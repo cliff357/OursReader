@@ -14,6 +14,7 @@
 		59E75EAB2ADF53AB007A549C /* OursReaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E75EAA2ADF53AB007A549C /* OursReaderTests.swift */; };
 		59E75EB52ADF53AB007A549C /* OursReaderUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E75EB42ADF53AB007A549C /* OursReaderUITests.swift */; };
 		59E75EB72ADF53AB007A549C /* OursReaderUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E75EB62ADF53AB007A549C /* OursReaderUITestsLaunchTests.swift */; };
+		59E75EC42ADF5749007A549C /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E75EC32ADF5749007A549C /* Model.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,7 @@
 		59E75EB02ADF53AB007A549C /* OursReaderUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OursReaderUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		59E75EB42ADF53AB007A549C /* OursReaderUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OursReaderUITests.swift; sourceTree = "<group>"; };
 		59E75EB62ADF53AB007A549C /* OursReaderUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OursReaderUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		59E75EC32ADF5749007A549C /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +98,7 @@
 			children = (
 				59E75E992ADF53AA007A549C /* OursReaderApp.swift */,
 				59E75E9B2ADF53AA007A549C /* ContentView.swift */,
+				59E75EC32ADF5749007A549C /* Model.swift */,
 				59E75E9D2ADF53AB007A549C /* Assets.xcassets */,
 				59E75E9F2ADF53AB007A549C /* Preview Content */,
 			);
@@ -257,6 +260,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				59E75EC42ADF5749007A549C /* Model.swift in Sources */,
 				59E75E9C2ADF53AA007A549C /* ContentView.swift in Sources */,
 				59E75E9A2ADF53AA007A549C /* OursReaderApp.swift in Sources */,
 			);
