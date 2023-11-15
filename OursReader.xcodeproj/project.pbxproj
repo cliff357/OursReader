@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5953369E2B05018100BB11D7 /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5953369D2B05018100BB11D7 /* Tab.swift */; };
+		595336A02B0503D800BB11D7 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5953369F2B0503D800BB11D7 /* Home.swift */; };
 		59E75E9A2ADF53AA007A549C /* OursReaderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E75E992ADF53AA007A549C /* OursReaderApp.swift */; };
 		59E75E9C2ADF53AA007A549C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E75E9B2ADF53AA007A549C /* ContentView.swift */; };
 		59E75E9E2ADF53AB007A549C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 59E75E9D2ADF53AB007A549C /* Assets.xcassets */; };
@@ -35,6 +37,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5953369D2B05018100BB11D7 /* Tab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tab.swift; sourceTree = "<group>"; };
+		5953369F2B0503D800BB11D7 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		59E75E962ADF53AA007A549C /* OursReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OursReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		59E75E992ADF53AA007A549C /* OursReaderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OursReaderApp.swift; sourceTree = "<group>"; };
 		59E75E9B2ADF53AA007A549C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -73,6 +77,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5953369B2B05016700BB11D7 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				5953369F2B0503D800BB11D7 /* Home.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		5953369C2B05016E00BB11D7 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				5953369D2B05018100BB11D7 /* Tab.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		59E75E8D2ADF53AA007A549C = {
 			isa = PBXGroup;
 			children = (
@@ -96,6 +116,8 @@
 		59E75E982ADF53AA007A549C /* OursReader */ = {
 			isa = PBXGroup;
 			children = (
+				5953369B2B05016700BB11D7 /* View */,
+				5953369C2B05016E00BB11D7 /* Model */,
 				59E75E992ADF53AA007A549C /* OursReaderApp.swift */,
 				59E75E9B2ADF53AA007A549C /* ContentView.swift */,
 				59E75EC32ADF5749007A549C /* Model.swift */,
@@ -262,7 +284,9 @@
 			files = (
 				59E75EC42ADF5749007A549C /* Model.swift in Sources */,
 				59E75E9C2ADF53AA007A549C /* ContentView.swift in Sources */,
+				595336A02B0503D800BB11D7 /* Home.swift in Sources */,
 				59E75E9A2ADF53AA007A549C /* OursReaderApp.swift in Sources */,
+				5953369E2B05018100BB11D7 /* Tab.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -429,6 +453,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -458,6 +483,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
