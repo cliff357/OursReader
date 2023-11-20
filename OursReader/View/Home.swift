@@ -10,6 +10,8 @@ import SwiftUI
 struct Home: View {
     @State private var selectedTab: Tab?
     @Environment(\.colorScheme) private var scheme
+    /// Tab Progress
+    @State private var tabProgress: CGFloat = 0
     
     var body: some View {
         VStack(spacing: 15) {
@@ -33,9 +35,30 @@ struct Home: View {
             .padding(15)
             
             CustomTabBar()
+            
+            //Paging View using new iOS 17 APIS
+            ScrollView(.horizontal) {
+                LazyHStack(spacing: 0 ) {
+                    SampleView(.purple)
+                        .containerRelativeFrame(.horizontal)
+                    
+                    SampleView(.red)
+                        .containerRelativeFrame(.horizontal)
+                    
+                    SampleView(.blue)
+                        .containerRelativeFrame(.horizontal)
+                }
+            }
+            .scrollPosition(id: $selectedTab)
+            .scrollIndicators(.hidden)
+            .scrollTargetBehavior(.paging)
+            .scrollClipDisabled()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(.gray.opacity(0.1))
+        .onChange(of: selectedTab) { oldValue, newValue in
+            print("changed ")
+        }
     }
     
     @ViewBuilder
@@ -68,10 +91,33 @@ struct Home: View {
                 Capsule()
                     .fill(scheme == .dark ? .black : .white)
                     .frame(width: capsuleWidth)
+                    .offset(x: tabProgress * (size.width - capsuleWidth))
             }
         }
         .background(.gray.opacity(0.1), in: .capsule)
         .padding(.horizontal, 15)
+    }
+    
+    // Sample View for Demonstrating Scrollabel Tab Bar Indicator
+    @ViewBuilder
+    func SampleView(_ color: Color) -> some View {
+        ScrollView(.vertical) {
+            LazyVGrid(columns: Array(repeating: GridItem(), count: 2), content: {
+                ForEach(1...10,id: \.self) { _ in
+                    RoundedRectangle(cornerRadius: 15)
+                        .fill(color.gradient)
+                        .frame(height: 150)
+                }
+                
+            })
+            .padding(15)
+            .scrollIndicators(.hidden)
+            .scrollClipDisabled()
+            .mask {
+                Rectangle()
+                    .padding(.bottom, -100)
+            }
+        }
     }
 }
 
