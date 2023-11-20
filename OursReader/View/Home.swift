@@ -15,24 +15,7 @@ struct Home: View {
     
     var body: some View {
         VStack(spacing: 15) {
-            HStack {
-                Button(action: {}, label: {
-                    Image(systemName: "line.3.horizontal.decrease")
-                })
-                
-                Spacer()
-                
-                Button(action: {}, label: {
-                    Image(systemName: "bell.badge")
-                })
-            }
-            .font(.title2)
-            .overlay {
-                Text("Messages")
-                    .font(.title3.bold())
-            }
-            .foregroundStyle(.primary)
-            .padding(15)
+            NavBar()
             
             CustomTabBar()
             
@@ -59,6 +42,28 @@ struct Home: View {
         .onChange(of: selectedTab) { oldValue, newValue in
             print("changed ")
         }
+    }
+    
+    @ViewBuilder
+    func NavBar() -> some View {
+        HStack {
+            Button(action: {}, label: {
+                Image(systemName: "line.3.horizontal.decrease")
+            })
+            
+            Spacer()
+            
+            Button(action: {}, label: {
+                Image(systemName: "bell.badge")
+            })
+        }
+        .font(.title2)
+        .overlay {
+            Text("Messages")
+                .font(.title3.bold())
+        }
+        .foregroundStyle(.primary)
+        .padding(15)
     }
     
     @ViewBuilder
@@ -107,6 +112,32 @@ struct Home: View {
                     RoundedRectangle(cornerRadius: 15)
                         .fill(color.gradient)
                         .frame(height: 150)
+                        .overlay {
+                            VStack(alignment: .leading) {
+                                Circle()
+                                    .fill(.white.opacity(0.25))
+                                    .frame(width:50, height: 50)
+                                
+                                VStack(alignment: .leading, spacing: 6 ) {
+                                    RoundedRectangle(cornerRadius: 6)
+                                        .fill(.white.opacity(0.25))
+                                        .frame(width: 80, height: 8)
+                                    
+                                    RoundedRectangle(cornerRadius: 6)
+                                        .fill(.white.opacity(0.25))
+                                        .frame(width: 60, height: 8)
+                                    
+                                    Spacer()
+                                    
+                                    RoundedRectangle(cornerRadius: 6)
+                                        .fill(.white.opacity(0.25))
+                                        .frame(width: 40, height: 8)
+                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                }
+                            }
+                            .padding(15)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        }
                 }
                 
             })

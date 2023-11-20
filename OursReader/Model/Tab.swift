@@ -8,18 +8,18 @@
 import Foundation
 
 enum Tab: String, CaseIterable {
-    case chats = "Chats"
-    case calls = "Calls"
-    case settings = "Settings"
+    case fav = "Favourite"
+    case new = "New"
+    case all = "All"
     
     var systemImage: String {
         switch self {
-        case .calls:
-            return "phone"
-        case .chats:
-            return "bubble.left.and.bubble.right"
-        case .settings:
-            return "gear"
+        case .fav:
+            return "list.star"
+        case .new:
+            return "book.fill"
+        case .all:
+            return "book.closed.fill"
         }
     }
 }
