@@ -20,28 +20,40 @@ struct Home: View {
             CustomTabBar()
             
             //Paging View using new iOS 17 APIS
-            ScrollView(.horizontal) {
-                LazyHStack(spacing: 0 ) {
-                    SampleView(.purple)
-                        .containerRelativeFrame(.horizontal)
-                    
-                    SampleView(.red)
-                        .containerRelativeFrame(.horizontal)
-                    
-                    SampleView(.blue)
-                        .containerRelativeFrame(.horizontal)
+            GeometryReader {
+                let size = $0.size
+                
+                ScrollView(.horizontal) {
+                    LazyHStack(spacing: 0 ) {
+                        SampleView(.purple)
+                            .id(Tab.all)
+                            .containerRelativeFrame(.horizontal)
+                        
+                        SampleView(.red)
+                            .id(Tab.fav)
+                            .containerRelativeFrame(.horizontal)
+                        
+                        SampleView(.blue)
+                            .id(Tab.new)
+                            .containerRelativeFrame(.horizontal)
+                    }
+                    .scrollTargetLayout()
+                    .offsetX { value in
+                        /// Converting offset into progress
+                        let progress = -value / (size.width * CGFloat(Tab.allCases.count - 1))
+                        /// Capping Progress BTW 0-1
+                        tabProgress = max(min(progress, 1),0)
+                    }
                 }
+                .scrollPosition(id: $selectedTab)
+                .scrollIndicators(.hidden)
+                .scrollTargetBehavior(.paging)
+                .scrollClipDisabled()
+                
             }
-            .scrollPosition(id: $selectedTab)
-            .scrollIndicators(.hidden)
-            .scrollTargetBehavior(.paging)
-            .scrollClipDisabled()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(.gray.opacity(0.1))
-        .onChange(of: selectedTab) { oldValue, newValue in
-            print("changed ")
-        }
     }
     
     @ViewBuilder
