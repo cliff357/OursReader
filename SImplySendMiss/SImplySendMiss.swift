@@ -10,11 +10,11 @@ import SwiftUI
 
 struct Provider: TimelineProvider {
     func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), emoji: "😀")
+        SimpleEntry(date: Date(), emoji: "😘")
     }
 
     func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        let entry = SimpleEntry(date: Date(), emoji: "😀")
+        let entry = SimpleEntry(date: Date(), emoji: "😘")
         completion(entry)
     }
 
@@ -25,7 +25,7 @@ struct Provider: TimelineProvider {
         let currentDate = Date()
         for hourOffset in 0 ..< 5 {
             let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-            let entry = SimpleEntry(date: entryDate, emoji: "😀")
+            let entry = SimpleEntry(date: entryDate, emoji: "😘")
             entries.append(entry)
         }
 
@@ -43,20 +43,16 @@ struct SImplySendMissEntryView : View {
     var entry: Provider.Entry
 
     var body: some View {
-        GeometryReader { geometry in
-                    VStack {
-                        
-                        // Show view size
-                        Text("\(Int(geometry.size.width)) x \(Int(geometry.size.height))")
-                            .font(.system(.title2, weight: .bold))
-                        
-                        // Show provider info
-                        Text(entry.emoji)
-                            .font(.footnote)
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color.green)
-                }
+        VStack {
+            Text("<3")
+            
+            // Show provider info
+            Text(entry.emoji)
+                .font(.footnote)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(.clear)
+            
     }
 }
 
