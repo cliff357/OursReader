@@ -9,6 +9,20 @@
 /* Begin PBXBuildFile section */
 		5953369E2B05018100BB11D7 /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5953369D2B05018100BB11D7 /* Tab.swift */; };
 		595336A02B0503D800BB11D7 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5953369F2B0503D800BB11D7 /* Home.swift */; };
+		598053882BA6DA8D008056F3 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 598053872BA6DA8D008056F3 /* WidgetKit.framework */; };
+		5980538A2BA6DA8D008056F3 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 598053892BA6DA8D008056F3 /* SwiftUI.framework */; };
+		5980538D2BA6DA8D008056F3 /* SendMissBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5980538C2BA6DA8D008056F3 /* SendMissBundle.swift */; };
+		5980538F2BA6DA8D008056F3 /* SendMissLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5980538E2BA6DA8D008056F3 /* SendMissLiveActivity.swift */; };
+		598053912BA6DA8D008056F3 /* SendMiss.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598053902BA6DA8D008056F3 /* SendMiss.swift */; };
+		598053932BA6DA8D008056F3 /* AppIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598053922BA6DA8D008056F3 /* AppIntent.swift */; };
+		598053952BA6DA8E008056F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 598053942BA6DA8E008056F3 /* Assets.xcassets */; };
+		598053992BA6DA8E008056F3 /* SendMissExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 598053852BA6DA8D008056F3 /* SendMissExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		598053D12BA6DBE9008056F3 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 598053872BA6DA8D008056F3 /* WidgetKit.framework */; };
+		598053D22BA6DBE9008056F3 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 598053892BA6DA8D008056F3 /* SwiftUI.framework */; };
+		598053D52BA6DBE9008056F3 /* SImplySendMissBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598053D42BA6DBE9008056F3 /* SImplySendMissBundle.swift */; };
+		598053D72BA6DBE9008056F3 /* SImplySendMiss.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598053D62BA6DBE9008056F3 /* SImplySendMiss.swift */; };
+		598053D92BA6DBEA008056F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 598053D82BA6DBEA008056F3 /* Assets.xcassets */; };
+		598053DD2BA6DBEA008056F3 /* SImplySendMissExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 598053D02BA6DBE9008056F3 /* SImplySendMissExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		598F58092B13A5ED003B4FCB /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598F58082B13A5ED003B4FCB /* View+Extensions.swift */; };
 		59E06A1A2BA6C77E00FE18FD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 59E06A192BA6C77E00FE18FD /* GoogleService-Info.plist */; };
 		59E06A1D2BA6C87B00FE18FD /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 59E06A1C2BA6C87B00FE18FD /* FirebaseAnalytics */; };
@@ -23,6 +37,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		598053972BA6DA8E008056F3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 59E75E8E2ADF53AA007A549C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 598053842BA6DA8D008056F3;
+			remoteInfo = SendMissExtension;
+		};
+		598053DB2BA6DBEA008056F3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 59E75E8E2ADF53AA007A549C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 598053CF2BA6DBE9008056F3;
+			remoteInfo = SImplySendMissExtension;
+		};
 		59E75EA72ADF53AB007A549C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 59E75E8E2ADF53AA007A549C /* Project object */;
@@ -39,9 +67,38 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		5980539D2BA6DA8E008056F3 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				598053DD2BA6DBEA008056F3 /* SImplySendMissExtension.appex in Embed Foundation Extensions */,
+				598053992BA6DA8E008056F3 /* SendMissExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		5953369D2B05018100BB11D7 /* Tab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tab.swift; sourceTree = "<group>"; };
 		5953369F2B0503D800BB11D7 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
+		598053852BA6DA8D008056F3 /* SendMissExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SendMissExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		598053872BA6DA8D008056F3 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		598053892BA6DA8D008056F3 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		5980538C2BA6DA8D008056F3 /* SendMissBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMissBundle.swift; sourceTree = "<group>"; };
+		5980538E2BA6DA8D008056F3 /* SendMissLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMissLiveActivity.swift; sourceTree = "<group>"; };
+		598053902BA6DA8D008056F3 /* SendMiss.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMiss.swift; sourceTree = "<group>"; };
+		598053922BA6DA8D008056F3 /* AppIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntent.swift; sourceTree = "<group>"; };
+		598053942BA6DA8E008056F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		598053962BA6DA8E008056F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		598053D02BA6DBE9008056F3 /* SImplySendMissExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SImplySendMissExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		598053D42BA6DBE9008056F3 /* SImplySendMissBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SImplySendMissBundle.swift; sourceTree = "<group>"; };
+		598053D62BA6DBE9008056F3 /* SImplySendMiss.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SImplySendMiss.swift; sourceTree = "<group>"; };
+		598053D82BA6DBEA008056F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		598053DA2BA6DBEA008056F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		598F58082B13A5ED003B4FCB /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		59E06A192BA6C77E00FE18FD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		59E75E962ADF53AA007A549C /* OursReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OursReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -58,6 +115,24 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		598053822BA6DA8D008056F3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5980538A2BA6DA8D008056F3 /* SwiftUI.framework in Frameworks */,
+				598053882BA6DA8D008056F3 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		598053CD2BA6DBE9008056F3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				598053D22BA6DBE9008056F3 /* SwiftUI.framework in Frameworks */,
+				598053D12BA6DBE9008056F3 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		59E75E932ADF53AA007A549C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -99,6 +174,39 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		598053862BA6DA8D008056F3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				598053872BA6DA8D008056F3 /* WidgetKit.framework */,
+				598053892BA6DA8D008056F3 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5980538B2BA6DA8D008056F3 /* SendMiss */ = {
+			isa = PBXGroup;
+			children = (
+				5980538C2BA6DA8D008056F3 /* SendMissBundle.swift */,
+				5980538E2BA6DA8D008056F3 /* SendMissLiveActivity.swift */,
+				598053902BA6DA8D008056F3 /* SendMiss.swift */,
+				598053922BA6DA8D008056F3 /* AppIntent.swift */,
+				598053942BA6DA8E008056F3 /* Assets.xcassets */,
+				598053962BA6DA8E008056F3 /* Info.plist */,
+			);
+			path = SendMiss;
+			sourceTree = "<group>";
+		};
+		598053D32BA6DBE9008056F3 /* SImplySendMiss */ = {
+			isa = PBXGroup;
+			children = (
+				598053D42BA6DBE9008056F3 /* SImplySendMissBundle.swift */,
+				598053D62BA6DBE9008056F3 /* SImplySendMiss.swift */,
+				598053D82BA6DBEA008056F3 /* Assets.xcassets */,
+				598053DA2BA6DBEA008056F3 /* Info.plist */,
+			);
+			path = SImplySendMiss;
+			sourceTree = "<group>";
+		};
 		598F58072B13A5D2003B4FCB /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -113,6 +221,9 @@
 				59E75E982ADF53AA007A549C /* OursReader */,
 				59E75EA92ADF53AB007A549C /* OursReaderTests */,
 				59E75EB32ADF53AB007A549C /* OursReaderUITests */,
+				5980538B2BA6DA8D008056F3 /* SendMiss */,
+				598053D32BA6DBE9008056F3 /* SImplySendMiss */,
+				598053862BA6DA8D008056F3 /* Frameworks */,
 				59E75E972ADF53AA007A549C /* Products */,
 			);
 			sourceTree = "<group>";
@@ -123,6 +234,8 @@
 				59E75E962ADF53AA007A549C /* OursReader.app */,
 				59E75EA62ADF53AB007A549C /* OursReaderTests.xctest */,
 				59E75EB02ADF53AB007A549C /* OursReaderUITests.xctest */,
+				598053852BA6DA8D008056F3 /* SendMissExtension.appex */,
+				598053D02BA6DBE9008056F3 /* SImplySendMissExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -171,6 +284,40 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		598053842BA6DA8D008056F3 /* SendMissExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5980539A2BA6DA8E008056F3 /* Build configuration list for PBXNativeTarget "SendMissExtension" */;
+			buildPhases = (
+				598053812BA6DA8D008056F3 /* Sources */,
+				598053822BA6DA8D008056F3 /* Frameworks */,
+				598053832BA6DA8D008056F3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SendMissExtension;
+			productName = SendMissExtension;
+			productReference = 598053852BA6DA8D008056F3 /* SendMissExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		598053CF2BA6DBE9008056F3 /* SImplySendMissExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 598053DE2BA6DBEA008056F3 /* Build configuration list for PBXNativeTarget "SImplySendMissExtension" */;
+			buildPhases = (
+				598053CC2BA6DBE9008056F3 /* Sources */,
+				598053CD2BA6DBE9008056F3 /* Frameworks */,
+				598053CE2BA6DBE9008056F3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SImplySendMissExtension;
+			productName = SImplySendMissExtension;
+			productReference = 598053D02BA6DBE9008056F3 /* SImplySendMissExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		59E75E952ADF53AA007A549C /* OursReader */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 59E75EBA2ADF53AB007A549C /* Build configuration list for PBXNativeTarget "OursReader" */;
@@ -178,10 +325,13 @@
 				59E75E922ADF53AA007A549C /* Sources */,
 				59E75E932ADF53AA007A549C /* Frameworks */,
 				59E75E942ADF53AA007A549C /* Resources */,
+				5980539D2BA6DA8E008056F3 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				598053982BA6DA8E008056F3 /* PBXTargetDependency */,
+				598053DC2BA6DBEA008056F3 /* PBXTargetDependency */,
 			);
 			name = OursReader;
 			packageProductDependencies = (
@@ -237,9 +387,15 @@
 				KnownAssetTags = (
 					New,
 				);
-				LastSwiftUpdateCheck = 1430;
+				LastSwiftUpdateCheck = 1500;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
+					598053842BA6DA8D008056F3 = {
+						CreatedOnToolsVersion = 15.0.1;
+					};
+					598053CF2BA6DBE9008056F3 = {
+						CreatedOnToolsVersion = 15.0.1;
+					};
 					59E75E952ADF53AA007A549C = {
 						CreatedOnToolsVersion = 14.3;
 					};
@@ -272,11 +428,29 @@
 				59E75E952ADF53AA007A549C /* OursReader */,
 				59E75EA52ADF53AB007A549C /* OursReaderTests */,
 				59E75EAF2ADF53AB007A549C /* OursReaderUITests */,
+				598053842BA6DA8D008056F3 /* SendMissExtension */,
+				598053CF2BA6DBE9008056F3 /* SImplySendMissExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		598053832BA6DA8D008056F3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				598053952BA6DA8E008056F3 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		598053CE2BA6DBE9008056F3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				598053D92BA6DBEA008056F3 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		59E75E942ADF53AA007A549C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -304,6 +478,26 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		598053812BA6DA8D008056F3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				598053912BA6DA8D008056F3 /* SendMiss.swift in Sources */,
+				598053932BA6DA8D008056F3 /* AppIntent.swift in Sources */,
+				5980538F2BA6DA8D008056F3 /* SendMissLiveActivity.swift in Sources */,
+				5980538D2BA6DA8D008056F3 /* SendMissBundle.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		598053CC2BA6DBE9008056F3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				598053D52BA6DBE9008056F3 /* SImplySendMissBundle.swift in Sources */,
+				598053D72BA6DBE9008056F3 /* SImplySendMiss.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		59E75E922ADF53AA007A549C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -337,6 +531,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		598053982BA6DA8E008056F3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 598053842BA6DA8D008056F3 /* SendMissExtension */;
+			targetProxy = 598053972BA6DA8E008056F3 /* PBXContainerItemProxy */;
+		};
+		598053DC2BA6DBEA008056F3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 598053CF2BA6DBE9008056F3 /* SImplySendMissExtension */;
+			targetProxy = 598053DB2BA6DBEA008056F3 /* PBXContainerItemProxy */;
+		};
 		59E75EA82ADF53AB007A549C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 59E75E952ADF53AA007A549C /* OursReader */;
@@ -350,6 +554,136 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		5980539B2BA6DA8E008056F3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = UM4ZKH8HWF;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SendMiss/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SendMiss;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cliffproject.OursReader.SendMiss;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5980539C2BA6DA8E008056F3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = UM4ZKH8HWF;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SendMiss/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SendMiss;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cliffproject.OursReader.SendMiss;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		598053DF2BA6DBEA008056F3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = UM4ZKH8HWF;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SImplySendMiss/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SImplySendMiss;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cliffproject.OursReader.SImplySendMiss;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		598053E02BA6DBEA008056F3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = UM4ZKH8HWF;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SImplySendMiss/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SImplySendMiss;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cliffproject.OursReader.SImplySendMiss;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		59E75EB82ADF53AB007A549C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -467,6 +801,7 @@
 		59E75EBB2ADF53AB007A549C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -497,6 +832,7 @@
 		59E75EBC2ADF53AB007A549C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -603,6 +939,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		5980539A2BA6DA8E008056F3 /* Build configuration list for PBXNativeTarget "SendMissExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5980539B2BA6DA8E008056F3 /* Debug */,
+				5980539C2BA6DA8E008056F3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		598053DE2BA6DBEA008056F3 /* Build configuration list for PBXNativeTarget "SImplySendMissExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				598053DF2BA6DBEA008056F3 /* Debug */,
+				598053E02BA6DBEA008056F3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		59E75E912ADF53AA007A549C /* Build configuration list for PBXProject "OursReader" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
