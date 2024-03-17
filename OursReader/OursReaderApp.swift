@@ -24,7 +24,8 @@ struct OursReaderApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            Login()
+            
         }
     }
 }

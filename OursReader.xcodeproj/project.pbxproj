@@ -28,6 +28,7 @@
 		598053E62BA6F019008056F3 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 598053E52BA6F019008056F3 /* FirebaseAuth */; };
 		598053E82BA6F169008056F3 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598053E72BA6F169008056F3 /* Error.swift */; };
 		598053EA2BA6F760008056F3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 598053E92BA6F760008056F3 /* GoogleService-Info.plist */; };
+		598053EC2BA6FD19008056F3 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598053EB2BA6FD19008056F3 /* Login.swift */; };
 		598F58092B13A5ED003B4FCB /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598F58082B13A5ED003B4FCB /* View+Extensions.swift */; };
 		59E06A1D2BA6C87B00FE18FD /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 59E06A1C2BA6C87B00FE18FD /* FirebaseAnalytics */; };
 		59E75E9A2ADF53AA007A549C /* OursReaderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E75E992ADF53AA007A549C /* OursReaderApp.swift */; };
@@ -106,6 +107,7 @@
 		598053E12BA6EDBB008056F3 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
 		598053E72BA6F169008056F3 /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		598053E92BA6F760008056F3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		598053EB2BA6FD19008056F3 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
 		598F58082B13A5ED003B4FCB /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		59E75E962ADF53AA007A549C /* OursReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OursReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		59E75E992ADF53AA007A549C /* OursReaderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OursReaderApp.swift; sourceTree = "<group>"; };
@@ -170,6 +172,7 @@
 			isa = PBXGroup;
 			children = (
 				5953369F2B0503D800BB11D7 /* Home.swift */,
+				598053EB2BA6FD19008056F3 /* Login.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -520,6 +523,7 @@
 				595336A02B0503D800BB11D7 /* Home.swift in Sources */,
 				59E75E9A2ADF53AA007A549C /* OursReaderApp.swift in Sources */,
 				598F58092B13A5ED003B4FCB /* View+Extensions.swift in Sources */,
+				598053EC2BA6FD19008056F3 /* Login.swift in Sources */,
 				5953369E2B05018100BB11D7 /* Tab.swift in Sources */,
 				598053E22BA6EDBB008056F3 /* DatabaseManager.swift in Sources */,
 			);
