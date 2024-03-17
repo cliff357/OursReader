@@ -19,3 +19,10 @@ struct BookDetail {
     var content: String
     var lastReadIndex: Int
 }
+
+struct User {
+    var safeEmail: String
+    var userUid: UUID
+    var firstName: String
+    var lastName: String
+}

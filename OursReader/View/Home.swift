@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import FirebaseAuth
+import FirebaseDatabase
 
 struct Home: View {
     @State private var selectedTab: Tab?
@@ -54,6 +56,20 @@ struct Home: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(.gray.opacity(0.1))
+        .onAppear() {
+            print("start listening")
+            Auth.auth().signInAnonymously { user, error in
+                if let error = error {
+                    print(error.localizedDescription)
+                }
+            }
+            let ref = Database.database().reference(withPath: "name")
+            ref.observe(.value) { snapshot in
+                if let output = snapshot.value {
+                    print(output)
+                }
+            }
+        }
     }
     
     @ViewBuilder
