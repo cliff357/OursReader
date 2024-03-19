@@ -57,7 +57,6 @@ struct Home: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(.gray.opacity(0.1))
         .onAppear() {
-            print("start listening")
             Auth.auth().signInAnonymously { user, error in
                 if let error = error {
                     print(error.localizedDescription)
@@ -66,7 +65,7 @@ struct Home: View {
             let ref = Database.database().reference(withPath: "name")
             ref.observe(.value) { snapshot in
                 if let output = snapshot.value {
-                    print(output)
+                    //Todo: data exchange with push token
                 }
             }
         }
@@ -180,6 +179,6 @@ struct Home: View {
     }
 }
 
-#Preview {
-    ContentView()
-}
+//#Preview {
+//    ContentView()
+//}
