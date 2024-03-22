@@ -11,6 +11,7 @@ import FirebaseDatabase
 
 struct Home: View {
     @State private var selectedTab: Tab?
+    @State private var selectedSideMenu: Int?
     @Environment(\.colorScheme) private var scheme
     /// Tab Progress
     @State private var tabProgress: CGFloat = 0
@@ -26,19 +27,19 @@ struct Home: View {
                 //Paging View using new iOS 17 APIS
                 GeometryReader {
                     let size = $0.size
-                    
+
                     ScrollView(.horizontal) {
                         LazyHStack(spacing: 0 ) {
-                            SampleView(.purple)
-                                .id(Tab.all)
-                                .containerRelativeFrame(.horizontal)
-                            
                             SampleView(.red)
                                 .id(Tab.fav)
                                 .containerRelativeFrame(.horizontal)
-                            
+
                             SampleView(.blue)
                                 .id(Tab.new)
+                                .containerRelativeFrame(.horizontal)
+
+                            SampleView(.purple)
+                                .id(Tab.all)
                                 .containerRelativeFrame(.horizontal)
                         }
                         .scrollTargetLayout()
@@ -53,8 +54,25 @@ struct Home: View {
                     .scrollIndicators(.hidden)
                     .scrollTargetBehavior(.paging)
                     .scrollClipDisabled()
-                    
+
                 }
+                
+//                        TabView(selection: $selectedSideMenu) {
+//                            Text("Dashboard")
+//                                .tag(0)
+//                            Text("Profile")
+//                                .tag(1)
+//                            Text("Search")
+//                                .tag(2)
+//                            Text("Notification")
+//                                .tag(3)
+//                        }
+                        .onChange(of: selectedSideMenu) { newState in
+                            print(newState)
+                        }
+                   
+                
+              
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .background(.gray.opacity(0.1))
@@ -72,7 +90,9 @@ struct Home: View {
                 }
             }
             
-            SideMenu(isShowing: $showMenu)
+            SideMenu(isShowing: $showMenu, selectedTab: $selectedSideMenu)
+                
+            
         }
     }
     
@@ -93,7 +113,7 @@ struct Home: View {
         }
         .font(.title2)
         .overlay {
-            Text("Messages")
+            Text("Dashboard")
                 .font(.title3.bold())
         }
         .foregroundStyle(.primary)
