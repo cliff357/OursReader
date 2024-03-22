@@ -14,67 +14,74 @@ struct Home: View {
     @Environment(\.colorScheme) private var scheme
     /// Tab Progress
     @State private var tabProgress: CGFloat = 0
+    @State private var showMenu = false
     
     var body: some View {
-        VStack(spacing: 15) {
-            NavBar()
-            
-            CustomTabBar()
-            
-            //Paging View using new iOS 17 APIS
-            GeometryReader {
-                let size = $0.size
+        ZStack {
+            VStack(spacing: 15) {
+                NavBar()
                 
-                ScrollView(.horizontal) {
-                    LazyHStack(spacing: 0 ) {
-                        SampleView(.purple)
-                            .id(Tab.all)
-                            .containerRelativeFrame(.horizontal)
-                        
-                        SampleView(.red)
-                            .id(Tab.fav)
-                            .containerRelativeFrame(.horizontal)
-                        
-                        SampleView(.blue)
-                            .id(Tab.new)
-                            .containerRelativeFrame(.horizontal)
-                    }
-                    .scrollTargetLayout()
-                    .offsetX { value in
-                        /// Converting offset into progress
-                        let progress = -value / (size.width * CGFloat(Tab.allCases.count - 1))
-                        /// Capping Progress BTW 0-1
-                        tabProgress = max(min(progress, 1),0)
-                    }
-                }
-                .scrollPosition(id: $selectedTab)
-                .scrollIndicators(.hidden)
-                .scrollTargetBehavior(.paging)
-                .scrollClipDisabled()
+                CustomTabBar()
                 
-            }
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .background(.gray.opacity(0.1))
-        .onAppear() {
-            Auth.auth().signInAnonymously { user, error in
-                if let error = error {
-                    print(error.localizedDescription)
+                //Paging View using new iOS 17 APIS
+                GeometryReader {
+                    let size = $0.size
+                    
+                    ScrollView(.horizontal) {
+                        LazyHStack(spacing: 0 ) {
+                            SampleView(.purple)
+                                .id(Tab.all)
+                                .containerRelativeFrame(.horizontal)
+                            
+                            SampleView(.red)
+                                .id(Tab.fav)
+                                .containerRelativeFrame(.horizontal)
+                            
+                            SampleView(.blue)
+                                .id(Tab.new)
+                                .containerRelativeFrame(.horizontal)
+                        }
+                        .scrollTargetLayout()
+                        .offsetX { value in
+                            /// Converting offset into progress
+                            let progress = -value / (size.width * CGFloat(Tab.allCases.count - 1))
+                            /// Capping Progress BTW 0-1
+                            tabProgress = max(min(progress, 1),0)
+                        }
+                    }
+                    .scrollPosition(id: $selectedTab)
+                    .scrollIndicators(.hidden)
+                    .scrollTargetBehavior(.paging)
+                    .scrollClipDisabled()
+                    
                 }
             }
-            let ref = Database.database().reference(withPath: "name")
-            ref.observe(.value) { snapshot in
-                if let output = snapshot.value {
-                    //Todo: data exchange with push token
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            .background(.gray.opacity(0.1))
+            .onAppear() {
+                Auth.auth().signInAnonymously { user, error in
+                    if let error = error {
+                        print(error.localizedDescription)
+                    }
+                }
+                let ref = Database.database().reference(withPath: "name")
+                ref.observe(.value) { snapshot in
+                    if let output = snapshot.value {
+                        //Todo: data exchange with push token
+                    }
                 }
             }
+            
+            SideMenu(isShowing: $showMenu)
         }
     }
     
     @ViewBuilder
     func NavBar() -> some View {
         HStack {
-            Button(action: {}, label: {
+            Button(action: {
+                showMenu.toggle()
+            }, label: {
                 Image(systemName: "line.3.horizontal.decrease")
             })
             
