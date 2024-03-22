@@ -52,6 +52,6 @@ struct SideMenu: View {
 }
 
 
-//#Preview {
-//    SideMenu(isShowing: .constant(true))
-//}
+#Preview {
+    SideMenu(isShowing: .constant(true))
+}

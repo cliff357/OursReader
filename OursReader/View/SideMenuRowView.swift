@@ -32,6 +32,6 @@ struct SideMenuRowView: View {
     }
 }
 
-//#Preview {
-//    SideMenuRowView(option: .dashboard, selectedOption: .constant(.dashboard))
-//}
+#Preview {
+    SideMenuRowView(option: .dashboard, selectedOption: .constant(.dashboard))
+}
