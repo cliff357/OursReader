@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SideMenu: View {
     @Binding var isShowing: Bool
+    @State private var selectedOption: SideMenuOptionModel?
     
     var body: some View {
         ZStack {
@@ -18,13 +19,18 @@ struct SideMenu: View {
                     .ignoresSafeArea()
                     .onTapGesture { isShowing.toggle() }
                 
+                
                 HStack {
                     VStack(alignment: .leading, spacing: 10) {
                         SideMenuHeaderView()
                         
                         VStack {
                             ForEach(SideMenuOptionModel.allCases) { option in
-                                SideMenuRowView(option: option)
+                                Button {
+                                    selectedOption = option
+                                } label: {
+                                    SideMenuRowView(option: option, selectedOption: $selectedOption)
+                                }
                             }
                         }
                         Spacer()
@@ -46,6 +52,6 @@ struct SideMenu: View {
 }
 
 
-#Preview {
-    SideMenu(isShowing: .constant(true))
-}
+//#Preview {
+//    SideMenu(isShowing: .constant(true))
+//}
