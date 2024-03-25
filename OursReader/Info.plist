@@ -11,9 +11,11 @@
 			<string>Google service</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.941049598862-7qte1ean1ci60c53vlrjglk200p6061p</string>
+				<string>com.googleusercontent.apps.941049598862-eskp70f9qcm9j6u90plih4dd2gt1g50i</string>
 			</array>
 		</dict>
 	</array>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<false/>
 </dict>
 </plist>

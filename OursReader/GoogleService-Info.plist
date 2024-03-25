@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>941049598862-7qte1ean1ci60c53vlrjglk200p6061p.apps.googleusercontent.com</string>
+	<string>941049598862-eskp70f9qcm9j6u90plih4dd2gt1g50i.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.941049598862-7qte1ean1ci60c53vlrjglk200p6061p</string>
+	<string>com.googleusercontent.apps.941049598862-eskp70f9qcm9j6u90plih4dd2gt1g50i</string>
 	<key>API_KEY</key>
 	<string>AIzaSyDFziiqPvvktI20Ycaz7MAA6KmQ31-e71k</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,23 +13,23 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.cliffproject.OursReader</string>
+	<string>com.cliffchan.manwareader</string>
 	<key>PROJECT_ID</key>
 	<string>our-reader</string>
 	<key>STORAGE_BUCKET</key>
 	<string>our-reader.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<false></false>
+	<false/>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false></false>
+	<false/>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>IS_GCM_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:941049598862:ios:bd5e0e83f1213200b4cadf</string>
+	<string>1:941049598862:ios:100d0f2ec6ba1158b4cadf</string>
 	<key>DATABASE_URL</key>
 	<string>https://our-reader-default-rtdb.firebaseio.com</string>
 </dict>

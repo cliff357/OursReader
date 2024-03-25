@@ -67,9 +67,6 @@ struct Home: View {
                     Text("Notification")
                         .tag(Optional.some(3))
                 }
-                .onChange(of: selectedSideMenu) { newState in
-                    print(newState)
-                }
                    
                 
               

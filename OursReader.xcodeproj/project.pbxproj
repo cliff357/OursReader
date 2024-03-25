@@ -45,6 +45,8 @@
 		9986141B2BAAB79600E0996D /* SideMenuHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9986141A2BAAB79600E0996D /* SideMenuHeaderView.swift */; };
 		9986141D2BAD20C500E0996D /* SideMenuRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9986141C2BAD20C500E0996D /* SideMenuRowView.swift */; };
 		9986141F2BAD330C00E0996D /* SideMenuOptionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9986141E2BAD330C00E0996D /* SideMenuOptionModel.swift */; };
+		998614442BB1770300E0996D /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614432BB1770300E0996D /* NotificationManager.swift */; };
+		998614462BB1799B00E0996D /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 998614452BB1799B00E0996D /* FirebaseMessaging */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -132,6 +134,8 @@
 		9986141A2BAAB79600E0996D /* SideMenuHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuHeaderView.swift; sourceTree = "<group>"; };
 		9986141C2BAD20C500E0996D /* SideMenuRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuRowView.swift; sourceTree = "<group>"; };
 		9986141E2BAD330C00E0996D /* SideMenuOptionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuOptionModel.swift; sourceTree = "<group>"; };
+		998614432BB1770300E0996D /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		998614482BB17C9A00E0996D /* OursReader.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OursReader.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,6 +163,7 @@
 			files = (
 				598053E42BA6EFF8008056F3 /* FirebaseDatabase in Frameworks */,
 				598053E62BA6F019008056F3 /* FirebaseAuth in Frameworks */,
+				998614462BB1799B00E0996D /* FirebaseMessaging in Frameworks */,
 				59E06A1D2BA6C87B00FE18FD /* FirebaseAnalytics in Frameworks */,
 				998614152BA80F5D00E0996D /* GoogleSignInSwift in Frameworks */,
 			);
@@ -186,10 +191,7 @@
 			children = (
 				5953369F2B0503D800BB11D7 /* Home.swift */,
 				598053EB2BA6FD19008056F3 /* Login.swift */,
-				998614182BAAB3A500E0996D /* SideMenu.swift */,
-				9986141A2BAAB79600E0996D /* SideMenuHeaderView.swift */,
-				9986141C2BAD20C500E0996D /* SideMenuRowView.swift */,
-				9986141E2BAD330C00E0996D /* SideMenuOptionModel.swift */,
+				998614422BB176D600E0996D /* SideMenu */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -240,6 +242,7 @@
 			isa = PBXGroup;
 			children = (
 				598F58082B13A5ED003B4FCB /* View+Extensions.swift */,
+				998614432BB1770300E0996D /* NotificationManager.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -272,6 +275,7 @@
 		59E75E982ADF53AA007A549C /* OursReader */ = {
 			isa = PBXGroup;
 			children = (
+				998614482BB17C9A00E0996D /* OursReader.entitlements */,
 				998614122BA80EA300E0996D /* Info.plist */,
 				598F58072B13A5D2003B4FCB /* Helpers */,
 				5953369B2B05016700BB11D7 /* View */,
@@ -311,6 +315,17 @@
 				59E75EB62ADF53AB007A549C /* OursReaderUITestsLaunchTests.swift */,
 			);
 			path = OursReaderUITests;
+			sourceTree = "<group>";
+		};
+		998614422BB176D600E0996D /* SideMenu */ = {
+			isa = PBXGroup;
+			children = (
+				998614182BAAB3A500E0996D /* SideMenu.swift */,
+				9986141A2BAAB79600E0996D /* SideMenuHeaderView.swift */,
+				9986141C2BAD20C500E0996D /* SideMenuRowView.swift */,
+				9986141E2BAD330C00E0996D /* SideMenuOptionModel.swift */,
+			);
+			path = SideMenu;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -371,6 +386,7 @@
 				598053E32BA6EFF8008056F3 /* FirebaseDatabase */,
 				598053E52BA6F019008056F3 /* FirebaseAuth */,
 				998614142BA80F5D00E0996D /* GoogleSignInSwift */,
+				998614452BB1799B00E0996D /* FirebaseMessaging */,
 			);
 			productName = OursReader;
 			productReference = 59E75E962ADF53AA007A549C /* OursReader.app */;
@@ -550,6 +566,7 @@
 				598F58092B13A5ED003B4FCB /* View+Extensions.swift in Sources */,
 				598053EC2BA6FD19008056F3 /* Login.swift in Sources */,
 				5953369E2B05018100BB11D7 /* Tab.swift in Sources */,
+				998614442BB1770300E0996D /* NotificationManager.swift in Sources */,
 				9986141B2BAAB79600E0996D /* SideMenuHeaderView.swift in Sources */,
 				598053E22BA6EDBB008056F3 /* DatabaseManager.swift in Sources */,
 			);
@@ -621,7 +638,7 @@
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.cliffproject.OursReader.SendMiss;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cliffchan.manwareader.SendMiss;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
@@ -654,7 +671,7 @@
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.cliffproject.OursReader.SendMiss;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cliffchan.manwareader.SendMiss;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -669,6 +686,7 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = SImplySendMissExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = UM4ZKH8HWF;
@@ -686,7 +704,7 @@
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.cliffproject.OursReader.SImplySendMiss;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cliffchan.manwareader.SImplySendMiss;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
@@ -702,6 +720,7 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = SImplySendMissExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = UM4ZKH8HWF;
@@ -719,7 +738,7 @@
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.cliffproject.OursReader.SImplySendMiss;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cliffchan.manwareader.SImplySendMiss;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -848,6 +867,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = OursReader/OursReader.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"OursReader/Preview Content\"";
@@ -866,7 +886,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.cliffproject.OursReader;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cliffchan.manwareader;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -880,6 +900,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = OursReader/OursReader.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"OursReader/Preview Content\"";
@@ -898,7 +919,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.cliffproject.OursReader;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cliffchan.manwareader;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -1082,6 +1103,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 998614132BA80F5D00E0996D /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
 			productName = GoogleSignInSwift;
+		};
+		998614452BB1799B00E0996D /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 59E06A1B2BA6C87B00FE18FD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
