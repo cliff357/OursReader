@@ -35,9 +35,9 @@ struct OursReaderApp: App {
     var body: some Scene {
         
         WindowGroup {
-            NavigationView{
+//            NavigationView{
                 Login()
-            }
+//            }
             .environmentObject(userAuth)
             .navigationViewStyle(.stack)
         }

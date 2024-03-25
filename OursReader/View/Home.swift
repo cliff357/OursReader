@@ -19,57 +19,57 @@ struct Home: View {
     
     var body: some View {
         ZStack {
-            VStack(spacing: 15) {
+            VStack() {
                 NavBar()
                 
-                CustomTabBar()
-                
-                //Paging View using new iOS 17 APIS
-                GeometryReader {
-                    let size = $0.size
-
-                    ScrollView(.horizontal) {
-                        LazyHStack(spacing: 0 ) {
-                            SampleView(.red)
-                                .id(Tab.fav)
-                                .containerRelativeFrame(.horizontal)
-
-                            SampleView(.blue)
-                                .id(Tab.new)
-                                .containerRelativeFrame(.horizontal)
-
-                            SampleView(.purple)
-                                .id(Tab.all)
-                                .containerRelativeFrame(.horizontal)
+                TabView(selection: $selectedSideMenu) {
+                    VStack(spacing: 15) {
+                        
+                        
+                        CustomTabBar()
+                        
+                        //Paging View using new iOS 17 APIS
+                        GeometryReader {
+                            let size = $0.size
+                            
+                            ScrollView(.horizontal) {
+                                LazyHStack(spacing: 0 ) {
+                                    SampleView(.red)
+                                        .id(Tab.fav)
+                                        .containerRelativeFrame(.horizontal)
+                                    
+                                    SampleView(.blue)
+                                        .id(Tab.new)
+                                        .containerRelativeFrame(.horizontal)
+                                    
+                                    SampleView(.purple)
+                                        .id(Tab.all)
+                                        .containerRelativeFrame(.horizontal)
+                                }
+                                .scrollTargetLayout()
+                                .offsetX { value in
+                                    /// Converting offset into progress
+                                    let progress = -value / (size.width * CGFloat(Tab.allCases.count - 1))
+                                    /// Capping Progress BTW 0-1
+                                    tabProgress = max(min(progress, 1),0)
+                                }
+                            }
+                            .scrollPosition(id: $selectedTab)
+                            .scrollIndicators(.hidden)
+                            .scrollTargetBehavior(.paging)
+                            .scrollClipDisabled()
                         }
-                        .scrollTargetLayout()
-                        .offsetX { value in
-                            /// Converting offset into progress
-                            let progress = -value / (size.width * CGFloat(Tab.allCases.count - 1))
-                            /// Capping Progress BTW 0-1
-                            tabProgress = max(min(progress, 1),0)
-                        }
-                    }
-                    .scrollPosition(id: $selectedTab)
-                    .scrollIndicators(.hidden)
-                    .scrollTargetBehavior(.paging)
-                    .scrollClipDisabled()
-
+                    }.tag(Optional.some(0))
+                    Text("Profile")
+                        .tag(Optional.some(1))
+                    Text("Search")
+                        .tag(Optional.some(2))
+                    Text("Notification")
+                        .tag(Optional.some(3))
                 }
-                
-//                        TabView(selection: $selectedSideMenu) {
-//                            Text("Dashboard")
-//                                .tag(0)
-//                            Text("Profile")
-//                                .tag(1)
-//                            Text("Search")
-//                                .tag(2)
-//                            Text("Notification")
-//                                .tag(3)
-//                        }
-                        .onChange(of: selectedSideMenu) { newState in
-                            print(newState)
-                        }
+                .onChange(of: selectedSideMenu) { newState in
+                    print(newState)
+                }
                    
                 
               
@@ -91,8 +91,6 @@ struct Home: View {
             }
             
             SideMenu(isShowing: $showMenu, selectedTab: $selectedSideMenu)
-                
-            
         }
     }
     
@@ -127,7 +125,7 @@ struct Home: View {
                 HStack(spacing: 10) {
                     Image(systemName: tab.systemImage)
                     
-                    Text(tab.rawValue)
+                    Text(tab.name)
                         .font(.callout)
                 }
                 .frame(maxWidth: .infinity)

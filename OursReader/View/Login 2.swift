@@ -59,7 +59,9 @@ struct Login: View {
             .navigationTitle("Login")
             
         }
+        
     }
+    
 }
 
 #Preview {
