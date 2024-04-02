@@ -39,13 +39,8 @@ struct Login: View {
     }
     
     var body: some View {
-        NavigationStack {
+        ZStack{            
             VStack {
-                NavigationLink(destination: Home().navigationBarHidden(true)
-                               , isActive: $vm.isLoggedIn) {
-                    EmptyView()
-                }
-                
                 UserInfo()
                 ProfilePic()
                 if(vm.isLoggedIn){
@@ -54,11 +49,17 @@ struct Login: View {
                     SignInButton()
                 }
                 Text(vm.errorMessage)
-                
+            }
+            .onChange(of: vm.isLoggedIn) { oldValue, newValue in
+                if newValue {
+                    HomeRouter.shared.push(to: .home)
+                }
             }
             .navigationTitle("Login")
-            
         }
+
+        
+        
     }
 }
 

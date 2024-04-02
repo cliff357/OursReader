@@ -60,7 +60,7 @@ struct Home: View {
                             .scrollClipDisabled()
                         }
                     }.tag(Optional.some(0))
-                    Text("Profile")
+                    Profile()
                         .tag(Optional.some(1))
                     Text("Search")
                         .tag(Optional.some(2))

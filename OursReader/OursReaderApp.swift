@@ -47,19 +47,22 @@ struct OursReaderApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @StateObject var notificationManager = NotificationManager()
     @StateObject var userAuth: UserAuthModel =  UserAuthModel()
+    @StateObject var homeRouter: HomeRouter = HomeRouter.shared
     
     var body: some Scene {
         
         WindowGroup {
-            //            NavigationView{
-            Login()
-                .task {
-                    await notificationManager.request()
-                    await notificationManager.getAuthStatus()
-                }
-            //            }
-                .environmentObject(userAuth)
-                .navigationViewStyle(.stack)
+            
+            NavigationStack(path: $homeRouter.path ) {
+                Login()
+                    .task {
+                        await notificationManager.request()
+                        await notificationManager.getAuthStatus()
+                    }
+                    .environmentObject(userAuth)
+                    .navigationViewStyle(.stack)
+                    .navigationDestination(for: HomeRoute.self, destination: { $0 })
+            }
         }
     }
 }

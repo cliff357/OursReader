@@ -12,6 +12,7 @@ import FirebaseCore
 import FirebaseAuth
 
 class UserAuthModel: ObservableObject {
+    static let shared: UserAuthModel = .init()
     
     @Published var givenName: String = ""
     @Published var profilePicUrl: String = ""
@@ -35,6 +36,8 @@ class UserAuthModel: ObservableObject {
             self.isLoggedIn = false
             self.givenName = "Not Logged In"
             self.profilePicUrl =  ""
+            let router = HomeRouter.shared
+            router.reset()
         }
     }
     
