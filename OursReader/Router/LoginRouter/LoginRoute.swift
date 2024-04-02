@@ -2,7 +2,7 @@
 //  LoginRoute.swift
 //  OursReader
 //
-//  Created by Autotoll Developer on 27/3/2024.
+//  Created by Cliff Chan on 27/3/2024.
 //
 
 import SwiftUI

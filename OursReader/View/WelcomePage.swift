@@ -2,7 +2,7 @@
 //  WelcomePage.swift
 //  OursReader
 //
-//  Created by Autotoll Developer on 2/4/2024.
+//  Created by Cliff Chan on 2/4/2024.
 //
 
 import SwiftUI

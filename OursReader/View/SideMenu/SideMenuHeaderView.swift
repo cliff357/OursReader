@@ -2,7 +2,7 @@
 //  SideMenuHeaderView.swift
 //  OursReader
 //
-//  Created by Autotoll Developer on 20/3/2024.
+//  Created by Cliff Chan on 20/3/2024.
 //
 
 import SwiftUI
@@ -19,12 +19,17 @@ struct SideMenuHeaderView: View {
                 .padding(.vertical)
             
             VStack(alignment: .leading, spacing: 6) {
-                Text("Cliff Chan")
+//                Text(UserAuthModel.shared.givenName)
+//                    .onAppear(perform: {
+//                        print(UserAuthModel.shared.givenName)
+//                    })
+//                    .foregroundStyle(.black)
+                Text("cliffchan1993@hotmail.com")
                     .font(.subheadline)
-                    .foregroundStyle(.black)
-                Text("cliffchan@gmail.com")
+                    .foregroundStyle(.red)
+                Text("Hello~")
                     .font(.footnote)
-                    .tint(.gray)
+                    .foregroundStyle(.black)
             }
         }
     }

@@ -54,6 +54,9 @@
 		998614542BB4295A00E0996D /* LoginRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614532BB4295A00E0996D /* LoginRouter.swift */; };
 		998614582BB429C100E0996D /* LoginRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614572BB429C100E0996D /* LoginRoute.swift */; };
 		9986145A2BBB9EEC00E0996D /* WelcomePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614592BBB9EEC00E0996D /* WelcomePage.swift */; };
+		9986145C2BBBAA6600E0996D /* Signup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9986145B2BBBAA6600E0996D /* Signup.swift */; };
+		9986145F2BBBAC8500E0996D /* UnderlineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9986145E2BBBAC8500E0996D /* UnderlineTextField.swift */; };
+		998614612BBBBA7F00E0996D /* DividerWithText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614602BBBBA7F00E0996D /* DividerWithText.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -150,6 +153,9 @@
 		998614532BB4295A00E0996D /* LoginRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRouter.swift; sourceTree = "<group>"; };
 		998614572BB429C100E0996D /* LoginRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRoute.swift; sourceTree = "<group>"; };
 		998614592BBB9EEC00E0996D /* WelcomePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomePage.swift; sourceTree = "<group>"; };
+		9986145B2BBBAA6600E0996D /* Signup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signup.swift; sourceTree = "<group>"; };
+		9986145E2BBBAC8500E0996D /* UnderlineTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderlineTextField.swift; sourceTree = "<group>"; };
+		998614602BBBBA7F00E0996D /* DividerWithText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DividerWithText.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -203,8 +209,10 @@
 		5953369B2B05016700BB11D7 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				9986145D2BBBAC7500E0996D /* Common */,
 				998614592BBB9EEC00E0996D /* WelcomePage.swift */,
 				598053EB2BA6FD19008056F3 /* Login.swift */,
+				9986145B2BBBAA6600E0996D /* Signup.swift */,
 				5953369F2B0503D800BB11D7 /* Home.swift */,
 				998614422BB176D600E0996D /* SideMenu */,
 				998614492BB3F9EE00E0996D /* Profile.swift */,
@@ -371,6 +379,15 @@
 				998614532BB4295A00E0996D /* LoginRouter.swift */,
 			);
 			path = LoginRouter;
+			sourceTree = "<group>";
+		};
+		9986145D2BBBAC7500E0996D /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				9986145E2BBBAC8500E0996D /* UnderlineTextField.swift */,
+				998614602BBBBA7F00E0996D /* DividerWithText.swift */,
+			);
+			path = Common;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -602,10 +619,12 @@
 				998614192BAAB3A500E0996D /* SideMenu.swift in Sources */,
 				598053E82BA6F169008056F3 /* Error.swift in Sources */,
 				59E75EC42ADF5749007A549C /* Model.swift in Sources */,
+				998614612BBBBA7F00E0996D /* DividerWithText.swift in Sources */,
 				9986144E2BB41F5000E0996D /* BasicRouter.swift in Sources */,
 				998614522BB428F200E0996D /* HomeRouter.swift in Sources */,
 				9986141D2BAD20C500E0996D /* SideMenuRowView.swift in Sources */,
 				998614172BA8110B00E0996D /* UserAuthModel.swift in Sources */,
+				9986145C2BBBAA6600E0996D /* Signup.swift in Sources */,
 				59E75E9C2ADF53AA007A549C /* ContentView.swift in Sources */,
 				595336A02B0503D800BB11D7 /* Home.swift in Sources */,
 				59E75E9A2ADF53AA007A549C /* OursReaderApp.swift in Sources */,
@@ -616,6 +635,7 @@
 				598053EC2BA6FD19008056F3 /* Login.swift in Sources */,
 				9986145A2BBB9EEC00E0996D /* WelcomePage.swift in Sources */,
 				5953369E2B05018100BB11D7 /* Tab.swift in Sources */,
+				9986145F2BBBAC8500E0996D /* UnderlineTextField.swift in Sources */,
 				998614442BB1770300E0996D /* NotificationManager.swift in Sources */,
 				9986141B2BAAB79600E0996D /* SideMenuHeaderView.swift in Sources */,
 				998614542BB4295A00E0996D /* LoginRouter.swift in Sources */,

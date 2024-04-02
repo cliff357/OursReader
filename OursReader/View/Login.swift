@@ -11,44 +11,88 @@ import GoogleSignIn
 struct Login: View {
     
     @EnvironmentObject var vm: UserAuthModel
-    @State  var gotoDashboard: Bool = false
+    //    @State  var gotoDashboard: Bool = false
+    @State var email: String = ""
+    @State var password: String = ""
     
-    fileprivate func SignInButton() -> Button<Text> {
+    fileprivate func LoginByUsernameButton() -> some View {
         Button(action: {
-            vm.signIn()
+            vm.loginUser(email: email, password: password) { msg in
+                
+            }
         }) {
-            Text("Sign In")
+            Text("Login Now")
+                .padding(5)
+        }
+        .buttonStyle(.bordered)
+        .tint(.white)
+        .buttonBorderShape(.capsule)
+    }
+    
+    fileprivate func SignUpButton() -> Button<Text> {
+        Button(action: {
+            //redirect to signup page
+        }) {
+            Text("Sign Up")
         }
     }
     
-    fileprivate func SignOutButton() -> Button<Text> {
+    fileprivate func LoginInByGoogleButton() -> some View {
         Button(action: {
-            vm.signOut()
-        }) {
-            Text("Sign Out")
-        }
+            vm.signInByGoogle()
+        }, label: {
+            Image("Google")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 25, height: 25)
+                .padding(7.5)
+        })
     }
     
-    fileprivate func ProfilePic() -> some View {
-        AsyncImage(url: URL(string: vm.profilePicUrl))
-            .frame(width: 100, height: 100)
-    }
-    
-    fileprivate func UserInfo() -> Text {
-        return Text(vm.givenName)
+    fileprivate func LoginInByAppleButton() -> some View {
+        
+        Button(action: {
+            vm.startSignInWithAppleFlow()
+        }, label: {
+            Image(systemName: "apple.logo")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 25, height: 25)
+                .padding(7.5)
+        })
+        
+        
     }
     
     var body: some View {
-        ZStack{            
+        ZStack{
             VStack {
-                UserInfo()
-                ProfilePic()
-                if(vm.isLoggedIn){
-                    SignOutButton()
-                }else{
-                    SignInButton()
+                VStack {
+                    UnderlineTextField
+                        .init(icon: "person.circle", placeHolder: "Email",keyboardType: .default, text: $email)
+                        .padding(.bottom, 20)
+                    UnderlineTextField
+                        .init(icon: "lock", placeHolder: "Password",keyboardType: .default, text: $password)
+                        .padding(.bottom, 50)
+                    LoginByUsernameButton()
+                        .padding(.bottom, 10)
+                    DividerWithText(label: "or")
+                        .padding(.bottom, 10)
+                    HStack {
+                        LoginInByAppleButton()
+                        LoginInByGoogleButton()
+                    }
+                    HStack {
+                        Text("Don't have an account? ")
+                        SignUpButton()
+                    }
+                    
+                    
                 }
-                Text(vm.errorMessage)
+                .padding()
+                
+                
+                
             }
             .onChange(of: vm.isLoggedIn) { oldValue, newValue in
                 if newValue {
@@ -57,7 +101,7 @@ struct Login: View {
             }
             .navigationTitle("Login")
         }
-
+        
         
         
     }

@@ -2,7 +2,7 @@
 //  SideMenu.swift
 //  OursReader
 //
-//  Created by Autotoll Developer on 20/3/2024.
+//  Created by Cliff Chan on 20/3/2024.
 //
 
 import SwiftUI
