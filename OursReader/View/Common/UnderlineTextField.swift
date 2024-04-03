@@ -39,14 +39,13 @@ struct UnderlineTextField: View {
                     .stroke(.gray, lineWidth: 1)
                 
                 RoundedRectangle(cornerRadius: 5)
-                    .trim(from: 0.445 + (0.44 * (labelWidth / width)), to: 1)
+                    .trim(from: 0.495 + (0.44 * (labelWidth / width)), to: 1)
                     .stroke(.gray, lineWidth: 1)
                 
                 HStack {
                     Image(systemName: icon)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .foregroundColor(.white)
                         .frame(width: 34, height: 34)
                     
                     Spacer()
@@ -55,7 +54,6 @@ struct UnderlineTextField: View {
                 .padding()
                 
                 Text(placeHolder)
-                    .foregroundColor(.white)
                     .overlay {
                         GeometryReader { geo in
                             Color.clear.onAppear {

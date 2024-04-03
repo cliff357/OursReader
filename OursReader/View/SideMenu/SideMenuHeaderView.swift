@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct SideMenuHeaderView: View {
+    @StateObject var user = UserAuthModel.shared
+    
     var body: some View {
         HStack {
             Image(systemName: "person.circle.fill")
@@ -19,14 +21,9 @@ struct SideMenuHeaderView: View {
                 .padding(.vertical)
             
             VStack(alignment: .leading, spacing: 6) {
-//                Text(UserAuthModel.shared.givenName)
-//                    .onAppear(perform: {
-//                        print(UserAuthModel.shared.givenName)
-//                    })
-//                    .foregroundStyle(.black)
-                Text("cliffchan1993@hotmail.com")
+                Text(user.givenName)
                     .font(.subheadline)
-                    .foregroundStyle(.red)
+                    .foregroundStyle(.black)
                 Text("Hello~")
                     .font(.footnote)
                     .foregroundStyle(.black)
