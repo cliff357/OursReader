@@ -7,6 +7,7 @@
 
 import SwiftUI
 import GoogleSignIn
+import FloatingPromptTextField
 
 struct Login: View {
     
@@ -22,11 +23,11 @@ struct Login: View {
             }
         }) {
             Text("Login Now")
-                .padding(5)
+                .padding(20)
         }
-        .buttonStyle(.bordered)
-        .tint(.white)
-        .buttonBorderShape(.capsule)
+        .background(Color.button_solid_bkgd)
+        .foregroundStyle(.white)
+        .clipShape(Capsule())
     }
     
     fileprivate func SignUpButton() -> Button<Text> {
@@ -66,44 +67,84 @@ struct Login: View {
     
     var body: some View {
         ZStack{
-            VStack {
-                VStack {
-                    UnderlineTextField
-                        .init(icon: "person.circle", placeHolder: "Email",keyboardType: .default, text: $email)
-                        .padding(.bottom, 20)
-                    UnderlineTextField
-                        .init(icon: "lock", placeHolder: "Password",keyboardType: .default, text: $password)
-                        .padding(.bottom, 50)
-                    LoginByUsernameButton()
-                        .padding(.bottom, 10)
-                    DividerWithText(label: "or")
-                        .padding(.bottom, 10)
-                    HStack {
-                        LoginInByAppleButton()
-                        LoginInByGoogleButton()
-                    }
-                    HStack {
-                        Text("Don't have an account? ")
-                        SignUpButton()
-                    }
-                    
-                    
-                }
-                .padding()
+            Color.white.ignoresSafeArea()
+            Spacer()
+            Circle()
+                .fill(Color.button_solid_bkgd)
+                .frame(width: 400 , height: 400)
+                .position(x: 150, y: -100)
+                .ignoresSafeArea(.keyboard)
                 
+            
+            Circle()
+                .fill(Color.circle_color)
+                .frame(width: UIScreen.main.bounds.width * 1.7 , height: UIScreen.main.bounds.width * 1.7)
+                .offset(y: UIScreen.main.bounds.width * 0.5)
+            
+            VStack {
+                Spacer()
+                FloatingPromptTextField(text: $email) {
+                    Text("Email")
+                        .foregroundStyle(Color.white)
+                }
+                .floatingPrompt {
+                    Text("Email 快d 入！！")
+                        .foregroundStyle(Color.white)
+                }
+                .padding(10)
+                .background(
+                    .gray,
+                    in: RoundedRectangle(
+                        cornerRadius: 20,
+                        style: .continuous
+                    )
+                )
+                .padding(.bottom, 20)
+                
+                FloatingPromptTextField(text: $password) {
+                    Text("Password")
+                        .foregroundStyle(Color.white)
+                }
+                .floatingPrompt {
+                    Text("打pwd打快d啦")
+                        .foregroundStyle(Color.white)
+                }
+                .padding(10)
+                .background(
+                    .gray,
+                    in: RoundedRectangle(
+                        cornerRadius: 20,
+                        style: .continuous
+                    )
+                )
+                .padding(.bottom, 20)
+                
+                LoginByUsernameButton()
+                    .padding(.bottom, 10)
+                DividerWithText(label: "or")
+                    .padding(.bottom, 10)
+                HStack {
+                    LoginInByAppleButton()
+                    LoginInByGoogleButton()
+                }
+                HStack {
+                    Text("Don't have an account? ")
+                    SignUpButton()
+                }
                 
                 
             }
+            .foregroundStyle(Color.white)
+            .padding()
+            .frame(width: UIScreen.main.bounds.width )
             .onChange(of: vm.isLoggedIn) { oldValue, newValue in
                 if newValue {
                     HomeRouter.shared.push(to: .home)
                 }
             }
             .navigationTitle("Login")
+            .navigationBarTitleTextColor(.white)
         }
-        
-        
-        
     }
 }
 

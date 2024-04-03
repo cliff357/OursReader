@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct UnderlineTextField: View {
-    let icon: String
-    let placeHolder: String
+    let placeholder: String
     let keyboardType: UIKeyboardType
     
     @Binding var text: String
@@ -18,55 +17,37 @@ struct UnderlineTextField: View {
     @State private var labelWidth = CGFloat.zero
     
     var body: some View {
-        HStack {
-            TextField("", text: $text)
-                .foregroundColor(.white)
-                .font(GilroyFont(isBold: true, size: 20))
-                .keyboardType(keyboardType)
-                .padding(EdgeInsets(top: 15, leading: 60, bottom: 15, trailing: 60))
-                .overlay {
-                    GeometryReader { geo in
-                        Color.clear.onAppear {
-                            width = geo.size.width
-                        }
+        TextField(placeholder, text: $text)
+                .foregroundColor(.gray)
+                .font(.system(size: 20))
+                .padding(EdgeInsets(top: 15, leading: 10, bottom: 15, trailing: 10))
+                .background {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 5)
+                            .trim(from: 0, to: 0.55)
+                            .stroke(.gray, lineWidth: 1)
+                        RoundedRectangle(cornerRadius: 5)
+                            .trim(from: 0.565 + (0.44 * (labelWidth / width)), to: 1)
+                            .stroke(.gray, lineWidth: 1)
+                        Text(placeholder)
+                            .foregroundColor(.gray)
+                            .overlay( GeometryReader { geo in Color.clear.onAppear { labelWidth = geo.size.width }})
+                            .padding(2)
+                            .font(.caption)
+                            .frame(maxWidth: .infinity,
+                                   maxHeight: .infinity,
+                                   alignment: .topLeading)
+                            .offset(x: 20, y: -10)
+
                     }
                 }
-        }
-        .background {
-            ZStack {
-                RoundedRectangle(cornerRadius: 5)
-                    .trim(from: 0, to: 0.55)
-                    .stroke(.gray, lineWidth: 1)
-                
-                RoundedRectangle(cornerRadius: 5)
-                    .trim(from: 0.495 + (0.44 * (labelWidth / width)), to: 1)
-                    .stroke(.gray, lineWidth: 1)
-                
-                HStack {
-                    Image(systemName: icon)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 34, height: 34)
-                    
-                    Spacer()
+                .overlay( GeometryReader { geo in Color.clear.onAppear { width = geo.size.width }})
+                .onChange(of: width) { _ in
+                    print("Width: ", width)
                 }
-                .frame(maxWidth: .infinity)
-                .padding()
-                
-                Text(placeHolder)
-                    .overlay {
-                        GeometryReader { geo in
-                            Color.clear.onAppear {
-                                labelWidth = geo.size.width
-                            }
-                        }
-                    }
-                    .padding(2)
-                    .font(GilroyFont(isBold: true, size: 13))
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                    .offset(x: 20, y: -10)
-            }
-        }
+                .onChange(of: labelWidth) { _ in
+                    print("labelWidth: ", labelWidth)
+                }
     }
 }
 
@@ -80,5 +61,5 @@ func GilroyFont(isBold: Bool = false, size: CGFloat) -> Font {
 }
 
 #Preview {
-    UnderlineTextField(icon: "lock", placeHolder: "Username",keyboardType: .numberPad, text: .constant(""))
+    UnderlineTextField(placeholder: "Username",keyboardType: .numberPad, text: .constant(""))
 }
