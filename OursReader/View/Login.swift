@@ -12,7 +12,6 @@ import FloatingPromptTextField
 struct Login: View {
     
     @EnvironmentObject var vm: UserAuthModel
-    //    @State  var gotoDashboard: Bool = false
     @State var email: String = ""
     @State var password: String = ""
     
@@ -32,7 +31,7 @@ struct Login: View {
     
     fileprivate func SignUpButton() -> Button<Text> {
         Button(action: {
-            //redirect to signup page
+            HomeRouter.shared.push(to: .signup)
         }) {
             Text("Sign Up")
         }
@@ -134,7 +133,6 @@ struct Login: View {
                 
                 
             }
-            .foregroundStyle(Color.white)
             .padding()
             .frame(width: UIScreen.main.bounds.width )
             .onChange(of: vm.isLoggedIn) { oldValue, newValue in

@@ -24,9 +24,9 @@ struct SideMenuRowView: View {
             Spacer()
         }
         .padding(.leading)
-        .foregroundStyle(isSelected ? .blue : .black)
+        .foregroundStyle(isSelected ? .white : .white)
         .frame(width: 216, height: 44)
-        .background(isSelected ? .blue.opacity(0.25) : .clear)
+        .background(isSelected ? Color.button_selected : .clear)
         .clipShape(RoundedRectangle(cornerRadius: 10))
         
     }

@@ -10,7 +10,7 @@ import SwiftUI
 struct SideMenu: View {
     @Binding var isShowing: Bool
     @Binding var selectedTab: SideMenuOptionModel?
-    @State private var selectedOption: SideMenuOptionModel?
+    @State private var selectedOption: SideMenuOptionModel? = .dashboard
     
     var body: some View {
         ZStack {
@@ -40,16 +40,13 @@ struct SideMenu: View {
                     }
                     .padding()
                     .frame(width: 270, alignment: .leading)
-                    .background(.white) //TODO get background color
-                    
+                    .background(Color.menu_bkgd)
                     Spacer()
-                    
                 }
                 .transition(.move(edge: .leading))
                 
             }
         }
-        
         .animation(.easeIn,value: isShowing)
     }
 }

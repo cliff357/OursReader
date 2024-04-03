@@ -23,10 +23,10 @@ struct SideMenuHeaderView: View {
             VStack(alignment: .leading, spacing: 6) {
                 Text(user.givenName)
                     .font(.subheadline)
-                    .foregroundStyle(.black)
+                    .foregroundStyle(.white)
                 Text("Hello~")
                     .font(.footnote)
-                    .foregroundStyle(.black)
+                    .foregroundStyle(.white)
             }
         }
     }
