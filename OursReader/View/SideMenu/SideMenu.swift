@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SideMenu: View {
     @Binding var isShowing: Bool
-    @Binding var selectedTab: Int?
+    @Binding var selectedTab: SideMenuOptionModel?
     @State private var selectedOption: SideMenuOptionModel?
     
     var body: some View {
@@ -29,7 +29,8 @@ struct SideMenu: View {
                             ForEach(SideMenuOptionModel.allCases) { option in
                                 Button {
                                     selectedOption = option
-                                    selectedTab = option.rawValue
+                                    selectedTab = option
+                                    isShowing = false
                                 } label: {
                                     SideMenuRowView(option: option, selectedOption: $selectedOption)
                                 }
@@ -43,17 +44,17 @@ struct SideMenu: View {
                     
                     Spacer()
                     
-                    
                 }
+                .transition(.move(edge: .leading))
                 
             }
         }
-        .transition(.move(edge: .leading))
-        .animation(.bouncy,value: isShowing)
+        
+        .animation(.easeIn,value: isShowing)
     }
 }
 
 
 #Preview {
-    SideMenu(isShowing: .constant(true), selectedTab: .constant(1))
+    SideMenu(isShowing: .constant(true), selectedTab: .constant(SideMenuOptionModel.dashboard))
 }

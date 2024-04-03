@@ -11,7 +11,7 @@ import FirebaseDatabase
 
 struct Home: View {
     @State private var selectedTab: Tab?
-    @State private var selectedSideMenu: Int?
+    @State private var selectedSideMenu: SideMenuOptionModel? = .dashboard
     @Environment(\.colorScheme) private var scheme
     /// Tab Progress
     @State private var tabProgress: CGFloat = 0
@@ -59,14 +59,16 @@ struct Home: View {
                             .scrollTargetBehavior(.paging)
                             .scrollClipDisabled()
                         }
-                    }.tag(Optional.some(0))
+                    }
+                        .tag(Optional.some(SideMenuOptionModel.dashboard))
                     Profile()
-                        .tag(Optional.some(1))
+                        .tag(Optional.some(SideMenuOptionModel.profile))
                     Text("Search")
-                        .tag(Optional.some(2))
+                        .tag(Optional.some(SideMenuOptionModel.search))
                     Text("Notification")
-                        .tag(Optional.some(3))
+                        .tag(Optional.some(SideMenuOptionModel.notification))
                 }
+                
                    
                 
               
@@ -108,7 +110,7 @@ struct Home: View {
         }
         .font(.title2)
         .overlay {
-            Text("Dashboard")
+            Text(selectedSideMenu?.title ?? "")
                 .font(.title3.bold())
         }
         .foregroundStyle(.primary)

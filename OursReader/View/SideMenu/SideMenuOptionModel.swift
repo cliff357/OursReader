@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum SideMenuOptionModel: Int, CaseIterable {
+enum SideMenuOptionModel: Int, CaseIterable, Equatable {
     case dashboard
     case profile
     case search
@@ -37,6 +37,10 @@ enum SideMenuOptionModel: Int, CaseIterable {
         case .notification:
             return "bell"
         }
+    }
+    
+    static func == (lhs: SideMenuOptionModel, rhs: SideMenuOptionModel) -> Bool {
+        return lhs.rawValue == rhs.rawValue
     }
 }
 
