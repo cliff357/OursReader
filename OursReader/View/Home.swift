@@ -159,7 +159,8 @@ struct Home: View {
     func SampleView(_ color: Color) -> some View {
         ScrollView(.vertical) {
             LazyVGrid(columns: Array(repeating: GridItem(), count: 2), content: {
-                ForEach(1...10,id: \.self) { _ in
+                ForEach(1...2,id: \.self) { _ in
+                //ForEach(1...10,id: \.self) { _ in
                     RoundedRectangle(cornerRadius: 15)
                         .fill(color.gradient)
                         .frame(height: 150)
