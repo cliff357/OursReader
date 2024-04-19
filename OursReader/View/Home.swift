@@ -63,10 +63,12 @@ struct Home: View {
                         .tag(Optional.some(SideMenuOptionModel.dashboard))
                     Profile()
                         .tag(Optional.some(SideMenuOptionModel.profile))
-                    Text("Search")
-                        .tag(Optional.some(SideMenuOptionModel.search))
-                    Text("Notification")
-                        .tag(Optional.some(SideMenuOptionModel.notification))
+                    Text("Widget")
+                        .tag(Optional.some(SideMenuOptionModel.widget))
+                    Text("Friend List")
+                        .tag(Optional.some(SideMenuOptionModel.friendList))
+                    Text("Settings")
+                        .tag(Optional.some(SideMenuOptionModel.settings))
                 }
                 
                    
