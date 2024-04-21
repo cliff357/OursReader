@@ -24,8 +24,8 @@ struct Login: View {
             Text("Login Now")
                 .padding(20)
         }
-        .background(Color.button_solid_bkgd)
-        .foregroundStyle(.white)
+        .background(Color.rice_white)
+        .foregroundStyle(Color.dark_brown2)
         .clipShape(Capsule())
     }
     
@@ -34,6 +34,7 @@ struct Login: View {
             HomeRouter.shared.push(to: .signup)
         }) {
             Text("Sign Up")
+                .foregroundStyle(Color.rice_white)
         }
     }
     
@@ -57,8 +58,10 @@ struct Login: View {
             Image(systemName: "apple.logo")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 25, height: 25)
-                .padding(7.5)
+                .padding(8)
+                .tint(.black)
+                .background(Circle().fill(Color.white))
+                .frame(width: 28, height: 28)
         })
         
         
@@ -66,17 +69,17 @@ struct Login: View {
     
     var body: some View {
         ZStack{
-            Color.white.ignoresSafeArea()
+            Color.rice_white.ignoresSafeArea()
             Spacer()
             Circle()
-                .fill(Color.button_solid_bkgd)
+                .fill(Color.background)
                 .frame(width: 400 , height: 400)
                 .position(x: 150, y: -100)
                 .ignoresSafeArea(.keyboard)
                 
             
             Circle()
-                .fill(Color.circle_color)
+                .fill(Color.dark_brown)
                 .frame(width: UIScreen.main.bounds.width * 1.7 , height: UIScreen.main.bounds.width * 1.7)
                 .offset(y: UIScreen.main.bounds.width * 0.5)
             
@@ -84,15 +87,15 @@ struct Login: View {
                 Spacer()
                 FloatingPromptTextField(text: $email) {
                     Text("Email")
-                        .foregroundStyle(Color.white)
+                        .foregroundStyle(Color.dark_brown2)
                 }
                 .floatingPrompt {
                     Text("Email 快d 入！！")
-                        .foregroundStyle(Color.white)
+                        .foregroundStyle(Color.dark_brown2)
                 }
                 .padding(10)
                 .background(
-                    .gray,
+                    Color.flesh1,
                     in: RoundedRectangle(
                         cornerRadius: 20,
                         style: .continuous
@@ -102,15 +105,15 @@ struct Login: View {
                 
                 FloatingPromptTextField(text: $password) {
                     Text("Password")
-                        .foregroundStyle(Color.white)
+                        .foregroundStyle(Color.dark_brown2)
                 }
                 .floatingPrompt {
                     Text("打pwd打快d啦")
-                        .foregroundStyle(Color.white)
+                        .foregroundStyle(Color.dark_brown2)
                 }
                 .padding(10)
                 .background(
-                    .gray,
+                    Color.flesh1,
                     in: RoundedRectangle(
                         cornerRadius: 20,
                         style: .continuous
@@ -119,15 +122,14 @@ struct Login: View {
                 .padding(.bottom, 20)
                 
                 LoginByUsernameButton()
-                    .padding(.bottom, 10)
-                DividerWithText(label: "or")
-                    .padding(.bottom, 10)
+                DividerWithText( label: "or", color: Color.rice_white)
                 HStack {
                     LoginInByAppleButton()
                     LoginInByGoogleButton()
                 }
                 HStack {
                     Text("Don't have an account? ")
+                        .foregroundStyle(Color.rice_white)
                     SignUpButton()
                 }
                 
@@ -141,7 +143,7 @@ struct Login: View {
                 }
             }
             .navigationTitle("Login")
-            .navigationBarTitleTextColor(.white)
+            .navigationBarTitleTextColor(.dark_brown2)
         }
     }
 }

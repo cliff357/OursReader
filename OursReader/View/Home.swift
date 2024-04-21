@@ -204,6 +204,6 @@ struct Home: View {
     }
 }
 
-//#Preview {
-//    ContentView()
-//}
+#Preview {
+    ContentView()
+}

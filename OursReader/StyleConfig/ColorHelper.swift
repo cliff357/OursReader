@@ -9,12 +9,14 @@ import SwiftUI
 import RswiftResources
 
 extension Color {
-    public static let menu_bkgd: Color = R.color.menu_bkgd.color
-    public static let circle_color: Color = R.color.circle_color.color
-    public static let button_solid_bkgd: Color = R.color.button_solid_bkgd.color
-    public static let button_hollow_outline: Color = R.color.button_hollow_outline.color
-    public static let button_hollow_bkgd: Color = R.color.button_hollow_bkgd.color
-    public static let button_selected: Color = R.color.button_selected.color
+    public static let flesh1: Color = R.color.flesh1.color
+    public static let dark_brown: Color = R.color.dark_brown.color
+    public static let rice_white: Color = R.color.rice_white.color
+    public static let orange1: Color = R.color.orange1.color
+    public static let red1: Color = R.color.red1.color
+    public static let green1: Color = R.color.green1.color
+    public static let dark_brown2: Color = R.color.dark_brown2.color
+    public static let background: Color = R.color.background.color
 }
 
 extension RswiftResources.ColorResource {

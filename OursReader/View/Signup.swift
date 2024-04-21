@@ -26,23 +26,23 @@ struct Signup: View {
             Text("Sign up")
                 .padding(20)
         }
-        .background(Color.button_solid_bkgd)
-        .foregroundStyle(.white)
+        .background(Color.rice_white)
+        .foregroundStyle(Color.dark_brown2)
         .clipShape(Capsule())
     }
     
     var body: some View {
         ZStack{
-            Color.white.ignoresSafeArea()
+            Color.background.ignoresSafeArea()
             Spacer()
             Circle()
-                .fill(Color.button_solid_bkgd)
+                .fill(Color.rice_white)
                 .frame(width: 400 , height: 400)
                 .position(x: 150, y: -100)
                 .ignoresSafeArea(.keyboard)
             
             Circle()
-                .fill(Color.circle_color)
+                .fill(Color.dark_brown)
                 .frame(width: UIScreen.main.bounds.width * 1.7 , height: UIScreen.main.bounds.width * 1.7)
                 .offset(y: UIScreen.main.bounds.width * 0.8)
             
@@ -90,7 +90,6 @@ struct Signup: View {
             .padding()
             .frame(width: UIScreen.main.bounds.width )
             .navigationTitle("Sign up")
-            .navigationBarTitleTextColor(.white)
         }
     }
 }

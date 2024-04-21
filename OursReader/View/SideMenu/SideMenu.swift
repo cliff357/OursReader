@@ -40,7 +40,7 @@ struct SideMenu: View {
                     }
                     .padding()
                     .frame(width: 270, alignment: .leading)
-                    .background(Color.menu_bkgd)
+                    .background(Color.flesh1)
                     Spacer()
                 }
                 .transition(.move(edge: .leading))
