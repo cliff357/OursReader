@@ -17,6 +17,7 @@ public struct FloatingPromptTextField<Prompt: View, FloatingPrompt: View, TextFi
 	
 	private var text: Binding<String>
 	private let textFieldStyle: TextFieldStyle
+    private let isSecure: Bool?
 	private let prompt: Prompt
 	private let floatingPrompt: FloatingPrompt
 	
@@ -27,16 +28,19 @@ public struct FloatingPromptTextField<Prompt: View, FloatingPrompt: View, TextFi
 	
 	@State private var promptState: PromptState
 	@State private var promptHeight: Double = 0
+    @State private var isPasswordVisible: Bool = false
 	
 	private var floatingOffset: Double { floatingPromptSpacing + promptHeight * floatingPromptScale }
 	private var topMargin: Double { animateFloatingPromptHeight && promptState == .normal ? 0 : floatingOffset }
 	
 	fileprivate init(text: Binding<String>,
 	                 textFieldStyle: TextFieldStyle,
+                     isSecure: Bool? = false,
 	                 @ViewBuilder prompt: () -> Prompt,
 	                 @ViewBuilder floatingPrompt: () -> FloatingPrompt) {
 		self.text = text
 		self.prompt = prompt()
+        self.isSecure = isSecure
 		self.floatingPrompt = floatingPrompt()
 		
 		self.textFieldStyle = textFieldStyle
@@ -46,9 +50,24 @@ public struct FloatingPromptTextField<Prompt: View, FloatingPrompt: View, TextFi
 	
 	public var body: some View {
 		ZStack(alignment: .leading) {
-			TextField("", text: text)
-				.foregroundStyle(textFieldStyle)
-				.focused($isFocused)
+            Group{
+                if isSecure ?? false && !isPasswordVisible {
+                    SecureField("", text: text)
+                } else {
+                    TextField("", text: text)
+                }
+            }
+            .if(isSecure ?? false) { view in
+                view.overlay(alignment: .trailing) {
+                    Image(systemName: isPasswordVisible ? "eye.fill" : "eye.slash.fill")
+                        .padding()
+                        .onTapGesture {
+                            isPasswordVisible.toggle()
+                        }
+                }
+            }
+            .foregroundStyle(textFieldStyle)
+            .focused($isFocused)
 			ZStack(alignment: .leading) {
 				prompt
 					.opacity(promptState == .normal ? 1 : 0)
@@ -93,10 +112,12 @@ public struct FloatingPromptTextField<Prompt: View, FloatingPrompt: View, TextFi
 
 private extension FloatingPromptTextField where TextFieldStyle == HierarchicalShapeStyle {
 	init(text: Binding<String>,
+         isSecure: Bool,
 	     @ViewBuilder prompt: () -> Prompt,
 	     @ViewBuilder floatingPrompt: () -> FloatingPrompt) {
 		self.init(text: text,
-		          textFieldStyle: .primary,
+                  textFieldStyle: .primary, 
+                  isSecure: isSecure,
 		          prompt: prompt,
 		          floatingPrompt: floatingPrompt)
 	}
@@ -104,10 +125,12 @@ private extension FloatingPromptTextField where TextFieldStyle == HierarchicalSh
 
 private extension FloatingPromptTextField where Prompt == FloatingPrompt {
 	init(text: Binding<String>,
+         isSecure: Bool,
 	     textFieldStyle: TextFieldStyle,
 	     @ViewBuilder prompt: () -> Prompt) {
 		self.init(text: text,
-		          textFieldStyle: textFieldStyle,
+                  textFieldStyle: textFieldStyle,
+                  isSecure: isSecure,
 		          prompt: prompt,
 		          floatingPrompt: prompt)
 	}
@@ -122,9 +145,11 @@ public extension FloatingPromptTextField where TextFieldStyle == HierarchicalSha
 	///   - prompt: A view that will be used as a prompt when the text field
 	///   is empty, and as a floating prompt when it's focused or not empty,
 	init(text: Binding<String>,
+         isSecure: Bool,
 	     @ViewBuilder prompt: () -> Prompt) {
 		self.init(text: text,
-		          textFieldStyle: .primary,
+                  textFieldStyle: .primary, 
+                  isSecure: isSecure,
 		          prompt: prompt,
 		          floatingPrompt: prompt)
 	}
@@ -138,9 +163,12 @@ public extension FloatingPromptTextField where TextFieldStyle == HierarchicalSha
 	///   - text: A binding to the text to display and edit.
 	///   - prompt: A Text view that will be used as a prompt when the text field
 	///   is empty, and as a floating prompt when it's focused or not empty.
-	init(text: Binding<String>, prompt: Text) {
+	init(text: Binding<String>, 
+         isSecure: Bool,
+         prompt: Text) {
 		self.init(text: text,
-		          textFieldStyle: .primary,
+                  textFieldStyle: .primary, 
+                  isSecure: isSecure,
 		          prompt: { prompt.foregroundColor(.secondary) },
 		          floatingPrompt: { prompt.foregroundColor(.accentColor) })
 	}
@@ -155,7 +183,8 @@ public extension FloatingPromptTextField {
 	func floatingPrompt<FloatingPromptType: View>(_ floatingPrompt: () -> FloatingPromptType) -> FloatingPromptTextField<Prompt, FloatingPromptType, TextFieldStyle> {
 		FloatingPromptTextField<Prompt, FloatingPromptType, TextFieldStyle>(
 			text: text,
-			textFieldStyle: textFieldStyle,
+            textFieldStyle: textFieldStyle,
+            isSecure: isSecure,
 			prompt: { prompt },
 			floatingPrompt: { floatingPrompt() }
 		)
@@ -166,7 +195,8 @@ public extension FloatingPromptTextField {
 	func textFieldForegroundStyle<Style: ShapeStyle>(_ style: Style) -> FloatingPromptTextField<Prompt, FloatingPrompt, Style> {
 		FloatingPromptTextField<Prompt, FloatingPrompt, Style>(
 			text: text,
-			textFieldStyle: style,
+            textFieldStyle: style,
+            isSecure: isSecure,
 			prompt: { prompt },
 			floatingPrompt: { floatingPrompt }
 		)

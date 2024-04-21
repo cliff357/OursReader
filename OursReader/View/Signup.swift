@@ -33,10 +33,10 @@ struct Signup: View {
     
     var body: some View {
         ZStack{
-            Color.background.ignoresSafeArea()
+            Color.rice_white.ignoresSafeArea()
             Spacer()
             Circle()
-                .fill(Color.rice_white)
+                .fill(Color.background)
                 .frame(width: 400 , height: 400)
                 .position(x: 150, y: -100)
                 .ignoresSafeArea(.keyboard)
@@ -48,41 +48,10 @@ struct Signup: View {
             
             VStack {
                 Spacer()
-                FloatingPromptTextField(text: $email) {
-                    Text("Email")
-                        .foregroundStyle(Color.white)
-                }
-                .floatingPrompt {
-                    Text("Email 快d 入！！")
-                        .foregroundStyle(Color.white)
-                }
-                .padding(10)
-                .background(
-                    .gray,
-                    in: RoundedRectangle(
-                        cornerRadius: 20,
-                        style: .continuous
-                    )
-                )
-                .padding(.bottom, 20)
-                
-                FloatingPromptTextField(text: $password) {
-                    Text("Password")
-                        .foregroundStyle(Color.white)
-                }
-                .floatingPrompt {
-                    Text("打pwd打快d啦")
-                        .foregroundStyle(Color.white)
-                }
-                .padding(10)
-                .background(
-                    .gray,
-                    in: RoundedRectangle(
-                        cornerRadius: 20,
-                        style: .continuous
-                    )
-                )
-                .padding(.bottom, 20)
+                ORTextField(text: $email,placeholder: "呢到就入Email", floatingPrompt: "隻手呀，一二一二")
+                    .padding(.bottom, 20)
+                ORTextField(text: $password,placeholder: "密碼黎架喂", floatingPrompt: "爽手啦",isSecure: true)
+                    .padding(.bottom, 20)
                 
                 SignupButton()
                     .padding(.bottom, 10)

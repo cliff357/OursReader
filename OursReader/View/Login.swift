@@ -85,41 +85,11 @@ struct Login: View {
             
             VStack {
                 Spacer()
-                FloatingPromptTextField(text: $email) {
-                    Text("Email")
-                        .foregroundStyle(Color.dark_brown2)
-                }
-                .floatingPrompt {
-                    Text("Email 快d 入！！")
-                        .foregroundStyle(Color.dark_brown2)
-                }
-                .padding(10)
-                .background(
-                    Color.flesh1,
-                    in: RoundedRectangle(
-                        cornerRadius: 20,
-                        style: .continuous
-                    )
-                )
-                .padding(.bottom, 20)
                 
-                FloatingPromptTextField(text: $password) {
-                    Text("Password")
-                        .foregroundStyle(Color.dark_brown2)
-                }
-                .floatingPrompt {
-                    Text("打pwd打快d啦")
-                        .foregroundStyle(Color.dark_brown2)
-                }
-                .padding(10)
-                .background(
-                    Color.flesh1,
-                    in: RoundedRectangle(
-                        cornerRadius: 20,
-                        style: .continuous
-                    )
-                )
-                .padding(.bottom, 20)
+                ORTextField(text: $email,placeholder: "呢到就入Email", floatingPrompt: "隻手呀，一二一二")
+                    .padding(.bottom, 20)
+                ORTextField(text: $password,placeholder: "密碼黎架喂", floatingPrompt: "爽手啦",isSecure: true)
+                    .padding(.bottom, 20)
                 
                 LoginByUsernameButton()
                 DividerWithText( label: "or", color: Color.rice_white)
