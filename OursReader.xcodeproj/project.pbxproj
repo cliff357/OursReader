@@ -30,6 +30,7 @@
 		598053EA2BA6F760008056F3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 598053E92BA6F760008056F3 /* GoogleService-Info.plist */; };
 		598053EC2BA6FD19008056F3 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598053EB2BA6FD19008056F3 /* Login.swift */; };
 		598F58092B13A5ED003B4FCB /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598F58082B13A5ED003B4FCB /* View+Extensions.swift */; };
+		599EC2F22BD4CEDA00F6DEB1 /* ORTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599EC2F12BD4CEDA00F6DEB1 /* ORTextField.swift */; };
 		59E06A1D2BA6C87B00FE18FD /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 59E06A1C2BA6C87B00FE18FD /* FirebaseAnalytics */; };
 		59E75E9A2ADF53AA007A549C /* OursReaderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E75E992ADF53AA007A549C /* OursReaderApp.swift */; };
 		59E75E9C2ADF53AA007A549C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E75E9B2ADF53AA007A549C /* ContentView.swift */; };
@@ -136,6 +137,7 @@
 		598053E92BA6F760008056F3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		598053EB2BA6FD19008056F3 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
 		598F58082B13A5ED003B4FCB /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
+		599EC2F12BD4CEDA00F6DEB1 /* ORTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ORTextField.swift; sourceTree = "<group>"; };
 		59E75E962ADF53AA007A549C /* OursReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OursReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		59E75E992ADF53AA007A549C /* OursReaderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OursReaderApp.swift; sourceTree = "<group>"; };
 		59E75E9B2ADF53AA007A549C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -419,6 +421,7 @@
 		998614672BBD20D000E0996D /* FloatingPromptTextField */ = {
 			isa = PBXGroup;
 			children = (
+				599EC2F12BD4CEDA00F6DEB1 /* ORTextField.swift */,
 				998614632BBD20D000E0996D /* EnvironmentValues.swift */,
 				998614642BBD20D000E0996D /* FloatingPromptTextField.swift */,
 				998614652BBD20D000E0996D /* HeightPreferenceKey.swift */,
@@ -709,6 +712,7 @@
 				598F58092B13A5ED003B4FCB /* View+Extensions.swift in Sources */,
 				598053EC2BA6FD19008056F3 /* Login.swift in Sources */,
 				9986146B2BBD20D100E0996D /* ViewExtensions.swift in Sources */,
+				599EC2F22BD4CEDA00F6DEB1 /* ORTextField.swift in Sources */,
 				9986145A2BBB9EEC00E0996D /* WelcomePage.swift in Sources */,
 				5953369E2B05018100BB11D7 /* Tab.swift in Sources */,
 				9986145F2BBBAC8500E0996D /* UnderlineTextField.swift in Sources */,

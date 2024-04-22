@@ -10,10 +10,8 @@ import Foundation
 enum SideMenuOptionModel: Int, CaseIterable, Equatable {
     case dashboard
     case profile
-    case widget
-    case friendList
-    case settings
-    
+    case search
+    case notification
     
     var title: String {
         switch self {
@@ -21,12 +19,10 @@ enum SideMenuOptionModel: Int, CaseIterable, Equatable {
             return "Dashboard"
         case .profile:
             return "Profile"
-        case .widget:
-            return "Widget"
-        case .friendList:
-            return "Friend List"
-        case .settings:
-            return "Settings"
+        case .search:
+            return "Search"
+        case .notification:
+            return "Notification"
         }
     }
     
@@ -36,12 +32,10 @@ enum SideMenuOptionModel: Int, CaseIterable, Equatable {
             return "filemenu.and.cursorarrow"
         case .profile:
             return "person"
-        case .widget:
-            return "square.and.pencil"
-        case .friendList:
-            return "person.2"
-        case .settings:
-            return "gear"
+        case .search:
+            return "magnifyingglass"
+        case .notification:
+            return "bell"
         }
     }
     

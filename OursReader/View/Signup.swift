@@ -26,63 +26,32 @@ struct Signup: View {
             Text("Sign up")
                 .padding(20)
         }
-        .background(Color.button_solid_bkgd)
-        .foregroundStyle(.white)
+        .background(Color.rice_white)
+        .foregroundStyle(Color.dark_brown2)
         .clipShape(Capsule())
     }
     
     var body: some View {
         ZStack{
-            Color.white.ignoresSafeArea()
+            Color.rice_white.ignoresSafeArea()
             Spacer()
             Circle()
-                .fill(Color.button_solid_bkgd)
+                .fill(Color.background)
                 .frame(width: 400 , height: 400)
                 .position(x: 150, y: -100)
                 .ignoresSafeArea(.keyboard)
             
             Circle()
-                .fill(Color.circle_color)
+                .fill(Color.dark_brown)
                 .frame(width: UIScreen.main.bounds.width * 1.7 , height: UIScreen.main.bounds.width * 1.7)
                 .offset(y: UIScreen.main.bounds.width * 0.8)
             
             VStack {
                 Spacer()
-                FloatingPromptTextField(text: $email) {
-                    Text("Email")
-                        .foregroundStyle(Color.white)
-                }
-                .floatingPrompt {
-                    Text("Email 快d 入！！")
-                        .foregroundStyle(Color.white)
-                }
-                .padding(10)
-                .background(
-                    .gray,
-                    in: RoundedRectangle(
-                        cornerRadius: 20,
-                        style: .continuous
-                    )
-                )
-                .padding(.bottom, 20)
-                
-                FloatingPromptTextField(text: $password) {
-                    Text("Password")
-                        .foregroundStyle(Color.white)
-                }
-                .floatingPrompt {
-                    Text("打pwd打快d啦")
-                        .foregroundStyle(Color.white)
-                }
-                .padding(10)
-                .background(
-                    .gray,
-                    in: RoundedRectangle(
-                        cornerRadius: 20,
-                        style: .continuous
-                    )
-                )
-                .padding(.bottom, 20)
+                ORTextField(text: $email,placeholder: "呢到就入Email", floatingPrompt: "隻手呀，一二一二")
+                    .padding(.bottom, 20)
+                ORTextField(text: $password,placeholder: "密碼黎架喂", floatingPrompt: "爽手啦",isSecure: true)
+                    .padding(.bottom, 20)
                 
                 SignupButton()
                     .padding(.bottom, 10)
@@ -90,7 +59,6 @@ struct Signup: View {
             .padding()
             .frame(width: UIScreen.main.bounds.width )
             .navigationTitle("Sign up")
-            .navigationBarTitleTextColor(.white)
         }
     }
 }
