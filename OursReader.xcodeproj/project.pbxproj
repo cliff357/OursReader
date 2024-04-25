@@ -247,6 +247,7 @@
 		5953369C2B05016E00BB11D7 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				59E75EC32ADF5749007A549C /* Model.swift */,
 				998614162BA8110B00E0996D /* UserAuthModel.swift */,
 				5953369D2B05018100BB11D7 /* Tab.swift */,
 			);
@@ -334,7 +335,6 @@
 				5953369C2B05016E00BB11D7 /* Model */,
 				59E75E992ADF53AA007A549C /* OursReaderApp.swift */,
 				59E75E9B2ADF53AA007A549C /* ContentView.swift */,
-				59E75EC32ADF5749007A549C /* Model.swift */,
 				598053E72BA6F169008056F3 /* Error.swift */,
 				598053E12BA6EDBB008056F3 /* DatabaseManager.swift */,
 				598053E92BA6F760008056F3 /* GoogleService-Info.plist */,

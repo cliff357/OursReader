@@ -37,6 +37,15 @@ struct SideMenu: View {
                             }
                         }
                         Spacer()
+                        Button {
+                            isShowing = false
+                            UserAuthModel.shared.signOut()
+                        } label: {
+                            HStack {
+                                Text("Logout")
+                                    .foregroundColor(.white)
+                            }
+                        }
                     }
                     .padding()
                     .frame(width: 270, alignment: .leading)

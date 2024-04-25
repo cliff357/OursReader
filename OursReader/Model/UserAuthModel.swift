@@ -42,6 +42,14 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
             } else {
                 self.isLoggedIn = false
                 let router = HomeRouter.shared
+                
+                
+                // do nothing if user is in signup page
+                // because signup error will check this state
+                if router.path.last == .signup {
+                    return
+                }
+                
                 router.reset()
             }
         }
@@ -202,14 +210,22 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
         Auth.auth().createUser(withEmail: email, password: password) { result, error in
             if let error = error {
                 print(error.localizedDescription)
-                completion("\(error.localizedDescription)") // Pass nil to indicate failure
+                completion("create user failed: \(error.localizedDescription)") // Pass nil to indicate failure
             } else {
                 guard let user = result?.user else {
                     completion(nil)
                     return
                 }
                 print("User created successfully:", user.email!, user.uid)
-                completion("User created successfully") // Pass success message
+                DatabaseManager.shared.insertUser(with: User(safeEmail: user.email ?? "",
+                                                             userUid: user.uid ?? "",
+                                                             name: user.displayName ?? "" )) { success in
+                    if success {
+                        completion("User created successfully") // Pass success message
+                    } else {
+                        completion("Failed to insert user to database") // Pass failure message
+                    }
+                }
             }
         }
     }
