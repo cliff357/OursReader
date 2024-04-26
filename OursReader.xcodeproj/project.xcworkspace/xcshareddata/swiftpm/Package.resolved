@@ -1,4 +1,5 @@
 {
+  "originHash" : "812f9fb0c27affad169883b184b36f497fe402fee9ec42a60497e17fe73a407e",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -172,6 +173,15 @@
       }
     },
     {
+      "identity" : "swiftentrykit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/huri000/SwiftEntryKit",
+      "state" : {
+        "revision" : "5ad36cccf0c4b9fea32f4e9b17a8e38f07563ef0",
+        "version" : "2.0.0"
+      }
+    },
+    {
       "identity" : "xcodeedit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/tomlokhorst/XcodeEdit",
@@ -181,5 +191,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

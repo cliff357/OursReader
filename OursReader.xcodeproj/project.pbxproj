@@ -40,6 +40,7 @@
 		59E75EB52ADF53AB007A549C /* OursReaderUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E75EB42ADF53AB007A549C /* OursReaderUITests.swift */; };
 		59E75EB72ADF53AB007A549C /* OursReaderUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E75EB62ADF53AB007A549C /* OursReaderUITestsLaunchTests.swift */; };
 		59E75EC42ADF5749007A549C /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E75EC32ADF5749007A549C /* Model.swift */; };
+		993EDABE2BDA4675002C18C7 /* SwiftEntryKit in Frameworks */ = {isa = PBXBuildFile; productRef = 993EDABD2BDA4675002C18C7 /* SwiftEntryKit */; };
 		998614152BA80F5D00E0996D /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 998614142BA80F5D00E0996D /* GoogleSignInSwift */; };
 		998614172BA8110B00E0996D /* UserAuthModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614162BA8110B00E0996D /* UserAuthModel.swift */; };
 		998614192BAAB3A500E0996D /* SideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614182BAAB3A500E0996D /* SideMenu.swift */; };
@@ -207,6 +208,7 @@
 				598053E62BA6F019008056F3 /* FirebaseAuth in Frameworks */,
 				998614732BBD21EF00E0996D /* FloatingPromptTextField in Frameworks */,
 				998614462BB1799B00E0996D /* FirebaseMessaging in Frameworks */,
+				993EDABE2BDA4675002C18C7 /* SwiftEntryKit in Frameworks */,
 				998614792BBD292500E0996D /* rswift in Frameworks */,
 				59E06A1D2BA6C87B00FE18FD /* FirebaseAnalytics in Frameworks */,
 				998614152BA80F5D00E0996D /* GoogleSignInSwift in Frameworks */,
@@ -293,6 +295,7 @@
 			children = (
 				598F58082B13A5ED003B4FCB /* View+Extensions.swift */,
 				998614432BB1770300E0996D /* NotificationManager.swift */,
+				598053E12BA6EDBB008056F3 /* DatabaseManager.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -325,19 +328,18 @@
 		59E75E982ADF53AA007A549C /* OursReader */ = {
 			isa = PBXGroup;
 			children = (
-				998614802BBD359E00E0996D /* Extension */,
-				998614742BBD284D00E0996D /* StyleConfig */,
-				9986144C2BB41F4300E0996D /* Router */,
 				998614482BB17C9A00E0996D /* OursReader.entitlements */,
 				998614122BA80EA300E0996D /* Info.plist */,
+				598053E92BA6F760008056F3 /* GoogleService-Info.plist */,
+				998614802BBD359E00E0996D /* Extension */,
+				998614742BBD284D00E0996D /* Config */,
+				9986144C2BB41F4300E0996D /* Router */,
+				5953369C2B05016E00BB11D7 /* Model */,
 				598F58072B13A5D2003B4FCB /* Helpers */,
 				5953369B2B05016700BB11D7 /* View */,
-				5953369C2B05016E00BB11D7 /* Model */,
 				59E75E992ADF53AA007A549C /* OursReaderApp.swift */,
 				59E75E9B2ADF53AA007A549C /* ContentView.swift */,
 				598053E72BA6F169008056F3 /* Error.swift */,
-				598053E12BA6EDBB008056F3 /* DatabaseManager.swift */,
-				598053E92BA6F760008056F3 /* GoogleService-Info.plist */,
 				59E75E9D2ADF53AB007A549C /* Assets.xcassets */,
 				59E75E9F2ADF53AB007A549C /* Preview Content */,
 			);
@@ -442,12 +444,12 @@
 			path = OursReader/View/Common/FloatingPromptTextField;
 			sourceTree = "<group>";
 		};
-		998614742BBD284D00E0996D /* StyleConfig */ = {
+		998614742BBD284D00E0996D /* Config */ = {
 			isa = PBXGroup;
 			children = (
 				998614752BBD287300E0996D /* ColorHelper.swift */,
 			);
-			path = StyleConfig;
+			path = Config;
 			sourceTree = "<group>";
 		};
 		998614802BBD359E00E0996D /* Extension */ = {
@@ -521,6 +523,7 @@
 				998614722BBD21EF00E0996D /* FloatingPromptTextField */,
 				998614782BBD292500E0996D /* rswift */,
 				9986147A2BBD2B3400E0996D /* RswiftLibrary */,
+				993EDABD2BDA4675002C18C7 /* SwiftEntryKit */,
 			);
 			productName = OursReader;
 			productReference = 59E75E962ADF53AA007A549C /* OursReader.app */;
@@ -608,6 +611,7 @@
 				998614132BA80F5D00E0996D /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				998614712BBD21EF00E0996D /* XCRemoteSwiftPackageReference "FloatingPromptTextField" */,
 				998614772BBD292500E0996D /* XCRemoteSwiftPackageReference "R" */,
+				993EDABC2BDA4675002C18C7 /* XCRemoteSwiftPackageReference "SwiftEntryKit" */,
 			);
 			productRefGroup = 59E75E972ADF53AA007A549C /* Products */;
 			projectDirPath = "";
@@ -1232,6 +1236,14 @@
 				minimumVersion = 10.22.1;
 			};
 		};
+		993EDABC2BDA4675002C18C7 /* XCRemoteSwiftPackageReference "SwiftEntryKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/huri000/SwiftEntryKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 		998614132BA80F5D00E0996D /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
@@ -1273,6 +1285,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 59E06A1B2BA6C87B00FE18FD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAnalytics;
+		};
+		993EDABD2BDA4675002C18C7 /* SwiftEntryKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 993EDABC2BDA4675002C18C7 /* XCRemoteSwiftPackageReference "SwiftEntryKit" */;
+			productName = SwiftEntryKit;
 		};
 		998614142BA80F5D00E0996D /* GoogleSignInSwift */ = {
 			isa = XCSwiftPackageProductDependency;
