@@ -217,15 +217,7 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
                     return
                 }
                 print("User created successfully:", user.email!, user.uid)
-                DatabaseManager.shared.insertUser(with: User(safeEmail: user.email ?? "",
-                                                             userUid: user.uid ?? "",
-                                                             name: user.displayName ?? "" )) { success in
-                    if success {
-                        completion("User created successfully") // Pass success message
-                    } else {
-                        completion("Failed to insert user to database") // Pass failure message
-                    }
-                }
+               
             }
         }
     }

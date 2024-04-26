@@ -6,69 +6,94 @@
 //
 
 import Foundation
-import FirebaseDatabase
+import FirebaseFirestore
+import FirebaseFirestoreSwift
 
 final class DatabaseManager {
     static let shared = DatabaseManager()
     
-    private let database = Database.database().reference()
-    
-    static func safeEmail(emailAddress: String) -> String {
-        var safeEmail = emailAddress.replacingOccurrences(of: ".", with: "-")
-        safeEmail = safeEmail.replacingOccurrences(of: "@", with: "-")
-        return safeEmail
+    //firebase key
+    enum Key {
+        static let user = "User"
     }
 }
 
 // MARK: - Account management
 extension DatabaseManager {
-    public func insertUser(with user: User, completion: @escaping (Bool)-> Void) {
-        let userDetail = [
-            "email": user.safeEmail,
-            "user_uid" : user.userUid,
-            "name": user.name
-        ] as [String : Any]
-        self.database.child("users").setValue(userDetail, withCompletionBlock: { error, _ in
-            guard error == nil else {
-                completion(false)
-                return
-            }
-            completion(true)
-        })
+    struct UserObject: Codable, Identifiable {
+        @DocumentID var id: String?
+        let name: String?
+        let userID: String?
+        let fcmToken: String?
+
     }
     
-    public func getAllUsers(completion: @escaping (Result<[[String: String]], Error>) -> Void) {
-        database.child("users").observeSingleEvent(of: .value, with: { snapshot in
-            guard let value = snapshot.value as? [[String: String]] else {
-                completion(.failure(DatabaseError.failedToFetch))
-                return
-            }
-            completion(.success(value))
-        })
+    // add user into fireStore
+    func addUser(name: String, userID: String, fcmToken: String) {
+        let user = UserObject(name: name, userID: userID, fcmToken: fcmToken)
+        do {
+            _ = try Firestore.firestore().collection(DatabaseManager.Key.user).addDocument(from: user)
+        } catch {
+            print(error)
+        }
+        
+//        Firestore.firestore().collection(DatabaseManager.Key.user).document(projectId).setData([
+//            "name": self.name ?? "",
+//            "version": self.version ?? "",
+//        ]) { (error) in
+//            if let err = error {
+//               print("error")
+//            } else {
+//                self.sendPushNotifiaction(type: self.type, name: projectName, version: self.version ?? "", platform: self.platform ?? "")
+//                self.presenter?.presentRouteToLandingPage()
+//            }
+//        }
     }
     
-    public func userExists(with email: String, completion: @escaping ((Bool) -> Void)) {
-        database.child("users").observeSingleEvent(of: .value, with: { snapshot in
-            guard !snapshot.exists() else {
-                completion(false)
-                return
-            }
-            completion(true)
-        })
+    
+    // update user info
+    func updateUser(name: String, userID: String, fcmToken: String) {
+//        let db = Firestore.firestore()
+//        let updateReference = db.collection(DatabaseManager.Key.user).document(userID)
+//        updateReference.getDocument { (document, err) in
+//            if let err = err {
+//                print(err.localizedDescription)
+//            }
+//            else {
+//                FirestoreResponse.updateOne(document: document, name: name, userID: userID, fcmToken: fcmToken) { (updated) in
+//                    if updated {
+//                        self.presenter?.presentRouteToLandingPage()
+//                    }
+//                }
+//            }
+//        }
+        
+//        let db = Firestore.firestore()
+//        let updateReference = db.collection(Configs.Database.rootname).document(id)
+//        updateReference.getDocument { (document, err) in
+//            if let err = err {
+//                print(err.localizedDescription)
+//            }
+//            else {
+//                FirestoreResponse.updateOne(document: document, name: self.name ?? item.name, version: self.version ?? item.version, bundle: self.bundle ?? item.bundle, platform: self.platform ?? item.platform, release: self.release ?? item.release, company: self.company ?? item.company, download: self.download ?? item.downloadURL, now: Int(now)) { (updated) in
+//                    if updated {
+//                        self.sendPushNotifiaction(type: self.type, name: self.name ?? item.name ?? "", version: self.version ?? item.version ?? "", platform: item.platform ?? "")
+//                            self.presenter?.presentRouteToLandingPage()
+//                    }
+//                }
+//            }
+//        }
     }
     
-    public func saveUserFcmToken(with user: User, token: String, completion: @escaping (Bool)-> Void) {
-        let userDetail = [
-            "fcm_token": token
-        ] as [String : Any]
-        self.database.child("users").child(user.safeEmail).setValue(userDetail, withCompletionBlock: { error, _ in
-            guard error == nil else {
-                completion(false)
-                return
-            }
-            completion(true)
-            
-    
-        })
-    }
+
+//    static func updateOne(document: FirebaseFirestore.DocumentSnapshot?, name: String?, userID: String?, fcmToken: String? , completion: @escaping (Bool) -> ()) {
+//        document?.reference.setData([
+//            "name": name ?? "",
+//            "userID": userID ?? "",
+//            "fcmtoken": fcmToken ?? ""
+//        ])
+//        
+//        completion(true)
+//    }
+   
 }

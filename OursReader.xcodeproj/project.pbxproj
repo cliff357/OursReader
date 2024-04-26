@@ -41,6 +41,8 @@
 		59E75EB72ADF53AB007A549C /* OursReaderUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E75EB62ADF53AB007A549C /* OursReaderUITestsLaunchTests.swift */; };
 		59E75EC42ADF5749007A549C /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E75EC32ADF5749007A549C /* Model.swift */; };
 		993EDABE2BDA4675002C18C7 /* SwiftEntryKit in Frameworks */ = {isa = PBXBuildFile; productRef = 993EDABD2BDA4675002C18C7 /* SwiftEntryKit */; };
+		993EDAC22BDBB71B002C18C7 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 993EDAC12BDBB71B002C18C7 /* FirebaseFirestore */; };
+		993EDAC42BDBB71B002C18C7 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 993EDAC32BDBB71B002C18C7 /* FirebaseFirestoreSwift */; };
 		998614152BA80F5D00E0996D /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 998614142BA80F5D00E0996D /* GoogleSignInSwift */; };
 		998614172BA8110B00E0996D /* UserAuthModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614162BA8110B00E0996D /* UserAuthModel.swift */; };
 		998614192BAAB3A500E0996D /* SideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614182BAAB3A500E0996D /* SideMenu.swift */; };
@@ -206,7 +208,9 @@
 				598053E42BA6EFF8008056F3 /* FirebaseDatabase in Frameworks */,
 				9986147B2BBD2B3400E0996D /* RswiftLibrary in Frameworks */,
 				598053E62BA6F019008056F3 /* FirebaseAuth in Frameworks */,
+				993EDAC22BDBB71B002C18C7 /* FirebaseFirestore in Frameworks */,
 				998614732BBD21EF00E0996D /* FloatingPromptTextField in Frameworks */,
+				993EDAC42BDBB71B002C18C7 /* FirebaseFirestoreSwift in Frameworks */,
 				998614462BB1799B00E0996D /* FirebaseMessaging in Frameworks */,
 				993EDABE2BDA4675002C18C7 /* SwiftEntryKit in Frameworks */,
 				998614792BBD292500E0996D /* rswift in Frameworks */,
@@ -524,6 +528,8 @@
 				998614782BBD292500E0996D /* rswift */,
 				9986147A2BBD2B3400E0996D /* RswiftLibrary */,
 				993EDABD2BDA4675002C18C7 /* SwiftEntryKit */,
+				993EDAC12BDBB71B002C18C7 /* FirebaseFirestore */,
+				993EDAC32BDBB71B002C18C7 /* FirebaseFirestoreSwift */,
 			);
 			productName = OursReader;
 			productReference = 59E75E962ADF53AA007A549C /* OursReader.app */;
@@ -1290,6 +1296,14 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 993EDABC2BDA4675002C18C7 /* XCRemoteSwiftPackageReference "SwiftEntryKit" */;
 			productName = SwiftEntryKit;
+		};
+		993EDAC12BDBB71B002C18C7 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseFirestore;
+		};
+		993EDAC32BDBB71B002C18C7 /* FirebaseFirestoreSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseFirestoreSwift;
 		};
 		998614142BA80F5D00E0996D /* GoogleSignInSwift */ = {
 			isa = XCSwiftPackageProductDependency;
