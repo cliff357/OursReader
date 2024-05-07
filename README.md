@@ -29,3 +29,16 @@ allow read, write:
     if  request.time < timestamp.date(2050, 1, 1); 
 
 咁其實等於冇set 到任何rules 
+
+
+2024 5月7號
+今日終於又抽到lunch time 番黎做野
+我發現用copilot 去寫真係快勁多
+例如想加一個check firestore user exist
+copilot真係gen到一個好fit既function出黎
+
+今日完成好左app層面對firestore 既setup！
+包括create完user，會加data落firestore 
+可以開始向dashboard推進
+
+下一個思考既位係，我應唔應該花時間去整靚ui ，定做好左功能先呢？ 
