@@ -12,6 +12,18 @@ import FirebaseCore
 import FirebaseAuth
 import CryptoKit
 import AuthenticationServices
+import FirebaseMessaging
+
+enum AuthenticationState {
+  case unauthenticated
+  case authenticating
+  case authenticated
+}
+
+enum AuthenticationFlow {
+  case login
+  case signUp
+}
 
 class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelegate {
     static let shared: UserAuthModel = .init()
@@ -37,7 +49,7 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
                 self.givenName = user.displayName ?? user.email ?? ""
                 
                 //TODO: get user imageurl
-//                guard let url = user.photoURL else { return }
+//                guard let uhk.rl = user.photoURL else { return }
                 //self.profilePicUrl =  //user.photoURL?.imageURL(withDimension: 100)!.absoluteString
             } else {
                 self.isLoggedIn = false
@@ -100,6 +112,25 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
                     // your request to Apple.
                     print(error?.localizedDescription)
                     return
+                }
+                
+                let user = result?.user
+                
+                var token = ""
+                if let t = Messaging.messaging().fcmToken {
+                    token = t
+                }
+                
+                DatabaseManager.shared.checkUserExist(email: user?.uid ?? "") { result in
+                    if result {
+                        print("user already exist")
+                    } else {
+                        DatabaseManager.shared.addUser(user: DatabaseManager.UserObject(name: user?.displayName,
+                                                                                        userID: user?.uid,
+                                                                                        fcmToken: token ,
+                                                                                        email: user?.email,
+                                                                                        login_type: .google))
+                    }
                 }
             }
         }
@@ -196,6 +227,24 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
                     return
                 }
                 
+                let user = authResult?.user
+                
+                var token = ""
+                if let t = Messaging.messaging().fcmToken {
+                    token = t
+                }
+                
+                DatabaseManager.shared.checkUserExist(email: user?.uid ?? "") { result in
+                    if result {
+                        print("user already exist")
+                    } else {
+                        DatabaseManager.shared.addUser(user: DatabaseManager.UserObject(name: user?.displayName,
+                                                                                        userID: user?.uid,
+                                                                                        fcmToken: token ,
+                                                                                        email: user?.email,
+                                                                                        login_type: .apple))
+                    }
+                }
             }
         }
     }
@@ -216,8 +265,18 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
                     completion(nil)
                     return
                 }
+                
+                var token = ""
+                if let t = Messaging.messaging().fcmToken {
+                    token = t
+                }
+                
+                DatabaseManager.shared.addUser(user: DatabaseManager.UserObject(name: user.displayName, 
+                                                                                userID: user.uid,
+                                                                                fcmToken: token,
+                                                                                email: email,
+                                                                                login_type: .email))
                 print("User created successfully:", user.email!, user.uid)
-               
             }
         }
     }
@@ -231,6 +290,8 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
             } else {
                 // 登入成功，回傳成功訊息
                 completion("Login success")
+                
+                
             }
         }
     }
