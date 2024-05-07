@@ -44,6 +44,9 @@ struct SideMenu: View {
                             HStack {
                                 Text("Logout")
                                     .foregroundColor(.white)
+                                    .padding()
+                                    .background(Color.green1)
+                                    .cornerRadius(10)
                             }
                         }
                     }
