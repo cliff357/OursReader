@@ -1,9 +1,10 @@
 Feature in OursReader
-- User management  <--- now i am here
+- User management  
+- peer to peer exchange data <--- now i am here
+- account deletion
 - push notification
 - testflight
 - xcode cloud 
-- peer to peer exchange data
 - interactive widget 
 - live activities
 
@@ -42,3 +43,21 @@ copilot真係gen到一個好fit既function出黎
 可以開始向dashboard推進
 
 下一個思考既位係，我應唔應該花時間去整靚ui ，定做好左功能先呢？ 
+
+
+2024 5月8號
+好！ 我決定唔搞UI住，太想研究下點樣處理近距離交換data既問題
+決定用 MultipeerConnectivity
+
+功能上其實只係需要2部機好近，然後互加對方
+如果可以做到唔洗approve都加到好友，就perfect
+
+試一試先 
+決定將 peer to peer exchange data 作為下一個feature
+
+
+
+2024 5月24號
+去左專心考車一段時間
+番黎！好想盡快可以交換到data，咁就可以send push！
+

@@ -48,13 +48,16 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
                 self.isLoggedIn = true
                 self.givenName = user.displayName ?? user.email ?? ""
                 
+                Storage.save(Storage.Key.userName, user.displayName)
+                Storage.save(Storage.Key.userEmail, user.email)
+                
                 //TODO: get user imageurl
 //                guard let uhk.rl = user.photoURL else { return }
                 //self.profilePicUrl =  //user.photoURL?.imageURL(withDimension: 100)!.absoluteString
             } else {
                 self.isLoggedIn = false
                 let router = HomeRouter.shared
-                
+                Storage.removeAllUserDefaultsObject()
                 
                 // do nothing if user is in signup page
                 // because signup error will check this state
