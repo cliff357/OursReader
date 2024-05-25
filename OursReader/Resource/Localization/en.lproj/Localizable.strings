@@ -19,6 +19,7 @@
 
 "login_title" = "Login Now";
 "sign_up" = "Sign up";
+"sign_up_button" = "Register";
 "login_email_title" = "Please input email";
 "login_email_floating_msg" = "email here";
 "login_pass_title" = "password";

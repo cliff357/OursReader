@@ -20,14 +20,14 @@ struct Signup: View {
     fileprivate func SignupButton() -> some View {
         Button(action: {
             UserAuthModel.shared.createUser(email: email, password: password) { msg in
-//                ReminderManager.shared.addReminder(reminder: ReminderData(title: "Error", desc: msg ?? "", buttons: [
-//                    GeneralButtonData(title: "OK", style: .fill, action: {
-//                        
-//                    })
-//                ]))
+                let reminderData = ReminderData(
+                    title: "!!",
+                    desc: msg ?? "",
+                    buttons: [GeneralButtonData(title: LM.Key.general_ok(), style: .fill, action: {})])
+                ReminderManager.shared.addReminder(reminder: reminderData)
             }
         }) {
-            Text("Sign up")
+            Text(LM.Key.sign_up_button())
                 .padding(20)
         }
         .background(Color.rice_white)

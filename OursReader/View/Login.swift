@@ -23,6 +23,7 @@ struct Login: View {
         }) {
             Text(LM.Key.login_title())
                 .padding(20)
+                .font(.workSans12)
         }
         .background(Color.rice_white)
         .foregroundStyle(Color.dark_brown2)
@@ -32,13 +33,9 @@ struct Login: View {
     fileprivate func SignUpButton() -> Button<Text> {
         Button(action: {
             HomeRouter.shared.push(to: .signup)
-//            let reminderData = ReminderData(
-//                title: "test",
-//                desc: "test",
-//                buttons: [GeneralButtonData(title: "OK", style: .fill, action: {})])
-//            ReminderManager.shared.addReminder(reminder: reminderData)
         }) {
             Text(LM.Key.sign_up())
+                .font(.workSans12)
                 .foregroundStyle(Color.rice_white)
         }
     }
@@ -105,6 +102,7 @@ struct Login: View {
                 HStack {
                     Text(LM.Key.login_no_account())
                         .foregroundStyle(Color.rice_white)
+                        .font(.workSans12)
                     SignUpButton()
                 }
                 
@@ -117,7 +115,7 @@ struct Login: View {
 //                    HomeRouter.shared.push(to: .home)
 //                }
 //            }
-            .navigationTitle(LM.Key.login_title())
+            .navigationTitle(LM.Key.login())
             .navigationBarTitleTextColor(.dark_brown2)
         }
     }

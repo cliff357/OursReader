@@ -19,6 +19,7 @@
 
 "login_title" = "即刻登入";
 "sign_up" = "整番個ac先";
+"sign_up_button" = "註冊";
 "login_email_title" = "呢到入email";
 "login_email_floating_msg" = "打email 快快快";
 "login_pass_title" = "呢到入密碼～";
