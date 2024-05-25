@@ -16,17 +16,17 @@ struct SideMenuHeaderView: View {
                 .imageScale(.large)
                 .foregroundStyle(.white)
                 .frame(width: 48, height: 48)
-                .background(.blue)
+                .background(Color.orange1)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .padding(.vertical)
             
             VStack(alignment: .leading, spacing: 6) {
                 Text(user.givenName)
                     .font(.subheadline)
-                    .foregroundStyle(Color.dark_brown2)
+                    .foregroundStyle(Color.green1)
                 Text("Hello~")
                     .font(.footnote)
-                    .foregroundStyle(Color.dark_brown2)
+                    .foregroundStyle(Color.green1)
             }
         }
     }

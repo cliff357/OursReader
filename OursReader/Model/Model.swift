@@ -22,7 +22,6 @@ struct BookDetail {
 
 struct User {
     var safeEmail: String
-    var userUid: UUID
-    var firstName: String
-    var lastName: String
+    var userUid: String
+    var name: String
 }

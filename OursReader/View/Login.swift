@@ -45,7 +45,7 @@ struct Login: View {
             Image("Google")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 25, height: 25)
+                .frame(width: 50, height: 50)
                 .padding(7.5)
         })
     }
@@ -58,10 +58,10 @@ struct Login: View {
             Image(systemName: "apple.logo")
                 .resizable()
                 .scaledToFit()
-                .padding(8)
+                .padding(15)
                 .tint(.black)
                 .background(Circle().fill(Color.white))
-                .frame(width: 28, height: 28)
+                .frame(width: 55, height: 55)
         })
         
         
