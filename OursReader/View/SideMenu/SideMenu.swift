@@ -42,7 +42,7 @@ struct SideMenu: View {
                             UserAuthModel.shared.signOut()
                         } label: {
                             HStack {
-                                Text("Logout")
+                                Text(LM.Key.logout())
                                     .foregroundColor(.white)
                                     .padding()
                                     .background(Color.green1)

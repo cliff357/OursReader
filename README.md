@@ -61,3 +61,10 @@ copilot真係gen到一個好fit既function出黎
 去左專心考車一段時間
 番黎！好想盡快可以交換到data，咁就可以send push！
 
+2024 5月25號
+我發現我需要一個可以隨時彈出既error dialog
+以下係幾點想隨時做到既要求
+1. 隨時都call 得既彈出式error alert
+2. 有個handler call佢，只要比message佢就可以隨時彈出黎
+3. 盡可能減少callback hell
+

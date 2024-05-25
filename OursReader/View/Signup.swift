@@ -15,12 +15,16 @@ struct Signup: View {
     @State var email: String = ""
     @State var password: String = ""
     @State var confirmPassword: String = ""
-    
+
     
     fileprivate func SignupButton() -> some View {
         Button(action: {
             UserAuthModel.shared.createUser(email: email, password: password) { msg in
-                
+//                ReminderManager.shared.addReminder(reminder: ReminderData(title: "Error", desc: msg ?? "", buttons: [
+//                    GeneralButtonData(title: "OK", style: .fill, action: {
+//                        
+//                    })
+//                ]))
             }
         }) {
             Text("Sign up")
@@ -48,9 +52,9 @@ struct Signup: View {
             
             VStack {
                 Spacer()
-                ORTextField(text: $email,placeholder: "呢到就入Email", floatingPrompt: "隻手呀，一二一二")
+                ORTextField(text: $email,placeholder: LM.Key.login_email_title(), floatingPrompt: LM.Key.login_email_floating_msg())
                     .padding(.bottom, 20)
-                ORTextField(text: $password,placeholder: "密碼黎架喂", floatingPrompt: "爽手啦",isSecure: true)
+                ORTextField(text: $password,placeholder: LM.Key.login_pass_title(), floatingPrompt: LM.Key.login_pass_floating_msg(),isSecure: true)
                     .padding(.bottom, 20)
                 
                 SignupButton()
@@ -58,7 +62,7 @@ struct Signup: View {
             }
             .padding()
             .frame(width: UIScreen.main.bounds.width )
-            .navigationTitle("Sign up")
+            .navigationTitle(LM.Key.sign_up())
         }
     }
 }

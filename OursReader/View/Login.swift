@@ -21,7 +21,7 @@ struct Login: View {
                 
             }
         }) {
-            Text("Login Now")
+            Text(LM.Key.login_title())
                 .padding(20)
         }
         .background(Color.rice_white)
@@ -32,8 +32,13 @@ struct Login: View {
     fileprivate func SignUpButton() -> Button<Text> {
         Button(action: {
             HomeRouter.shared.push(to: .signup)
+//            let reminderData = ReminderData(
+//                title: "test",
+//                desc: "test",
+//                buttons: [GeneralButtonData(title: "OK", style: .fill, action: {})])
+//            ReminderManager.shared.addReminder(reminder: reminderData)
         }) {
-            Text("Sign Up")
+            Text(LM.Key.sign_up())
                 .foregroundStyle(Color.rice_white)
         }
     }
@@ -86,19 +91,19 @@ struct Login: View {
             VStack {
                 Spacer()
                 
-                ORTextField(text: $email,placeholder: "呢到就入Email", floatingPrompt: "隻手呀，一二一二")
+                ORTextField(text: $email,placeholder: LM.Key.login_email_title(), floatingPrompt: LM.Key.login_email_floating_msg())
                     .padding(.bottom, 20)
-                ORTextField(text: $password,placeholder: "密碼黎架喂", floatingPrompt: "爽手啦",isSecure: true)
+                ORTextField(text: $password,placeholder: LM.Key.login_pass_title(), floatingPrompt: LM.Key.login_pass_floating_msg(),isSecure: true)
                     .padding(.bottom, 20)
                 
                 LoginByUsernameButton()
-                DividerWithText( label: "or", color: Color.rice_white)
+                DividerWithText( label: LM.Key.or(), color: Color.rice_white)
                 HStack {
                     LoginInByAppleButton()
                     LoginInByGoogleButton()
                 }
                 HStack {
-                    Text("Don't have an account? ")
+                    Text(LM.Key.login_no_account())
                         .foregroundStyle(Color.rice_white)
                     SignUpButton()
                 }
@@ -107,12 +112,12 @@ struct Login: View {
             }
             .padding()
             .frame(width: UIScreen.main.bounds.width )
-            .onChange(of: vm.isLoggedIn) { oldValue, newValue in
-                if newValue {
-                    HomeRouter.shared.push(to: .home)
-                }
-            }
-            .navigationTitle("Login")
+//            .onChange(of: vm.isLoggedIn) { oldValue, newValue in
+//                if newValue {
+//                    HomeRouter.shared.push(to: .home)
+//                }
+//            }
+            .navigationTitle(LM.Key.login_title())
             .navigationBarTitleTextColor(.dark_brown2)
         }
     }

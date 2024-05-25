@@ -48,8 +48,8 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
                 self.isLoggedIn = true
                 self.givenName = user.displayName ?? user.email ?? ""
                 
-                Storage.save(Storage.Key.userName, user.displayName)
-                Storage.save(Storage.Key.userEmail, user.email)
+                Storage.save(Storage.Key.userName, user.displayName ?? "")
+                Storage.save(Storage.Key.userEmail, user.email ?? "")
                 
                 //TODO: get user imageurl
 //                guard let uhk.rl = user.photoURL else { return }
