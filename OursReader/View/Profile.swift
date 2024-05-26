@@ -9,12 +9,10 @@ import SwiftUI
 
 struct Profile: View {
     var body: some View {
-        Button {
-            UserAuthModel.shared.signOut()
-        } label: {
-            Text("Logout!")
+        ZStack {
+            Color.background.ignoresSafeArea()
+            Text("Profile")
         }
-
     }
 }
 

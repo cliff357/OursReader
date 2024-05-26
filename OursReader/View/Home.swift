@@ -10,7 +10,7 @@ import FirebaseAuth
 import FirebaseDatabase
 
 struct Home: View {
-    @State private var selectedSideMenu: SideMenuOptionModel? = .dashboard
+    @State private var selectedSideMenu: SideMenuOptionModel? = .friendList
     @Environment(\.colorScheme) private var scheme
     
     @State private var showMenu = false

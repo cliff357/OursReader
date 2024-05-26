@@ -11,21 +11,38 @@ struct FriendList: View {
     @StateObject var model = DeviceFinderViewModel()
     
     var body: some View {
-            List(model.peers) { peer in
-                HStack {
-                    Image(systemName: "iphone.gen1")
-                        .imageScale(.large)
-                        .foregroundColor(.accentColor)
-                    
-                    Text(peer.peerId.displayName)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+        ZStack {
+//            Color.background.ignoresSafeArea()
+            VStack {
+                
+                List {
+                    ForEach(1..<8) { index in
+                        Text("HI")
+                            .backgroundStyle(.red)
+                    }
                 }
-                .padding(.vertical, 5)
-                .onTapGesture {
-                    model.selectedPeer = peer
-//                    HomeRouter.shared.push(to: .friendDetail)
+                
+                Spacer()
+                
+                
+                List(model.peers) { peer in
+                    HStack {
+                        Image(systemName: "iphone.gen1")
+                            .imageScale(.large)
+                            .foregroundColor(.accentColor)
+                        
+                        Text(peer.peerId.displayName)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .padding(.vertical, 5)
+                    .onTapGesture {
+                        model.selectedPeer = peer
+                        //                    HomeRouter.shared.push(to: .friendDetail)
+                    }
+                    .listRowBackground(Color.green)
                 }
-            }
+            } .background(Color.background)
+        
             //Receive message from other peer
             .alert(item: $model.permissionRequest, content: { request in
                 Alert(
@@ -45,7 +62,9 @@ struct FriendList: View {
             .onDisappear {
                 model.finishBrowsing()
             }
-//        }
+        }
+           
+            
     }
 }
 
