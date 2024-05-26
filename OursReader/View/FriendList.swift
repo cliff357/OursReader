@@ -11,21 +11,27 @@ struct FriendList: View {
     @StateObject var model = DeviceFinderViewModel()
     
     var body: some View {
+        ZStack {
+            Color.background.ignoresSafeArea()
+
             List(model.peers) { peer in
                 HStack {
-                    Image(systemName: "iphone.gen1")
+                    Image(systemName: "person.wave.2")
                         .imageScale(.large)
-                        .foregroundColor(.accentColor)
+                        .foregroundColor(Color.rice_white)
                     
                     Text(peer.peerId.displayName)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
+                .listRowBackground(Color.dark_brown2)
                 .padding(.vertical, 5)
                 .onTapGesture {
                     model.selectedPeer = peer
 //                    HomeRouter.shared.push(to: .friendDetail)
                 }
             }
+            .scrollContentBackground(.hidden)
+            
             //Receive message from other peer
             .alert(item: $model.permissionRequest, content: { request in
                 Alert(
@@ -45,7 +51,9 @@ struct FriendList: View {
             .onDisappear {
                 model.finishBrowsing()
             }
-//        }
+        }
+           
+            
     }
 }
 

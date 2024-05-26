@@ -23,7 +23,7 @@ struct Login: View {
         }) {
             Text(LM.Key.login_title())
                 .padding(20)
-                .font(.workSans12)
+                .font(.workSansMedium16)
         }
         .background(Color.rice_white)
         .foregroundStyle(Color.dark_brown2)
@@ -35,7 +35,7 @@ struct Login: View {
             HomeRouter.shared.push(to: .signup)
         }) {
             Text(LM.Key.sign_up())
-                .font(.workSans12)
+                .font(.workSansMedium16)
                 .foregroundStyle(Color.rice_white)
         }
     }
@@ -102,7 +102,7 @@ struct Login: View {
                 HStack {
                     Text(LM.Key.login_no_account())
                         .foregroundStyle(Color.rice_white)
-                        .font(.workSans12)
+                        .font(.workSansMedium16)
                     SignUpButton()
                 }
                 

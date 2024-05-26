@@ -13,42 +13,50 @@ struct Dashboard: View {
     @State private var selectedTab: Tab?
     
     var body: some View {
-        VStack(spacing: 15) {
-            CustomTabBar()
+        ZStack {
+            Color.background.ignoresSafeArea()
             
-            //Paging View using new iOS 17 APIS
-            GeometryReader {
-                let size = $0.size
+            VStack(spacing: 15) {
+                Spacer().frame(height: 15)
                 
-                ScrollView(.horizontal) {
-                    LazyHStack(spacing: 0 ) {
-                        SampleView(.red)
-                            .id(Tab.fav)
-                            .containerRelativeFrame(.horizontal)
-                        
-                        SampleView(.blue)
-                            .id(Tab.new)
-                            .containerRelativeFrame(.horizontal)
-                        
-                        SampleView(.purple)
-                            .id(Tab.all)
-                            .containerRelativeFrame(.horizontal)
+                
+                CustomTabBar()
+                
+                //Paging View using new iOS 17 APIS
+                GeometryReader {
+                    let size = $0.size
+                    
+                    ScrollView(.horizontal) {
+                        LazyHStack(spacing: 0 ) {
+                            SampleView(.red)
+                                .id(Tab.fav)
+                                .containerRelativeFrame(.horizontal)
+                            
+                            SampleView(.blue)
+                                .id(Tab.new)
+                                .containerRelativeFrame(.horizontal)
+                            
+                            SampleView(.purple)
+                                .id(Tab.all)
+                                .containerRelativeFrame(.horizontal)
+                        }
+                        .scrollTargetLayout()
+                        .offsetX { value in
+                            /// Converting offset into progress
+                            let progress = -value / (size.width * CGFloat(Tab.allCases.count - 1))
+                            /// Capping Progress BTW 0-1
+                            tabProgress = max(min(progress, 1),0)
+                        }
                     }
-                    .scrollTargetLayout()
-                    .offsetX { value in
-                        /// Converting offset into progress
-                        let progress = -value / (size.width * CGFloat(Tab.allCases.count - 1))
-                        /// Capping Progress BTW 0-1
-                        tabProgress = max(min(progress, 1),0)
-                    }
+                    .scrollPosition(id: $selectedTab)
+                    .scrollIndicators(.hidden)
+                    .scrollTargetBehavior(.paging)
+                    .scrollClipDisabled()
                 }
-                .scrollPosition(id: $selectedTab)
-                .scrollIndicators(.hidden)
-                .scrollTargetBehavior(.paging)
-                .scrollClipDisabled()
             }
+//            .background(Color.background)
         }
-        .background(Color.background)
+        
     }
     
     @ViewBuilder
