@@ -10,7 +10,7 @@ import FirebaseAuth
 import FirebaseDatabase
 
 struct Home: View {
-    @State private var selectedSideMenu: SideMenuOptionModel? = .friendList
+    @State private var selectedSideMenu: SideMenuOptionModel? = .dashboard
     @Environment(\.colorScheme) private var scheme
     
     @State private var showMenu = false
@@ -34,20 +34,20 @@ struct Home: View {
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-            .background(.gray.opacity(0.1))
-            .onAppear() {
-                Auth.auth().signInAnonymously { user, error in
-                    if let error = error {
-                        print(error.localizedDescription)
-                    }
-                }
-                let ref = Database.database().reference(withPath: "name")
-                ref.observe(.value) { snapshot in
-                    if let output = snapshot.value {
-                        //Todo: data exchange with push token
-                    }
-                }
-            }
+//            .background(.gray.opacity(0.1))
+//            .onAppear() {
+//                Auth.auth().signInAnonymously { user, error in
+//                    if let error = error {
+//                        print(error.localizedDescription)
+//                    }
+//                }
+//                let ref = Database.database().reference(withPath: "name")
+//                ref.observe(.value) { snapshot in
+//                    if let output = snapshot.value {
+//                        //Todo: data exchange with push token
+//                    }
+//                }
+//            }
             
             SideMenu(isShowing: $showMenu, selectedTab: $selectedSideMenu)
         }

@@ -12,37 +12,26 @@ struct FriendList: View {
     
     var body: some View {
         ZStack {
-//            Color.background.ignoresSafeArea()
-            VStack {
-                
-                List {
-                    ForEach(1..<8) { index in
-                        Text("HI")
-                            .backgroundStyle(.red)
-                    }
+            Color.background.ignoresSafeArea()
+
+            List(model.peers) { peer in
+                HStack {
+                    Image(systemName: "person.wave.2")
+                        .imageScale(.large)
+                        .foregroundColor(Color.rice_white)
+                    
+                    Text(peer.peerId.displayName)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                
-                Spacer()
-                
-                
-                List(model.peers) { peer in
-                    HStack {
-                        Image(systemName: "iphone.gen1")
-                            .imageScale(.large)
-                            .foregroundColor(.accentColor)
-                        
-                        Text(peer.peerId.displayName)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    .padding(.vertical, 5)
-                    .onTapGesture {
-                        model.selectedPeer = peer
-                        //                    HomeRouter.shared.push(to: .friendDetail)
-                    }
-                    .listRowBackground(Color.green)
+                .listRowBackground(Color.dark_brown2)
+                .padding(.vertical, 5)
+                .onTapGesture {
+                    model.selectedPeer = peer
+//                    HomeRouter.shared.push(to: .friendDetail)
                 }
-            } .background(Color.background)
-        
+            }
+            .scrollContentBackground(.hidden)
+            
             //Receive message from other peer
             .alert(item: $model.permissionRequest, content: { request in
                 Alert(
