@@ -7,11 +7,38 @@
 
 import SwiftUI
 
-//TODO: just an idea, want to insert this page before login
+import Combine
+
+class IconViewModel: ObservableObject {
+    @Published var currentIcon: String = "star.fill"
+    
+    private var icons = ["heart.fill", "bell.fill", "figure.badminton", "figure.boxing"]
+    private var index = 0
+    private var timer: AnyCancellable?
+    
+    init() {
+        startTimer()
+    }
+    
+    private func startTimer() {
+        timer = Timer.publish(every: 2.0, on: .main, in: .common).autoconnect()
+            .sink { [weak self] _ in
+                self?.nextIcon()
+            }
+    }
+    
+    private func nextIcon() {
+        index = (index + 1) % icons.count
+        withAnimation(.easeOut(duration: 1)) {
+            currentIcon = icons[index]
+        }
+    }
+}
 
 struct WelcomePage: View {
     @State var nickname: String = ""
     @EnvironmentObject var vm: UserAuthModel
+    @StateObject private var viewModel = IconViewModel()
     
     fileprivate func confirmButton() -> some View {
         Button(action: {
@@ -42,17 +69,26 @@ struct WelcomePage: View {
                 .offset(y: UIScreen.main.bounds.width * 0.8)
             
             VStack {
-                Spacer()
+                Spacer().frame(height: 100)
+                Image(systemName: viewModel.currentIcon)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 200, height: 200)
+                    .transition(AnyTransition.opacity.combined(with: .scale))
+                    .padding()
+                
                 ORTextField(text: $nickname,placeholder: LM.Key.nick_name(), floatingPrompt: LM.Key.nick_name())
                     .padding(.bottom, 20)
                 
                 confirmButton()
                     .padding(.bottom, 10)
+                
+                Spacer()
             }
             .padding()
             .frame(width: UIScreen.main.bounds.width )
-            .navigationTitle(LM.Key.sign_up())
         }
+        .navigationTitle(LM.Key.nick_name())
     }
 }
 
