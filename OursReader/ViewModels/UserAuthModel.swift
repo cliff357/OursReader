@@ -28,6 +28,7 @@ enum AuthenticationFlow {
 class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelegate {
     static let shared: UserAuthModel = .init()
     
+    @Published var nickName: String = ""
     @Published var givenName: String = ""
     @Published var profilePicUrl: String = ""
     @Published var isLoggedIn: Bool = false
@@ -43,6 +44,10 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
     }
     
     func check() {
+        if let name = Storage.getString(Storage.Key.nickName) {
+            self.nickName = name
+        }
+        
         Auth.auth().addStateDidChangeListener { auth, user in
             if let user = user {
                 self.isLoggedIn = true
@@ -274,7 +279,7 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
                     token = t
                 }
                 
-                DatabaseManager.shared.addUser(user: DatabaseManager.UserObject(name: user.displayName, 
+                DatabaseManager.shared.addUser(user: DatabaseManager.UserObject(name: user.displayName,
                                                                                 userID: user.uid,
                                                                                 fcmToken: token,
                                                                                 email: email,

@@ -50,7 +50,7 @@ class DeviceFinderViewModel: NSObject, ObservableObject {
     @Published var joinedPeer: [PeerDevice] = []
     
     override init() {
-        let peer = MCPeerID(displayName: "Mac")//Storage.getString(Storage.Key.userName) ?? "iPhone")
+        let peer = MCPeerID(displayName: Storage.getString(Storage.Key.nickName) ?? "Friend")
         session = MCSession(peer: peer, securityIdentity: nil, encryptionPreference: .required)
         
         advertiser = MCNearbyServiceAdvertiser(

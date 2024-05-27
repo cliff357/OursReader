@@ -17,6 +17,9 @@
 "logout" = "登出";
 "copy" = "複制";
 
+"welcome" = "Welcome";
+"nick_name" = "花名";
+
 "login_title" = "即刻登入";
 "sign_up" = "整番個ac先";
 "sign_up_button" = "註冊";

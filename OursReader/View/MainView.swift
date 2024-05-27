@@ -18,19 +18,24 @@ struct MainView: View {
     var body: some View {
         VStack {
             Group {
-                if userAuth.isLoggedIn {
-                    NavigationStack(path: $homeRouter.path ) {
-                        Home()
-                            .environmentObject(userAuth)
-                            .navigationDestination(for: HomeRoute.self, destination: { $0 })
-                    }
+                if userAuth.nickName.isEmpty {
+                    WelcomePage()
+                        .environmentObject(userAuth)
                 } else {
-                    NavigationStack(path: $homeRouter.path ) {
-                        Login()
-                            .environmentObject(userAuth)
-                            .navigationDestination(for: HomeRoute.self, destination: { $0 })
+                    if userAuth.isLoggedIn {
+                        NavigationStack(path: $homeRouter.path ) {
+                            Home()
+                                .environmentObject(userAuth)
+                                .navigationDestination(for: HomeRoute.self, destination: { $0 })
+                        }
+                    } else {
+                        NavigationStack(path: $homeRouter.path ) {
+                            Login()
+                                .environmentObject(userAuth)
+                                .navigationDestination(for: HomeRoute.self, destination: { $0 })
+                        }
+                        
                     }
-
                 }
             }
             

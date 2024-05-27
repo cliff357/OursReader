@@ -17,6 +17,7 @@ class Storage {
         static let currentLanguage = "language.current"
         static let currentFontSize = "fontSize.current"
         
+        static let nickName = "user.nickName"
         static let pushToken = "user.pushToken"
         static let userName = "user.Name"
         static let userEmail = "user.Email"
