@@ -68,3 +68,12 @@ copilot真係gen到一個好fit既function出黎
 2. 有個handler call佢，只要比message佢就可以隨時彈出黎
 3. 盡可能減少callback hell
 
+2024 5月27號
+成功啦！！！！！！係chatgpt 4o 既幫助下
+終於實現到2部電話用MultipeerConnectivity 黎exchange data
+雖然寫得唔靚，但起碼做到個效果了，commit！ 然後就睇下可以點樣寫番靚仔d
+
+依家kick住既問題係雙方一connected 就會delay 1 秒先會send msg
+以下係2個解決方法
+1. display loading，交換完就dismiss loading 
+2. 真係detect到connected，先會交換data 

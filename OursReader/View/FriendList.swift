@@ -12,6 +12,8 @@ struct FriendList: View {
     
     var body: some View {
         ZStack {
+            //Should check have user grand notification permission, otherwise, should not able to exchange data
+            
             Color.background.ignoresSafeArea()
 
             List(model.peers) { peer in
@@ -22,17 +24,24 @@ struct FriendList: View {
                     
                     Text(peer.peerId.displayName)
                         .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    if model.joinedPeer.contains(where: { $0.peerId == peer.peerId }) {
+                        Text("Connected")
+                            .foregroundColor(.green)
+                            .padding(.horizontal)
+                    }
                 }
                 .listRowBackground(Color.dark_brown2)
                 .padding(.vertical, 5)
                 .onTapGesture {
                     model.selectedPeer = peer
 //                    HomeRouter.shared.push(to: .friendDetail)
+                    print("list tabbed")
                 }
             }
             .scrollContentBackground(.hidden)
             
-            //Receive message from other peer
+            //Receive  message from other peer
             .alert(item: $model.permissionRequest, content: { request in
                 Alert(
                     title: Text("Start linking to  \(request.peerId.displayName)"),

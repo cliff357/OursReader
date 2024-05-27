@@ -28,31 +28,30 @@ class DeviceFinderViewModel: NSObject, ObservableObject {
         }
     }
 
-//    @Published var messages: [MockMessages.ChatMessageItem] = []
-//    let messagePublisher = PassthroughSubject<MockMessages.ChatMessageItem, Never>()
-//    var subscriptions = Set<AnyCancellable>()
-//
-//    func send(draft: ChatMessageKind) {
-//        guard case let .text(string) = draft else {
-//            return
-//        }
-//
-//        guard let data = string.data(using: .utf8) else {
-//            return
-//        }
-//
-//        try? session.send(data, toPeers: [joinedPeer.last!.peerId], with: .reliable)
-//
-//        messagePublisher.send(
-//            .init(user: MockMessages.sender, messageKind: draft, isSender: true)
-//        )
-//    }
+    func send(message: String) {
+        guard let data = message.data(using: .utf8) else {
+            return
+        }
+
+        do {
+            if let lastPeer = joinedPeer.last {
+                if session.connectedPeers.contains(lastPeer.peerId) {
+                    try session.send(data, toPeers: [lastPeer.peerId], with: .reliable)
+                    print("send messsage completeed")
+                } else {
+                    print("Target peer is not connected")
+                }
+            }
+        } catch {
+            print("Failed to send message: \(error)")
+        }
+    }
     
     @Published var joinedPeer: [PeerDevice] = []
     
     override init() {
-        let peer = MCPeerID(displayName: "Iphone")//Storage.getString(Storage.Key.userName) ?? "iPhone")
-        session = MCSession(peer: peer)
+        let peer = MCPeerID(displayName: "Mac")//Storage.getString(Storage.Key.userName) ?? "iPhone")
+        session = MCSession(peer: peer, securityIdentity: nil, encryptionPreference: .required)
         
         advertiser = MCNearbyServiceAdvertiser(
             peer: peer,
@@ -68,12 +67,7 @@ class DeviceFinderViewModel: NSObject, ObservableObject {
         browser.delegate = self
         session.delegate = self
         isAdvertised = true
-//        messagePublisher
-//            .receive(on: DispatchQueue.main)
-//            .sink { [weak self] in
-//                self?.messages.append($0)
-//            }
-//            .store(in: &subscriptions)
+     
     }
 
     func startBrowsing() {
@@ -89,7 +83,12 @@ class DeviceFinderViewModel: NSObject, ObservableObject {
             return
         }
         
-        joinedPeer.append(first)
+        // Avoid adding duplicate peers
+        if !joinedPeer.contains(where: { $0.peerId == peerId }) {
+            joinedPeer.append(first)
+        } else {
+            print("peer already joined")
+        }
     }
     
     private func connect() {
@@ -102,6 +101,7 @@ class DeviceFinderViewModel: NSObject, ObservableObject {
         } else {
             browser.invitePeer(selectedPeer.peerId, to: session, withContext: nil, timeout: 60)
         }
+        print("number of joined peer: \(joinedPeer.count)")
     }
 }
 
@@ -124,28 +124,58 @@ extension DeviceFinderViewModel: MCNearbyServiceAdvertiserDelegate {
 
 extension DeviceFinderViewModel: MCNearbyServiceBrowserDelegate {
     func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
-        peers.append(PeerDevice(peerId: peerID)) // first go here
+        DispatchQueue.main.async {
+            self.peers.append(PeerDevice(peerId: peerID)) // first go here
+        }
     }
 
     func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
-        peers.removeAll(where: { $0.peerId == peerID })
+        DispatchQueue.main.async {
+            self.peers.removeAll(where: { $0.peerId == peerID })
+        }
     }
     
 }
 
 extension DeviceFinderViewModel: MCSessionDelegate {
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
-        //
+        DispatchQueue.main.async {
+               switch state {
+               case .connected:
+                   print("Connected to \(peerID.displayName)")
+                   self.show(peerId: peerID)
+                   
+                   DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                       let pushToken = Storage.getString(Storage.Key.pushToken)
+                       self.send(message: pushToken ?? "")
+                   }
+                   
+               case .notConnected:
+                   print("Disconnected from \(peerID.displayName)")
+                   self.joinedPeer.removeAll(where: { $0.peerId == peerID })
+               case .connecting:
+                   print("Connecting to \(peerID.displayName)")
+               @unknown default:
+                   print("Unknown state for \(peerID.displayName)")
+               }
+           }
     }
     
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-        guard let last = joinedPeer.last, last.peerId == peerID, let message = String(data: data, encoding: .utf8) else {
+        guard let last = joinedPeer.last else {
+            return
+        }
+        
+        guard last.peerId == peerID else {
+            return
+        }
+        
+        guard let message = String(data: data, encoding: .utf8) else {
             return
         }
 
-//        messagePublisher.send(
-//            .init(user: MockMessages.sender, messageKind: .text(message), isSender: false)
-//        )
+        
+        print("message received: \(message)")
     }
     
     func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {

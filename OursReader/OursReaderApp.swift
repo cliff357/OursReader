@@ -36,6 +36,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         if let fcm = Messaging.messaging().fcmToken {
             print("FCM Token: \(fcm)")
+            Storage.save(Storage.Key.pushToken, fcm )
         }
     }
 }
@@ -65,10 +66,10 @@ struct OursReaderApp: App {
                 
             }
             .reminderBottomSheet(showReminder: $reminderManager.showReminder)
-//            .task {
-//                await notificationManager.request()
-//                await notificationManager.getAuthStatus()
-//            }
+            .task {
+                await notificationManager.request()
+                await notificationManager.getAuthStatus()
+            }
 //            .toastMessage(show: toastManager.isPresenting, title: toastManager.title, message: toastManager.message)
 //            .onReceive(timer) { _ in
 //                if timeRemaining > 0 {
