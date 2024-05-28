@@ -20,22 +20,7 @@ final class DatabaseManager {
 
 // MARK: - Account management
 extension DatabaseManager {
-    enum UserType : Int, Codable{
-        case apple
-        case google
-        case email
-    }
-
-    struct UserObject: Codable, Identifiable {
-        @DocumentID var id: String?
-        let name: String?
-        let userID: String?
-        let fcmToken: String?
-        let email: String?
-        let login_type: UserType?
-        
-    }
-    
+ 
     // add user into fireStore
     func addUser(user:UserObject) {
         Firestore.firestore().collection(DatabaseManager.Key.user).document(user.userID ?? "").setData([
@@ -52,6 +37,10 @@ extension DatabaseManager {
         }
     }
     
+    // add friend to this user
+    func addFriend() {
+        
+    }
     
     // update user info
     func updateUser(name: String, userID: String, fcmToken: String) {
