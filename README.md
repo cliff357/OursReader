@@ -77,3 +77,4 @@ copilot真係gen到一個好fit既function出黎
 以下係2個解決方法
 1. display loading，交換完就dismiss loading 
 2. 真係detect到connected，先會交換data 
+ 
