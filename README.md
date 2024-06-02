@@ -78,3 +78,8 @@ copilot真係gen到一個好fit既function出黎
 1. display loading，交換完就dismiss loading 
 2. 真係detect到connected，先會交換data 
  
+
+2024 6月2號
+wow 用xcode cloud build app 又幾正，幾經辛苦 
+終於搞掂哂d 問題，成功係xcode cloud 出build 上testflight，正
+
