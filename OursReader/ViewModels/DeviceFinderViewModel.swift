@@ -13,7 +13,7 @@ class DeviceFinderViewModel: NSObject, ObservableObject {
     private let browser: MCNearbyServiceBrowser
     private let session: MCSession
     private let serviceType = "nearby-devices"
-
+    
     @Published var permissionRequest: PermitionRequest?
     
     @Published var selectedPeer: PeerDevice? {
@@ -27,12 +27,53 @@ class DeviceFinderViewModel: NSObject, ObservableObject {
             isAdvertised ? advertiser.startAdvertisingPeer() : advertiser.stopAdvertisingPeer()
         }
     }
-
+    
+    func sendUserData() {
+        guard let userData = UserAuthModel.shared.userData else {
+            return
+        }
+        
+        let jsonEncoder = JSONEncoder()
+        
+        if let data = try? jsonEncoder.encode(userData) {
+            do {
+                if let lastPeer = joinedPeer.last {
+                    if session.connectedPeers.contains(lastPeer.peerId) {
+                        try session.send(data, toPeers: [lastPeer.peerId], with: .reliable)
+                        print("send messsage completeed")
+                    } else {
+                        print("Target peer is not connected")
+                    }
+                }
+            } catch {
+                print("Failed to send message: \(error)")
+            }
+        }
+    }
+    
+    func encodeAndDecodeData() {
+        let userData = TestUserObject(id:"fesfs",name: "aa", userID: "fewf", fcmToken: "cdvs", email: "gesrg", login_type: .apple)
+//        guard let userData = UserAuthModel.shared.userData else {
+//            return
+//        }
+        
+        let jsonEncoder = JSONEncoder()
+        
+        if let data = try? jsonEncoder.encode(userData) {
+            let jsonDecoder = JSONDecoder()
+            if let decodedUser = try? jsonDecoder.decode(TestUserObject.self, from: data) {
+                print(decodedUser)
+            }
+        }
+        
+        
+    
+    }
     func send(message: String) {
         guard let data = message.data(using: .utf8) else {
             return
         }
-
+        
         do {
             if let lastPeer = joinedPeer.last {
                 if session.connectedPeers.contains(lastPeer.peerId) {
@@ -63,13 +104,14 @@ class DeviceFinderViewModel: NSObject, ObservableObject {
         
         super.init()
         
+        encodeAndDecodeData()
+        
         advertiser.delegate = self
         browser.delegate = self
         session.delegate = self
         isAdvertised = true
-     
     }
-
+    
     func startBrowsing() {
         browser.startBrowsingForPeers()
     }
@@ -128,7 +170,7 @@ extension DeviceFinderViewModel: MCNearbyServiceBrowserDelegate {
             self.peers.append(PeerDevice(peerId: peerID)) // first go here
         }
     }
-
+    
     func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
         DispatchQueue.main.async {
             self.peers.removeAll(where: { $0.peerId == peerID })
@@ -140,25 +182,24 @@ extension DeviceFinderViewModel: MCNearbyServiceBrowserDelegate {
 extension DeviceFinderViewModel: MCSessionDelegate {
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         DispatchQueue.main.async {
-               switch state {
-               case .connected:
-                   print("Connected to \(peerID.displayName)")
-                   self.show(peerId: peerID)
-                   
-                   DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                       let pushToken = Storage.getString(Storage.Key.pushToken)
-                       self.send(message: pushToken ?? "")
-                   }
-                   
-               case .notConnected:
-                   print("Disconnected from \(peerID.displayName)")
-                   self.joinedPeer.removeAll(where: { $0.peerId == peerID })
-               case .connecting:
-                   print("Connecting to \(peerID.displayName)")
-               @unknown default:
-                   print("Unknown state for \(peerID.displayName)")
-               }
-           }
+            switch state {
+            case .connected:
+                print("Connected to \(peerID.displayName)")
+                self.show(peerId: peerID)
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.sendUserData()
+                }
+                
+            case .notConnected:
+                print("Disconnected from \(peerID.displayName)")
+                self.joinedPeer.removeAll(where: { $0.peerId == peerID })
+            case .connecting:
+                print("Connecting to \(peerID.displayName)")
+            @unknown default:
+                print("Unknown state for \(peerID.displayName)")
+            }
+        }
     }
     
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
@@ -170,12 +211,18 @@ extension DeviceFinderViewModel: MCSessionDelegate {
             return
         }
         
-        guard let message = String(data: data, encoding: .utf8) else {
-            return
+        // Decode user
+        let jsonDecoder = JSONDecoder()
+        if let decodedUser = try? jsonDecoder.decode(UserObject.self, from: data) {
+            print(decodedUser)
         }
-
         
-        print("message received: \(message)")
+        // Decode normal message
+        if let message = String(data: data, encoding: .utf8) {
+            print("message received: \(message)")
+        }
+        
+        
     }
     
     func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {

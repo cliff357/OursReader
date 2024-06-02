@@ -21,6 +21,7 @@ class Storage {
         static let pushToken = "user.pushToken"
         static let userName = "user.Name"
         static let userEmail = "user.Email"
+        static let userLoginType = "user.LoginType"
     }
 
     enum StorageType {

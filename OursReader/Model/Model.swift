@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import FirebaseFirestore
+import FirebaseFirestoreSwift
 
 
 struct Book {
@@ -20,8 +22,28 @@ struct BookDetail {
     var lastReadIndex: Int
 }
 
-struct User {
-    var safeEmail: String
-    var userUid: String
-    var name: String
+enum UserType : Int, Codable{
+    case apple
+    case google
+    case email
+}
+
+struct UserObject: Codable, Identifiable {
+    @DocumentID var id: String?
+    let name: String?
+    let userID: String?
+    let fcmToken: String?
+    let email: String?
+    let login_type: UserType?
+    
+}
+
+struct TestUserObject: Codable, Identifiable {
+    @DocumentID var id: String?
+    let name: String?
+    let userID: String?
+    let fcmToken: String?
+    let email: String?
+    let login_type: UserType?
+    
 }
