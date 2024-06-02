@@ -1,12 +1,13 @@
 Feature in OursReader
 - User management  
-- peer to peer exchange data <--- now i am here
-- account deletion
-- push notification
 - testflight
 - xcode cloud 
+- peer to peer exchange data <--- now i am here
+- push notification
 - interactive widget 
 - live activities
+- account deletion
+- setup fastlane and github action 
 
 
 Function
@@ -77,3 +78,9 @@ copilot真係gen到一個好fit既function出黎
 以下係2個解決方法
 1. display loading，交換完就dismiss loading 
 2. 真係detect到connected，先會交換data 
+ 
+
+2024 6月2號
+wow 用xcode cloud build app 又幾正，幾經辛苦 
+終於搞掂哂d 問題，成功係xcode cloud 出build 上testflight，正
+

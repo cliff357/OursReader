@@ -97,9 +97,8 @@
 		9986146B2BBD20D100E0996D /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614662BBD20D000E0996D /* ViewExtensions.swift */; };
 		998614732BBD21EF00E0996D /* FloatingPromptTextField in Frameworks */ = {isa = PBXBuildFile; productRef = 998614722BBD21EF00E0996D /* FloatingPromptTextField */; };
 		998614762BBD287300E0996D /* ColorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614752BBD287300E0996D /* ColorHelper.swift */; };
-		998614792BBD292500E0996D /* rswift in Frameworks */ = {isa = PBXBuildFile; productRef = 998614782BBD292500E0996D /* rswift */; };
-		9986147B2BBD2B3400E0996D /* RswiftLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 9986147A2BBD2B3400E0996D /* RswiftLibrary */; };
 		998614822BBD35AC00E0996D /* Color+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614812BBD35AC00E0996D /* Color+.swift */; };
+		999651D82C0C62C400EC7C43 /* RswiftLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 999651D72C0C62C400EC7C43 /* RswiftLibrary */; };
 		99E2102A2C0168F1006F27A7 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E210292C0168F1006F27A7 /* Storage.swift */; };
 /* End PBXBuildFile section */
 
@@ -269,14 +268,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				598053E42BA6EFF8008056F3 /* FirebaseDatabase in Frameworks */,
-				9986147B2BBD2B3400E0996D /* RswiftLibrary in Frameworks */,
 				598053E62BA6F019008056F3 /* FirebaseAuth in Frameworks */,
 				993EDAC22BDBB71B002C18C7 /* FirebaseFirestore in Frameworks */,
 				998614732BBD21EF00E0996D /* FloatingPromptTextField in Frameworks */,
 				993EDAC42BDBB71B002C18C7 /* FirebaseFirestoreSwift in Frameworks */,
+				999651D82C0C62C400EC7C43 /* RswiftLibrary in Frameworks */,
 				998614462BB1799B00E0996D /* FirebaseMessaging in Frameworks */,
 				993EDABE2BDA4675002C18C7 /* SwiftEntryKit in Frameworks */,
-				998614792BBD292500E0996D /* rswift in Frameworks */,
 				59E06A1D2BA6C87B00FE18FD /* FirebaseAnalytics in Frameworks */,
 				998614152BA80F5D00E0996D /* GoogleSignInSwift in Frameworks */,
 			);
@@ -663,7 +661,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				9986147D2BBD2B6000E0996D /* PBXTargetDependency */,
+				999651D42C0C5C3B00EC7C43 /* PBXTargetDependency */,
 				598053982BA6DA8E008056F3 /* PBXTargetDependency */,
 				598053DC2BA6DBEA008056F3 /* PBXTargetDependency */,
 			);
@@ -675,11 +673,10 @@
 				998614142BA80F5D00E0996D /* GoogleSignInSwift */,
 				998614452BB1799B00E0996D /* FirebaseMessaging */,
 				998614722BBD21EF00E0996D /* FloatingPromptTextField */,
-				998614782BBD292500E0996D /* rswift */,
-				9986147A2BBD2B3400E0996D /* RswiftLibrary */,
 				993EDABD2BDA4675002C18C7 /* SwiftEntryKit */,
 				993EDAC12BDBB71B002C18C7 /* FirebaseFirestore */,
 				993EDAC32BDBB71B002C18C7 /* FirebaseFirestoreSwift */,
+				999651D72C0C62C400EC7C43 /* RswiftLibrary */,
 			);
 			productName = OursReader;
 			productReference = 59E75E962ADF53AA007A549C /* OursReader.app */;
@@ -767,8 +764,8 @@
 				59E06A1B2BA6C87B00FE18FD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				998614132BA80F5D00E0996D /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				998614712BBD21EF00E0996D /* XCRemoteSwiftPackageReference "FloatingPromptTextField" */,
-				998614772BBD292500E0996D /* XCRemoteSwiftPackageReference "R" */,
 				993EDABC2BDA4675002C18C7 /* XCRemoteSwiftPackageReference "SwiftEntryKit" */,
+				999651D62C0C62C400EC7C43 /* XCRemoteSwiftPackageReference "R" */,
 			);
 			productRefGroup = 59E75E972ADF53AA007A549C /* Products */;
 			projectDirPath = "";
@@ -957,9 +954,9 @@
 			target = 59E75E952ADF53AA007A549C /* OursReader */;
 			targetProxy = 59E75EB12ADF53AB007A549C /* PBXContainerItemProxy */;
 		};
-		9986147D2BBD2B6000E0996D /* PBXTargetDependency */ = {
+		999651D42C0C5C3B00EC7C43 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			productRef = 9986147C2BBD2B6000E0996D /* RswiftGenerateInternalResources */;
+			productRef = 999651D32C0C5C3B00EC7C43 /* RswiftGenerateInternalResources */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1460,7 +1457,7 @@
 				minimumVersion = 0.4.0;
 			};
 		};
-		998614772BBD292500E0996D /* XCRemoteSwiftPackageReference "R" */ = {
+		999651D62C0C62C400EC7C43 /* XCRemoteSwiftPackageReference "R" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mac-cain13/R.swift";
 			requirement = {
@@ -1514,20 +1511,14 @@
 			package = 998614712BBD21EF00E0996D /* XCRemoteSwiftPackageReference "FloatingPromptTextField" */;
 			productName = FloatingPromptTextField;
 		};
-		998614782BBD292500E0996D /* rswift */ = {
+		999651D32C0C5C3B00EC7C43 /* RswiftGenerateInternalResources */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 998614772BBD292500E0996D /* XCRemoteSwiftPackageReference "R" */;
-			productName = rswift;
-		};
-		9986147A2BBD2B3400E0996D /* RswiftLibrary */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 998614772BBD292500E0996D /* XCRemoteSwiftPackageReference "R" */;
-			productName = RswiftLibrary;
-		};
-		9986147C2BBD2B6000E0996D /* RswiftGenerateInternalResources */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 998614772BBD292500E0996D /* XCRemoteSwiftPackageReference "R" */;
 			productName = "plugin:RswiftGenerateInternalResources";
+		};
+		999651D72C0C62C400EC7C43 /* RswiftLibrary */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 999651D62C0C62C400EC7C43 /* XCRemoteSwiftPackageReference "R" */;
+			productName = RswiftLibrary;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
