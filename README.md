@@ -1,12 +1,13 @@
 Feature in OursReader
 - User management  
-- peer to peer exchange data <--- now i am here
-- account deletion
-- push notification
 - testflight
 - xcode cloud 
+- peer to peer exchange data <--- now i am here
+- push notification
 - interactive widget 
 - live activities
+- account deletion
+- setup fastlane and github action 
 
 
 Function
