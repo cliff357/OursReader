@@ -10,9 +10,9 @@ import SwiftUI
 import Combine
 
 class IconViewModel: ObservableObject {
-    @Published var currentIcon: String = "star.fill"
+    @Published var currentIcon: String = "cover_image_1"
     
-    private var icons = ["heart.fill", "bell.fill", "figure.badminton", "figure.boxing"]
+    private var images = ["cover_image_1", "cover_image_2", "cover_image_3"]
     private var index = 0
     private var timer: AnyCancellable?
     
@@ -28,9 +28,9 @@ class IconViewModel: ObservableObject {
     }
     
     private func nextIcon() {
-        index = (index + 1) % icons.count
+        index = (index + 1) % images.count
         withAnimation(.easeOut(duration: 1)) {
-            currentIcon = icons[index]
+            currentIcon = images[index]
         }
     }
 }
@@ -70,10 +70,11 @@ struct WelcomePage: View {
             
             VStack {
                 Spacer().frame(height: 100)
-                Image(systemName: viewModel.currentIcon)
+                
+                Image(viewModel.currentIcon)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 200, height: 200)
+                    .frame(width: 400, height: 400)
                     .transition(AnyTransition.opacity.combined(with: .scale))
                     .padding()
                 
