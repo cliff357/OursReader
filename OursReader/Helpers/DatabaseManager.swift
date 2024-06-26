@@ -11,6 +11,7 @@ import FirebaseFirestoreSwift
 
 final class DatabaseManager {
     static let shared = DatabaseManager()
+    private let db = Firestore.firestore()
     
     //firebase key
     enum Key {
@@ -20,83 +21,90 @@ final class DatabaseManager {
 
 // MARK: - Account management
 extension DatabaseManager {
-    enum UserType : Int, Codable{
-        case apple
-        case google
-        case email
-    }
-
-    struct UserObject: Codable, Identifiable {
-        @DocumentID var id: String?
-        let name: String?
-        let userID: String?
-        let fcmToken: String?
-        let email: String?
-        let login_type: UserType?
-        
-    }
     
     // add user into fireStore
-    func addUser(user:UserObject) {
-        Firestore.firestore().collection(DatabaseManager.Key.user).document(user.userID ?? "").setData([
+    func addUser(user:UserObject, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let userID = user.userID else {
+            completion(.failure(NSError(domain: "Invalid UserID", code: 0, userInfo: nil)))
+            return
+        }
+        
+        let data: [String: Any] = [
             "name": user.name ?? "",
             "fcmToken": user.fcmToken ?? "",
             "email": user.email ?? "",
-            "login_type": user.login_type?.rawValue ?? 0
-        ]) { (error) in
-            if let err = error {
-                print("error")
+            "login_type": user.login_type?.rawValue ?? 0,
+            "friends": user.connections_userID ?? []
+        ]
+        
+        db.collection(Key.user).document(userID).setData(data) { error in
+            if let error = error {
+                print("Error adding user: \(error.localizedDescription)")
+                completion(.failure(error))
             } else {
-                print("add user success")
+                print("User added successfully")
+                completion(.success(()))
             }
         }
     }
     
-    
-    // update user info
-    func updateUser(name: String, userID: String, fcmToken: String) {
-        //        let db = Firestore.firestore()
-        //        let updateReference = db.collection(DatabaseManager.Key.user).document(userID)
-        //        updateReference.getDocument { (document, err) in
-        //            if let err = err {
-        //                print(err.localizedDescription)
-        //            }
-        //            else {
-        //                FirestoreResponse.updateOne(document: document, name: name, userID: userID, fcmToken: fcmToken) { (updated) in
-        //                    if updated {
-        //                        self.presenter?.presentRouteToLandingPage()
-        //                    }
-        //                }
-        //            }
-        //        }
+    // add friend to this user
+    func addFriend(friend: UserObject, completion: @escaping (Result<Void, Error>) -> Void ) {
+        //Update firestore user data by userid
+        guard let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() else {
+            completion(.failure(NSError(domain: "Invalid Current User", code: 0, userInfo: nil)))
+            return
+        }
         
-        //        let db = Firestore.firestore()
-        //        let updateReference = db.collection(Configs.Database.rootname).document(id)
-        //        updateReference.getDocument { (document, err) in
-        //            if let err = err {
-        //                print(err.localizedDescription)
-        //            }
-        //            else {
-        //                FirestoreResponse.updateOne(document: document, name: self.name ?? item.name, version: self.version ?? item.version, bundle: self.bundle ?? item.bundle, platform: self.platform ?? item.platform, release: self.release ?? item.release, company: self.company ?? item.company, download: self.download ?? item.downloadURL, now: Int(now)) { (updated) in
-        //                    if updated {
-        //                        self.sendPushNotifiaction(type: self.type, name: self.name ?? item.name ?? "", version: self.version ?? item.version ?? "", platform: item.platform ?? "")
-        //                            self.presenter?.presentRouteToLandingPage()
-        //                    }
-        //                }
-        //            }
-        //        }
+        let currentUserID = currentUser.uid 
+        
+        guard let friendID = friend.userID else {
+            completion(.failure(NSError(domain: "Invalid Friend UserID", code: 0, userInfo: nil)))
+            return
+        }
+        
+        let userDocument = db.collection(Key.user).document(currentUserID)
+        
+        userDocument.updateData([
+            "connections_userID": FieldValue.arrayUnion([friendID])
+        ]) { error in
+            if let error = error {
+                print("Error adding friend: \(error.localizedDescription)")
+                completion(.failure(error))
+            } else {
+                print("Friend added successfully")
+                completion(.success(()))
+            }
+        }
+        
     }
     
+    // Update a user's data in Firestore
+    func updateUser(user: UserObject, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let userID = user.userID else {
+            completion(.failure(NSError(domain: "Invalid UserID", code: 0, userInfo: nil)))
+            return
+        }
+        
+        let data: [String: Any] = [
+            "name": user.name ?? "",
+            "fcmToken": user.fcmToken ?? "",
+            "email": user.email ?? "",
+            "login_type": user.login_type?.rawValue ?? 0,
+            "connections_userID": user.connections_userID ?? [] 
+        ]
+        
+        db.collection(Key.user).document(userID).updateData(data) { error in
+            if let error = error {
+                print("Error updating user: \(error.localizedDescription)")
+                completion(.failure(error))
+            } else {
+                print("User updated successfully")
+                completion(.success(()))
+            }
+        }
+    }
     
-    //    static func updateOne(document: FirebaseFirestore.DocumentSnapshot?, name: String?, userID: String?, fcmToken: String? , completion: @escaping (Bool) -> ()) {
-    //        document?.reference.setData([
-    //            "name": name ?? "",
-    //            "userID": userID ?? "",
-    //            "fcmtoken": fcmToken ?? ""
-    //        ])
-    //
-    //        completion(true)
-    //    }
     
     //check user exist in firestore
     func checkUserExist(email: String, completion: @escaping (Bool) -> ()) {

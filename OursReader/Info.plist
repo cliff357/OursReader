@@ -31,5 +31,7 @@
 		<string>_nearby-devices._tcp</string>
 		<string>_nearby-devices._upd</string>
 	</array>
+<!--    <key>NSLocalNetworkUsageDescription</key>-->
+<!--        <string>We need access to your device's local network to connect to other devices.</string>-->
 </dict>
 </plist>

@@ -21,7 +21,7 @@ struct SideMenuHeaderView: View {
                 .padding(.vertical)
             
             VStack(alignment: .leading, spacing: 6) {
-                Text(user.givenName)
+                Text(user.nickName)
                     .font(.subheadline)
                     .foregroundStyle(Color.green1)
                 Text("Hello~")
