@@ -28,47 +28,40 @@ class DeviceFinderViewModel: NSObject, ObservableObject {
         }
     }
     
+    @Published var toastMsg: String = ""
+    
+    func printMsg(_ msg: String ) {
+        print(msg)
+//        toastMsg = msg + "\n" + toastMsg
+    }
     func sendUserData() {
+        printMsg("send user data")
         guard let userData = UserAuthModel.shared.userData else {
             return
         }
         
+        //TODO: temp method, need to find out how to send userData directly, because when i try to encode it, firebase will return "Attempting to initialize or set a @DocumentID property with a non-nil value: "xxx". The document ID is managed by Firestore and any initialized or set value will be ignored. The ID is automatically set when reading from Firestore."
+        // so i have to copy userData to sendable without DocumentID
+        let sendable = SendableUserObject(name: userData.name, userID: userData.userID, fcmToken: userData.fcmToken, email: userData.email, login_type: userData.login_type)
+        
         let jsonEncoder = JSONEncoder()
         
-        if let data = try? jsonEncoder.encode(userData) {
+        if let data = try? jsonEncoder.encode(sendable) {
             do {
                 if let lastPeer = joinedPeer.last {
                     if session.connectedPeers.contains(lastPeer.peerId) {
                         try session.send(data, toPeers: [lastPeer.peerId], with: .reliable)
-                        print("send messsage completeed")
+                        printMsg("send messsage completeed")
                     } else {
-                        print("Target peer is not connected")
+                        printMsg("Target peer is not connected")
                     }
                 }
             } catch {
-                print("Failed to send message: \(error)")
+                printMsg("Failed to send message: \(error)")
             }
         }
     }
     
-    func encodeAndDecodeData() {
-        let userData = TestUserObject(id:"fesfs",name: "aa", userID: "fewf", fcmToken: "cdvs", email: "gesrg", login_type: .apple)
-//        guard let userData = UserAuthModel.shared.userData else {
-//            return
-//        }
-        
-        let jsonEncoder = JSONEncoder()
-        
-        if let data = try? jsonEncoder.encode(userData) {
-            let jsonDecoder = JSONDecoder()
-            if let decodedUser = try? jsonDecoder.decode(TestUserObject.self, from: data) {
-                print(decodedUser)
-            }
-        }
-        
-        
-    
-    }
     func send(message: String) {
         guard let data = message.data(using: .utf8) else {
             return
@@ -78,13 +71,13 @@ class DeviceFinderViewModel: NSObject, ObservableObject {
             if let lastPeer = joinedPeer.last {
                 if session.connectedPeers.contains(lastPeer.peerId) {
                     try session.send(data, toPeers: [lastPeer.peerId], with: .reliable)
-                    print("send messsage completeed")
+                    printMsg("send messsage completeed")
                 } else {
-                    print("Target peer is not connected")
+                    printMsg("Target peer is not connected")
                 }
             }
         } catch {
-            print("Failed to send message: \(error)")
+            printMsg("Failed to send message: \(error)")
         }
     }
     
@@ -103,8 +96,6 @@ class DeviceFinderViewModel: NSObject, ObservableObject {
         browser = MCNearbyServiceBrowser(peer: peer, serviceType: serviceType)
         
         super.init()
-        
-        encodeAndDecodeData()
         
         advertiser.delegate = self
         browser.delegate = self
@@ -129,7 +120,7 @@ class DeviceFinderViewModel: NSObject, ObservableObject {
         if !joinedPeer.contains(where: { $0.peerId == peerId }) {
             joinedPeer.append(first)
         } else {
-            print("peer already joined")
+            printMsg("peer already joined")
         }
     }
     
@@ -184,15 +175,10 @@ extension DeviceFinderViewModel: MCSessionDelegate {
         DispatchQueue.main.async {
             switch state {
             case .connected:
-                print("Connected to \(peerID.displayName)")
+                self.printMsg("Connected to \(peerID.displayName)")
                 self.show(peerId: peerID)
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    self.sendUserData()
-                }
-                
             case .notConnected:
-                print("Disconnected from \(peerID.displayName)")
+                self.printMsg("Disconnected from \(peerID.displayName)")
                 self.joinedPeer.removeAll(where: { $0.peerId == peerID })
             case .connecting:
                 print("Connecting to \(peerID.displayName)")
@@ -212,14 +198,23 @@ extension DeviceFinderViewModel: MCSessionDelegate {
         }
         
         // Decode user
+        printMsg("message received")
         let jsonDecoder = JSONDecoder()
-        if let decodedUser = try? jsonDecoder.decode(UserObject.self, from: data) {
-            print(decodedUser)
+        if let decodedUser = try? jsonDecoder.decode(SendableUserObject.self, from: data) {
+            
+            DatabaseManager.shared.addFriend(friend: UserObject(name: decodedUser.name, userID: decodedUser.userID, fcmToken: decodedUser.fcmToken, email: decodedUser.email, login_type: decodedUser.login_type, connections_userID: [])) { result in
+                switch result {
+                case .success:
+                    self.printMsg("add friend success")
+                case .failure(let error):
+                    self.printMsg("add friend failed: \(error)")
+                }
+            }
         }
         
         // Decode normal message
         if let message = String(data: data, encoding: .utf8) {
-            print("message received: \(message)")
+            printMsg("message received: \(message)")
         }
         
         

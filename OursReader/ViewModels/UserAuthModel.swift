@@ -28,10 +28,10 @@ enum AuthenticationFlow {
 class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelegate {
     static let shared: UserAuthModel = .init()
     
-    @Published var nickName: String = ""
-    @Published var profilePicUrl: String = ""
     @Published var isLoggedIn: Bool = false
     @Published var errorMessage: String = ""
+    
+    @Published var nickName: String = ""
     @Published var userData: UserObject?
     
     // Unhashed nonce.
@@ -64,10 +64,9 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
             if let user = user {
                 self.isLoggedIn = true
                 self.userData = UserObject(name: self.nickName, userID: user.uid, fcmToken: token, email: user.email, login_type: loginType)
-                
+
                 Storage.save(Storage.Key.userName, user.displayName ?? "")
                 Storage.save(Storage.Key.userEmail, user.email ?? "")
-                
                 
                 //TODO: get user imageurl
 //                guard let uhk.rl = user.photoURL else { return }
@@ -104,6 +103,13 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
         }
     }
     
+    func getCurrentFirebaseUser() -> User? {
+        if let user = Auth.auth().currentUser {
+            return user
+        }
+        
+        return nil
+    }
     //MARK: Google Sign in
     func signInByGoogle() {
         
@@ -148,11 +154,18 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
                     } else {
                         Storage.save(Storage.Key.userLoginType, UserType.google.rawValue)
                         
-                        DatabaseManager.shared.addUser(user: UserObject(name: user?.displayName,
-                                                                        userID: user?.uid,
-                                                                        fcmToken: token ,
-                                                                        email: user?.email,
-                                                                        login_type: .google))
+                        DatabaseManager.shared.addUser(user:  UserObject(name: self.nickName,
+                                                                         userID: user?.uid,
+                                                                         fcmToken: token ,
+                                                                         email: user?.email,
+                                                                         login_type: .google)) { result in
+                            switch result {
+                            case .success:
+                                print("user added successfully")
+                            case .failure(let error):
+                                print("error: \(error.localizedDescription)")
+                            }
+                        }
                     }
                 }
             }
@@ -263,11 +276,19 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
                     } else {
                         Storage.save(Storage.Key.userLoginType, UserType.apple.rawValue)
                         
-                        DatabaseManager.shared.addUser(user: UserObject(name: user?.displayName,
-                                                                        userID: user?.uid,
-                                                                        fcmToken: token ,
-                                                                        email: user?.email,
-                                                                        login_type: .apple))
+                        DatabaseManager.shared.addUser(user:  UserObject(name: self.nickName,
+                                                                         userID: user?.uid,
+                                                                         fcmToken: token,
+                                                                         email: user?.email,
+                                                                         login_type: .apple)) { result in
+                            switch result {
+                            case .success:
+                                print("user added successfully")
+                            case .failure(let error):
+                                print("error: \(error.localizedDescription)")
+                            }
+                        }
+                        
                     }
                 }
             }
@@ -298,12 +319,18 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
                 
                 Storage.save(Storage.Key.userLoginType, UserType.email.rawValue)
                 
-                DatabaseManager.shared.addUser(user: UserObject(name: user.displayName,
-                                                                userID: user.uid,
-                                                                fcmToken: token,
-                                                                email: email,
-                                                                login_type: .email))
-                print("User created successfully:", user.email!, user.uid)
+                DatabaseManager.shared.addUser(user:  UserObject(name: self.nickName,
+                                                                 userID: user.uid,
+                                                                 fcmToken: token,
+                                                                 email: email,
+                                                                 login_type: .email)) { result in
+                    switch result {
+                    case .success:
+                        print("user added successfully")
+                    case .failure(let error):
+                        print("error: \(error.localizedDescription)")
+                    }
+                }
             }
         }
     }
