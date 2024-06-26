@@ -9,6 +9,7 @@ import SwiftUI
 
 struct FriendList: View {
     @StateObject var model = DeviceFinderViewModel()
+    @State private var toast: Toast? = nil
     
     var body: some View {
         ZStack {
@@ -17,27 +18,33 @@ struct FriendList: View {
             Color.background.ignoresSafeArea()
 
             List(model.peers) { peer in
-                HStack {
-                    Image(systemName: "person.wave.2")
-                        .imageScale(.large)
-                        .foregroundColor(Color.rice_white)
-                    
-                    Text(peer.peerId.displayName)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    if model.joinedPeer.contains(where: { $0.peerId == peer.peerId }) {
-                        Text("Connected")
-                            .foregroundColor(.green)
-                            .padding(.horizontal)
+                VStack {
+                    HStack {
+                        Image(systemName: "person.wave.2")
+                            .imageScale(.large)
+                            .foregroundColor(Color.rice_white)
+                        
+                        Text(peer.peerId.displayName)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        
+                        Button {
+                            if model.joinedPeer.contains(where: { $0.peerId == peer.peerId }) {
+                                model.sendUserData()
+                            } else {
+                                model.selectedPeer = peer
+                            }
+                        }
+                        label: {
+                            Text(model.joinedPeer.contains(where: { $0.peerId == peer.peerId }) ?
+                                 "Send" : "Connect" )
+                                .foregroundColor(Color.rice_white)
+                            
+                        }
                     }
                 }
                 .listRowBackground(Color.dark_brown2)
                 .padding(.vertical, 5)
-                .onTapGesture {
-                    model.selectedPeer = peer
-//                    HomeRouter.shared.push(to: .friendDetail)
-                    print("list tabbed")
-                }
             }
             .scrollContentBackground(.hidden)
             
@@ -61,7 +68,10 @@ struct FriendList: View {
                 model.finishBrowsing()
             }
         }
-           
+        .onChange(of: model.toastMsg, { oldValue, newValue in
+            toast = Toast(style: .warning, message: newValue)
+        })
+        .toastView(toast: $toast)
             
     }
 }

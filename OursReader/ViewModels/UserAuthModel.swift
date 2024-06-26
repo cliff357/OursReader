@@ -28,11 +28,11 @@ enum AuthenticationFlow {
 class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelegate {
     static let shared: UserAuthModel = .init()
     
-    @Published var nickName: String = ""
-    @Published var givenName: String = ""
-    @Published var profilePicUrl: String = ""
     @Published var isLoggedIn: Bool = false
     @Published var errorMessage: String = ""
+    
+    @Published var nickName: String = ""
+    @Published var userData: UserObject?
     
     // Unhashed nonce.
     var currentNonce: String?
@@ -40,6 +40,8 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
     
     override init() {
         super.init()
+        
+        Storage.save(Storage.Key.userLoginType, UserType.email.rawValue)
         self.check()
     }
     
@@ -48,11 +50,21 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
             self.nickName = name
         }
         
+        var token = ""
+        if let t = Storage.getString(Storage.Key.pushToken) {
+            token = t
+        }
+        
+        var loginType: UserType?
+        if let t = Storage.getInt(Storage.Key.userLoginType) {
+            loginType = UserType.init(rawValue: t)
+        }
+        
         Auth.auth().addStateDidChangeListener { auth, user in
             if let user = user {
                 self.isLoggedIn = true
-                self.givenName = user.displayName ?? user.email ?? ""
-                
+                self.userData = UserObject(name: self.nickName, userID: user.uid, fcmToken: token, email: user.email, login_type: loginType)
+
                 Storage.save(Storage.Key.userName, user.displayName ?? "")
                 Storage.save(Storage.Key.userEmail, user.email ?? "")
                 
@@ -91,6 +103,13 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
         }
     }
     
+    func getCurrentFirebaseUser() -> User? {
+        if let user = Auth.auth().currentUser {
+            return user
+        }
+        
+        return nil
+    }
     //MARK: Google Sign in
     func signInByGoogle() {
         
@@ -133,11 +152,20 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
                     if result {
                         print("user already exist")
                     } else {
-                        DatabaseManager.shared.addUser(user: DatabaseManager.UserObject(name: user?.displayName,
-                                                                                        userID: user?.uid,
-                                                                                        fcmToken: token ,
-                                                                                        email: user?.email,
-                                                                                        login_type: .google))
+                        Storage.save(Storage.Key.userLoginType, UserType.google.rawValue)
+                        
+                        DatabaseManager.shared.addUser(user:  UserObject(name: self.nickName,
+                                                                         userID: user?.uid,
+                                                                         fcmToken: token ,
+                                                                         email: user?.email,
+                                                                         login_type: .google)) { result in
+                            switch result {
+                            case .success:
+                                print("user added successfully")
+                            case .failure(let error):
+                                print("error: \(error.localizedDescription)")
+                            }
+                        }
                     }
                 }
             }
@@ -246,11 +274,21 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
                     if result {
                         print("user already exist")
                     } else {
-                        DatabaseManager.shared.addUser(user: DatabaseManager.UserObject(name: user?.displayName,
-                                                                                        userID: user?.uid,
-                                                                                        fcmToken: token ,
-                                                                                        email: user?.email,
-                                                                                        login_type: .apple))
+                        Storage.save(Storage.Key.userLoginType, UserType.apple.rawValue)
+                        
+                        DatabaseManager.shared.addUser(user:  UserObject(name: self.nickName,
+                                                                         userID: user?.uid,
+                                                                         fcmToken: token,
+                                                                         email: user?.email,
+                                                                         login_type: .apple)) { result in
+                            switch result {
+                            case .success:
+                                print("user added successfully")
+                            case .failure(let error):
+                                print("error: \(error.localizedDescription)")
+                            }
+                        }
+                        
                     }
                 }
             }
@@ -279,12 +317,20 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
                     token = t
                 }
                 
-                DatabaseManager.shared.addUser(user: DatabaseManager.UserObject(name: user.displayName,
-                                                                                userID: user.uid,
-                                                                                fcmToken: token,
-                                                                                email: email,
-                                                                                login_type: .email))
-                print("User created successfully:", user.email!, user.uid)
+                Storage.save(Storage.Key.userLoginType, UserType.email.rawValue)
+                
+                DatabaseManager.shared.addUser(user:  UserObject(name: self.nickName,
+                                                                 userID: user.uid,
+                                                                 fcmToken: token,
+                                                                 email: email,
+                                                                 login_type: .email)) { result in
+                    switch result {
+                    case .success:
+                        print("user added successfully")
+                    case .failure(let error):
+                        print("error: \(error.localizedDescription)")
+                    }
+                }
             }
         }
     }

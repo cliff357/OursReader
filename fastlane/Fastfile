@@ -17,6 +17,20 @@ default_platform(:ios)
 
 platform :ios do
 
+  desc "update version number"
+  lane :update_version do
+    buildNumber = increment_version_number
+
+    UI.success("Update version number to #{buildNumber}")
+  end  
+
+  desc "update build number"
+  lane :update_build_number do
+    buildNumber = increment_build_number
+
+    UI.success("Update build number to #{buildNumber}")
+  end  
+
   desc "build Production and upload to App Store"
   lane :prod do
     build_app(scheme: "OursReader",configuration: "Debug", export_method:"app-store",xcargs: "-allowProvisioningUpdates")
