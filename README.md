@@ -85,3 +85,12 @@ wow 用xcode cloud build app 又幾正，幾經辛苦
 終於搞掂哂d 問題，成功係xcode cloud 出build 上testflight，正
 
 順手加埋相片display 係welcome page
+
+2024 6月26號
+補番26號日記先！ 今日其實係27號
+
+一口氣做好左個互換data 既功能，開心到，即刻commit
+諗起可以順手trigger 埋xcode cloud，點知冇反應
+
+原來係未Review account 既agreement 
+ 
