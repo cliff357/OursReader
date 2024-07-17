@@ -2,7 +2,7 @@
 //  ToastView.swift
 //  OursReader
 //
-//  Created by Autotoll Developer on 3/6/2024.
+//  Created by Cliff Chan on 3/6/2024.
 //
 
 import SwiftUI
