@@ -53,6 +53,7 @@
 		598053EA2BA6F760008056F3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 598053E92BA6F760008056F3 /* GoogleService-Info.plist */; };
 		598053EC2BA6FD19008056F3 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598053EB2BA6FD19008056F3 /* Login.swift */; };
 		598F58092B13A5ED003B4FCB /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598F58082B13A5ED003B4FCB /* View+Extensions.swift */; };
+		5993CE692C939F0200855103 /* BookDetailPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5993CE682C939F0200855103 /* BookDetailPage.swift */; };
 		599EC2F22BD4CEDA00F6DEB1 /* ORTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599EC2F12BD4CEDA00F6DEB1 /* ORTextField.swift */; };
 		59E06A1D2BA6C87B00FE18FD /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 59E06A1C2BA6C87B00FE18FD /* FirebaseAnalytics */; };
 		59E75E9A2ADF53AA007A549C /* OursReaderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E75E992ADF53AA007A549C /* OursReaderApp.swift */; };
@@ -195,6 +196,7 @@
 		598053E92BA6F760008056F3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		598053EB2BA6FD19008056F3 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
 		598F58082B13A5ED003B4FCB /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
+		5993CE682C939F0200855103 /* BookDetailPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailPage.swift; sourceTree = "<group>"; };
 		599EC2F12BD4CEDA00F6DEB1 /* ORTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ORTextField.swift; sourceTree = "<group>"; };
 		59E75E962ADF53AA007A549C /* OursReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OursReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		59E75E992ADF53AA007A549C /* OursReaderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OursReaderApp.swift; sourceTree = "<group>"; };
@@ -370,9 +372,9 @@
 				5953369F2B0503D800BB11D7 /* Home.swift */,
 				998614422BB176D600E0996D /* SideMenu */,
 				993EDAC62BE9F6EA002C18C7 /* Dashboard.swift */,
-				998614492BB3F9EE00E0996D /* Profile.swift */,
-				993EDAD32BEB59FB002C18C7 /* FriendList.swift */,
-				993EDADC2BEC6D65002C18C7 /* FriendDetail.swift */,
+				5993CE6F2C939F2500855103 /* Book */,
+				5993CE722C939F3200855103 /* Friend */,
+				5993CE752C939F4700855103 /* Profile */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -434,6 +436,31 @@
 				593EB1F32C01E6E500DD430F /* FontManager.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		5993CE6F2C939F2500855103 /* Book */ = {
+			isa = PBXGroup;
+			children = (
+				5993CE682C939F0200855103 /* BookDetailPage.swift */,
+			);
+			path = Book;
+			sourceTree = "<group>";
+		};
+		5993CE722C939F3200855103 /* Friend */ = {
+			isa = PBXGroup;
+			children = (
+				993EDAD32BEB59FB002C18C7 /* FriendList.swift */,
+				993EDADC2BEC6D65002C18C7 /* FriendDetail.swift */,
+			);
+			path = Friend;
+			sourceTree = "<group>";
+		};
+		5993CE752C939F4700855103 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				998614492BB3F9EE00E0996D /* Profile.swift */,
+			);
+			path = Profile;
 			sourceTree = "<group>";
 		};
 		59E75E8D2ADF53AA007A549C = {
@@ -900,6 +927,7 @@
 				593EB1FD2C01EE9F00DD430F /* GeneralBottomSheet.swift in Sources */,
 				593EB1D22C01DE3B00DD430F /* FontHelper.swift in Sources */,
 				9986141F2BAD330C00E0996D /* SideMenuOptionModel.swift in Sources */,
+				5993CE692C939F0200855103 /* BookDetailPage.swift in Sources */,
 				593EB1ED2C01E2A700DD430F /* Queue.swift in Sources */,
 				993EDACF2BEB2CE2002C18C7 /* PermissionRequest.swift in Sources */,
 				593EB1F42C01E6E500DD430F /* FontManager.swift in Sources */,

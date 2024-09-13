@@ -28,15 +28,15 @@ struct Dashboard: View {
                     
                     ScrollView(.horizontal) {
                         LazyHStack(spacing: 0 ) {
-                            SampleView(.red)
+                            BooklistView(.red)
                                 .id(Tab.fav)
                                 .containerRelativeFrame(.horizontal)
                             
-                            SampleView(.blue)
+                            BooklistView(.blue)
                                 .id(Tab.new)
                                 .containerRelativeFrame(.horizontal)
                             
-                            SampleView(.purple)
+                            BooklistView(.purple)
                                 .id(Tab.all)
                                 .containerRelativeFrame(.horizontal)
                         }
@@ -99,7 +99,7 @@ struct Dashboard: View {
     
     // Sample View for Demonstrating Scrollabel Tab Bar Indicator
     @ViewBuilder
-    func SampleView(_ color: Color) -> some View {
+    func BooklistView(_ color: Color) -> some View {
         ScrollView(.vertical) {
             LazyVGrid(columns: Array(repeating: GridItem(), count: 2), content: {
                 ForEach(1...2,id: \.self) { _ in
