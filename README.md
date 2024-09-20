@@ -7,7 +7,8 @@ Feature in OursReader
 - interactive widget 
 - live activities
 - account deletion
-- setup fastlane and github action 
+- setup fastlane and github action
+- scrapy , to get web ebook and publish to ebook 
 
 
 Function
@@ -94,3 +95,8 @@ wow 用xcode cloud build app 又幾正，幾經辛苦
 
 原來係未Review account 既agreement 
  
+2024 9月19號
+哇。。。原來已經3個月冇update 
+呢期太忙了 
+
+依家諗緊去邊個方向行好，應該係整ebook 先，定整send data 好，不如整左push noti 先

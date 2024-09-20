@@ -74,6 +74,7 @@
 		993EDAD22BEB48BA002C18C7 /* DeviceFinderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993EDAD12BEB48BA002C18C7 /* DeviceFinderViewModel.swift */; };
 		993EDAD42BEB59FB002C18C7 /* FriendList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993EDAD32BEB59FB002C18C7 /* FriendList.swift */; };
 		993EDADD2BEC6D65002C18C7 /* FriendDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993EDADC2BEC6D65002C18C7 /* FriendDetail.swift */; };
+		997291252C9C2D6E0070DFAC /* DashboardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997291242C9C2D6E0070DFAC /* DashboardModel.swift */; };
 		998614152BA80F5D00E0996D /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 998614142BA80F5D00E0996D /* GoogleSignInSwift */; };
 		998614172BA8110B00E0996D /* UserAuthModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614162BA8110B00E0996D /* UserAuthModel.swift */; };
 		998614192BAAB3A500E0996D /* SideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614182BAAB3A500E0996D /* SideMenu.swift */; };
@@ -216,6 +217,7 @@
 		993EDAD12BEB48BA002C18C7 /* DeviceFinderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceFinderViewModel.swift; sourceTree = "<group>"; };
 		993EDAD32BEB59FB002C18C7 /* FriendList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendList.swift; sourceTree = "<group>"; };
 		993EDADC2BEC6D65002C18C7 /* FriendDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendDetail.swift; sourceTree = "<group>"; };
+		997291242C9C2D6E0070DFAC /* DashboardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardModel.swift; sourceTree = "<group>"; };
 		998614122BA80EA300E0996D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		998614162BA8110B00E0996D /* UserAuthModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAuthModel.swift; sourceTree = "<group>"; };
 		998614182BAAB3A500E0996D /* SideMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenu.swift; sourceTree = "<group>"; };
@@ -371,7 +373,7 @@
 				9986145B2BBBAA6600E0996D /* Signup.swift */,
 				5953369F2B0503D800BB11D7 /* Home.swift */,
 				998614422BB176D600E0996D /* SideMenu */,
-				993EDAC62BE9F6EA002C18C7 /* Dashboard.swift */,
+				997291232C9C22BD0070DFAC /* Dashboard */,
 				5993CE6F2C939F2500855103 /* Book */,
 				5993CE722C939F3200855103 /* Friend */,
 				5993CE752C939F4700855103 /* Profile */,
@@ -545,6 +547,15 @@
 				993EDAD12BEB48BA002C18C7 /* DeviceFinderViewModel.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		997291232C9C22BD0070DFAC /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				993EDAC62BE9F6EA002C18C7 /* Dashboard.swift */,
+				997291242C9C2D6E0070DFAC /* DashboardModel.swift */,
+			);
+			path = Dashboard;
 			sourceTree = "<group>";
 		};
 		998614422BB176D600E0996D /* SideMenu */ = {
@@ -914,6 +925,7 @@
 				993EDACA2BEB2C9C002C18C7 /* PeerDevice.swift in Sources */,
 				993EDAC72BE9F6EB002C18C7 /* Dashboard.swift in Sources */,
 				593EB1FB2C01EB8500DD430F /* GeneralReminder.swift in Sources */,
+				997291252C9C2D6E0070DFAC /* DashboardModel.swift in Sources */,
 				595336A02B0503D800BB11D7 /* Home.swift in Sources */,
 				593EB2122C01F9F400DD430F /* MainView.swift in Sources */,
 				9986146A2BBD20D100E0996D /* HeightPreferenceKey.swift in Sources */,
