@@ -133,11 +133,11 @@ struct Dashboard: View {
                 case .push_notification:
                     ForEach(pushNotificationList, id: \.id) { push in
                         RoundedRectangle(cornerRadius: 15)
-                            .fill(Color.blue.gradient)
+                            .fill(type.color)
                             .frame(height: 100)
                             .overlay {
                                 VStack(alignment: .leading) {
-                                    Text(push.name)
+                                    Text(push.title)
                                         .font(.headline)
                                     
                                     Text(push.message)
@@ -152,7 +152,7 @@ struct Dashboard: View {
                 case .widget:
                     ForEach(widgetList, id: \.id) { widget in
                         RoundedRectangle(cornerRadius: 15)
-                            .fill(Color.blue.gradient)
+                            .fill(type.color)
                             .frame(height: 100)
                             .overlay {
                                 VStack(alignment: .leading) {
@@ -171,7 +171,7 @@ struct Dashboard: View {
                 case .ebook:
                     ForEach(ebookList, id: \.id) { ebook in
                         RoundedRectangle(cornerRadius: 15)
-                            .fill(Color.green.gradient)
+                            .fill(type.color)
                             .frame(height: 150)
                             .overlay {
                                 VStack(alignment: .leading) {

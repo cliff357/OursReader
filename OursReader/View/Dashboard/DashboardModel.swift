@@ -6,17 +6,29 @@
 //
 
 import Foundation
+import SwiftUI
 
 enum ButtonListType {
     case push_notification
     case widget
     case ebook
+    
+    var color: Color {
+        switch self {
+        case .push_notification:
+            return Color.firstTab
+        case .widget:
+            return Color.secondTab
+        case .ebook:
+            return Color.thirdTab
+        }
+    }
 }
 
 // 定義 Widget 結構
 struct OurPushNotification {
     var id: String
-    var name: String
+    var title: String
     var message: String
 }
 
@@ -38,10 +50,10 @@ struct Ebook {
 // 建立 widget list
 let pushNotificationList: [OurPushNotification] = [
     //get 一堆push 黎
-    OurPushNotification(id: "push_001", name: "Welcome", message: "Welcome to OursReader!"),
-    OurPushNotification(id: "push_002", name: "New Book", message: "Check out our new book collection!"),
-    OurPushNotification(id: "push_003", name: "Special Offer", message: "Don't miss our special offer!"),
-    OurPushNotification(id: "push_004", name: "Reminder", message: "Don't forget to read today!")
+    OurPushNotification(id: "push_001", title: "喂！", message: "掛住你掛住你掛住你"),
+    OurPushNotification(id: "push_002", title: "黎自文華通知～", message: "你做緊咩呀你做緊咩呀"),
+    OurPushNotification(id: "push_003", title: "黎自文華通知～", message: "今晚食咩好"),
+    OurPushNotification(id: "push_004", title: "黎自文華通知～", message: "抖下先啦～ 唔好咁辛苦")
 ]
 let widgetList: [Widget] = [
     Widget(id: "widget_001", name: "Weather Widget", actionCode: "SHOW_WEATHER"),
