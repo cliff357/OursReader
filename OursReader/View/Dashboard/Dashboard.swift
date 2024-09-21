@@ -139,7 +139,7 @@ struct Dashboard: View {
                                 VStack(alignment: .leading) {
                                     Text(push.title)
                                         .font(.headline)
-                                    
+                                        .foregroundColor(Color(hex: "BC2649"))
                                     Text(push.message)
                                         .font(.subheadline)
                                         .foregroundColor(.gray)
@@ -158,10 +158,10 @@ struct Dashboard: View {
                                 VStack(alignment: .leading) {
                                     Text(widget.name)
                                         .font(.headline)
-                                    
+                                        .foregroundColor(Color(hex: "FFFFFF"))
                                     Text(widget.actionCode)
                                         .font(.subheadline)
-                                        .foregroundColor(.gray)
+                                        .foregroundColor(Color(hex: "FFD741"))
                                 }
                                 .padding(15)
                                 .frame(maxWidth: .infinity, alignment: .leading)
