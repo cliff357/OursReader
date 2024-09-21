@@ -17,6 +17,11 @@ extension Color {
     public static let green1: Color = R.color.green1.color
     public static let dark_brown2: Color = R.color.dark_brown2.color
     public static let background: Color = R.color.background.color
+    
+    //Dashboard
+    public static let firstTab: Color = R.color.first_tab.color
+    public static let secondTab: Color = R.color.second_tab.color
+    public static let thirdTab: Color = R.color.third_tab.color
 }
 
 extension RswiftResources.ColorResource {

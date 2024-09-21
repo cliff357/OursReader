@@ -8,29 +8,29 @@
 import Foundation
 
 enum Tab: Int, CaseIterable, Equatable {
-    case fav = 0
-    case new = 1
-    case all = 2
+    case push = 0
+    case widget = 1
+    case ebook = 2
     
     var systemImage: String {
         switch self {
-        case .fav:
+        case .push:
             return "list.star"
-        case .new:
+        case .widget:
             return "book.fill"
-        case .all:
+        case .ebook:
             return "book.closed.fill"
         }
     }
     
     var name: String {
         switch self {
-        case .fav:
-            return "Favourite"
-        case .new:
-            return "New"
-        case .all:
-            return "All"
+        case .push:
+            return "通知"
+        case .widget:
+            return "Widget"
+        case .ebook:
+            return "電子書"
         }
     }
     
