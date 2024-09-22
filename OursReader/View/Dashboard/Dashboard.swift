@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct Dashboard: View {
-    /// Tab Progress
     @State private var tabProgress: CGFloat = 0
     @State private var selectedTab: Tab?
     @State private var selectedButtonListType: ButtonListType = .push_notification
@@ -20,13 +19,10 @@ struct Dashboard: View {
             VStack(spacing: 15) {
                 Spacer().frame(height: 15)
                 
-                
                 CustomTabBar()
                 
-                //Paging View using new iOS 17 APIS
-                GeometryReader {
-                    let size = $0.size
-                    
+                // Paging View using new iOS 17 APIS
+                GeometryReader { geometry in
                     ScrollView(.horizontal) {
                         LazyHStack(spacing: 0 ) {
                             BooklistView(type: selectedButtonListType)
@@ -43,15 +39,10 @@ struct Dashboard: View {
                         }
                         .scrollTargetLayout()
                         .offsetX { value in
-                            /// Converting offset into progress
-                            let progress = -value / (size.width * CGFloat(Tab.allCases.count - 1))
-                            /// Capping Progress BTW 0-1
-                            tabProgress = max(min(progress, 1),0)
+                            let progress = -value / (geometry.size.width * CGFloat(Tab.allCases.count - 1))
+                            tabProgress = max(min(progress, 1), 0)
                             
-                            /// Determine the current page based on offset
-                            let currentPage = Int(round(-value / size.width))
-                            
-                            /// Update the `selectedButtonListType` based on currentPage
+                            let currentPage = Int(round(-value / geometry.size.width))
                             switch currentPage {
                             case 0:
                                 selectedButtonListType = .push_notification
@@ -73,9 +64,7 @@ struct Dashboard: View {
                     .scrollClipDisabled()
                 }
             }
-//            .background(Color.background)
         }
-        
     }
     
     @ViewBuilder
@@ -84,9 +73,7 @@ struct Dashboard: View {
             ForEach(Tab.allCases, id: \.rawValue) { tab in
                 HStack(spacing: 10) {
                     Image(systemName: tab.systemImage)
-                    
-                    Text(tab.name)
-                        .font(.callout)
+                    Text(tab.name).font(.callout)
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 10)
@@ -94,7 +81,6 @@ struct Dashboard: View {
                 .onTapGesture {
                     withAnimation(.snappy) {
                         selectedTab = tab
-                        
                         switch tab {
                         case .push:
                             selectedButtonListType = .push_notification
@@ -107,28 +93,23 @@ struct Dashboard: View {
                 }
             }
         }
-        
-        /// Scrollable Active Tab Indicator
-        .background() {
-            GeometryReader {
-                let size = $0.size
-                let capsuleWidth = size.width / CGFloat(Tab.allCases.count)
-                
+        .background {
+            GeometryReader { geometry in
+                let capsuleWidth = geometry.size.width / CGFloat(Tab.allCases.count)
                 Capsule()
-//                    .fill(scheme == .dark ? Color.green1 : Color.red1)
                     .fill(Color.green1)
                     .frame(width: capsuleWidth)
-                    .offset(x: tabProgress * (size.width - capsuleWidth))
+                    .offset(x: tabProgress * (geometry.size.width - capsuleWidth))
             }
         }
-        .background(.gray.opacity(0.1), in: .capsule)
+        .background(Color.gray.opacity(0.1), in: .capsule)
         .padding(.horizontal, 15)
     }
     
     @ViewBuilder
     func BooklistView(type: ButtonListType) -> some View {
         ScrollView(.vertical) {
-            LazyVGrid(columns: Array(repeating: GridItem(), count: 2), content: {
+            LazyVGrid(columns: Array(repeating: GridItem(), count: 2)) {
                 switch type {
                 case .push_notification:
                     ForEach(pushNotificationList, id: \.id) { push in
@@ -175,18 +156,9 @@ struct Dashboard: View {
                             .frame(height: 150)
                             .overlay {
                                 VStack(alignment: .leading) {
-                                    Text(ebook.title)
-                                        .font(.headline)
-                                    
-                                    Text(ebook.name)
-                                        .font(.subheadline)
-                                        .foregroundColor(.gray)
-                                    
-                                    Text(ebook.instruction)
-                                        .font(.body)
-                                        .foregroundColor(.gray)
-                                        .lineLimit(2)
-                                    
+                                    Text(ebook.title).font(.headline)
+                                    Text(ebook.name).font(.subheadline).foregroundColor(.gray)
+                                    Text(ebook.instruction).font(.body).foregroundColor(.gray).lineLimit(2)
                                     Spacer()
                                 }
                                 .padding(15)
@@ -194,8 +166,7 @@ struct Dashboard: View {
                             }
                     }
                 }
-                
-            })
+            }
             .padding(15)
             .scrollIndicators(.hidden)
             .scrollClipDisabled()
