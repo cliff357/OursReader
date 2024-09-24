@@ -91,7 +91,7 @@ extension DatabaseManager {
             "fcmToken": user.fcmToken ?? "",
             "email": user.email ?? "",
             "login_type": user.login_type?.rawValue ?? 0,
-            "connections_userID": user.connections_userID ?? [] 
+//            "connections_userID": user.connections_userID ?? [] 
         ]
         
         db.collection(Key.user).document(userID).updateData(data) { error in
