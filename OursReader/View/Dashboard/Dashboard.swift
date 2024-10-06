@@ -11,6 +11,7 @@ struct Dashboard: View {
     @State private var tabProgress: CGFloat = 0
     @State private var selectedTab: Tab?
     @State private var selectedButtonListType: ButtonListType = .push_notification
+    @StateObject var notificationManager = NotificationManager()
     
     var body: some View {
         ZStack {
@@ -127,6 +128,10 @@ struct Dashboard: View {
                                 }
                                 .padding(15)
                                 .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                            .onTapGesture {
+                                let friendFcmToken = "c1w3tfoWNEaMgTl1QvfFtX:APA91bFGj-zuYtefhsYfScYpgApR_RvoXYdj2t0feZ1sY2Aw-8vp8u_qlwZyemFHbX0E6SHXoKZdqHI8vroIxfqCcRScEcrkPzHIB8RWTuiCi889lwhPP37qdUA14cl9AH6NV6P5ltoe"
+                                notificationManager.sendFirebasePushNotification(to: friendFcmToken, title: push.title, message: push.message)
                             }
                     }
                     

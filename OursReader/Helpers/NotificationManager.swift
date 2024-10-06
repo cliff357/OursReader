@@ -36,4 +36,11 @@ class NotificationManager: ObservableObject{
             hasPermission = false
         }
     }
+
+    func sendFirebasePushNotification(to fcmToken: String, title: String, message: String) {
+        
+       
+    }
+
+
 }
