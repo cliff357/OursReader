@@ -9,6 +9,7 @@ import SwiftUI
 import FirebaseCore
 import GoogleSignIn
 import FirebaseMessaging
+import FirebaseAppCheck
 
 class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNotificationCenterDelegate {
     
@@ -16,7 +17,28 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         application.registerForRemoteNotifications()
+        
         FirebaseApp.configure()
+        
+        let providerFactory = OurReaderAppCheckProviderFactory()
+//        let providerFactory = AppCheckDebugProviderFactory()
+        AppCheck.setAppCheckProviderFactory(providerFactory)
+        
+        AppCheck.appCheck().token(forcingRefresh: true) { token, error in
+            if let error = error {
+                print("App Check token error: \(error)")
+                return
+            }
+            
+            guard let token = token else {
+                print("App Check token is nil.")
+                return
+            }
+            
+            print("App Check token: \(token.token)")
+        }
+
+        
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
         
@@ -47,6 +69,17 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
     }
 }
 
+
+
+class OurReaderAppCheckProviderFactory: NSObject, AppCheckProviderFactory {
+    func createProvider(with app: FirebaseApp) -> AppCheckProvider? {
+        if #available(iOS 14.0, *) {
+            return AppAttestProvider(app: app)
+        } else {
+            return DeviceCheckProvider(app: app)
+        }
+    }
+}
 
 @main
 struct OursReaderApp: App {
