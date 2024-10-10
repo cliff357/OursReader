@@ -130,8 +130,22 @@ struct Dashboard: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             }
                             .onTapGesture {
-                                let friendFcmToken = "c1w3tfoWNEaMgTl1QvfFtX:APA91bFGj-zuYtefhsYfScYpgApR_RvoXYdj2t0feZ1sY2Aw-8vp8u_qlwZyemFHbX0E6SHXoKZdqHI8vroIxfqCcRScEcrkPzHIB8RWTuiCi889lwhPP37qdUA14cl9AH6NV6P5ltoe"
-                                notificationManager.sendFirebasePushNotification(to: friendFcmToken, title: push.title, message: push.message)
+                                DatabaseManager.shared.getAllFriendsToken { result in
+                                    switch result {
+                                    case .success(let tokens):
+                                        
+                                        notificationManager.sendPushNotification(to: tokens, title: push.title, body: push.message) { result in
+                                            switch result {
+                                            case .success(let response):
+                                                print("Notification sent successfully: \(response)")
+                                            case .failure(let error):
+                                                print("Error sending notification: \(error.localizedDescription)")
+                                            }
+                                        }
+                                    case .failure(let error):
+                                        print("Error getting all friends token: \(error.localizedDescription)")
+                                    }
+                                }
                             }
                     }
                     

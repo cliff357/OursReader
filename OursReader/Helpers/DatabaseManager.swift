@@ -16,6 +16,11 @@ final class DatabaseManager {
     //firebase key
     enum Key {
         static let user = "User"
+        static let name = "name"
+        static let fcmToken = "fcmToken"
+        static let email = "email"
+        static let login_type = "login_type"
+        static let connections_userID = "connections_userID"
     }
 }
 
@@ -30,11 +35,11 @@ extension DatabaseManager {
         }
         
         let data: [String: Any] = [
-            "name": user.name ?? "",
-            "fcmToken": user.fcmToken ?? "",
-            "email": user.email ?? "",
-            "login_type": user.login_type?.rawValue ?? 0,
-            "connections_userID": user.connections_userID ?? []
+            Key.name: user.name ?? "",
+            Key.fcmToken: user.fcmToken ?? "",
+            Key.email: user.email ?? "",
+            Key.login_type: user.login_type?.rawValue ?? 0,
+            Key.connections_userID: user.connections_userID ?? []
         ]
         
         db.collection(Key.user).document(userID).setData(data) { error in
@@ -66,7 +71,7 @@ extension DatabaseManager {
         let userDocument = db.collection(Key.user).document(currentUserID)
         
         userDocument.updateData([
-            "connections_userID": FieldValue.arrayUnion([friendID])
+            Key.connections_userID: FieldValue.arrayUnion([friendID])
         ]) { error in
             if let error = error {
                 print("Error adding friend: \(error.localizedDescription)")
@@ -87,11 +92,11 @@ extension DatabaseManager {
         }
         
         let data: [String: Any] = [
-            "name": user.name ?? "",
-            "fcmToken": user.fcmToken ?? "",
-            "email": user.email ?? "",
-            "login_type": user.login_type?.rawValue ?? 0,
-//            "connections_userID": user.connections_userID ?? [] 
+            Key.name: user.name ?? "",
+            Key.fcmToken: user.fcmToken ?? "",
+            Key.email: user.email ?? "",
+            Key.login_type: user.login_type?.rawValue ?? 0,
+//            "connections_userID": user.connections_userID ?? []
         ]
         
         db.collection(Key.user).document(userID).updateData(data) { error in
@@ -137,6 +142,41 @@ extension DatabaseManager {
                 }
             }
         }
+    }
+    
+    func getAllFriendsToken(completion: @escaping (Result<[String], Error>) -> () ) {
+        guard let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() else {
+            completion(.failure(NSError(domain: "Invalid Current User", code: 0, userInfo: nil)))
+            return
+        }
+        
+        let currentUserID = currentUser.uid
+        
+        
+        //get all token from firebase
+        db.collection(Key.user).getDocuments { (snapshot, error) in
+            if let error = error {
+                print("Error getting documents: \(error)")
+            } else {
+                
+                var tokens:[String] = []
+                
+                let document = snapshot?.documents.first(where: { $0.documentID == currentUserID })
+                
+                if let connections_userID = document?.data()[Key.connections_userID] as? [String] {
+                    for userID in connections_userID {
+                        let friendDocument = snapshot?.documents.first(where: { $0.documentID == userID })
+                        if let token = friendDocument?.data()["fcmToken"] as? String {
+                            tokens.append(token)
+                        }
+                    }
+                }
+                
+                completion(.success(tokens))
+            }
+        }
+        
+       
     }
     
 }

@@ -100,3 +100,26 @@ wow 用xcode cloud build app 又幾正，幾經辛苦
 呢期太忙了 
 
 依家諗緊去邊個方向行好，應該係整ebook 先，定整send data 好，不如整左push noti 先
+
+2024 10月9號
+我既一小步！
+整好左push notification
+好正，我依家係firebase 既functions 去做
+
+首先我要係電腦setup 好firebase function 既venv 先
+然後再用js 寫左個function 負責send push
+
+deploy 完之後就變成我既backend
+
+幾正，成功send到第一個push既感覺好爽 
+
+2024 10月9號
+都仲係同一日，但我要分開寫
+因為呢個係我做完push之後，突然發現仲未可以commit 住既野黎
+係咩黎，就係。。。。
+安全
+
+我覺得依家就咁放條link 上網好唔安全，所以我想睇下有冇d咩方法可以保護到隻app
+
+依家試下先！ 
+ios 16 出左d新野，應該用得著。
