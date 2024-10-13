@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct Dashboard: View {
+    @StateObject private var viewModel = DashboardViewModel()
     @State private var tabProgress: CGFloat = 0
     @State private var selectedTab: Tab?
     @State private var selectedButtonListType: ButtonListType = .push_notification
@@ -24,7 +25,7 @@ struct Dashboard: View {
                 // Paging View using new iOS 17 APIS
                 GeometryReader { geometry in
                     ScrollView(.horizontal) {
-                        LazyHStack(spacing: 0 ) {
+                        LazyHStack(spacing: 0) {
                             BooklistView(type: selectedButtonListType)
                                 .id(Tab.push)
                                 .containerRelativeFrame(.horizontal)
@@ -112,9 +113,10 @@ struct Dashboard: View {
             LazyVGrid(columns: Array(repeating: GridItem(), count: 2)) {
                 switch type {
                 case .push_notification:
-                    PushSettingView()
+                    PushSettingView(viewModel: viewModel)
                     
-                    AddNotificationButton()
+                    AddNotificationButton(viewModel: viewModel)
+
                 case .widget:
                     ForEach(widgetList, id: \.id) { widget in
                         RoundedRectangle(cornerRadius: 15)
@@ -133,7 +135,7 @@ struct Dashboard: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             }
                     }
-                    
+
                 case .ebook:
                     ForEach(ebookList, id: \.id) { ebook in
                         RoundedRectangle(cornerRadius: 15)
@@ -160,33 +162,18 @@ struct Dashboard: View {
 }
 
 struct PushSettingView: View {
-    @State private var pushSettings: [Push_Setting] = []
-    @State private var isLoading = true
+    @ObservedObject var viewModel: DashboardViewModel
     
     var body: some View {
-        if isLoading {
+        if viewModel.isLoading {
             ProgressView("Loading...") // 顯示載入中指示
-                .onAppear(perform: fetchPushSettings)
+                .onAppear(perform: viewModel.fetchPushSettings)
         } else {
-            ForEach(pushSettings, id: \.self) { setting in
+            ForEach(viewModel.pushSettings, id: \.self) { setting in
                 NotificationItemView(
                     push: setting,
-                    color: ButtonListType.push_notification.color
-                )
+                    color: ButtonListType.push_notification.color)
             }
-        }
-    }
-    
-    private func fetchPushSettings() {
-        DatabaseManager.shared.getUserPushSetting { result in
-            switch result {
-            case .success(let settings):
-                self.pushSettings = settings
-            case .failure(let error):
-                print("Failed to fetch push settings: \(error.localizedDescription)")
-                self.pushSettings = [Push_Setting.defaultSetting]
-            }
-            isLoading = false
         }
     }
 }
@@ -273,7 +260,6 @@ struct NotificationItemView: View {
                 }
             }
     }
-    
 }
 
 struct EditNotificationButton: View {
@@ -299,6 +285,7 @@ struct AddNotificationButton: View {
     @State private var showAddSettingSheet = false
     @State private var newTitle: String = ""
     @State private var newBody: String = ""
+    @ObservedObject var viewModel: DashboardViewModel
     
     var body: some View {
         Button(action: {
@@ -335,19 +322,13 @@ struct AddNotificationButton: View {
                 }
         }
         .sheet(isPresented: $showAddSettingSheet) {
-            EditPushBottomSheet(
-                pushTitle: $newTitle,
-                pushBody: $newBody
-            ) {
-                let newSetting = Push_Setting(title: newTitle, body: newBody)
-                
-                DatabaseManager.shared.addPushSetting(newSetting) { result in
+            EditPushBottomSheet(pushTitle: $newTitle,pushBody: $newBody) {
+                viewModel.addPushSetting(title: newTitle, body: newBody) { result in
                     switch result {
                     case .success():
                         newTitle = ""
                         newBody = ""
-                        
-                        
+                        viewModel.fetchPushSettings() 
                     case .failure(let error):
                         print(error.localizedDescription)
                     }

@@ -26,13 +26,6 @@ enum ButtonListType {
 }
 
 // 定義 Widget 結構
-struct OurPushNotification {
-    var id: String
-    var title: String
-    var message: String
-}
-
-// 定義 Widget 結構
 struct Widget {
     var id: String
     var name: String
