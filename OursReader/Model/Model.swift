@@ -33,6 +33,13 @@ struct Push_Setting: Codable, Hashable {
     let body: String?
     
     static let defaultSetting = Push_Setting(title: "Default Title", body: "Default Body")
+    
+    func toDictionary() -> [String: Any] {
+        return [
+            "title": title ?? "",
+            "body": body ?? ""
+        ]
+    }
 }
 
 struct UserObject: Codable, Identifiable {

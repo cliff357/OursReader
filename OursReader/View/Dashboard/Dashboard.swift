@@ -114,6 +114,7 @@ struct Dashboard: View {
                 case .push_notification:
                     PushSettingView()
                     
+                    AddNotificationButton()
                 case .widget:
                     ForEach(widgetList, id: \.id) { widget in
                         RoundedRectangle(cornerRadius: 15)
@@ -291,6 +292,68 @@ struct EditNotificationButton: View {
                 .symbolEffect(.bounce.up.byLayer, value: isButtonClicked) // 動畫效果
         }
         .padding([.top, .trailing], 10)
+    }
+}
+
+struct AddNotificationButton: View {
+    @State private var showAddSettingSheet = false
+    @State private var newTitle: String = ""
+    @State private var newBody: String = ""
+    
+    var body: some View {
+        Button(action: {
+            showAddSettingSheet.toggle()
+        }) {
+            RoundedRectangle(cornerRadius: 15)
+                .fill(Color.firstTab)
+                .frame(height: 100)
+                .overlay {
+                    ZStack {
+                        VStack(alignment: .leading) {
+                            Text("加多幾個通知")
+                                .font(.headline)
+                                .foregroundColor(Color(hex: "BC2649"))
+
+                            Text("發揮小宇宙")
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                        }
+                        .padding(15)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+
+                        HStack {
+                            Spacer()
+                            VStack {
+                                Image(systemName: "pencil.tip.crop.circle.badge.plus")
+                                    .foregroundColor(.gray)
+                                    .font(.system(size: 30))
+                                    .padding([.top, .trailing], 10)
+                                Spacer()
+                            }
+                        }
+                    }
+                }
+        }
+        .sheet(isPresented: $showAddSettingSheet) {
+            EditPushBottomSheet(
+                pushTitle: $newTitle,
+                pushBody: $newBody
+            ) {
+                let newSetting = Push_Setting(title: newTitle, body: newBody)
+                
+                DatabaseManager.shared.addPushSetting(newSetting) { result in
+                    switch result {
+                    case .success():
+                        newTitle = ""
+                        newBody = ""
+                        
+                        
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                    }
+                }
+            }
+        }
     }
 }
 

@@ -29,7 +29,7 @@ final class DatabaseManager {
 
 // MARK: - Account management
 extension DatabaseManager {
-    
+    //MARK: User Data
     // add user into fireStore
     func addUser(user:UserObject, completion: @escaping (Result<Void, Error>) -> Void) {
         guard let userID = user.userID else {
@@ -179,7 +179,7 @@ extension DatabaseManager {
         }
     }
     
-    
+    //MARK: Push Setting
     // Get user push setting in Firestore
     func getUserPushSetting(completion: @escaping (Result<[Push_Setting], Error>) -> () ) {
         guard let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() else {
@@ -217,4 +217,24 @@ extension DatabaseManager {
             }
         }
     }
+    
+    func addPushSetting(_ pushSetting: Push_Setting, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() else {
+            completion(.failure(NSError(domain: "Invalid Current User", code: 0, userInfo: nil)))
+            return
+        }
+        
+        let currentUserID = currentUser.uid
+        
+        db.collection(Key.user).document(currentUserID).updateData([
+            Key.push_setting: FieldValue.arrayUnion([pushSetting.toDictionary()])
+        ]) { error in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                completion(.success(()))
+            }
+        }
+    }
+
 }

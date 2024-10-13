@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct HalfPresentationDetent: CustomPresentationDetent {
     // 1
     static func height(in context: Context) -> CGFloat? {
@@ -26,20 +25,21 @@ struct EditPushBottomSheet: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section(header: Text("Edit Notification")) {
-                    TextField("Title", text: $pushTitle)
-                    TextField("Body", text: $pushBody)
+                Section(header: Text("通知")) {
+                    TextField("標題", text: $pushTitle)
+                    TextField("內容", text: $pushBody)
                 }
             }
-            .navigationTitle("Edit Notification")
+            .navigationTitle("新增通知")
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") {
+                    Button("搞掂") {
                         onSave()
+                        dismiss()
                     }
                 }
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
+                    Button("唔整住") {
                         dismiss()
                     }
                 }
