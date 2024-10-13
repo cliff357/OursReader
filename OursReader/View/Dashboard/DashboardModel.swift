@@ -49,11 +49,11 @@ struct Ebook {
 
 // 建立 widget list
 let pushNotificationList: [OurPushNotification] = [
-    //get 一堆push 黎
-    OurPushNotification(id: "push_001", title: "喂！", message: "掛住你掛住你掛住你"),
-    OurPushNotification(id: "push_002", title: "黎自文華通知～", message: "你做緊咩呀你做緊咩呀"),
-    OurPushNotification(id: "push_003", title: "黎自文華通知～", message: "今晚食咩好"),
-    OurPushNotification(id: "push_004", title: "黎自文華通知～", message: "抖下先啦～ 唔好咁辛苦")
+    OurPushNotification(id: "push_001", title: "bb通知", message: "我掛住你啊🥹"),
+    OurPushNotification(id: "push_002", title: "bb通知", message: "你做緊咩呀"),
+    OurPushNotification(id: "push_003", title: "bb通知", message: "今晚食咩好"),
+    OurPushNotification(id: "push_004", title: "bb通知", message: "抖下先啦～ 唔好咁辛苦"),
+    OurPushNotification(id: "push_004", title: "bb通知", message: "收工未")
 ]
 let widgetList: [Widget] = [
     Widget(id: "widget_001", name: "Weather Widget", actionCode: "SHOW_WEATHER"),

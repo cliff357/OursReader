@@ -11,7 +11,6 @@ struct Dashboard: View {
     @State private var tabProgress: CGFloat = 0
     @State private var selectedTab: Tab?
     @State private var selectedButtonListType: ButtonListType = .push_notification
-    @StateObject var notificationManager = NotificationManager()
     
     var body: some View {
         ZStack {
@@ -114,39 +113,7 @@ struct Dashboard: View {
                 switch type {
                 case .push_notification:
                     ForEach(pushNotificationList, id: \.id) { push in
-                        RoundedRectangle(cornerRadius: 15)
-                            .fill(type.color)
-                            .frame(height: 100)
-                            .overlay {
-                                VStack(alignment: .leading) {
-                                    Text(push.title)
-                                        .font(.headline)
-                                        .foregroundColor(Color(hex: "BC2649"))
-                                    Text(push.message)
-                                        .font(.subheadline)
-                                        .foregroundColor(.gray)
-                                }
-                                .padding(15)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            }
-                            .onTapGesture {
-                                DatabaseManager.shared.getAllFriendsToken { result in
-                                    switch result {
-                                    case .success(let tokens):
-                                        
-                                        notificationManager.sendPushNotification(to: tokens, title: push.title, body: push.message) { result in
-                                            switch result {
-                                            case .success(let response):
-                                                print("Notification sent successfully: \(response)")
-                                            case .failure(let error):
-                                                print("Error sending notification: \(error.localizedDescription)")
-                                            }
-                                        }
-                                    case .failure(let error):
-                                        print("Error getting all friends token: \(error.localizedDescription)")
-                                    }
-                                }
-                            }
+                        NotificationItemView(push: push,color: type.color)
                     }
                     
                 case .widget:
@@ -192,6 +159,100 @@ struct Dashboard: View {
         }
     }
 }
+
+
+struct EditNotificationButton: View {
+    @State private var isButtonClicked = false
+
+    var action: () -> Void
+
+    var body: some View {
+        Button(action: {
+            isButtonClicked.toggle()
+            action()
+        }) {
+            Image(systemName: "ellipsis.circle")
+                .foregroundColor(.gray)
+                .font(.title2)
+                .symbolEffect(.bounce.up.byLayer, value: isButtonClicked) // 動畫效果
+        }
+        .padding([.top, .trailing], 10) // 設置間距
+    }
+}
+
+struct NotificationItemView: View {
+    let push: OurPushNotification
+    let color: Color
+    @StateObject var notificationManager = NotificationManager()
+    @State private var isShaking = false
+
+    var body: some View {
+        RoundedRectangle(cornerRadius: 15)
+            .fill(color)
+            .frame(height: 100)
+            .overlay {
+                ZStack {
+                    VStack(alignment: .leading) {
+                        Text(push.title)
+                            .font(.headline)
+                            .foregroundColor(Color(hex: "BC2649"))
+
+                        Text(push.message)
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                    }
+                    .padding(15)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                    HStack {
+                        Spacer()
+                        VStack {
+                            EditNotificationButton {
+                                print("按鈕被點擊！")
+                            }
+                            Spacer()
+                        }
+                    }
+                }
+            }
+            .offset(x: isShaking ? -10 : 0)
+            .animation(
+                .interpolatingSpring(stiffness: 100, damping: 5)
+                    .repeatCount(3, autoreverses: true),
+                value: isShaking
+            )
+            .onTapGesture {
+                withAnimation {
+                    isShaking = true
+                }
+
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    isShaking = false // 恢復原狀
+                }
+
+                DatabaseManager.shared.getAllFriendsToken { result in
+                    switch result {
+                    case .success(let tokens):
+                        notificationManager.sendPushNotification(
+                            to: tokens,
+                            title: push.title,
+                            body: push.message
+                        ) { result in
+                            switch result {
+                            case .success(let response):
+                                print("Notification sent successfully: \(response)")
+                            case .failure(let error):
+                                print("Error sending notification: \(error.localizedDescription)")
+                            }
+                        }
+                    case .failure(let error):
+                        print("Error getting all friends token: \(error.localizedDescription)")
+                    }
+                }
+            }
+    }
+}
+
 
 #Preview {
     Dashboard()
