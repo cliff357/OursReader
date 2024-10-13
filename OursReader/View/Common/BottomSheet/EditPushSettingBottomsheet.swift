@@ -1,5 +1,5 @@
 //
-//  EditPushBottomsheet.swift
+//  EditPushSettingBottomsheet.swift
 //  OursReader
 //
 //  Created by Cliff Chan on 13/10/2024.
@@ -7,20 +7,17 @@
 
 import SwiftUI
 
-struct HalfPresentationDetent: CustomPresentationDetent {
-    static func height(in context: Context) -> CGFloat? {
-        return max(20, context.maxDetentValue * 0.7)
-    }
-}
 
-struct EditPushBottomSheet: View {
+struct EditPushSettingBottomsheet: View {
     @Binding var pushTitle: String
     @Binding var pushBody: String
     var onSave: () -> Void
+    var onDelete: () -> Void
 
     @Environment(\.dismiss) private var dismiss
     @FocusState private var isTitleFocused: Bool // 追蹤標題 TextField 的焦點
     @FocusState private var isBodyFocused: Bool // 追蹤內容 TextField 的焦點
+    @State private var showDeleteAlert = false
     
     var body: some View {
         NavigationStack {
@@ -48,8 +45,17 @@ struct EditPushBottomSheet: View {
                             }
                         }
                 }
+                    
+                Button {
+                    showDeleteAlert = true
+                } label: {
+                    Label("移除通知", systemImage: "trash")
+                        .foregroundColor(.red)
+                }
+                
+                
             }
-            .navigationTitle("新增通知")
+            .navigationTitle("修改通知")
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("搞掂") {
@@ -63,7 +69,7 @@ struct EditPushBottomSheet: View {
                     }
                 }
             }
-            .presentationDetents([.custom(HalfPresentationDetent.self),.fraction(0.3)])
+            .presentationDetents([.custom(HalfPresentationDetent.self),.fraction(0.5)])
             .padding(.bottom, 0) // 確保底部無額外填充
             .onAppear {
                 // 在視圖出現時，保持焦點不改變底部視圖的位置
@@ -73,10 +79,17 @@ struct EditPushBottomSheet: View {
                     isTitleFocused = false
                 }
             }
+            .alert("確認刪除", isPresented: $showDeleteAlert) {
+                Button("刪除", role: .destructive) {
+                    handleDelete() // 確認刪除後執行
+                }
+                Button("取消", role: .cancel) {}
+            } message: {
+                Text("你確定要移除這個通知嗎？此操作無法復原。")
+            }
         }
     }
     
-    // 處理確認按鈕
     private func handleConfirm() {
         if !pushTitle.isEmpty && !pushBody.isEmpty {
             onSave() // 調用 onSave() 來儲存資料
@@ -86,4 +99,13 @@ struct EditPushBottomSheet: View {
             print("請填寫標題和內容")
         }
     }
+    
+    private func handleDelete() {
+            onDelete() // 呼叫刪除閉包
+            dismiss()  // 關閉視圖
+        }
+}
+
+#Preview {
+    EditPushSettingBottomsheet(pushTitle: .constant("hi"), pushBody: .constant("body"), onSave: {}, onDelete: {})
 }

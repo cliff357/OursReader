@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		591BAACB2CBB7B63001FAE1C /* EditPushBottomsheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 591BAACA2CBB7B63001FAE1C /* EditPushBottomsheet.swift */; };
+		591BAACB2CBB7B63001FAE1C /* AddPushBottomsheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 591BAACA2CBB7B63001FAE1C /* AddPushBottomsheet.swift */; };
 		591BAAD42CBBF07B001FAE1C /* PushSettingListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 591BAAD32CBBF07B001FAE1C /* PushSettingListView.swift */; };
 		591BAAD72CBBF0AC001FAE1C /* PushSettingListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 591BAAD62CBBF0A3001FAE1C /* PushSettingListViewModel.swift */; };
+		591BAADB2CBBF5A3001FAE1C /* EditPushSettingBottomsheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 591BAADA2CBBF5A3001FAE1C /* EditPushSettingBottomsheet.swift */; };
 		593EB1CE2C01DC1800DD430F /* ToastManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593EB1CB2C01DC1700DD430F /* ToastManager.swift */; };
 		593EB1D22C01DE3B00DD430F /* FontHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593EB1D12C01DE3A00DD430F /* FontHelper.swift */; };
 		593EB1D92C01DED300DD430F /* BaseReminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593EB1D62C01DED300DD430F /* BaseReminder.swift */; };
@@ -157,9 +158,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		591BAACA2CBB7B63001FAE1C /* EditPushBottomsheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPushBottomsheet.swift; sourceTree = "<group>"; };
+		591BAACA2CBB7B63001FAE1C /* AddPushBottomsheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPushBottomsheet.swift; sourceTree = "<group>"; };
 		591BAAD32CBBF07B001FAE1C /* PushSettingListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushSettingListView.swift; sourceTree = "<group>"; };
 		591BAAD62CBBF0A3001FAE1C /* PushSettingListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushSettingListViewModel.swift; sourceTree = "<group>"; };
+		591BAADA2CBBF5A3001FAE1C /* EditPushSettingBottomsheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPushSettingBottomsheet.swift; sourceTree = "<group>"; };
 		593EB1CB2C01DC1700DD430F /* ToastManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToastManager.swift; sourceTree = "<group>"; };
 		593EB1D12C01DE3A00DD430F /* FontHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontHelper.swift; sourceTree = "<group>"; };
 		593EB1D62C01DED300DD430F /* BaseReminder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseReminder.swift; sourceTree = "<group>"; };
@@ -316,7 +318,8 @@
 		591BAAC32CBB7B33001FAE1C /* BottomSheet */ = {
 			isa = PBXGroup;
 			children = (
-				591BAACA2CBB7B63001FAE1C /* EditPushBottomsheet.swift */,
+				591BAACA2CBB7B63001FAE1C /* AddPushBottomsheet.swift */,
+				591BAADA2CBBF5A3001FAE1C /* EditPushSettingBottomsheet.swift */,
 			);
 			path = BottomSheet;
 			sourceTree = "<group>";
@@ -940,7 +943,7 @@
 				998614762BBD287300E0996D /* ColorHelper.swift in Sources */,
 				598053E82BA6F169008056F3 /* Error.swift in Sources */,
 				593EB1F72C01EAC300DD430F /* GeneralErrorReminder.swift in Sources */,
-				591BAACB2CBB7B63001FAE1C /* EditPushBottomsheet.swift in Sources */,
+				591BAACB2CBB7B63001FAE1C /* AddPushBottomsheet.swift in Sources */,
 				59E75EC42ADF5749007A549C /* Model.swift in Sources */,
 				998614612BBBBA7F00E0996D /* DividerWithText.swift in Sources */,
 				9986144E2BB41F5000E0996D /* BasicRouter.swift in Sources */,
@@ -986,6 +989,7 @@
 				593EB2012C01EF6600DD430F /* ErrorHelper.swift in Sources */,
 				599EC2F22BD4CEDA00F6DEB1 /* ORTextField.swift in Sources */,
 				9986145A2BBB9EEC00E0996D /* WelcomePage.swift in Sources */,
+				591BAADB2CBBF5A3001FAE1C /* EditPushSettingBottomsheet.swift in Sources */,
 				5953369E2B05018100BB11D7 /* Tab.swift in Sources */,
 				593EB1D92C01DED300DD430F /* BaseReminder.swift in Sources */,
 				9986145F2BBBAC8500E0996D /* UnderlineTextField.swift in Sources */,

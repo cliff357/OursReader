@@ -34,7 +34,7 @@ class PushSettingListViewModel: ObservableObject {
     }
     
     func addPushSetting(title: String, body: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        let newSetting = Push_Setting(title: title, body: body)
+        let newSetting = Push_Setting(id: UUID().uuidString, title: title, body: body)
         DatabaseManager.shared.addPushSetting(newSetting) { result in
             DispatchQueue.main.async {
                 switch result {
@@ -47,4 +47,26 @@ class PushSettingListViewModel: ObservableObject {
             }
         }
     }
+    
+    func removePushSetting(withID id: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        
+        DatabaseManager.shared.deletePushSetting(id: id) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success():
+                    // 使用 first(where:) 找到匹配的設定
+                    if let index = self.pushSettings.firstIndex(where: { $0.id == id }) {
+                        self.pushSettings.remove(at: index) // 成功後從本地陣列中移除
+                        completion(.success(()))
+                    } else {
+                        completion(.failure(NSError(domain: "無法找到指定的設定", code: -1, userInfo: nil)))
+                    }
+                case .failure(let error):
+                    print("Failed to delete push setting: \(error.localizedDescription)")
+                    completion(.failure(error))
+                }
+            }
+        }
+    }
+
 }

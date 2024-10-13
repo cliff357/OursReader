@@ -36,7 +36,7 @@ struct PushSettingCellView: View {
                 .onAppear(perform: viewModel.fetchPushSettings)
         } else {
             ForEach(viewModel.pushSettings, id: \.self) { setting in
-                NotificationItemView(push: setting, color: ButtonListType.push_notification.color)
+                NotificationItemView(push: setting, color: ButtonListType.push_notification.color, viewModel: viewModel)
             }
         }
     }
@@ -49,7 +49,8 @@ struct NotificationItemView: View {
     @StateObject var notificationManager = NotificationManager()
     @State private var isShaking = false
     @State var presentSheet = false
-
+    @ObservedObject var viewModel: PushSettingListViewModel
+    
     var body: some View {
         RoundedRectangle(cornerRadius: 15)
             .fill(color)
@@ -68,16 +69,15 @@ struct NotificationItemView: View {
                     .padding(15)
                     .frame(maxWidth: .infinity, alignment: .leading)
 
-//                    HStack {
-//                        Spacer()
-//                        VStack {
-//                            EditNotificationButton {
-//                                print("按鈕被點擊！")
-//                                presentSheet = true
-//                            }
-//                            Spacer()
-//                        }
-//                    }
+                    HStack {
+                        Spacer()
+                        VStack {
+                            EditNotificationButton {
+                                presentSheet = true
+                            }
+                            Spacer()
+                        }
+                    }
                 }
             }
             .offset(x: isShaking ? -10 : 0)
@@ -116,12 +116,21 @@ struct NotificationItemView: View {
                 }
             }
             .sheet(isPresented: $presentSheet) {
-                EditPushBottomSheet(
+                EditPushSettingBottomsheet(
                     pushTitle: .constant("hhi"),
                     pushBody: .constant("bbbb")
                 ) {
                     print("Push Notification Updated:")
                     // 可在此呼叫更新 API 或儲存新資料
+                } onDelete: {
+                    viewModel.removePushSetting(withID: push.id) { result in
+                        switch result {
+                        case .success:
+                            print("Push Notification Deleted")
+                        case .failure:
+                            print("Error deleting Push Notification")
+                        }
+                    }
                 }
             }
     }
@@ -188,7 +197,7 @@ struct AddPushSettingCellView: View {
                 }
         }
         .sheet(isPresented: $showAddSettingSheet) {
-            EditPushBottomSheet(pushTitle: $newTitle,pushBody: $newBody) {
+            AddPushBottomSheet(pushTitle: $newTitle,pushBody: $newBody) {
                 viewModel.addPushSetting(title: newTitle, body: newBody) { result in
                     switch result {
                     case .success():

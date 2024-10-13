@@ -191,31 +191,30 @@ extension DatabaseManager {
         
         
         //get all token from firebase
-        db.collection(Key.user).getDocuments { (snapshot, error) in
+        db.collection(Key.user).document(currentUserID).getDocument { (document, error) in
             if let error = error {
-                print("Error getting documents: \(error)")
-            } else {
-                
-                var pushSettings:[Push_Setting] = []
-                
-                let document = snapshot?.documents.first(where: { $0.documentID == currentUserID })
-                
-                if let settingsArray = document?.data()[Key.push_setting] as? [[String: Any]] {
-                    pushSettings = settingsArray.compactMap { dictionary in
-                        var title = ""
-                        var body = ""
-                        if let t = dictionary["title"] as? String, let b = dictionary["body"] as? String{
-                            title = t
-                            body = b
-                        }
-                        
-                        return Push_Setting(title: title, body: body)
-                    }
-                }
-                
-                completion(.success(pushSettings))
+                print("Error getting document: \(error)")
+                completion(.failure(error))
+                return
             }
+            
+            guard let data = document?.data(),
+                  let settingsArray = data[Key.push_setting] as? [[String: Any]] else {
+                print("No push settings found.")
+                completion(.success([]))
+                return
+            }
+            
+            let pushSettings = settingsArray.compactMap { dict -> Push_Setting? in
+                guard let id = dict["id"] as? String,
+                      let title = dict["title"] as? String,
+                      let body = dict["body"] as? String else { return nil }
+                return Push_Setting(id: id, title: title, body: body)
+            }
+            
+            completion(.success(pushSettings))
         }
+
     }
     
     func addPushSetting(_ pushSetting: Push_Setting, completion: @escaping (Result<Void, Error>) -> Void) {
@@ -237,4 +236,49 @@ extension DatabaseManager {
         }
     }
 
+    func deletePushSetting(id: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() else {
+            completion(.failure(NSError(domain: "Invalid Current User", code: 0, userInfo: nil)))
+            return
+        }
+        
+        let currentUserID = currentUser.uid
+        
+        db.collection(Key.user).document(currentUserID).getDocument { documentSnapshot, error in
+            if let error = error {
+                print("Error fetching user document: \(error.localizedDescription)")
+                completion(.failure(error))
+                return
+            }
+            
+            guard let document = documentSnapshot, document.exists else {
+                completion(.failure(NSError(domain: "User document does not exist", code: 0, userInfo: nil)))
+                return
+            }
+            
+            if var settingsArray = document.data()?[Key.push_setting] as? [[String: Any]] {
+                if let index = settingsArray.firstIndex(where: {
+                    let settingDict = $0
+                    return settingDict["id"] as? String == id
+                }) {
+                    settingsArray.remove(at: index)
+                    
+                    self.db.collection(Key.user).document(currentUserID).updateData([
+                        Key.push_setting: settingsArray
+                    ]) { error in
+                        if let error = error {
+                            print("Error deleting push setting: \(error.localizedDescription)")
+                            completion(.failure(error))
+                        } else {
+                            completion(.success(()))
+                        }
+                    }
+                } else {
+                    completion(.failure(NSError(domain: "Push setting not found", code: 0, userInfo: nil)))
+                }
+            } else {
+                completion(.failure(NSError(domain: "No push settings available", code: 0, userInfo: nil)))
+            }
+        }
+    }
 }
