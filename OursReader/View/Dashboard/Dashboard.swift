@@ -112,9 +112,7 @@ struct Dashboard: View {
             LazyVGrid(columns: Array(repeating: GridItem(), count: 2)) {
                 switch type {
                 case .push_notification:
-                    ForEach(pushNotificationList, id: \.id) { push in
-                        NotificationItemView(push: push,color: type.color)
-                    }
+                    PushSettingView()
                     
                 case .widget:
                     ForEach(widgetList, id: \.id) { widget in
@@ -160,28 +158,40 @@ struct Dashboard: View {
     }
 }
 
-
-struct EditNotificationButton: View {
-    @State private var isButtonClicked = false
-
-    var action: () -> Void
-
+struct PushSettingView: View {
+    @State private var pushSettings: [Push_Setting] = []
+    @State private var isLoading = true
+    
     var body: some View {
-        Button(action: {
-            isButtonClicked.toggle()
-            action()
-        }) {
-            Image(systemName: "ellipsis.circle")
-                .foregroundColor(.gray)
-                .font(.system(size: 30))
-                .symbolEffect(.bounce.up.byLayer, value: isButtonClicked) // 動畫效果
+        if isLoading {
+            ProgressView("Loading...") // 顯示載入中指示
+                .onAppear(perform: fetchPushSettings)
+        } else {
+            ForEach(pushSettings, id: \.self) { setting in
+                NotificationItemView(
+                    push: setting,
+                    color: ButtonListType.push_notification.color
+                )
+            }
         }
-        .padding([.top, .trailing], 10)
+    }
+    
+    private func fetchPushSettings() {
+        DatabaseManager.shared.getUserPushSetting { result in
+            switch result {
+            case .success(let settings):
+                self.pushSettings = settings
+            case .failure(let error):
+                print("Failed to fetch push settings: \(error.localizedDescription)")
+                self.pushSettings = [Push_Setting.defaultSetting]
+            }
+            isLoading = false
+        }
     }
 }
 
 struct NotificationItemView: View {
-    let push: OurPushNotification
+    let push: Push_Setting
     let color: Color
     @StateObject var notificationManager = NotificationManager()
     @State private var isShaking = false
@@ -194,11 +204,11 @@ struct NotificationItemView: View {
             .overlay {
                 ZStack {
                     VStack(alignment: .leading) {
-                        Text(push.title)
+                        Text(push.title ?? "")
                             .font(.headline)
                             .foregroundColor(Color(hex: "BC2649"))
 
-                        Text(push.message)
+                        Text(push.body ?? "")
                             .font(.subheadline)
                             .foregroundColor(.gray)
                     }
@@ -237,8 +247,8 @@ struct NotificationItemView: View {
                     case .success(let tokens):
                         notificationManager.sendPushNotification(
                             to: tokens,
-                            title: push.title,
-                            body: push.message
+                            title: push.title ?? "",
+                            body: push.body ?? ""
                         ) { result in
                             switch result {
                             case .success(let response):
@@ -262,8 +272,27 @@ struct NotificationItemView: View {
                 }
             }
     }
+    
 }
 
+struct EditNotificationButton: View {
+    @State private var isButtonClicked = false
+
+    var action: () -> Void
+
+    var body: some View {
+        Button(action: {
+            isButtonClicked.toggle()
+            action()
+        }) {
+            Image(systemName: "ellipsis.circle")
+                .foregroundColor(.gray)
+                .font(.system(size: 30))
+                .symbolEffect(.bounce.up.byLayer, value: isButtonClicked) // 動畫效果
+        }
+        .padding([.top, .trailing], 10)
+    }
+}
 
 #Preview {
     Dashboard()

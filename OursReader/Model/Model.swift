@@ -28,7 +28,7 @@ enum UserType: Int, Codable{
     case email
 }
 
-struct Push_Setting: Codable {
+struct Push_Setting: Codable, Hashable {
     let title: String?
     let body: String?
     

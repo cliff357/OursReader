@@ -81,18 +81,6 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
                         }
                     }
                 }
-                
-                //TODO: get user imageurl
-                DatabaseManager.shared.getUserPushSetting { result in
-                    switch result {
-                    case .success(let pushSetting):
-                        print("success")
-                    case .failure(let error):
-                        print("failed: \(error.localizedDescription)")
-                    }
-                }
-//                guard let uhk.rl = user.photoURL else { return }
-                //self.profilePicUrl =  //user.photoURL?.imageURL(withDimension: 100)!.absoluteString
             } else {
                 self.isLoggedIn = false
                 let router = HomeRouter.shared
