@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct Dashboard: View {
-    @StateObject private var viewModel = DashboardViewModel()
+    @StateObject private var pushNotificationViewModel = PushSettingListViewModel()
     @State private var tabProgress: CGFloat = 0
     @State private var selectedTab: Tab?
     @State private var selectedButtonListType: ButtonListType = .push_notification
@@ -19,44 +19,26 @@ struct Dashboard: View {
             
             VStack(spacing: 15) {
                 Spacer().frame(height: 15)
-                
                 CustomTabBar()
                 
-                // Paging View using new iOS 17 APIS
                 GeometryReader { geometry in
                     ScrollView(.horizontal) {
                         LazyHStack(spacing: 0) {
-                            BooklistView(type: selectedButtonListType)
+                            PushSettingListView(viewModel: pushNotificationViewModel)
                                 .id(Tab.push)
                                 .containerRelativeFrame(.horizontal)
-                            
-                            BooklistView(type: selectedButtonListType)
+
+                            BooklistView(type: .widget)
                                 .id(Tab.widget)
                                 .containerRelativeFrame(.horizontal)
-                            
-                            BooklistView(type: selectedButtonListType)
+
+                            BooklistView(type: .ebook)
                                 .id(Tab.ebook)
                                 .containerRelativeFrame(.horizontal)
                         }
                         .scrollTargetLayout()
                         .offsetX { value in
-                            let progress = -value / (geometry.size.width * CGFloat(Tab.allCases.count - 1))
-                            tabProgress = max(min(progress, 1), 0)
-                            
-                            let currentPage = Int(round(-value / geometry.size.width))
-                            switch currentPage {
-                            case 0:
-                                selectedButtonListType = .push_notification
-                                selectedTab = .push
-                            case 1:
-                                selectedButtonListType = .widget
-                                selectedTab = .widget
-                            case 2:
-                                selectedButtonListType = .ebook
-                                selectedTab = .ebook
-                            default:
-                                break
-                            }
+                            updateTabProgress(value, geometrySize: geometry.size)
                         }
                     }
                     .scrollPosition(id: $selectedTab)
@@ -67,7 +49,27 @@ struct Dashboard: View {
             }
         }
     }
-    
+
+    private func updateTabProgress(_ value: CGFloat, geometrySize: CGSize) {
+        let progress = -value / (geometrySize.width * CGFloat(Tab.allCases.count - 1))
+        tabProgress = max(min(progress, 1), 0)
+
+        let currentPage = Int(round(-value / geometrySize.width))
+        switch currentPage {
+        case 0:
+            selectedButtonListType = .push_notification
+            selectedTab = .push
+        case 1:
+            selectedButtonListType = .widget
+            selectedTab = .widget
+        case 2:
+            selectedButtonListType = .ebook
+            selectedTab = .ebook
+        default:
+            break
+        }
+    }
+
     @ViewBuilder
     func CustomTabBar() -> some View {
         HStack(spacing: 0) {
@@ -82,14 +84,7 @@ struct Dashboard: View {
                 .onTapGesture {
                     withAnimation(.snappy) {
                         selectedTab = tab
-                        switch tab {
-                        case .push:
-                            selectedButtonListType = .push_notification
-                        case .widget:
-                            selectedButtonListType = .widget
-                        case .ebook:
-                            selectedButtonListType = .ebook
-                        }
+                        updateSelectedButtonListType(for: tab)
                     }
                 }
             }
@@ -112,12 +107,7 @@ struct Dashboard: View {
         ScrollView(.vertical) {
             LazyVGrid(columns: Array(repeating: GridItem(), count: 2)) {
                 switch type {
-                case .push_notification:
-                    PushSettingView(viewModel: viewModel)
-                    
-                    AddNotificationButton(viewModel: viewModel)
-
-                case .widget:
+                case .push_notification,.widget:
                     ForEach(widgetList, id: \.id) { widget in
                         RoundedRectangle(cornerRadius: 15)
                             .fill(type.color)
@@ -159,185 +149,17 @@ struct Dashboard: View {
             .scrollClipDisabled()
         }
     }
-}
 
-struct PushSettingView: View {
-    @ObservedObject var viewModel: DashboardViewModel
+    private func updateSelectedButtonListType(for tab: Tab) {
+        switch tab {
+        case .push:
+            selectedButtonListType = .push_notification
+        case .widget:
+            selectedButtonListType = .widget
+        case .ebook:
+            selectedButtonListType = .ebook
+        }
+    }
     
-    var body: some View {
-        if viewModel.isLoading {
-            ProgressView("Loading...") // 顯示載入中指示
-                .onAppear(perform: viewModel.fetchPushSettings)
-        } else {
-            ForEach(viewModel.pushSettings, id: \.self) { setting in
-                NotificationItemView(
-                    push: setting,
-                    color: ButtonListType.push_notification.color)
-            }
-        }
-    }
-}
-
-struct NotificationItemView: View {
-    let push: Push_Setting
-    let color: Color
-    @StateObject var notificationManager = NotificationManager()
-    @State private var isShaking = false
-    @State var presentSheet = false
-
-    var body: some View {
-        RoundedRectangle(cornerRadius: 15)
-            .fill(color)
-            .frame(height: 100)
-            .overlay {
-                ZStack {
-                    VStack(alignment: .leading) {
-                        Text(push.title ?? "")
-                            .font(.headline)
-                            .foregroundColor(Color(hex: "BC2649"))
-
-                        Text(push.body ?? "")
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
-                    }
-                    .padding(15)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-
-//                    HStack {
-//                        Spacer()
-//                        VStack {
-//                            EditNotificationButton {
-//                                print("按鈕被點擊！")
-//                                presentSheet = true
-//                            }
-//                            Spacer()
-//                        }
-//                    }
-                }
-            }
-            .offset(x: isShaking ? -10 : 0)
-            .animation(
-                .interpolatingSpring(stiffness: 100, damping: 5)
-                    .repeatCount(3, autoreverses: true),
-                value: isShaking
-            )
-            .onTapGesture {
-                withAnimation {
-                    isShaking = true
-                }
-
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    isShaking = false // 恢復原狀
-                }
-
-                DatabaseManager.shared.getAllFriendsToken { result in
-                    switch result {
-                    case .success(let tokens):
-                        notificationManager.sendPushNotification(
-                            to: tokens,
-                            title: push.title ?? "",
-                            body: push.body ?? ""
-                        ) { result in
-                            switch result {
-                            case .success(let response):
-                                print("Notification sent successfully: \(response)")
-                            case .failure(let error):
-                                print("Error sending notification: \(error.localizedDescription)")
-                            }
-                        }
-                    case .failure(let error):
-                        print("Error getting all friends token: \(error.localizedDescription)")
-                    }
-                }
-            }
-            .sheet(isPresented: $presentSheet) {
-                EditPushBottomSheet(
-                    pushTitle: .constant("hhi"),
-                    pushBody: .constant("bbbb")
-                ) {
-                    print("Push Notification Updated:")
-                    // 可在此呼叫更新 API 或儲存新資料
-                }
-            }
-    }
-}
-
-struct EditNotificationButton: View {
-    @State private var isButtonClicked = false
-
-    var action: () -> Void
-
-    var body: some View {
-        Button(action: {
-            isButtonClicked.toggle()
-            action()
-        }) {
-            Image(systemName: "ellipsis.circle")
-                .foregroundColor(.gray)
-                .font(.system(size: 30))
-                .symbolEffect(.bounce.up.byLayer, value: isButtonClicked) // 動畫效果
-        }
-        .padding([.top, .trailing], 10)
-    }
-}
-
-struct AddNotificationButton: View {
-    @State private var showAddSettingSheet = false
-    @State private var newTitle: String = ""
-    @State private var newBody: String = ""
-    @ObservedObject var viewModel: DashboardViewModel
     
-    var body: some View {
-        Button(action: {
-            showAddSettingSheet.toggle()
-        }) {
-            RoundedRectangle(cornerRadius: 15)
-                .fill(Color.firstTab)
-                .frame(height: 100)
-                .overlay {
-                    ZStack {
-                        VStack(alignment: .leading) {
-                            Text("加多幾個通知")
-                                .font(.headline)
-                                .foregroundColor(Color(hex: "BC2649"))
-
-                            Text("發揮小宇宙")
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
-                        }
-                        .padding(15)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-
-                        HStack {
-                            Spacer()
-                            VStack {
-                                Image(systemName: "pencil.tip.crop.circle.badge.plus")
-                                    .foregroundColor(.gray)
-                                    .font(.system(size: 30))
-                                    .padding([.top, .trailing], 10)
-                                Spacer()
-                            }
-                        }
-                    }
-                }
-        }
-        .sheet(isPresented: $showAddSettingSheet) {
-            EditPushBottomSheet(pushTitle: $newTitle,pushBody: $newBody) {
-                viewModel.addPushSetting(title: newTitle, body: newBody) { result in
-                    switch result {
-                    case .success():
-                        newTitle = ""
-                        newBody = ""
-                        viewModel.fetchPushSettings()
-                    case .failure(let error):
-                        print(error.localizedDescription)
-                    }
-                }
-            }
-        }
-    }
-}
-
-#Preview {
-    Dashboard()
 }

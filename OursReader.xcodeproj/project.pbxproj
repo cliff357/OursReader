@@ -8,7 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		591BAACB2CBB7B63001FAE1C /* EditPushBottomsheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 591BAACA2CBB7B63001FAE1C /* EditPushBottomsheet.swift */; };
-		591BAACF2CBBCEC9001FAE1C /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 591BAACE2CBBCEC9001FAE1C /* DashboardViewModel.swift */; };
+		591BAAD42CBBF07B001FAE1C /* PushSettingListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 591BAAD32CBBF07B001FAE1C /* PushSettingListView.swift */; };
+		591BAAD72CBBF0AC001FAE1C /* PushSettingListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 591BAAD62CBBF0A3001FAE1C /* PushSettingListViewModel.swift */; };
 		593EB1CE2C01DC1800DD430F /* ToastManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593EB1CB2C01DC1700DD430F /* ToastManager.swift */; };
 		593EB1D22C01DE3B00DD430F /* FontHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593EB1D12C01DE3A00DD430F /* FontHelper.swift */; };
 		593EB1D92C01DED300DD430F /* BaseReminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593EB1D62C01DED300DD430F /* BaseReminder.swift */; };
@@ -157,7 +158,8 @@
 
 /* Begin PBXFileReference section */
 		591BAACA2CBB7B63001FAE1C /* EditPushBottomsheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPushBottomsheet.swift; sourceTree = "<group>"; };
-		591BAACE2CBBCEC9001FAE1C /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
+		591BAAD32CBBF07B001FAE1C /* PushSettingListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushSettingListView.swift; sourceTree = "<group>"; };
+		591BAAD62CBBF0A3001FAE1C /* PushSettingListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushSettingListViewModel.swift; sourceTree = "<group>"; };
 		593EB1CB2C01DC1700DD430F /* ToastManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToastManager.swift; sourceTree = "<group>"; };
 		593EB1D12C01DE3A00DD430F /* FontHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontHelper.swift; sourceTree = "<group>"; };
 		593EB1D62C01DED300DD430F /* BaseReminder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseReminder.swift; sourceTree = "<group>"; };
@@ -317,6 +319,15 @@
 				591BAACA2CBB7B63001FAE1C /* EditPushBottomsheet.swift */,
 			);
 			path = BottomSheet;
+			sourceTree = "<group>";
+		};
+		591BAAD22CBBF05D001FAE1C /* PushSetting */ = {
+			isa = PBXGroup;
+			children = (
+				591BAAD32CBBF07B001FAE1C /* PushSettingListView.swift */,
+				591BAAD62CBBF0A3001FAE1C /* PushSettingListViewModel.swift */,
+			);
+			path = PushSetting;
 			sourceTree = "<group>";
 		};
 		593EB1D52C01DEC000DD430F /* Reminder */ = {
@@ -569,9 +580,9 @@
 		997291232C9C22BD0070DFAC /* Dashboard */ = {
 			isa = PBXGroup;
 			children = (
+				591BAAD22CBBF05D001FAE1C /* PushSetting */,
 				993EDAC62BE9F6EA002C18C7 /* Dashboard.swift */,
 				997291242C9C2D6E0070DFAC /* DashboardModel.swift */,
-				591BAACE2CBBCEC9001FAE1C /* DashboardViewModel.swift */,
 			);
 			path = Dashboard;
 			sourceTree = "<group>";
@@ -934,6 +945,7 @@
 				998614612BBBBA7F00E0996D /* DividerWithText.swift in Sources */,
 				9986144E2BB41F5000E0996D /* BasicRouter.swift in Sources */,
 				998614522BB428F200E0996D /* HomeRouter.swift in Sources */,
+				591BAAD72CBBF0AC001FAE1C /* PushSettingListViewModel.swift in Sources */,
 				99EB5FA32C0D9C5600F2AF29 /* ToastView.swift in Sources */,
 				9986141D2BAD20C500E0996D /* SideMenuRowView.swift in Sources */,
 				998614172BA8110B00E0996D /* UserAuthModel.swift in Sources */,
@@ -944,7 +956,6 @@
 				59E75E9C2ADF53AA007A549C /* ContentView.swift in Sources */,
 				998614692BBD20D100E0996D /* FloatingPromptTextField.swift in Sources */,
 				993EDACA2BEB2C9C002C18C7 /* PeerDevice.swift in Sources */,
-				591BAACF2CBBCEC9001FAE1C /* DashboardViewModel.swift in Sources */,
 				993EDAC72BE9F6EB002C18C7 /* Dashboard.swift in Sources */,
 				593EB1FB2C01EB8500DD430F /* GeneralReminder.swift in Sources */,
 				997291252C9C2D6E0070DFAC /* DashboardModel.swift in Sources */,
@@ -982,6 +993,7 @@
 				998614822BBD35AC00E0996D /* Color+.swift in Sources */,
 				9986141B2BAAB79600E0996D /* SideMenuHeaderView.swift in Sources */,
 				593EB1CE2C01DC1800DD430F /* ToastManager.swift in Sources */,
+				591BAAD42CBBF07B001FAE1C /* PushSettingListView.swift in Sources */,
 				998614542BB4295A00E0996D /* LoginRouter.swift in Sources */,
 				598053E22BA6EDBB008056F3 /* DatabaseManager.swift in Sources */,
 				998614582BB429C100E0996D /* LoginRoute.swift in Sources */,
