@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		591BAACB2CBB7B63001FAE1C /* EditPushBottomsheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 591BAACA2CBB7B63001FAE1C /* EditPushBottomsheet.swift */; };
 		593EB1CE2C01DC1800DD430F /* ToastManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593EB1CB2C01DC1700DD430F /* ToastManager.swift */; };
 		593EB1D22C01DE3B00DD430F /* FontHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593EB1D12C01DE3A00DD430F /* FontHelper.swift */; };
 		593EB1D92C01DED300DD430F /* BaseReminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593EB1D62C01DED300DD430F /* BaseReminder.swift */; };
@@ -154,6 +155,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		591BAACA2CBB7B63001FAE1C /* EditPushBottomsheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPushBottomsheet.swift; sourceTree = "<group>"; };
 		593EB1CB2C01DC1700DD430F /* ToastManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToastManager.swift; sourceTree = "<group>"; };
 		593EB1D12C01DE3A00DD430F /* FontHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontHelper.swift; sourceTree = "<group>"; };
 		593EB1D62C01DED300DD430F /* BaseReminder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseReminder.swift; sourceTree = "<group>"; };
@@ -307,6 +309,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		591BAAC32CBB7B33001FAE1C /* BottomSheet */ = {
+			isa = PBXGroup;
+			children = (
+				591BAACA2CBB7B63001FAE1C /* EditPushBottomsheet.swift */,
+			);
+			path = BottomSheet;
+			sourceTree = "<group>";
+		};
 		593EB1D52C01DEC000DD430F /* Reminder */ = {
 			isa = PBXGroup;
 			children = (
@@ -605,6 +615,7 @@
 		9986145D2BBBAC7500E0996D /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				591BAAC32CBB7B33001FAE1C /* BottomSheet */,
 				99EB5FA12C0D9C2A00F2AF29 /* Toast */,
 				593EB1F92C01EB6C00DD430F /* General */,
 				998614672BBD20D000E0996D /* FloatingPromptTextField */,
@@ -915,6 +926,7 @@
 				998614762BBD287300E0996D /* ColorHelper.swift in Sources */,
 				598053E82BA6F169008056F3 /* Error.swift in Sources */,
 				593EB1F72C01EAC300DD430F /* GeneralErrorReminder.swift in Sources */,
+				591BAACB2CBB7B63001FAE1C /* EditPushBottomsheet.swift in Sources */,
 				59E75EC42ADF5749007A549C /* Model.swift in Sources */,
 				998614612BBBBA7F00E0996D /* DividerWithText.swift in Sources */,
 				9986144E2BB41F5000E0996D /* BasicRouter.swift in Sources */,

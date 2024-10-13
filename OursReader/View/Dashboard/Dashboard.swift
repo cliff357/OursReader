@@ -185,6 +185,7 @@ struct NotificationItemView: View {
     let color: Color
     @StateObject var notificationManager = NotificationManager()
     @State private var isShaking = false
+    @State var presentSheet = false
 
     var body: some View {
         RoundedRectangle(cornerRadius: 15)
@@ -209,6 +210,7 @@ struct NotificationItemView: View {
                         VStack {
                             EditNotificationButton {
                                 print("按鈕被點擊！")
+                                presentSheet = true
                             }
                             Spacer()
                         }
@@ -248,6 +250,15 @@ struct NotificationItemView: View {
                     case .failure(let error):
                         print("Error getting all friends token: \(error.localizedDescription)")
                     }
+                }
+            }
+            .sheet(isPresented: $presentSheet) {
+                EditPushBottomSheet(
+                    pushTitle: .constant("hhi"),
+                    pushBody: .constant("bbbb")
+                ) {
+                    print("Push Notification Updated:")
+                    // 可在此呼叫更新 API 或儲存新資料
                 }
             }
     }
