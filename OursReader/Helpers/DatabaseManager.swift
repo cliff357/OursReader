@@ -281,4 +281,38 @@ extension DatabaseManager {
             }
         }
     }
+    
+    func updatePushSetting(_ pushSetting: Push_Setting, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() else {
+            completion(.failure(NSError(domain: "Invalid Current User", code: 0, userInfo: nil)))
+            return
+        }
+        
+        let currentUserID = currentUser.uid
+        
+        let settingData = pushSetting.toDictionary()
+        
+        db.collection(Key.user).document(currentUserID).updateData([
+            Key.push_setting: FieldValue.arrayRemove([pushSetting.toDictionary()]) // 先移除舊的設定
+        ]) { error in
+            if let error = error {
+                print("Error removing old push setting: \(error.localizedDescription)")
+                completion(.failure(error))
+                return
+            }
+            
+            // 添加新的設定
+            self.db.collection(Key.user).document(currentUserID).updateData([
+                Key.push_setting: FieldValue.arrayUnion([settingData])
+            ]) { error in
+                if let error = error {
+                    print("Error adding new push setting: \(error.localizedDescription)")
+                    completion(.failure(error))
+                } else {
+                    completion(.success(()))
+                }
+            }
+        }
+    }
+
 }

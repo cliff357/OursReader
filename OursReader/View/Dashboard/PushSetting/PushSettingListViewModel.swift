@@ -69,4 +69,24 @@ class PushSettingListViewModel: ObservableObject {
         }
     }
 
+    func editPushSetting(withID id: String, newTitle: String, newBody: String, completion: @escaping (Result<Void, Error>) -> Void) {
+            let updatedSetting = Push_Setting(id: id, title: newTitle, body: newBody)
+            
+            DatabaseManager.shared.updatePushSetting(updatedSetting) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success():
+                        if let index = self.pushSettings.firstIndex(where: { $0.id == id }) {
+                            self.pushSettings[index] = updatedSetting
+                            completion(.success(()))
+                        } else {
+                            completion(.failure(NSError(domain: "無法找到指定的設定", code: -1, userInfo: nil)))
+                        }
+                    case .failure(let error):
+                        print("Failed to edit push setting: \(error.localizedDescription)")
+                        completion(.failure(error))
+                    }
+                }
+            }
+        }
 }
