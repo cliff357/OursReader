@@ -173,10 +173,10 @@ struct EditNotificationButton: View {
         }) {
             Image(systemName: "ellipsis.circle")
                 .foregroundColor(.gray)
-                .font(.title2)
+                .font(.system(size: 30))
                 .symbolEffect(.bounce.up.byLayer, value: isButtonClicked) // 動畫效果
         }
-        .padding([.top, .trailing], 10) // 設置間距
+        .padding([.top, .trailing], 10)
     }
 }
 
