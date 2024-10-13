@@ -21,6 +21,9 @@ final class DatabaseManager {
         static let email = "email"
         static let login_type = "login_type"
         static let connections_userID = "connections_userID"
+        static let push_setting = "push_setting"
+        static let body = "body"
+        static let title = "title"
     }
 }
 
@@ -61,7 +64,7 @@ extension DatabaseManager {
             return
         }
         
-        let currentUserID = currentUser.uid 
+        let currentUserID = currentUser.uid
         
         guard let friendID = friend.userID else {
             completion(.failure(NSError(domain: "Invalid Friend UserID", code: 0, userInfo: nil)))
@@ -109,7 +112,6 @@ extension DatabaseManager {
             }
         }
     }
-    
     
     //check user exist in firestore
     func checkUserExist(email: String, completion: @escaping (Bool) -> ()) {
@@ -175,8 +177,44 @@ extension DatabaseManager {
                 completion(.success(tokens))
             }
         }
-        
-       
     }
     
+    
+    // Get user push setting in Firestore
+    func getUserPushSetting(completion: @escaping (Result<[Push_Setting], Error>) -> () ) {
+        guard let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() else {
+            completion(.failure(NSError(domain: "Invalid Current User", code: 0, userInfo: nil)))
+            return
+        }
+        
+        let currentUserID = currentUser.uid
+        
+        
+        //get all token from firebase
+        db.collection(Key.user).getDocuments { (snapshot, error) in
+            if let error = error {
+                print("Error getting documents: \(error)")
+            } else {
+                
+                var pushSettings:[Push_Setting] = []
+                
+                let document = snapshot?.documents.first(where: { $0.documentID == currentUserID })
+                
+                if let settingsArray = document?.data()[Key.push_setting] as? [[String: Any]] {
+                    pushSettings = settingsArray.compactMap { dictionary in
+                        var title = ""
+                        var body = ""
+                        if let t = dictionary["title"] as? String, let b = dictionary["body"] as? String{
+                            title = t
+                            body = b
+                        }
+                        
+                        return Push_Setting(title: title, body: body)
+                    }
+                }
+                
+                completion(.success(pushSettings))
+            }
+        }
+    }
 }
