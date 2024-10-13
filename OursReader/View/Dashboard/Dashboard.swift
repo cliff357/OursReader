@@ -203,16 +203,16 @@ struct NotificationItemView: View {
                     .padding(15)
                     .frame(maxWidth: .infinity, alignment: .leading)
 
-                    HStack {
-                        Spacer()
-                        VStack {
-                            EditNotificationButton {
-                                print("按鈕被點擊！")
-                                presentSheet = true
-                            }
-                            Spacer()
-                        }
-                    }
+//                    HStack {
+//                        Spacer()
+//                        VStack {
+//                            EditNotificationButton {
+//                                print("按鈕被點擊！")
+//                                presentSheet = true
+//                            }
+//                            Spacer()
+//                        }
+//                    }
                 }
             }
             .offset(x: isShaking ? -10 : 0)
@@ -328,7 +328,7 @@ struct AddNotificationButton: View {
                     case .success():
                         newTitle = ""
                         newBody = ""
-                        viewModel.fetchPushSettings() 
+                        viewModel.fetchPushSettings()
                     case .failure(let error):
                         print(error.localizedDescription)
                     }
