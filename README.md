@@ -124,6 +124,13 @@ deploy 完之後就變成我既backend
 依家試下先！ 
 ios 16 出左d新野，應該用得著。
 
+2024 10月11號
+極度興奮！！！！
+終於
+終於成功整到app attest
+冇想像中咁難整
+但網絡上既資源其實好少
+
 2024 10月13號
 係屋企專心沖左成日
 好正
@@ -135,3 +142,9 @@ ios 16 出左d新野，應該用得著。
 
 做埋code refactor，將logic 抽哂出黎放係viewmodel 到，似番樣了 
 正
+
+
+2024 10月14 
+成功搞掂app check，所有firestore 上面既資源，都要經app check先做到
+同埋可以收埋條link，令到call api 既link 唔洗係public git 出現
+v1 既firebase function 淨係得條link ，v2 好好多

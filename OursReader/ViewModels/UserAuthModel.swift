@@ -41,7 +41,6 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
     override init() {
         super.init()
         
-        Storage.save(Storage.Key.userLoginType, UserType.email.rawValue)
         self.check()
     }
     

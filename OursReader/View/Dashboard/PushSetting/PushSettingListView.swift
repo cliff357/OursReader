@@ -83,7 +83,7 @@ struct NotificationItemView: View {
             .offset(x: isShaking ? -10 : 0)
             .animation(
                 .interpolatingSpring(stiffness: 100, damping: 5)
-                    .repeatCount(3, autoreverses: true),
+                    .repeatCount(1, autoreverses: true),
                 value: isShaking
             )
             .onTapGesture {
