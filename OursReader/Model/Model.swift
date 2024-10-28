@@ -30,8 +30,8 @@ enum UserType: Int, Codable{
 
 struct Push_Setting: Codable, Hashable {
     let id: String
-    let title: String?
-    let body: String?
+    var title: String?
+    var body: String?
     
     static let defaultSetting = Push_Setting(id: UUID().uuidString, title: "Default Title", body: "Default Body")
     

@@ -19,33 +19,21 @@ struct AddPushBottomSheet: View {
     var onSave: () -> Void
 
     @Environment(\.dismiss) private var dismiss
-    @FocusState private var isTitleFocused: Bool
-    @FocusState private var isBodyFocused: Bool
-    
+
     var body: some View {
         NavigationStack {
             Form {
                 Section(header: Text("通知")) {
                     TextField("標題", text: $pushTitle)
                         .submitLabel(pushBody.isEmpty ? .next : .done)
-                        .focused($isTitleFocused)
                         .onSubmit {
-                            if pushBody.isEmpty {
-                                isBodyFocused = true
-                            } else {
-                                handleConfirm()
-                            }
+                            handleConfirm()
                         }
-                    
+
                     TextField("內容", text: $pushBody)
                         .submitLabel(pushTitle.isEmpty ? .next : .done)
-                        .focused($isBodyFocused)
                         .onSubmit {
-                            if pushTitle.isEmpty {
-                                isTitleFocused = true
-                            } else {
-                                handleConfirm()
-                            }
+                            handleConfirm()
                         }
                 }
             }
@@ -63,18 +51,11 @@ struct AddPushBottomSheet: View {
                     }
                 }
             }
-            .presentationDetents([.custom(HalfPresentationDetent.self),.fraction(0.3)])
+            .presentationDetents([.custom(HalfPresentationDetent.self)/*, .fraction(0.5)*/])
             .padding(.bottom, 0)
-            .onAppear {
-                if isTitleFocused {
-                    isBodyFocused = false
-                } else if isBodyFocused {
-                    isTitleFocused = false
-                }
-            }
         }
     }
-    
+
     private func handleConfirm() {
         if !pushTitle.isEmpty && !pushBody.isEmpty {
             onSave()

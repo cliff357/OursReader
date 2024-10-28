@@ -24,21 +24,6 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
 //        let providerFactory = AppCheckDebugProviderFactory()
         AppCheck.setAppCheckProviderFactory(providerFactory)
         
-        AppCheck.appCheck().token(forcingRefresh: true) { token, error in
-            if let error = error {
-                print("App Check token error: \(error)")
-                return
-            }
-            
-            guard let token = token else {
-                print("App Check token is nil.")
-                return
-            }
-            
-            print("App Check token: \(token.token)")
-        }
-
-        
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
         

@@ -287,30 +287,39 @@ extension DatabaseManager {
             completion(.failure(NSError(domain: "Invalid Current User", code: 0, userInfo: nil)))
             return
         }
-        
+
         let currentUserID = currentUser.uid
-        
         let settingData = pushSetting.toDictionary()
-        
-        db.collection(Key.user).document(currentUserID).updateData([
-            Key.push_setting: FieldValue.arrayRemove([pushSetting.toDictionary()]) // 先移除舊的設定
-        ]) { error in
-            if let error = error {
-                print("Error removing old push setting: \(error.localizedDescription)")
-                completion(.failure(error))
-                return
-            }
-            
-            // 添加新的設定
-            self.db.collection(Key.user).document(currentUserID).updateData([
-                Key.push_setting: FieldValue.arrayUnion([settingData])
-            ]) { error in
-                if let error = error {
-                    print("Error adding new push setting: \(error.localizedDescription)")
-                    completion(.failure(error))
+
+        let db = Firestore.firestore()
+        let userDocRef = db.collection(Key.user).document(currentUserID)
+
+        // Add or update a setting in the push_setting array
+        userDocRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                var existingSettings = document.get("push_setting") as? [[String: Any]] ?? []
+                
+                // Check if the setting with the same ID already exists
+                if let index = existingSettings.firstIndex(where: { $0["id"] as? String == pushSetting.id }) {
+                    // Update the existing setting
+                    existingSettings[index] = settingData
                 } else {
-                    completion(.success(()))
+                    // Add the new setting
+                    existingSettings.append(settingData)
                 }
+                
+                // Write the updated array back to Firestore
+                userDocRef.updateData(["push_setting": existingSettings]) { error in
+                    if let error = error {
+                        print("Error updating push setting: \(error.localizedDescription)")
+                        completion(.failure(error))
+                    } else {
+                        completion(.success(()))
+                    }
+                }
+            } else {
+                print("Document does not exist or failed to fetch: \(error?.localizedDescription ?? "No error message")")
+                completion(.failure(error ?? NSError(domain: "Document Fetch Error", code: 0, userInfo: nil)))
             }
         }
     }

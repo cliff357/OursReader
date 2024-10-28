@@ -7,6 +7,7 @@
 
 import Foundation
 import UserNotifications
+import FirebaseFunctions
 
 @MainActor
 class NotificationManager: ObservableObject{
@@ -38,44 +39,64 @@ class NotificationManager: ObservableObject{
     }
 
     func sendPushNotification(to tokens: [String], title: String, body: String, completion: @escaping (Result<String, Error>) -> Void) {
-            
-            guard let url = URL(string: "") else {
-                completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
-                return
-            }
-            
-            var request = URLRequest(url: url)
-            request.httpMethod = "POST"
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            
-            let json: [String: Any] = [
-                "tokens": tokens,
-                "title": title,
-                "body": body
-            ]
-            
-            do {
-                let jsonData = try JSONSerialization.data(withJSONObject: json, options: [])
-                request.httpBody = jsonData
-                 
-                // 發送請求
-                let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                    if let error = error {
-                        completion(.failure(error))
-                        return
-                    }
-                    
-                    if let data = data, let responseString = String(data: data, encoding: .utf8) {
-                        completion(.success(responseString))
-                    } else {
-                        completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid response"])))
-                    }
+        
+        let json: [String: Any] = [
+            "tokens": tokens,
+            "title": title,
+            "body": body
+        ]
+        
+        let functions = Functions.functions()
+        functions.httpsCallable("sendPushNotificationWithAppCheck")
+            .call(json) { result, error in
+                if let error = error as NSError? {
+                    print("Error: \(error.localizedDescription)")
+                    completion(.failure(error))
+                } else if let resultData = result?.data as? [String: Any] {
+                    print("Result: \(resultData)")
+                    completion(.success("Success"))
                 }
-                task.resume()
-            } catch {
-                completion(.failure(error))
             }
-        }
+    }
 
-
+    //v1
+//    func sendPushNotification(to tokens: [String], title: String, body: String, completion: @escaping (Result<String, Error>) -> Void) {
+//            
+//            guard let url = URL(string: "") else {
+//                completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
+//                return
+//            }
+//            
+//            var request = URLRequest(url: url)
+//            request.httpMethod = "POST"
+//            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+//            
+//            let json: [String: Any] = [
+//                "tokens": tokens,
+//                "title": title,
+//                "body": body
+//            ]
+//            
+//            do {
+//                let jsonData = try JSONSerialization.data(withJSONObject: json, options: [])
+//                request.httpBody = jsonData
+//                 
+//                // 發送請求
+//                let task = URLSession.shared.dataTask(with: request) { data, response, error in
+//                    if let error = error {
+//                        completion(.failure(error))
+//                        return
+//                    }
+//                    
+//                    if let data = data, let responseString = String(data: data, encoding: .utf8) {
+//                        completion(.success(responseString))
+//                    } else {
+//                        completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid response"])))
+//                    }
+//                }
+//                task.resume()
+//            } catch {
+//                completion(.failure(error))
+//            }
+//        }
 }

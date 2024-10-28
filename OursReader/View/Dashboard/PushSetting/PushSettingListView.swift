@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-import SwiftUI
-
 struct PushSettingListView: View {
     @ObservedObject var viewModel: PushSettingListViewModel
     
@@ -44,12 +42,13 @@ struct PushSettingCellView: View {
 
 
 struct NotificationItemView: View {
-    let push: Push_Setting
+    var push: Push_Setting
     let color: Color
     @StateObject var notificationManager = NotificationManager()
     @State private var isShaking = false
     @State var presentSheet = false
     @ObservedObject var viewModel: PushSettingListViewModel
+    
     
     var body: some View {
         RoundedRectangle(cornerRadius: 15)
@@ -83,7 +82,7 @@ struct NotificationItemView: View {
             .offset(x: isShaking ? -10 : 0)
             .animation(
                 .interpolatingSpring(stiffness: 100, damping: 5)
-                    .repeatCount(3, autoreverses: true),
+                    .repeatCount(1, autoreverses: true),
                 value: isShaking
             )
             .onTapGesture {
@@ -116,22 +115,7 @@ struct NotificationItemView: View {
                 }
             }
             .sheet(isPresented: $presentSheet) {
-                EditPushSettingBottomsheet(
-                    pushTitle: .constant("hhi"),
-                    pushBody: .constant("bbbb")
-                ) {
-                    print("Push Notification Updated:")
-                    // 可在此呼叫更新 API 或儲存新資料
-                } onDelete: {
-                    viewModel.removePushSetting(withID: push.id) { result in
-                        switch result {
-                        case .success:
-                            print("Push Notification Deleted")
-                        case .failure:
-                            print("Error deleting Push Notification")
-                        }
-                    }
-                }
+                EditPushSettingBottomsheet(viewModel: viewModel, push: push)
             }
     }
 }

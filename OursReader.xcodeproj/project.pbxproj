@@ -81,6 +81,9 @@
 		997291252C9C2D6E0070DFAC /* DashboardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997291242C9C2D6E0070DFAC /* DashboardModel.swift */; };
 		997D30632CB6672B00A3B692 /* AppSecurity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997D30622CB6672B00A3B692 /* AppSecurity.swift */; };
 		997D30662CB75BF200A3B692 /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = 997D30652CB75BF200A3B692 /* FirebaseAppCheck */; };
+		997D30712CBD04DA00A3B692 /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = 997D30702CBD04DA00A3B692 /* FirebaseAppCheck */; };
+		997D30742CBD06B400A3B692 /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = 997D30732CBD06B400A3B692 /* FirebaseAppCheck */; };
+		997D30762CBD06B400A3B692 /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = 997D30752CBD06B400A3B692 /* FirebaseFunctions */; };
 		998614152BA80F5D00E0996D /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 998614142BA80F5D00E0996D /* GoogleSignInSwift */; };
 		998614172BA8110B00E0996D /* UserAuthModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614162BA8110B00E0996D /* UserAuthModel.swift */; };
 		998614192BAAB3A500E0996D /* SideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614182BAAB3A500E0996D /* SideMenu.swift */; };
@@ -285,9 +288,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				598053E42BA6EFF8008056F3 /* FirebaseDatabase in Frameworks */,
+				997D30762CBD06B400A3B692 /* FirebaseFunctions in Frameworks */,
+				997D30742CBD06B400A3B692 /* FirebaseAppCheck in Frameworks */,
 				598053E62BA6F019008056F3 /* FirebaseAuth in Frameworks */,
 				993EDAC22BDBB71B002C18C7 /* FirebaseFirestore in Frameworks */,
 				998614732BBD21EF00E0996D /* FloatingPromptTextField in Frameworks */,
+				997D30712CBD04DA00A3B692 /* FirebaseAppCheck in Frameworks */,
 				993EDAC42BDBB71B002C18C7 /* FirebaseFirestoreSwift in Frameworks */,
 				999651D82C0C62C400EC7C43 /* RswiftLibrary in Frameworks */,
 				998614462BB1799B00E0996D /* FirebaseMessaging in Frameworks */,
@@ -760,6 +766,9 @@
 				993EDAC32BDBB71B002C18C7 /* FirebaseFirestoreSwift */,
 				999651D72C0C62C400EC7C43 /* RswiftLibrary */,
 				997D30652CB75BF200A3B692 /* FirebaseAppCheck */,
+				997D30702CBD04DA00A3B692 /* FirebaseAppCheck */,
+				997D30732CBD06B400A3B692 /* FirebaseAppCheck */,
+				997D30752CBD06B400A3B692 /* FirebaseFunctions */,
 			);
 			productName = OursReader;
 			productReference = 59E75E962ADF53AA007A549C /* OursReader.app */;
@@ -1590,6 +1599,18 @@
 		997D30652CB75BF200A3B692 /* FirebaseAppCheck */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = FirebaseAppCheck;
+		};
+		997D30702CBD04DA00A3B692 /* FirebaseAppCheck */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseAppCheck;
+		};
+		997D30732CBD06B400A3B692 /* FirebaseAppCheck */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseAppCheck;
+		};
+		997D30752CBD06B400A3B692 /* FirebaseFunctions */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseFunctions;
 		};
 		998614142BA80F5D00E0996D /* GoogleSignInSwift */ = {
 			isa = XCSwiftPackageProductDependency;
