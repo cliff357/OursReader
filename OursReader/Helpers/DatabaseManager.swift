@@ -16,12 +16,20 @@ final class DatabaseManager {
     //firebase key
     enum Key {
         static let user = "User"
+        static let name = "name"
+        static let fcmToken = "fcmToken"
+        static let email = "email"
+        static let login_type = "login_type"
+        static let connections_userID = "connections_userID"
+        static let push_setting = "push_setting"
+        static let body = "body"
+        static let title = "title"
     }
 }
 
 // MARK: - Account management
 extension DatabaseManager {
-    
+    //MARK: User Data
     // add user into fireStore
     func addUser(user:UserObject, completion: @escaping (Result<Void, Error>) -> Void) {
         guard let userID = user.userID else {
@@ -30,11 +38,11 @@ extension DatabaseManager {
         }
         
         let data: [String: Any] = [
-            "name": user.name ?? "",
-            "fcmToken": user.fcmToken ?? "",
-            "email": user.email ?? "",
-            "login_type": user.login_type?.rawValue ?? 0,
-            "connections_userID": user.connections_userID ?? []
+            Key.name: user.name ?? "",
+            Key.fcmToken: user.fcmToken ?? "",
+            Key.email: user.email ?? "",
+            Key.login_type: user.login_type?.rawValue ?? 0,
+            Key.connections_userID: user.connections_userID ?? []
         ]
         
         db.collection(Key.user).document(userID).setData(data) { error in
@@ -56,7 +64,7 @@ extension DatabaseManager {
             return
         }
         
-        let currentUserID = currentUser.uid 
+        let currentUserID = currentUser.uid
         
         guard let friendID = friend.userID else {
             completion(.failure(NSError(domain: "Invalid Friend UserID", code: 0, userInfo: nil)))
@@ -66,7 +74,7 @@ extension DatabaseManager {
         let userDocument = db.collection(Key.user).document(currentUserID)
         
         userDocument.updateData([
-            "connections_userID": FieldValue.arrayUnion([friendID])
+            Key.connections_userID: FieldValue.arrayUnion([friendID])
         ]) { error in
             if let error = error {
                 print("Error adding friend: \(error.localizedDescription)")
@@ -87,11 +95,11 @@ extension DatabaseManager {
         }
         
         let data: [String: Any] = [
-            "name": user.name ?? "",
-            "fcmToken": user.fcmToken ?? "",
-            "email": user.email ?? "",
-            "login_type": user.login_type?.rawValue ?? 0,
-            "connections_userID": user.connections_userID ?? [] 
+            Key.name: user.name ?? "",
+            Key.fcmToken: user.fcmToken ?? "",
+            Key.email: user.email ?? "",
+            Key.login_type: user.login_type?.rawValue ?? 0,
+//            "connections_userID": user.connections_userID ?? []
         ]
         
         db.collection(Key.user).document(userID).updateData(data) { error in
@@ -104,7 +112,6 @@ extension DatabaseManager {
             }
         }
     }
-    
     
     //check user exist in firestore
     func checkUserExist(email: String, completion: @escaping (Bool) -> ()) {
@@ -139,4 +146,182 @@ extension DatabaseManager {
         }
     }
     
+    func getAllFriendsToken(completion: @escaping (Result<[String], Error>) -> () ) {
+        guard let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() else {
+            completion(.failure(NSError(domain: "Invalid Current User", code: 0, userInfo: nil)))
+            return
+        }
+        
+        let currentUserID = currentUser.uid
+        
+        
+        //get all token from firebase
+        db.collection(Key.user).getDocuments { (snapshot, error) in
+            if let error = error {
+                print("Error getting documents: \(error)")
+            } else {
+                
+                var tokens:[String] = []
+                
+                let document = snapshot?.documents.first(where: { $0.documentID == currentUserID })
+                
+                if let connections_userID = document?.data()[Key.connections_userID] as? [String] {
+                    for userID in connections_userID {
+                        let friendDocument = snapshot?.documents.first(where: { $0.documentID == userID })
+                        if let token = friendDocument?.data()["fcmToken"] as? String {
+                            tokens.append(token)
+                        }
+                    }
+                }
+                
+                completion(.success(tokens))
+            }
+        }
+    }
+    
+    //MARK: Push Setting
+    // Get user push setting in Firestore
+    func getUserPushSetting(completion: @escaping (Result<[Push_Setting], Error>) -> () ) {
+        guard let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() else {
+            completion(.failure(NSError(domain: "Invalid Current User", code: 0, userInfo: nil)))
+            return
+        }
+        
+        let currentUserID = currentUser.uid
+        
+        
+        //get all token from firebase
+        db.collection(Key.user).document(currentUserID).getDocument { (document, error) in
+            if let error = error {
+                print("Error getting document: \(error)")
+                completion(.failure(error))
+                return
+            }
+            
+            guard let data = document?.data(),
+                  let settingsArray = data[Key.push_setting] as? [[String: Any]] else {
+                print("No push settings found.")
+                completion(.success([]))
+                return
+            }
+            
+            let pushSettings = settingsArray.compactMap { dict -> Push_Setting? in
+                guard let id = dict["id"] as? String,
+                      let title = dict["title"] as? String,
+                      let body = dict["body"] as? String else { return nil }
+                return Push_Setting(id: id, title: title, body: body)
+            }
+            
+            completion(.success(pushSettings))
+        }
+
+    }
+    
+    func addPushSetting(_ pushSetting: Push_Setting, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() else {
+            completion(.failure(NSError(domain: "Invalid Current User", code: 0, userInfo: nil)))
+            return
+        }
+        
+        let currentUserID = currentUser.uid
+        
+        db.collection(Key.user).document(currentUserID).updateData([
+            Key.push_setting: FieldValue.arrayUnion([pushSetting.toDictionary()])
+        ]) { error in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                completion(.success(()))
+            }
+        }
+    }
+
+    func deletePushSetting(id: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() else {
+            completion(.failure(NSError(domain: "Invalid Current User", code: 0, userInfo: nil)))
+            return
+        }
+        
+        let currentUserID = currentUser.uid
+        
+        db.collection(Key.user).document(currentUserID).getDocument { documentSnapshot, error in
+            if let error = error {
+                print("Error fetching user document: \(error.localizedDescription)")
+                completion(.failure(error))
+                return
+            }
+            
+            guard let document = documentSnapshot, document.exists else {
+                completion(.failure(NSError(domain: "User document does not exist", code: 0, userInfo: nil)))
+                return
+            }
+            
+            if var settingsArray = document.data()?[Key.push_setting] as? [[String: Any]] {
+                if let index = settingsArray.firstIndex(where: {
+                    let settingDict = $0
+                    return settingDict["id"] as? String == id
+                }) {
+                    settingsArray.remove(at: index)
+                    
+                    self.db.collection(Key.user).document(currentUserID).updateData([
+                        Key.push_setting: settingsArray
+                    ]) { error in
+                        if let error = error {
+                            print("Error deleting push setting: \(error.localizedDescription)")
+                            completion(.failure(error))
+                        } else {
+                            completion(.success(()))
+                        }
+                    }
+                } else {
+                    completion(.failure(NSError(domain: "Push setting not found", code: 0, userInfo: nil)))
+                }
+            } else {
+                completion(.failure(NSError(domain: "No push settings available", code: 0, userInfo: nil)))
+            }
+        }
+    }
+    
+    func updatePushSetting(_ pushSetting: Push_Setting, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() else {
+            completion(.failure(NSError(domain: "Invalid Current User", code: 0, userInfo: nil)))
+            return
+        }
+
+        let currentUserID = currentUser.uid
+        let settingData = pushSetting.toDictionary()
+
+        let db = Firestore.firestore()
+        let userDocRef = db.collection(Key.user).document(currentUserID)
+
+        // Add or update a setting in the push_setting array
+        userDocRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                var existingSettings = document.get("push_setting") as? [[String: Any]] ?? []
+                
+                // Check if the setting with the same ID already exists
+                if let index = existingSettings.firstIndex(where: { $0["id"] as? String == pushSetting.id }) {
+                    // Update the existing setting
+                    existingSettings[index] = settingData
+                } else {
+                    // Add the new setting
+                    existingSettings.append(settingData)
+                }
+                
+                // Write the updated array back to Firestore
+                userDocRef.updateData(["push_setting": existingSettings]) { error in
+                    if let error = error {
+                        print("Error updating push setting: \(error.localizedDescription)")
+                        completion(.failure(error))
+                    } else {
+                        completion(.success(()))
+                    }
+                }
+            } else {
+                print("Document does not exist or failed to fetch: \(error?.localizedDescription ?? "No error message")")
+                completion(.failure(error ?? NSError(domain: "Document Fetch Error", code: 0, userInfo: nil)))
+            }
+        }
+    }
+
 }

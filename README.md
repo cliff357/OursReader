@@ -100,3 +100,63 @@ wow 用xcode cloud build app 又幾正，幾經辛苦
 呢期太忙了 
 
 依家諗緊去邊個方向行好，應該係整ebook 先，定整send data 好，不如整左push noti 先
+
+2024 10月9號
+我既一小步！
+整好左push notification
+好正，我依家係firebase 既functions 去做
+
+首先我要係電腦setup 好firebase function 既venv 先
+然後再用js 寫左個function 負責send push
+
+deploy 完之後就變成我既backend
+
+幾正，成功send到第一個push既感覺好爽 
+
+2024 10月9號
+都仲係同一日，但我要分開寫
+因為呢個係我做完push之後，突然發現仲未可以commit 住既野黎
+係咩黎，就係。。。。
+安全
+
+我覺得依家就咁放條link 上網好唔安全，所以我想睇下有冇d咩方法可以保護到隻app
+
+依家試下先！ 
+ios 16 出左d新野，應該用得著。
+
+2024 10月11號
+極度興奮！！！！
+終於
+終於成功整到app attest
+冇想像中咁難整
+但網絡上既資源其實好少
+
+2024 10月13號
+係屋企專心沖左成日
+好正
+
+整左好多野
+主要都係針對firestore 上既野黎，同埋d 制既回彈反應，動畫，好過癮
+依家可以隨意加野！ 
+黎緊整埋排位，remove ，就差唔多完成呢part！
+
+做埋code refactor，將logic 抽哂出黎放係viewmodel 到，似番樣了 
+正
+
+
+2024 10月14 
+成功搞掂app check，所有firestore 上面既資源，都要經app check先做到
+同埋可以收埋條link，令到call api 既link 唔洗係public git 出現
+v1 既firebase function 淨係得條link ，v2 好好多
+
+2024 10月28
+突然公司需要我幫忙出去參加比賽，所以呢邊進度落後左
+但我戀算抽到時間成功研究，點樣做update！
+
+卡左好幾日，唔知點樣可以edit list入面既item 得黎，仲可以return 番出去張list到即時睇到
+終於！ 
+
+原來只要將成個viewmodel pass入去就搞掂左loooool
+頂。。。
+
+build app先！ 開心仔

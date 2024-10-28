@@ -22,10 +22,26 @@ struct BookDetail {
     var lastReadIndex: Int
 }
 
-enum UserType : Int, Codable{
+enum UserType: Int, Codable{
     case apple
     case google
     case email
+}
+
+struct Push_Setting: Codable, Hashable {
+    let id: String
+    var title: String?
+    var body: String?
+    
+    static let defaultSetting = Push_Setting(id: UUID().uuidString, title: "Default Title", body: "Default Body")
+    
+    func toDictionary() -> [String: Any] {
+        return [
+            "id": id,
+            "title": title ?? "",
+            "body": body ?? ""
+        ]
+    }
 }
 
 struct UserObject: Codable, Identifiable {
@@ -36,6 +52,7 @@ struct UserObject: Codable, Identifiable {
     let email: String?
     let login_type: UserType?
     var connections_userID: [String]?
+    var push_setting: Push_Setting? = Push_Setting.defaultSetting
     
 //    private enum CodingKeys: String, CodingKey {
 //        case id

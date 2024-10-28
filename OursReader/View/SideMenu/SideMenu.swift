@@ -12,6 +12,16 @@ struct SideMenu: View {
     @Binding var selectedTab: SideMenuOptionModel?
     @State private var selectedOption: SideMenuOptionModel? = .dashboard
     
+    var version: String {
+            // 從專案的 Info.plist 中取得版本號
+            if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
+               let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
+                return "v\(version) (\(build))" // 格式：v1.0.0 (1)
+            }
+            return "版本資訊無法取得"
+        }
+
+    
     var body: some View {
         ZStack {
             if isShowing {
@@ -49,6 +59,8 @@ struct SideMenu: View {
                                     .cornerRadius(10)
                             }
                         }
+                        Text(version)
+                            .foregroundColor(Color.black)
                     }
                     .padding()
                     .frame(width: 270, alignment: .leading)

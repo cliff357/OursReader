@@ -24,7 +24,7 @@ struct SideMenuHeaderView: View {
                 Text(user.nickName)
                     .font(.subheadline)
                     .foregroundStyle(Color.green1)
-                Text("Hello~")
+                Text(user.userData?.email ?? "")
                     .font(.footnote)
                     .foregroundStyle(Color.green1)
             }

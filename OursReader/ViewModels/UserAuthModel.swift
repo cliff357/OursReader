@@ -41,7 +41,6 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
     override init() {
         super.init()
         
-        Storage.save(Storage.Key.userLoginType, UserType.email.rawValue)
         self.check()
     }
     
@@ -68,9 +67,19 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
                 Storage.save(Storage.Key.userName, user.displayName ?? "")
                 Storage.save(Storage.Key.userEmail, user.email ?? "")
                 
-                //TODO: get user imageurl
-//                guard let uhk.rl = user.photoURL else { return }
-                //self.profilePicUrl =  //user.photoURL?.imageURL(withDimension: 100)!.absoluteString
+                print("user.uid: \(user.uid)")
+                
+                //update push token after user login
+                if let userData = self.userData {
+                    DatabaseManager.shared.updateUser(user: userData) { result in
+                        switch result {
+                        case .success:
+                            print("update user data success")
+                        case .failure(let error):
+                            print("error: \(error.localizedDescription)")
+                        }
+                    }
+                }
             } else {
                 self.isLoggedIn = false
                 let router = HomeRouter.shared
