@@ -157,6 +157,7 @@ extension DeviceFinderViewModel: MCNearbyServiceAdvertiserDelegate {
 
 extension DeviceFinderViewModel: MCNearbyServiceBrowserDelegate {
     func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
+        print("peer found")
         DispatchQueue.main.async {
             self.peers.append(PeerDevice(peerId: peerID)) // first go here
         }

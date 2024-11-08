@@ -15,25 +15,25 @@
 			</array>
 		</dict>
 	</array>
-    <key>ITSAppUsesNonExemptEncryption</key>
-    <false/>
-	<key>UIAppFonts</key>
-    <array>
-        <string>WorkSans-Bold.ttf</string>
-        <string>WorkSans-BoldItalic.ttf</string>
-        <string>WorkSans-Italic.ttf</string>
-        <string>WorkSans-Medium.ttf</string>
-        <string>WorkSans-MediumItalic.ttf</string>
-        <string>WorkSans-Regular.ttf</string>
-    </array>
 	<key>FirebaseAppDelegateProxyEnabled</key>
+	<false/>
+	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>NSBonjourServices</key>
 	<array>
 		<string>_nearby-devices._tcp</string>
 		<string>_nearby-devices._upd</string>
 	</array>
-<!--    <key>NSLocalNetworkUsageDescription</key>-->
-<!--        <string>We need access to your device's local network to connect to other devices.</string>-->
+	<key>UIAppFonts</key>
+	<array>
+		<string>WorkSans-Bold.ttf</string>
+		<string>WorkSans-BoldItalic.ttf</string>
+		<string>WorkSans-Italic.ttf</string>
+		<string>WorkSans-Medium.ttf</string>
+		<string>WorkSans-MediumItalic.ttf</string>
+		<string>WorkSans-Regular.ttf</string>
+	</array>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>請允許以尋找其他設備</string>
 </dict>
 </plist>
