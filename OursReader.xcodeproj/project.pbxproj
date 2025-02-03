@@ -488,6 +488,7 @@
 		5993CE722C939F3200855103 /* Friend */ = {
 			isa = PBXGroup;
 			children = (
+				993EDAD12BEB48BA002C18C7 /* DeviceFinderViewModel.swift */,
 				993EDAD32BEB59FB002C18C7 /* FriendList.swift */,
 				993EDADC2BEC6D65002C18C7 /* FriendDetail.swift */,
 			);
@@ -581,7 +582,6 @@
 			isa = PBXGroup;
 			children = (
 				998614162BA8110B00E0996D /* UserAuthModel.swift */,
-				993EDAD12BEB48BA002C18C7 /* DeviceFinderViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -1327,7 +1327,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = OursReader/OursReader.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 16;
 				DEVELOPMENT_ASSET_PATHS = "\"OursReader/Preview Content\"";
 				DEVELOPMENT_TEAM = UM4ZKH8HWF;
 				ENABLE_PREVIEWS = YES;
@@ -1361,7 +1361,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = OursReader/OursReader.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 16;
 				DEVELOPMENT_ASSET_PATHS = "\"OursReader/Preview Content\"";
 				DEVELOPMENT_TEAM = UM4ZKH8HWF;
 				ENABLE_PREVIEWS = YES;

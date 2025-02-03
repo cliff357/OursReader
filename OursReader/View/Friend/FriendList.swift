@@ -37,7 +37,7 @@ struct FriendList: View {
                         }
                         label: {
                             Text(model.joinedPeer.contains(where: { $0.peerId == peer.peerId }) ?
-                                 "Send" : "Connect" )
+                                 "發出邀請" : "連結中" ) //TODO : "連結中" need to cross check with firebase friendlist 
                                 .foregroundColor(Color.rice_white)
                             
                         }
@@ -51,10 +51,10 @@ struct FriendList: View {
             //Receive  message from other peer
             .alert(item: $model.permissionRequest, content: { request in
                 Alert(
-                    title: Text("Start linking to  \(request.peerId.displayName)"),
-                    primaryButton: .default(Text("Start! "), action: {
+                    title: Text("Add  \(request.peerId.displayName)?"),
+                    primaryButton: .default(Text("Ok"), action: {
                         request.onRequest(true)
-                        model.show(peerId: request.peerId)
+                        model.peerJoin(peerId: request.peerId)
                     }),
                     secondaryButton: .cancel(Text("No"), action: {
                         request.onRequest(false)
@@ -68,10 +68,10 @@ struct FriendList: View {
                 model.finishBrowsing()
             }
         }
-        .onChange(of: model.toastMsg, { oldValue, newValue in
-            toast = Toast(style: .warning, message: newValue)
-        })
-        .toastView(toast: $toast)
+//        .onChange(of: model.toastMsg, { oldValue, newValue in
+//            toast = Toast(style: .warning, message: newValue)
+//        })
+//        .toastView(toast: $toast)
             
     }
 }

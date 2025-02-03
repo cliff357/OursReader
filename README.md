@@ -2,9 +2,9 @@ Feature in OursReader
 - User management  
 - testflight
 - xcode cloud 
-- peer to peer exchange data <--- now i am here
+- peer to peer exchange data 
 - push notification
-- interactive widget 
+- interactive widget <--- now i am here
 - live activities
 - account deletion
 - setup fastlane and github action
