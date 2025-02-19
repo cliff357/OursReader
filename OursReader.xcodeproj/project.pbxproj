@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -31,7 +31,6 @@
 		593EB1FF2C01EED600DD430F /* View+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593EB1FE2C01EED600DD430F /* View+.swift */; };
 		593EB2012C01EF6600DD430F /* ErrorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593EB2002C01EF6600DD430F /* ErrorHelper.swift */; };
 		593EB2042C01EFFF00DD430F /* LM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593EB2032C01EFFF00DD430F /* LM.swift */; };
-		593EB20C2C01F1CD00DD430F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 593EB20E2C01F1CD00DD430F /* Localizable.strings */; };
 		593EB2122C01F9F400DD430F /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593EB2112C01F9F400DD430F /* MainView.swift */; };
 		593EB2152C01FA1200DD430F /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593EB2142C01FA1200DD430F /* SplashView.swift */; };
 		5953369E2B05018100BB11D7 /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5953369D2B05018100BB11D7 /* Tab.swift */; };
@@ -68,6 +67,7 @@
 		59E75EB52ADF53AB007A549C /* OursReaderUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E75EB42ADF53AB007A549C /* OursReaderUITests.swift */; };
 		59E75EB72ADF53AB007A549C /* OursReaderUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E75EB62ADF53AB007A549C /* OursReaderUITestsLaunchTests.swift */; };
 		59E75EC42ADF5749007A549C /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E75EC32ADF5749007A549C /* Model.swift */; };
+		990DE4312D5C829E00C8776F /* readerWatchOS Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 990DE4242D5C829C00C8776F /* readerWatchOS Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		993EDABE2BDA4675002C18C7 /* SwiftEntryKit in Frameworks */ = {isa = PBXBuildFile; productRef = 993EDABD2BDA4675002C18C7 /* SwiftEntryKit */; };
 		993EDAC22BDBB71B002C18C7 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 993EDAC12BDBB71B002C18C7 /* FirebaseFirestore */; };
 		993EDAC42BDBB71B002C18C7 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 993EDAC32BDBB71B002C18C7 /* FirebaseFirestoreSwift */; };
@@ -109,9 +109,9 @@
 		998614732BBD21EF00E0996D /* FloatingPromptTextField in Frameworks */ = {isa = PBXBuildFile; productRef = 998614722BBD21EF00E0996D /* FloatingPromptTextField */; };
 		998614762BBD287300E0996D /* ColorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614752BBD287300E0996D /* ColorHelper.swift */; };
 		998614822BBD35AC00E0996D /* Color+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614812BBD35AC00E0996D /* Color+.swift */; };
-		999651D82C0C62C400EC7C43 /* RswiftLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 999651D72C0C62C400EC7C43 /* RswiftLibrary */; };
 		99E2102A2C0168F1006F27A7 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E210292C0168F1006F27A7 /* Storage.swift */; };
 		99EB5FA32C0D9C5600F2AF29 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EB5FA22C0D9C5500F2AF29 /* ToastView.swift */; };
+		99EFE3472D5CA69100EA82EC /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 99EFE3462D5CA69100EA82EC /* Localizable.xcstrings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -143,6 +143,13 @@
 			remoteGlobalIDString = 59E75E952ADF53AA007A549C;
 			remoteInfo = OursReader;
 		};
+		990DE42F2D5C829E00C8776F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 59E75E8E2ADF53AA007A549C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 990DE4232D5C829C00C8776F;
+			remoteInfo = "readerWatchOS Watch App";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -156,6 +163,17 @@
 				598053992BA6DA8E008056F3 /* SendMissExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		990DE4322D5C829E00C8776F /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				990DE4312D5C829E00C8776F /* readerWatchOS Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -185,8 +203,6 @@
 		593EB1FE2C01EED600DD430F /* View+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+.swift"; sourceTree = "<group>"; };
 		593EB2002C01EF6600DD430F /* ErrorHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorHelper.swift; sourceTree = "<group>"; };
 		593EB2032C01EFFF00DD430F /* LM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LM.swift; sourceTree = "<group>"; };
-		593EB20D2C01F1CD00DD430F /* zh-HK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-HK"; path = "zh-HK.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		593EB20F2C01F1D300DD430F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		593EB2112C01F9F400DD430F /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		593EB2142C01FA1200DD430F /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		5953369D2B05018100BB11D7 /* Tab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tab.swift; sourceTree = "<group>"; };
@@ -223,6 +239,7 @@
 		59E75EB42ADF53AB007A549C /* OursReaderUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OursReaderUITests.swift; sourceTree = "<group>"; };
 		59E75EB62ADF53AB007A549C /* OursReaderUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OursReaderUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		59E75EC32ADF5749007A549C /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		990DE4242D5C829C00C8776F /* readerWatchOS Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "readerWatchOS Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		993EDAC62BE9F6EA002C18C7 /* Dashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dashboard.swift; sourceTree = "<group>"; };
 		993EDAC92BEB2C9C002C18C7 /* PeerDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeerDevice.swift; sourceTree = "<group>"; };
 		993EDACC2BEB2CBF002C18C7 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
@@ -262,7 +279,12 @@
 		998614812BBD35AC00E0996D /* Color+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+.swift"; sourceTree = "<group>"; };
 		99E210292C0168F1006F27A7 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		99EB5FA22C0D9C5500F2AF29 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
+		99EFE3462D5CA69100EA82EC /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		990DE4252D5C829C00C8776F /* readerWatchOS Watch App */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "readerWatchOS Watch App"; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		598053822BA6DA8D008056F3 /* Frameworks */ = {
@@ -295,7 +317,6 @@
 				998614732BBD21EF00E0996D /* FloatingPromptTextField in Frameworks */,
 				997D30712CBD04DA00A3B692 /* FirebaseAppCheck in Frameworks */,
 				993EDAC42BDBB71B002C18C7 /* FirebaseFirestoreSwift in Frameworks */,
-				999651D82C0C62C400EC7C43 /* RswiftLibrary in Frameworks */,
 				998614462BB1799B00E0996D /* FirebaseMessaging in Frameworks */,
 				993EDABE2BDA4675002C18C7 /* SwiftEntryKit in Frameworks */,
 				59E06A1D2BA6C87B00FE18FD /* FirebaseAnalytics in Frameworks */,
@@ -312,6 +333,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		59E75EAD2ADF53AB007A549C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		990DE4212D5C829C00C8776F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -393,7 +421,7 @@
 		593EB2072C01F13E00DD430F /* Localization */ = {
 			isa = PBXGroup;
 			children = (
-				593EB20E2C01F1CD00DD430F /* Localizable.strings */,
+				99EFE3462D5CA69100EA82EC /* Localizable.xcstrings */,
 			);
 			path = Localization;
 			sourceTree = "<group>";
@@ -511,6 +539,7 @@
 				59E75EB32ADF53AB007A549C /* OursReaderUITests */,
 				5980538B2BA6DA8D008056F3 /* SendMiss */,
 				598053D32BA6DBE9008056F3 /* SImplySendMiss */,
+				990DE4252D5C829C00C8776F /* readerWatchOS Watch App */,
 				598053862BA6DA8D008056F3 /* Frameworks */,
 				59E75E972ADF53AA007A549C /* Products */,
 			);
@@ -524,6 +553,7 @@
 				59E75EB02ADF53AB007A549C /* OursReaderUITests.xctest */,
 				598053852BA6DA8D008056F3 /* SendMissExtension.appex */,
 				598053D02BA6DBE9008056F3 /* SImplySendMissExtension.appex */,
+				990DE4242D5C829C00C8776F /* readerWatchOS Watch App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -745,6 +775,7 @@
 				59E75E932ADF53AA007A549C /* Frameworks */,
 				59E75E942ADF53AA007A549C /* Resources */,
 				5980539D2BA6DA8E008056F3 /* Embed Foundation Extensions */,
+				990DE4322D5C829E00C8776F /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
@@ -752,6 +783,7 @@
 				999651D42C0C5C3B00EC7C43 /* PBXTargetDependency */,
 				598053982BA6DA8E008056F3 /* PBXTargetDependency */,
 				598053DC2BA6DBEA008056F3 /* PBXTargetDependency */,
+				990DE4302D5C829E00C8776F /* PBXTargetDependency */,
 			);
 			name = OursReader;
 			packageProductDependencies = (
@@ -764,7 +796,6 @@
 				993EDABD2BDA4675002C18C7 /* SwiftEntryKit */,
 				993EDAC12BDBB71B002C18C7 /* FirebaseFirestore */,
 				993EDAC32BDBB71B002C18C7 /* FirebaseFirestoreSwift */,
-				999651D72C0C62C400EC7C43 /* RswiftLibrary */,
 				997D30652CB75BF200A3B692 /* FirebaseAppCheck */,
 				997D30702CBD04DA00A3B692 /* FirebaseAppCheck */,
 				997D30732CBD06B400A3B692 /* FirebaseAppCheck */,
@@ -810,6 +841,28 @@
 			productReference = 59E75EB02ADF53AB007A549C /* OursReaderUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		990DE4232D5C829C00C8776F /* readerWatchOS Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 990DE4352D5C829E00C8776F /* Build configuration list for PBXNativeTarget "readerWatchOS Watch App" */;
+			buildPhases = (
+				990DE4202D5C829C00C8776F /* Sources */,
+				990DE4212D5C829C00C8776F /* Frameworks */,
+				990DE4222D5C829C00C8776F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				990DE4252D5C829C00C8776F /* readerWatchOS Watch App */,
+			);
+			name = "readerWatchOS Watch App";
+			packageProductDependencies = (
+			);
+			productName = "readerWatchOS Watch App";
+			productReference = 990DE4242D5C829C00C8776F /* readerWatchOS Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -820,7 +873,7 @@
 				KnownAssetTags = (
 					New,
 				);
-				LastSwiftUpdateCheck = 1500;
+				LastSwiftUpdateCheck = 1600;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					598053842BA6DA8D008056F3 = {
@@ -840,6 +893,9 @@
 						CreatedOnToolsVersion = 14.3;
 						TestTargetID = 59E75E952ADF53AA007A549C;
 					};
+					990DE4232D5C829C00C8776F = {
+						CreatedOnToolsVersion = 16.0;
+					};
 				};
 			};
 			buildConfigurationList = 59E75E912ADF53AA007A549C /* Build configuration list for PBXProject "OursReader" */;
@@ -857,7 +913,6 @@
 				998614132BA80F5D00E0996D /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				998614712BBD21EF00E0996D /* XCRemoteSwiftPackageReference "FloatingPromptTextField" */,
 				993EDABC2BDA4675002C18C7 /* XCRemoteSwiftPackageReference "SwiftEntryKit" */,
-				999651D62C0C62C400EC7C43 /* XCRemoteSwiftPackageReference "R" */,
 			);
 			productRefGroup = 59E75E972ADF53AA007A549C /* Products */;
 			projectDirPath = "";
@@ -868,6 +923,7 @@
 				59E75EAF2ADF53AB007A549C /* OursReaderUITests */,
 				598053842BA6DA8D008056F3 /* SendMissExtension */,
 				598053CF2BA6DBE9008056F3 /* SImplySendMissExtension */,
+				990DE4232D5C829C00C8776F /* readerWatchOS Watch App */,
 			);
 		};
 /* End PBXProject section */
@@ -895,7 +951,7 @@
 			files = (
 				59E75EA12ADF53AB007A549C /* Preview Assets.xcassets in Resources */,
 				593EB1E92C01DF1B00DD430F /* WorkSans-BoldItalic.ttf in Resources */,
-				593EB20C2C01F1CD00DD430F /* Localizable.strings in Resources */,
+				99EFE3472D5CA69100EA82EC /* Localizable.xcstrings in Resources */,
 				593EB1E82C01DF1B00DD430F /* WorkSans-MediumItalic.ttf in Resources */,
 				59E75E9E2ADF53AB007A549C /* Assets.xcassets in Resources */,
 				993EDACD2BEB2CC0002C18C7 /* README.md in Resources */,
@@ -915,6 +971,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		59E75EAE2ADF53AB007A549C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		990DE4222D5C829C00C8776F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1031,6 +1094,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		990DE4202D5C829C00C8776F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1054,23 +1124,16 @@
 			target = 59E75E952ADF53AA007A549C /* OursReader */;
 			targetProxy = 59E75EB12ADF53AB007A549C /* PBXContainerItemProxy */;
 		};
+		990DE4302D5C829E00C8776F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 990DE4232D5C829C00C8776F /* readerWatchOS Watch App */;
+			targetProxy = 990DE42F2D5C829E00C8776F /* PBXContainerItemProxy */;
+		};
 		999651D42C0C5C3B00EC7C43 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 999651D32C0C5C3B00EC7C43 /* RswiftGenerateInternalResources */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		593EB20E2C01F1CD00DD430F /* Localizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				593EB20D2C01F1CD00DD430F /* zh-HK */,
-				593EB20F2C01F1D300DD430F /* en */,
-			);
-			name = Localizable.strings;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		5980539B2BA6DA8E008056F3 /* Debug */ = {
@@ -1261,6 +1324,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -1314,6 +1378,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1465,6 +1530,75 @@
 			};
 			name = Release;
 		};
+		990DE4332D5C829E00C8776F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"readerWatchOS Watch App/Preview Content\"";
+				DEVELOPMENT_TEAM = UM4ZKH8HWF;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = readerWatchOS;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.cliffchan.manwareader;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cliffchan.manwareader.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.0;
+			};
+			name = Debug;
+		};
+		990DE4342D5C829E00C8776F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"readerWatchOS Watch App/Preview Content\"";
+				DEVELOPMENT_TEAM = UM4ZKH8HWF;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = readerWatchOS;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.cliffchan.manwareader;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cliffchan.manwareader.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1522,6 +1656,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		990DE4352D5C829E00C8776F /* Build configuration list for PBXNativeTarget "readerWatchOS Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				990DE4332D5C829E00C8776F /* Debug */,
+				990DE4342D5C829E00C8776F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -1555,14 +1698,6 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 0.4.0;
-			};
-		};
-		999651D62C0C62C400EC7C43 /* XCRemoteSwiftPackageReference "R" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/mac-cain13/R.swift";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 7.5.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -1630,11 +1765,6 @@
 		999651D32C0C5C3B00EC7C43 /* RswiftGenerateInternalResources */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = "plugin:RswiftGenerateInternalResources";
-		};
-		999651D72C0C62C400EC7C43 /* RswiftLibrary */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 999651D62C0C62C400EC7C43 /* XCRemoteSwiftPackageReference "R" */;
-			productName = RswiftLibrary;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -15,7 +15,7 @@ struct Dashboard: View {
     
     var body: some View {
         ZStack {
-            Color.background.ignoresSafeArea()
+            ColorManager.shared.background.ignoresSafeArea()
             
             VStack(spacing: 15) {
                 Spacer().frame(height: 15)
@@ -93,7 +93,7 @@ struct Dashboard: View {
             GeometryReader { geometry in
                 let capsuleWidth = geometry.size.width / CGFloat(Tab.allCases.count)
                 Capsule()
-                    .fill(Color.green1)
+                    .fill(ColorManager.shared.green1)
                     .frame(width: capsuleWidth)
                     .offset(x: tabProgress * (geometry.size.width - capsuleWidth))
             }

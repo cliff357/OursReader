@@ -45,26 +45,26 @@ struct WelcomePage: View {
             vm.nickName = nickname
             Storage.save(Storage.Key.nickName, nickname)
         }) {
-            Text(LM.Key.general_done())
+            Text("general_done")
                 .padding(20)
         }
-        .background(Color.rice_white)
-        .foregroundStyle(Color.dark_brown2)
+        .background(ColorManager.shared.rice_white)
+        .foregroundStyle(ColorManager.shared.dark_brown2)
         .clipShape(Capsule())
     }
     
     var body: some View {
         ZStack{
-            Color.rice_white.ignoresSafeArea()
+            ColorManager.shared.rice_white.ignoresSafeArea()
             Spacer()
             Circle()
-                .fill(Color.background)
+                .fill(ColorManager.shared.background)
                 .frame(width: 400 , height: 400)
                 .position(x: 150, y: -100)
                 .ignoresSafeArea(.keyboard)
             
             Circle()
-                .fill(Color.dark_brown)
+                .fill(ColorManager.shared.dark_brown)
                 .frame(width: UIScreen.main.bounds.width * 1.7 , height: UIScreen.main.bounds.width * 1.7)
                 .offset(y: UIScreen.main.bounds.width * 0.8)
             
@@ -78,7 +78,7 @@ struct WelcomePage: View {
                     .transition(AnyTransition.opacity.combined(with: .scale))
                     .padding()
                 
-                ORTextField(text: $nickname,placeholder: LM.Key.nick_name(), floatingPrompt: LM.Key.nick_name())
+                ORTextField(text: $nickname,placeholder: String(localized: "nick_name"), floatingPrompt: String(localized: "nick_name"))
                     .padding(.bottom, 20)
                 
                 confirmButton()
@@ -89,7 +89,7 @@ struct WelcomePage: View {
             .padding()
             .frame(width: UIScreen.main.bounds.width )
         }
-        .navigationTitle(LM.Key.nick_name())
+        .navigationTitle("nick_name")
     }
 }
 

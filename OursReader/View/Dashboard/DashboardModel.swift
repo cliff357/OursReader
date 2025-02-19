@@ -16,11 +16,11 @@ enum ButtonListType {
     var color: Color {
         switch self {
         case .push_notification:
-            return Color.firstTab
+            return ColorManager.shared.firstTab
         case .widget:
-            return Color.secondTab
+            return ColorManager.shared.secondTab
         case .ebook:
-            return Color.thirdTab
+            return ColorManager.shared.thirdTab
         }
     }
 }

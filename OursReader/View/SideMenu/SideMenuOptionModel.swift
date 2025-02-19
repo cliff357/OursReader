@@ -18,15 +18,15 @@ enum SideMenuOptionModel: Int, CaseIterable, Equatable {
     var title: String {
         switch self {
         case .dashboard:
-            return LM.Key.dashboard()
+            return String(localized:"dashboard")
         case .profile:
-            return LM.Key.profile()
+            return String(localized:"profile")
         case .widget:
-            return LM.Key.widget()
+            return String(localized:"widget")
         case .friendList:
-            return LM.Key.friendList()
+            return String(localized:"friendList")
         case .settings:
-            return LM.Key.settings()
+            return String(localized:"settings")
         }
     }
     

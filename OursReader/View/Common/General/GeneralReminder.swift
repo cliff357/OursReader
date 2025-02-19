@@ -11,7 +11,7 @@ struct GeneralReminderRowTitle: View {
     var title: String
     var body: some View {
         Text(title)
-            .font(.workSansMedium24)
+            .font(FontHelper.shared.workSansMedium24)
             .foregroundColor(.blue)
     }
 }
@@ -20,7 +20,7 @@ struct GeneralReminderRowDescription: View {
     var desc: String
     var body: some View {
         Text(desc)
-            .font(.workSansMedium16)
+            .font(FontHelper.shared.workSansMedium16)
             .foregroundColor(.blue)
             .kerning(0.16)
     }

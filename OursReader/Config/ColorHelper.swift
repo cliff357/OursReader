@@ -6,26 +6,57 @@
 //
 
 import SwiftUI
-import RswiftResources
 
-extension Color {
-    public static let flesh1: Color = R.color.flesh1.color
-    public static let dark_brown: Color = R.color.dark_brown.color
-    public static let rice_white: Color = R.color.rice_white.color
-    public static let orange1: Color = R.color.orange1.color
-    public static let red1: Color = R.color.red1.color
-    public static let green1: Color = R.color.green1.color
-    public static let dark_brown2: Color = R.color.dark_brown2.color
-    public static let background: Color = R.color.background.color
+
+class ColorManager {
     
-    //Dashboard
-    public static let firstTab: Color = R.color.first_tab.color
-    public static let secondTab: Color = R.color.second_tab.color
-    public static let thirdTab: Color = R.color.third_tab.color
-}
-
-extension RswiftResources.ColorResource {
-    var color: Color {
-        Color(name)
+    /// 單例實例
+    static let shared = ColorManager()
+    
+    /// 私有初始化，防止外部實例化
+    private init() {}
+    
+    var flesh1: Color {
+        Color("flesh1")
+    }
+    
+    var dark_brown: Color {
+        Color("dark_brown")
+    }
+    
+    var rice_white: Color {
+        Color("rice_white")
+    }
+    
+    var orange1: Color {
+        Color("orange1")
+    }
+    
+    var red1: Color {
+        Color("red1")
+    }
+    
+    var green1: Color {
+        Color("green1")
+    }
+    
+    var dark_brown2: Color {
+        Color("dark_brown2")
+    }
+    
+    var background: Color {
+        Color("background")
+    }
+    
+    var firstTab: Color {
+        Color("firstTab")
+    }
+    
+    var secondTab: Color {
+        Color("secondTab")
+    }
+    
+    var thirdTab: Color {
+        Color("thirdTab")
     }
 }
