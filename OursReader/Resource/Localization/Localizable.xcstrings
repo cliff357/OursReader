@@ -4,13 +4,7 @@
     "" : {
 
     },
-    "Add Friend by ID" : {
-
-    },
     "Connect" : {
-
-    },
-    "Copied to clipboard!" : {
 
     },
     "copy" : {
@@ -46,9 +40,6 @@
           }
         }
       }
-    },
-    "Enter friend's ID" : {
-
     },
     "Find Friends Nearby" : {
 
@@ -438,12 +429,6 @@
       }
     },
     "Widget" : {
-
-    },
-    "Your Friends" : {
-
-    },
-    "Your User ID" : {
 
     },
     "你確定要移除這個通知嗎？此操作無法復原。" : {

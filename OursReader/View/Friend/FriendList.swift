@@ -9,10 +9,11 @@ import SwiftUI
 
 struct FriendList: View {
     @StateObject var model = DeviceFinderViewModel()
-    @State private var toast: Toast? = nil
     @State private var showPeersView = false
     @State private var friendID = ""
     @State private var showCopyConfirmation = false
+    @State private var showAddFriendConfirmation = false
+    @State private var addFriendMessage = ""
     
     var body: some View {
         ZStack {
@@ -20,95 +21,24 @@ struct FriendList: View {
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    // User ID display section
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Your User ID")
-                            .font(.headline)
-                            .foregroundColor(ColorManager.shared.red1)
-                        
-                        HStack {
-                            Text(UserAuthModel.shared.getCurrentFirebaseUser()?.uid ?? "Not signed in")
-                                .padding()
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .background(ColorManager.shared.rice_white)
-                                .cornerRadius(8)
-                                .foregroundColor(ColorManager.shared.rice_white)
-                            
-                            Button {
-                                UIPasteboard.general.string = UserAuthModel.shared.getCurrentFirebaseUser()?.uid
-                                withAnimation {
-                                    showCopyConfirmation = true
-                                }
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                    withAnimation {
-                                        showCopyConfirmation = false
-                                    }
-                                }
-                            } label: {
-                                Image(systemName: "doc.on.doc")
-                                    .padding(10)
-                                    .background(ColorManager.shared.rice_white)
-                                    .foregroundColor(ColorManager.shared.red1)
-                                    .cornerRadius(8)
-                            }
-                        }
-                        
-                        if showCopyConfirmation {
-                            Text("Copied to clipboard!")
-                                .foregroundColor(Color.gray)
-                                .font(.caption)
-                                .transition(.opacity)
-                        }
-                    }
-                    .padding()
+                    UserIDSection(showConfirmation: $showCopyConfirmation)
                     
-                    Divider()
-                        .background(ColorManager.shared.red1)
+                    Divider().styled()
                     
-                    // Add friend by ID section
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Add Friend by ID")
-                            .font(.headline)
-                            .foregroundColor(ColorManager.shared.red1)
-                        
-                        HStack {
-                            // Extract TextField into a simpler form
-                            friendIdTextField
-                            
-                            // Extract Button into a simpler form
-                            addFriendButton
-                        }
-                    }
-                    .padding()
+                    AddFriendSection(
+                        friendID: $friendID,
+                        showConfirmation: $showAddFriendConfirmation,
+                        message: $addFriendMessage,
+                        onAdd: addFriendByID
+                    )
                     
-                    Divider()
-                        .background(ColorManager.shared.red1)
+                    Divider().styled()
                     
-                    // Friends list section (keeping existing functionality)
-                    Text("Your Friends")
-                        .font(.headline)
-                        .foregroundColor(ColorManager.shared.red1)
-                        .padding(.horizontal)
-                    
-                    // Here would go the friends list display
+                    // Friends list would go here
                     
                     Spacer(minLength: 20)
                     
-                    // Secondary feature - Nearby discovery
-                    Button {
-                        showPeersView = true
-                    } label: {
-                        HStack {
-                            Image(systemName: "wave.3.right")
-                            Text("Find Friends Nearby")
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(ColorManager.shared.rice_white)
-                        .foregroundColor(ColorManager.shared.red1)
-                        .cornerRadius(8)
-                        .padding(.horizontal)
-                    }
+                    NearbyDiscoveryButton(action: { showPeersView = true })
                 }
             }
             
@@ -117,27 +47,6 @@ struct FriendList: View {
                     .transition(.move(edge: .bottom))
                     .animation(.spring(), value: showPeersView)
             }
-        }
-    }
-    
-    // MARK: - Extracted Views
-    private var friendIdTextField: some View {
-        TextField("Enter friend's ID", text: $friendID)
-            .padding()
-            .background(ColorManager.shared.rice_white)
-            .cornerRadius(8)
-            .foregroundColor(ColorManager.shared.red1)
-    }
-    
-    private var addFriendButton: some View {
-        Button {
-            addFriendByID()
-        } label: {
-            Image(systemName: "plus")
-                .padding(10)
-                .background(ColorManager.shared.rice_white)
-                .foregroundColor(Color.gray)
-                .cornerRadius(8)
         }
     }
     
@@ -154,20 +63,190 @@ struct FriendList: View {
                     DispatchQueue.main.async {
                         switch result {
                         case .success:
-                            toast = Toast(style: .success, message: "Friend added successfully!")
+                            self.addFriendMessage = "Friend added successfully!"
                             friendID = ""
+                            showConfirmationMessage()
                         case .failure(let error):
-                            toast = Toast(style: .error, message: "Failed to add friend: \(error.localizedDescription)")
+                            self.addFriendMessage = "Failed: \(error.localizedDescription)"
+                            showConfirmationMessage()
                         }
                     }
                 }
             } else {
-                toast = Toast(style: .warning, message: "User not found with that ID")
+                self.addFriendMessage = "User not found with that ID"
+                showConfirmationMessage()
+            }
+        }
+    }
+    
+    private func showConfirmationMessage() {
+        withAnimation {
+            showAddFriendConfirmation = true
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
+            withAnimation {
+                showAddFriendConfirmation = false
             }
         }
     }
 }
 
+// MARK: - Section Components
+struct UserIDSection: View {
+    @Binding var showConfirmation: Bool
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            SectionHeader(title: "Your User ID")
+            
+            HStack {
+                Text(UserAuthModel.shared.getCurrentFirebaseUser()?.uid ?? "Not signed in")
+                    .padding()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(ColorManager.shared.rice_white)
+                    .cornerRadius(8)
+                    .foregroundColor(ColorManager.shared.red1)
+                
+                Button {
+                    UIPasteboard.general.string = UserAuthModel.shared.getCurrentFirebaseUser()?.uid
+                    showWithTimer(binding: $showConfirmation)
+                } label: {
+                    Image(systemName: "doc.on.doc")
+                        .padding(10)
+                        .background(ColorManager.shared.rice_white)
+                        .foregroundColor(ColorManager.shared.red1)
+                        .cornerRadius(8)
+                }
+            }
+            
+            if showConfirmation {
+                ConfirmationMessage(text: "Copied to clipboard!")
+            }
+        }
+        .padding()
+    }
+}
+
+struct AddFriendSection: View {
+    @Binding var friendID: String
+    @Binding var showConfirmation: Bool
+    @Binding var message: String
+    let onAdd: () -> Void
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            SectionHeader(title: "Add Friend by ID")
+            
+            HStack {
+                StyledTextField(placeholder: "Enter friend's ID", text: $friendID)
+                
+                StyledButton(icon: "plus", action: onAdd)
+            }
+            
+            if showConfirmation {
+                ConfirmationMessage(
+                    text: message,
+                    color: message.contains("success") ? Color.green : Color.gray
+                )
+            }
+        }
+        .padding()
+    }
+}
+
+struct NearbyDiscoveryButton: View {
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            HStack {
+                Image(systemName: "wave.3.right")
+                Text("Find Friends Nearby")
+            }
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(ColorManager.shared.rice_white)
+            .foregroundColor(ColorManager.shared.red1)
+            .cornerRadius(8)
+            .padding(.horizontal)
+        }
+    }
+}
+
+// MARK: - Reusable UI Components
+struct SectionHeader: View {
+    let title: String
+    
+    var body: some View {
+        Text(title)
+            .font(.headline)
+            .foregroundColor(ColorManager.shared.red1)
+            .padding(.horizontal)
+    }
+}
+
+struct StyledTextField: View {
+    let placeholder: String
+    @Binding var text: String
+    
+    var body: some View {
+        TextField(placeholder, text: $text)
+            .padding()
+            .background(ColorManager.shared.rice_white)
+            .cornerRadius(8)
+            .foregroundColor(ColorManager.shared.red1)
+    }
+}
+
+struct StyledButton: View {
+    let icon: String
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: icon)
+                .padding(10)
+                .background(ColorManager.shared.rice_white)
+                .foregroundColor(Color.gray)
+                .cornerRadius(8)
+        }
+    }
+}
+
+struct ConfirmationMessage: View {
+    let text: String
+    var color: Color = Color.gray
+    
+    var body: some View {
+        Text(text)
+            .foregroundColor(color)
+            .font(.caption)
+            .transition(.opacity)
+            .padding(.top, 4)
+    }
+}
+
+// MARK: - Extensions
+extension View {
+    func showWithTimer(binding: Binding<Bool>, duration: Double = 5) {
+        withAnimation {
+            binding.wrappedValue = true
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+            withAnimation {
+                binding.wrappedValue = false
+            }
+        }
+    }
+}
+
+extension Divider {
+    func styled() -> some View {
+        self.background(ColorManager.shared.red1)
+    }
+}
+
+// MARK: - NearbyPeersView
 struct NearbyPeersView: View {
     @Binding var isPresented: Bool
     @ObservedObject var viewModel: DeviceFinderViewModel
@@ -206,7 +285,6 @@ struct NearbyPeersView: View {
         }
     }
     
-    // MARK: - Extracted Views
     private var headerView: some View {
         HStack {
             Text("Find Nearby Friends")
@@ -243,6 +321,7 @@ struct NearbyPeersView: View {
     }
 }
 
+// MARK: - PeerCellView
 struct PeerCellView: View {
     let peer: PeerDevice
     @ObservedObject var viewModel: DeviceFinderViewModel
@@ -294,8 +373,3 @@ struct PeerCellView: View {
         }
     }
 }
-
-#Preview {
-    FriendList()
-}
-
