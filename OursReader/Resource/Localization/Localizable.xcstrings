@@ -4,7 +4,13 @@
     "" : {
 
     },
-    "Add  %@?" : {
+    "Add Friend by ID" : {
+
+    },
+    "Connect" : {
+
+    },
+    "Copied to clipboard!" : {
 
     },
     "copy" : {
@@ -40,6 +46,15 @@
           }
         }
       }
+    },
+    "Enter friend's ID" : {
+
+    },
+    "Find Friends Nearby" : {
+
+    },
+    "Find Nearby Friends" : {
+
     },
     "friendList" : {
       "extractionState" : "manual",
@@ -288,9 +303,6 @@
     "No" : {
 
     },
-    "Ok" : {
-
-    },
     "or" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -326,6 +338,9 @@
       }
     },
     "Profile" : {
+
+    },
+    "Send Info" : {
 
     },
     "settings" : {
@@ -382,6 +397,12 @@
         }
       }
     },
+    "Start linking to %@" : {
+
+    },
+    "Start!" : {
+
+    },
     "welcome" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -419,6 +440,12 @@
     "Widget" : {
 
     },
+    "Your Friends" : {
+
+    },
+    "Your User ID" : {
+
+    },
     "你確定要移除這個通知嗎？此操作無法復原。" : {
 
     },
@@ -449,9 +476,6 @@
     "標題" : {
 
     },
-    "發出邀請" : {
-
-    },
     "發揮小宇宙" : {
 
     },
@@ -462,9 +486,6 @@
 
     },
     "通知" : {
-
-    },
-    "連結中" : {
 
     }
   },

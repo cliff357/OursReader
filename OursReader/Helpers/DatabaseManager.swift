@@ -130,10 +130,12 @@ extension DatabaseManager {
         }
     }
     
+    //check user exist in firestore by userID
     func checkUserExist(userID: String, completion: @escaping (Bool) -> ()) {
         Firestore.firestore().collection(DatabaseManager.Key.user).document(userID).getDocument { (document, error) in
             if let err = error {
                 print(err.localizedDescription)
+                completion(false)
             }
             else {
                 if document?.exists == true {
