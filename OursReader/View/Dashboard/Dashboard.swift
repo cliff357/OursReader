@@ -2,7 +2,7 @@
 //  Dashboard.swift
 //  OursReader
 //
-//  Created by Autotoll Developer on 7/5/2024.
+//  Created by Cliff Chan on 7/5/2024.
 //
 
 import SwiftUI

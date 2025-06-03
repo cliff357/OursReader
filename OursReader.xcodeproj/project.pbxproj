@@ -109,6 +109,15 @@
 		998614732BBD21EF00E0996D /* FloatingPromptTextField in Frameworks */ = {isa = PBXBuildFile; productRef = 998614722BBD21EF00E0996D /* FloatingPromptTextField */; };
 		998614762BBD287300E0996D /* ColorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614752BBD287300E0996D /* ColorHelper.swift */; };
 		998614822BBD35AC00E0996D /* Color+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614812BBD35AC00E0996D /* Color+.swift */; };
+		99BA2CFC2D9250D3003AD65C /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 99BA2CFB2D9250D3003AD65C /* FirebaseDatabase */; };
+		99BA2CFE2D9250D3003AD65C /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 99BA2CFD2D9250D3003AD65C /* FirebaseDatabaseSwift */; };
+		99BA2D042D9250D3003AD65C /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = 99BA2D032D9250D3003AD65C /* FirebaseFunctions */; };
+		99BA2D572D925265003AD65C /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 99BA2D562D925265003AD65C /* FirebaseFirestore */; };
+		99DA2D7A2D65B575007D178A /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DA2D792D65B575007D178A /* KeychainManager.swift */; };
+		99DA2D7D2D6C76CB007D178A /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 99DA2D7C2D6C76CB007D178A /* FirebaseAnalytics */; };
+		99DA2D7F2D6C76CB007D178A /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 99DA2D7E2D6C76CB007D178A /* FirebaseAnalyticsSwift */; };
+		99DA2D812D6C76CB007D178A /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = 99DA2D802D6C76CB007D178A /* FirebaseAppCheck */; };
+		99DA2D8A2D6D5E9B007D178A /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 99DA2D892D6D5E9B007D178A /* FirebaseAuth */; };
 		99E2102A2C0168F1006F27A7 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E210292C0168F1006F27A7 /* Storage.swift */; };
 		99EB5FA32C0D9C5600F2AF29 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EB5FA22C0D9C5500F2AF29 /* ToastView.swift */; };
 		99EFE3472D5CA69100EA82EC /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 99EFE3462D5CA69100EA82EC /* Localizable.xcstrings */; };
@@ -277,6 +286,8 @@
 		9986146F2BBD21A500E0996D /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
 		998614752BBD287300E0996D /* ColorHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorHelper.swift; sourceTree = "<group>"; };
 		998614812BBD35AC00E0996D /* Color+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+.swift"; sourceTree = "<group>"; };
+		99DA2D752D6586BE007D178A /* OursReaderDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OursReaderDebug.entitlements; sourceTree = "<group>"; };
+		99DA2D792D65B575007D178A /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
 		99E210292C0168F1006F27A7 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		99EB5FA22C0D9C5500F2AF29 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		99EFE3462D5CA69100EA82EC /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -343,6 +354,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				99BA2CFE2D9250D3003AD65C /* FirebaseDatabaseSwift in Frameworks */,
+				99BA2D572D925265003AD65C /* FirebaseFirestore in Frameworks */,
+				99DA2D7F2D6C76CB007D178A /* FirebaseAnalyticsSwift in Frameworks */,
+				99DA2D812D6C76CB007D178A /* FirebaseAppCheck in Frameworks */,
+				99DA2D7D2D6C76CB007D178A /* FirebaseAnalytics in Frameworks */,
+				99DA2D8A2D6D5E9B007D178A /* FirebaseAuth in Frameworks */,
+				99BA2CFC2D9250D3003AD65C /* FirebaseDatabase in Frameworks */,
+				99BA2D042D9250D3003AD65C /* FirebaseFunctions in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -501,6 +520,7 @@
 				593EB1CB2C01DC1700DD430F /* ToastManager.swift */,
 				593EB1F32C01E6E500DD430F /* FontManager.swift */,
 				997D30622CB6672B00A3B692 /* AppSecurity.swift */,
+				99DA2D792D65B575007D178A /* KeychainManager.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -561,8 +581,9 @@
 		59E75E982ADF53AA007A549C /* OursReader */ = {
 			isa = PBXGroup;
 			children = (
-				993EDACC2BEB2CBF002C18C7 /* README.md */,
+				99DA2D752D6586BE007D178A /* OursReaderDebug.entitlements */,
 				998614482BB17C9A00E0996D /* OursReader.entitlements */,
+				993EDACC2BEB2CBF002C18C7 /* README.md */,
 				998614122BA80EA300E0996D /* Info.plist */,
 				598053E92BA6F760008056F3 /* GoogleService-Info.plist */,
 				998614742BBD284D00E0996D /* Config */,
@@ -858,6 +879,14 @@
 			);
 			name = "readerWatchOS Watch App";
 			packageProductDependencies = (
+				99DA2D7C2D6C76CB007D178A /* FirebaseAnalytics */,
+				99DA2D7E2D6C76CB007D178A /* FirebaseAnalyticsSwift */,
+				99DA2D802D6C76CB007D178A /* FirebaseAppCheck */,
+				99DA2D892D6D5E9B007D178A /* FirebaseAuth */,
+				99BA2CFB2D9250D3003AD65C /* FirebaseDatabase */,
+				99BA2CFD2D9250D3003AD65C /* FirebaseDatabaseSwift */,
+				99BA2D032D9250D3003AD65C /* FirebaseFunctions */,
+				99BA2D562D925265003AD65C /* FirebaseFirestore */,
 			);
 			productName = "readerWatchOS Watch App";
 			productReference = 990DE4242D5C829C00C8776F /* readerWatchOS Watch App.app */;
@@ -1034,6 +1063,7 @@
 				993EDAC72BE9F6EB002C18C7 /* Dashboard.swift in Sources */,
 				593EB1FB2C01EB8500DD430F /* GeneralReminder.swift in Sources */,
 				997291252C9C2D6E0070DFAC /* DashboardModel.swift in Sources */,
+				99DA2D7A2D65B575007D178A /* KeychainManager.swift in Sources */,
 				595336A02B0503D800BB11D7 /* Home.swift in Sources */,
 				593EB2122C01F9F400DD430F /* MainView.swift in Sources */,
 				9986146A2BBD20D100E0996D /* HeightPreferenceKey.swift in Sources */,
@@ -1390,7 +1420,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = OursReader/OursReader.entitlements;
+				CODE_SIGN_ENTITLEMENTS = OursReader/OursReaderDebug.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 16;
 				DEVELOPMENT_ASSET_PATHS = "\"OursReader/Preview Content\"";
@@ -1536,6 +1566,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "readerWatchOS Watch App/readerWatchOS Watch AppDebug.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"readerWatchOS Watch App/Preview Content\"";
@@ -1561,7 +1592,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 11.0;
+				WATCHOS_DEPLOYMENT_TARGET = 10.6;
 			};
 			name = Debug;
 		};
@@ -1571,6 +1602,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "readerWatchOS Watch App/readerWatchOS Watch App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"readerWatchOS Watch App/Preview Content\"";
@@ -1595,7 +1627,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 11.0;
+				WATCHOS_DEPLOYMENT_TARGET = 10.6;
 			};
 			name = Release;
 		};
@@ -1765,6 +1797,39 @@
 		999651D32C0C5C3B00EC7C43 /* RswiftGenerateInternalResources */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = "plugin:RswiftGenerateInternalResources";
+		};
+		99BA2CFB2D9250D3003AD65C /* FirebaseDatabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseDatabase;
+		};
+		99BA2CFD2D9250D3003AD65C /* FirebaseDatabaseSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseDatabaseSwift;
+		};
+		99BA2D032D9250D3003AD65C /* FirebaseFunctions */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseFunctions;
+		};
+		99BA2D562D925265003AD65C /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseFirestore;
+		};
+		99DA2D7C2D6C76CB007D178A /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseAnalytics;
+		};
+		99DA2D7E2D6C76CB007D178A /* FirebaseAnalyticsSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseAnalyticsSwift;
+		};
+		99DA2D802D6C76CB007D178A /* FirebaseAppCheck */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseAppCheck;
+		};
+		99DA2D892D6D5E9B007D178A /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 59E06A1B2BA6C87B00FE18FD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

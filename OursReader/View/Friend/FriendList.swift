@@ -2,7 +2,7 @@
 //  FriendList.swift
 //  OursReader
 //
-//  Created by Autotoll Developer on 8/5/2024.
+//  Created by Cliff Chan on 8/5/2024.
 //
 
 import SwiftUI

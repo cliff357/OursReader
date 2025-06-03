@@ -2,7 +2,7 @@
 //  ColorHelper.swift
 //  OursReader
 //
-//  Created by Autotoll Developer on 3/4/2024.
+//  Created by Cliff Chan on 3/4/2024.
 //
 
 import SwiftUI
@@ -49,14 +49,14 @@ class ColorManager {
     }
     
     var firstTab: Color {
-        Color("firstTab")
+        Color("first_tab")
     }
     
     var secondTab: Color {
-        Color("secondTab")
+        Color("second_tab")
     }
     
     var thirdTab: Color {
-        Color("thirdTab")
+        Color("third_tab")
     }
 }

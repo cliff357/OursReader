@@ -2,7 +2,7 @@
 //  AppSecurity.swift
 //  OursReader
 //
-//  Created by Autotoll Developer on 9/10/2024.
+//  Created by Cliff Chan on 9/10/2024.
 //
 
 import Foundation
