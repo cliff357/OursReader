@@ -1,6 +1,7 @@
 {
   "images" : [
     {
+      "filename" : "widget_icon_cliiffgor.png",
       "idiom" : "universal",
       "platform" : "watchos",
       "size" : "1024x1024"
