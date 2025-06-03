@@ -21,12 +21,12 @@ struct Login: View {
                 
             }
         }) {
-            Text(LM.Key.login_title())
+            Text("login_title")
                 .padding(20)
-                .font(.workSansMedium16)
+                .font(FontHelper.shared.workSansMedium16)
         }
-        .background(Color.rice_white)
-        .foregroundStyle(Color.dark_brown2)
+        .background(ColorManager.shared.rice_white)
+        .foregroundStyle(ColorManager.shared.dark_brown2)
         .clipShape(Capsule())
     }
     
@@ -34,9 +34,9 @@ struct Login: View {
         Button(action: {
             HomeRouter.shared.push(to: .signup)
         }) {
-            Text(LM.Key.sign_up())
-                .font(.workSansMedium16)
-                .foregroundStyle(Color.rice_white)
+            Text("sign_up")
+                .font(FontHelper.shared.workSansMedium16)
+                .foregroundStyle(ColorManager.shared.rice_white)
         }
     }
     
@@ -71,38 +71,38 @@ struct Login: View {
     
     var body: some View {
         ZStack{
-            Color.rice_white.ignoresSafeArea()
+            ColorManager.shared.rice_white.ignoresSafeArea()
             Spacer()
             Circle()
-                .fill(Color.background)
+                .fill(ColorManager.shared.background)
                 .frame(width: 400 , height: 400)
                 .position(x: 150, y: -100)
                 .ignoresSafeArea(.keyboard)
                 
             
             Circle()
-                .fill(Color.dark_brown)
+                .fill(ColorManager.shared.dark_brown)
                 .frame(width: UIScreen.main.bounds.width * 1.7 , height: UIScreen.main.bounds.width * 1.7)
                 .offset(y: UIScreen.main.bounds.width * 0.5)
             
             VStack {
                 Spacer()
                 
-                ORTextField(text: $email,placeholder: LM.Key.login_email_title(), floatingPrompt: LM.Key.login_email_floating_msg())
+                ORTextField(text: $email,placeholder: String(localized:"login_email_title"), floatingPrompt: String(localized:"login_email_floating_msg"))
                     .padding(.bottom, 20)
-                ORTextField(text: $password,placeholder: LM.Key.login_pass_title(), floatingPrompt: LM.Key.login_pass_floating_msg(),isSecure: true)
+                ORTextField(text: $password,placeholder: String(localized: "login_pass_title"), floatingPrompt: String(localized: "login_pass_floating_msg") ,isSecure: true)
                     .padding(.bottom, 20)
                 
                 LoginByUsernameButton()
-                DividerWithText( label: LM.Key.or(), color: Color.rice_white)
+                DividerWithText( label: String(localized:"or"), color: ColorManager.shared.rice_white)
                 HStack {
                     LoginInByAppleButton()
                     LoginInByGoogleButton()
                 }
                 HStack {
-                    Text(LM.Key.login_no_account())
-                        .foregroundStyle(Color.rice_white)
-                        .font(.workSansMedium16)
+                    Text("login_no_account")
+                        .foregroundStyle(ColorManager.shared.rice_white)
+                        .font(FontHelper.shared.workSansMedium16)
                     SignUpButton()
                 }
                 
@@ -115,8 +115,8 @@ struct Login: View {
 //                    HomeRouter.shared.push(to: .home)
 //                }
 //            }
-            .navigationTitle(LM.Key.login())
-            .navigationBarTitleTextColor(.dark_brown2)
+            .navigationTitle(String(localized:"login"))
+            .navigationBarTitleTextColor(ColorManager.shared.dark_brown2)
         }
     }
 }

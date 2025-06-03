@@ -40,12 +40,12 @@ struct ToastMessage: View {
     var body: some View {
         VStack(alignment: .center, spacing: 4) {
             Text(title)
-                .font(.workSansMedium16)
+                .font(FontHelper.shared.workSansMedium16)
                 .kerning(0.16)
                 .foregroundColor(.black)
             
             Text(message)
-                .font(.workSans14)
+                .font(FontHelper.shared.workSans14)
                 .kerning(0.08)
                 .foregroundColor(.black)
         }

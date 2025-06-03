@@ -19,11 +19,11 @@ struct GeneralErrorReminder: View {
                     .frame(width: 64, height: 64)
                     .padding(.bottom, 16)
                 Text(reminderData.title)
-                    .font(.workSansMedium24)
+                    .font(FontHelper.shared.workSansMedium24)
                     .foregroundColor(.blue)
                     .padding(.bottom, 10)
                 Text(reminderData.desc)
-                    .font(.workSansMedium16)
+                    .font(FontHelper.shared.workSansMedium16)
                     .foregroundColor(.black)
                     .kerning(0.16)
                 

@@ -2,7 +2,7 @@
 //  FriendList.swift
 //  OursReader
 //
-//  Created by Autotoll Developer on 8/5/2024.
+//  Created by Cliff Chan on 8/5/2024.
 //
 
 import SwiftUI
@@ -15,14 +15,14 @@ struct FriendList: View {
         ZStack {
             //Should check have user grand notification permission, otherwise, should not able to exchange data
             
-            Color.background.ignoresSafeArea()
+            ColorManager.shared.background.ignoresSafeArea()
 
             List(model.peers) { peer in
                 VStack {
                     HStack {
                         Image(systemName: "person.wave.2")
                             .imageScale(.large)
-                            .foregroundColor(Color.rice_white)
+                            .foregroundColor(ColorManager.shared.rice_white)
                         
                         Text(peer.peerId.displayName)
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -38,12 +38,12 @@ struct FriendList: View {
                         label: {
                             Text(model.joinedPeer.contains(where: { $0.peerId == peer.peerId }) ?
                                  "發出邀請" : "連結中" ) //TODO : "連結中" need to cross check with firebase friendlist 
-                                .foregroundColor(Color.rice_white)
+                            .foregroundColor(ColorManager.shared.rice_white)
                             
                         }
                     }
                 }
-                .listRowBackground(Color.dark_brown2)
+                .listRowBackground(ColorManager.shared.dark_brown2)
                 .padding(.vertical, 5)
             }
             .scrollContentBackground(.hidden)
@@ -76,6 +76,6 @@ struct FriendList: View {
     }
 }
 
-#Preview {
-    FriendList()
-}
+//#Preview {
+//    FriendList()
+//}

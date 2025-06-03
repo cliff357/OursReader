@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftUI
-import RswiftResources
+
 
 final class FontManager {
     enum FontSize: String, Equatable {

@@ -151,7 +151,7 @@ struct AddPushSettingCellView: View {
             showAddSettingSheet.toggle()
         }) {
             RoundedRectangle(cornerRadius: 15)
-                .fill(Color.firstTab)
+                .fill(ColorManager.shared.firstTab)
                 .frame(height: 100)
                 .overlay {
                     ZStack {

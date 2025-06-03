@@ -8,7 +8,6 @@
 import Foundation
 
 #if DEBUG
-import RswiftResources
 import SwiftUI
 #endif
 
@@ -58,9 +57,9 @@ final class LocalizationManager {
         }
     }
 
-    static var Key: _R.string.localizable {
-        return R.string(preferredLanguages: [currentLanguage.rawValue]).localizable
-    }
+//    static var Key: _R.string.localizable {
+//        return R.string(preferredLanguages: [currentLanguage.rawValue]).localizable
+//    }
 }
 
 //#if DEBUG

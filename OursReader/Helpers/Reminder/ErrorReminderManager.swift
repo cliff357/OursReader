@@ -27,7 +27,7 @@ class ErrorReminderManager: BaseReminder, ErrorReminderProtocol {
             ])
         case .undefined(let message):
             reminder = ReminderData(title: "Error", desc: message, buttons: [
-                GeneralButtonData(title: LM.Key.general_ok(), style: .fill, action: {
+                GeneralButtonData(title: "OK", style: .fill, action: {
 
                 })
             ])

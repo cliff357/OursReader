@@ -13,6 +13,7 @@ import FirebaseAuth
 import CryptoKit
 import AuthenticationServices
 import FirebaseMessaging
+import WatchConnectivity
 
 enum AuthenticationState {
   case unauthenticated
@@ -80,6 +81,9 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
                         }
                     }
                 }
+                
+                self.sendFirebaseTokenToWatch()
+                
             } else {
                 self.isLoggedIn = false
                 let router = HomeRouter.shared
@@ -102,6 +106,26 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
             
         }
     }
+    
+    func sendFirebaseTokenToWatch() {
+        Auth.auth().currentUser?.getIDToken { token, error in
+            guard let token = token else {
+                print("Failed to get Firebase token")
+                return
+            }
+            
+            // 發送 token 到手錶應用
+            if WCSession.isSupported() {
+                let session = WCSession.default
+                if session.activationState == .activated && session.isPaired && session.isWatchAppInstalled {
+                    session.sendMessage(["authToken": token], replyHandler: nil, errorHandler: { error in
+                        print("Error sending token to watch: \(error.localizedDescription)")
+                    })
+                }
+            }
+        }
+    }
+
     
     func signOut() {
         let firebaseAuth = Auth.auth()
@@ -263,7 +287,8 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
                                                       rawNonce: nonce)
             
             // Sign in with Firebase.
-            Auth.auth().signIn(with: credential) { (authResult, error) in
+            Auth.auth().signIn(with: credential) { [weak self] (authResult, error) in
+                guard let self = self else { return }
                 if (error != nil) {
                     // Error. If error.code == .MissingOrInvalidNonce, make sure
                     // you're sending the SHA256-hashed nonce as a hex string with

@@ -6,15 +6,14 @@
 //
 
 import SwiftUI
-import RswiftResources
 
 struct GeneralButtonData: Identifiable {
     var id: UUID = UUID()
     var title: String
     var style: GeneralButton.GeneralButtonStyle
     var isEnabled: Bool = true
-    var leftImage: RswiftResources.ImageResource?
-    var rightImage: RswiftResources.ImageResource?
+    var leftImage: UIImage?
+    var rightImage: UIImage?
     var closeReminder: Bool = true
     var action: () -> Void
 }
@@ -30,8 +29,8 @@ struct GeneralButton: View, Identifiable {
     var title: String
     var style: GeneralButtonStyle
     var isEnabled: Bool = true
-    var leftImage: RswiftResources.ImageResource?
-    var rightImage: RswiftResources.ImageResource?
+    var leftImage: UIImage?
+    var rightImage: UIImage?
     var action: () -> Void
     var body: some View {
         VStack(alignment: .center, spacing: 6) {
@@ -42,7 +41,7 @@ struct GeneralButton: View, Identifiable {
                     .modifier(GeneralButtonTextModifier(style: style))
                     .modifier(GeneralButtonLeftImageModifier(image: leftImage))
                     .modifier(GeneralButtonRightImageModifier(image: rightImage))
-                    .font(.workSansMedium16)
+                    .font(FontHelper.shared.workSansMedium16)
                     .contentShape(Rectangle())
                     .frame(maxWidth: .infinity, minHeight: 24)
 
@@ -59,7 +58,7 @@ struct GeneralButton: View, Identifiable {
 
 struct GeneralButton_Previews: PreviewProvider {
     static var previews: some View {
-        GeneralButton(title: LM.Key.login(), style: .fill, leftImage: R.image.google, rightImage: R.image.google) {
+        GeneralButton(title: String(localized:"login"), style: .fill, leftImage: UIImage(named: "Google"), rightImage: UIImage(named: "Google")) {
 
         }
     }
@@ -81,12 +80,12 @@ struct GeneralButtonTextModifier: ViewModifier {
 }
 
 struct GeneralButtonLeftImageModifier: ViewModifier {
-    var image: RswiftResources.ImageResource?
+    var image: UIImage?
     @ViewBuilder
     func body(content: Content) -> some View {
         if let image = image {
             HStack(spacing: 10) {
-                Image(image)
+                Image(uiImage: image)
                 content
             }
         } else {
@@ -96,13 +95,13 @@ struct GeneralButtonLeftImageModifier: ViewModifier {
 }
 
 struct GeneralButtonRightImageModifier: ViewModifier {
-    var image: RswiftResources.ImageResource?
+    var image: UIImage?
     @ViewBuilder
     func body(content: Content) -> some View {
         if let image = image {
             HStack(spacing: 10) {
                 content
-                Image(image)
+                Image(uiImage: image)
             }
         } else {
             content
@@ -138,8 +137,8 @@ struct CopyButton: View {
         Button {
             action()
         } label: {
-            Text(LM.Key.copy())
-                .font(.workSansMedium14)
+            Text("copy")
+                .font(FontHelper.shared.workSansMedium14)
                 .foregroundColor(.blue)
                 .kerning(0.4)
                 .overlay(

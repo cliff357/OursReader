@@ -74,7 +74,7 @@ struct Home: View {
                 .font(.title3.bold())
         }
         .padding(15)
-        .background(Color.background)
+        .background(ColorManager.shared.background)
         .foregroundStyle(Color.black)
     }
     

@@ -2,7 +2,7 @@
 //  ToastView.swift
 //  OursReader
 //
-//  Created by Autotoll Developer on 3/6/2024.
+//  Created by Cliff Chan on 3/6/2024.
 //
 
 import SwiftUI
@@ -53,7 +53,7 @@ struct ToastView: View {
             Image(systemName: style.iconFileName)
                 .foregroundColor(style.themeColor)
             Text(message)
-                .font(.workSans28)
+                .font(FontHelper.shared.workSans28)
                 .foregroundColor(Color.white)
             
             Spacer(minLength: 10)

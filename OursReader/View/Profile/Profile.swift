@@ -10,7 +10,7 @@ import SwiftUI
 struct Profile: View {
     var body: some View {
         ZStack {
-            Color.background.ignoresSafeArea()
+            ColorManager.shared.background.ignoresSafeArea()
             Text("Profile")
         }
     }
