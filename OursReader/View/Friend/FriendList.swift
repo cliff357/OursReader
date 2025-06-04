@@ -19,7 +19,7 @@ struct FriendList: View {
                 VStack {
                     // Custom header with add button
                     HStack {
-                        Text("Friends")
+                        Text(String(localized:"friend_list_title"))
                             .font(.title2)
                             .fontWeight(.bold)
                             .foregroundColor(ColorManager.shared.red1)
@@ -31,7 +31,7 @@ struct FriendList: View {
                         } label: {
                             HStack(spacing: 5) {
                                 Image(systemName: "person.badge.plus")
-                                Text("Add")
+                                Text(String(localized:"friend_add_button"))
                             }
                             .padding(8)
                             .background(ColorManager.shared.rice_white.opacity(0.3))
@@ -69,28 +69,12 @@ struct FriendList: View {
     
     // MARK: - View Components
     
-    // Keep this for compatibility but it won't be used with navigationBarHidden(true)
-    private var addFriendButton: some View {
-        Button {
-            showAddFriendSheet = true
-        } label: {
-            HStack(spacing: 5) {
-                Image(systemName: "person.badge.plus")
-                Text("Add")
-            }
-            .padding(8)
-            .background(ColorManager.shared.rice_white.opacity(0.2))
-            .cornerRadius(8)
-            .foregroundColor(ColorManager.shared.red1)
-        }
-    }
-    
     private var emptyStateView: some View {
         EmptyStateView(
             icon: "person.2.slash",
-            title: "No Friends Yet",
-            message: "Add friends to connect and share stories together.",
-            buttonTitle: "Add Friend",
+            title: String(localized:"friend_empty_state_title"),
+            message: String(localized:"friend_empty_state_message"),
+            buttonTitle: String(localized:"friend_add_button"),
             action: { showAddFriendSheet = true }
         )
     }
@@ -104,7 +88,7 @@ struct FriendList: View {
                             Button(role: .destructive) {
                                 viewModel.removeFriend(friend)
                             } label: {
-                                Label("Remove Friend", systemImage: "person.badge.minus")
+                                Label(String(localized:"friend_remove_button"), systemImage: "person.badge.minus")
                             }
                         }
                 }

@@ -88,10 +88,10 @@ struct UserIDSection: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            SectionHeader(title: "Your User ID")
+            SectionHeader(title: String(localized: "friend_your_user_id"))
             
             HStack {
-                Text(UserAuthModel.shared.getCurrentFirebaseUser()?.uid ?? "Not signed in")
+                Text(UserAuthModel.shared.getCurrentFirebaseUser()?.uid ?? String(localized: "friend_not_signed_in"))
                     .padding()
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(ColorManager.shared.rice_white)
@@ -111,7 +111,7 @@ struct UserIDSection: View {
             }
             
             if showConfirmation {
-                ConfirmationMessage(text: "Copied to clipboard!")
+                ConfirmationMessage(text: String(localized: "friend_copied_to_clipboard"))
             }
         }
         .padding()
@@ -126,10 +126,10 @@ struct AddFriendSection: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            SectionHeader(title: "Add Friend by ID")
+            SectionHeader(title: String(localized: "friend_add_by_id"))
             
             HStack {
-                StyledTextField(placeholder: "Enter friend's ID", text: $friendID)
+                StyledTextField(placeholder: String(localized: "friend_enter_id"), text: $friendID)
                 StyledButton(icon: "plus", action: onAdd)
             }
             
@@ -151,7 +151,7 @@ struct NearbyDiscoveryButton: View {
         Button(action: action) {
             HStack {
                 Image(systemName: "wave.3.right")
-                Text("Find Friends Nearby")
+                Text(String(localized: "friend_find_nearby"))
             }
             .frame(maxWidth: .infinity)
             .padding()
@@ -189,13 +189,14 @@ struct NearbyPeersView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .alert(item: $viewModel.permissionRequest) { request in
-            Alert(
-                title: Text("Start linking to \(request.peerId.displayName)"),
-                primaryButton: .default(Text("Start!"), action: {
+            let name = request.peerId.displayName
+            return Alert(
+                title: Text("friend_linking_request \(name)"),
+                primaryButton: .default(Text("friend_linking_start"), action: {
                     request.onRequest(true)
                     viewModel.peerJoin(peerId: request.peerId)
                 }),
-                secondaryButton: .cancel(Text("No"), action: {
+                secondaryButton: .cancel(Text("general_no"), action: {
                     request.onRequest(false)
                 })
             )
@@ -204,7 +205,7 @@ struct NearbyPeersView: View {
     
     private var headerView: some View {
         HStack {
-            Text("Find Nearby Friends")
+            Text(String(localized: "friend_nearby_title"))
                 .font(.headline)
                 .foregroundColor(ColorManager.shared.rice_white)
             
@@ -269,7 +270,7 @@ struct PeerCellView: View {
     }
     
     private var buttonLabel: some View {
-        Text(isPeerJoined ? "Send Info" : "Connect")
+        Text(isPeerJoined ? String(localized: "friend_send_info") : String(localized: "friend_connect"))
             .padding(.horizontal, 10)
             .padding(.vertical, 5)
             .background(Color.gray)

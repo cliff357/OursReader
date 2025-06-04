@@ -26,41 +26,41 @@ struct EditPushSettingBottomsheet: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section(header: Text("通知")) {
-                    TextField("標題", text: $editedTitle)
-                    TextField("內容", text: $editedBody)
+                Section(header: Text(String(localized:"push_notification"))) {
+                    TextField(String(localized:"push_title"), text: $editedTitle)
+                    TextField(String(localized:"push_content"), text: $editedBody)
                 }
 
                 Button {
                     showDeleteAlert = true
                 } label: {
-                    Label("移除通知", systemImage: "trash")
+                    Label(String(localized:"push_remove"), systemImage: "trash")
                         .foregroundColor(.red)
                 }
             }
-            .navigationTitle("修改通知")
+            .navigationTitle(String(localized:"push_edit"))
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("搞掂") {
+                    Button(String(localized:"push_done")) {
                         handleConfirm()
                     }
                     .disabled(editedTitle.isEmpty || editedBody.isEmpty) // 防止空資料
                 }
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("唔整住") {
+                    Button(String(localized:"push_cancel")) {
                         dismiss()
                     }
                 }
             }
-            .alert("確認刪除", isPresented: $showDeleteAlert) {
-                Button("刪除", role: .destructive) {
+            .alert(String(localized:"push_confirm_delete"), isPresented: $showDeleteAlert) {
+                Button(String(localized:"push_delete"), role: .destructive) {
                     viewModel.removePushSetting(withID: push.id) { _ in
                         dismiss()
                     }
                 }
-                Button("取消", role: .cancel) {}
+                Button(String(localized:"push_cancel"), role: .cancel) {}
             } message: {
-                Text("你確定要移除這個通知嗎？此操作無法復原。")
+                Text(String(localized:"push_delete_confirm_message"))
             }
         }
     }

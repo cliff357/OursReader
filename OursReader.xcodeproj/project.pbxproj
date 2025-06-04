@@ -77,7 +77,6 @@
 		993EDACF2BEB2CE2002C18C7 /* PermissionRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993EDACE2BEB2CE2002C18C7 /* PermissionRequest.swift */; };
 		993EDAD22BEB48BA002C18C7 /* DeviceFinderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993EDAD12BEB48BA002C18C7 /* DeviceFinderViewModel.swift */; };
 		993EDAD42BEB59FB002C18C7 /* FriendList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993EDAD32BEB59FB002C18C7 /* FriendList.swift */; };
-		993EDADD2BEC6D65002C18C7 /* FriendDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993EDADC2BEC6D65002C18C7 /* FriendDetail.swift */; };
 		994344592DEEED3B002FD942 /* FriendSharedComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994344582DEEED3B002FD942 /* FriendSharedComponents.swift */; };
 		9943445A2DEEED3B002FD942 /* AddFriend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994344572DEEED3B002FD942 /* AddFriend.swift */; };
 		9943445C2DEEF2C9002FD942 /* FriendRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9943445B2DEEF2C9002FD942 /* FriendRow.swift */; };
@@ -259,7 +258,6 @@
 		993EDACE2BEB2CE2002C18C7 /* PermissionRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionRequest.swift; sourceTree = "<group>"; };
 		993EDAD12BEB48BA002C18C7 /* DeviceFinderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceFinderViewModel.swift; sourceTree = "<group>"; };
 		993EDAD32BEB59FB002C18C7 /* FriendList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendList.swift; sourceTree = "<group>"; };
-		993EDADC2BEC6D65002C18C7 /* FriendDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendDetail.swift; sourceTree = "<group>"; };
 		994344572DEEED3B002FD942 /* AddFriend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriend.swift; sourceTree = "<group>"; };
 		994344582DEEED3B002FD942 /* FriendSharedComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSharedComponents.swift; sourceTree = "<group>"; };
 		9943445B2DEEF2C9002FD942 /* FriendRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRow.swift; sourceTree = "<group>"; };
@@ -546,7 +544,6 @@
 			children = (
 				993EDAD12BEB48BA002C18C7 /* DeviceFinderViewModel.swift */,
 				993EDAD32BEB59FB002C18C7 /* FriendList.swift */,
-				993EDADC2BEC6D65002C18C7 /* FriendDetail.swift */,
 				994344572DEEED3B002FD942 /* AddFriend.swift */,
 				9943445B2DEEF2C9002FD942 /* FriendRow.swift */,
 				994344582DEEED3B002FD942 /* FriendSharedComponents.swift */,
@@ -1087,7 +1084,6 @@
 				997D30632CB6672B00A3B692 /* AppSecurity.swift in Sources */,
 				593EB1FF2C01EED600DD430F /* View+.swift in Sources */,
 				998614502BB4253200E0996D /* Route.swift in Sources */,
-				993EDADD2BEC6D65002C18C7 /* FriendDetail.swift in Sources */,
 				993EDAD42BEB59FB002C18C7 /* FriendList.swift in Sources */,
 				593EB2042C01EFFF00DD430F /* LM.swift in Sources */,
 				593EB1FD2C01EE9F00DD430F /* GeneralBottomSheet.swift in Sources */,

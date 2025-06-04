@@ -23,30 +23,30 @@ struct AddPushBottomSheet: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section(header: Text("通知")) {
-                    TextField("標題", text: $pushTitle)
+                Section(header: Text(String(localized:"push_notification"))) {
+                    TextField(String(localized:"push_title"), text: $pushTitle)
                         .submitLabel(pushBody.isEmpty ? .next : .done)
                         .onSubmit {
                             handleConfirm()
                         }
 
-                    TextField("內容", text: $pushBody)
+                    TextField(String(localized:"push_content"), text: $pushBody)
                         .submitLabel(pushTitle.isEmpty ? .next : .done)
                         .onSubmit {
                             handleConfirm()
                         }
                 }
             }
-            .navigationTitle("新增通知")
+            .navigationTitle(String(localized:"push_add_new"))
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("搞掂") {
+                    Button(String(localized:"push_done")) {
                         handleConfirm()
                     }
                     .disabled(pushTitle.isEmpty || pushBody.isEmpty)
                 }
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("唔整住") {
+                    Button(String(localized:"push_cancel")) {
                         dismiss()
                     }
                 }
@@ -61,7 +61,7 @@ struct AddPushBottomSheet: View {
             onSave()
             dismiss()
         } else {
-            print("請填寫標題和內容")
+            print(String(localized:"push_please_fill_fields"))
         }
     }
 }

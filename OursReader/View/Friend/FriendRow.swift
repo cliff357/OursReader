@@ -28,7 +28,7 @@ struct FriendRow: View {
             }
             
             VStack(alignment: .leading) {
-                Text(friend.name ?? "Friend")
+                Text(friend.name ?? String(localized:"friend_default_name"))
                     .font(.headline)
                     .foregroundColor(ColorManager.shared.red1)
                 
@@ -46,7 +46,3 @@ struct FriendRow: View {
         .cornerRadius(10)
     }
 }
-
-//#Preview {
-//    FriendRow(friend: UserObject(id: "", name: "aaa", userID: "", fcmToken: "", email: "clifsifld@gmail.com", login_type: LoginType.apple, connections_userID: nil, push_setting: nil))
-//}

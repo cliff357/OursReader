@@ -38,11 +38,11 @@ struct AddFriend: View {
                     NearbyDiscoveryButton(action: { showPeersView = true })
                 }
             }
-            .navigationTitle("Add Friend")
+            .navigationTitle(String(localized:"friend_add_title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    Button(String(localized:"general_cancel")) {
                         dismiss()
                     }
                     .foregroundColor(ColorManager.shared.red1)
@@ -70,17 +70,17 @@ struct AddFriend: View {
                     DispatchQueue.main.async {
                         switch result {
                         case .success:
-                            self.addFriendMessage = "Friend added successfully!"
+                            self.addFriendMessage = String(localized:"friend_added_success")
                             friendID = ""
                             showConfirmationMessage()
                         case .failure(let error):
-                            self.addFriendMessage = "Failed: \(error.localizedDescription)"
+                            self.addFriendMessage = String(localized:"friend_add_failed") + error.localizedDescription
                             showConfirmationMessage()
                         }
                     }
                 }
             } else {
-                self.addFriendMessage = "User not found with that ID"
+                self.addFriendMessage = String(localized:"friend_user_not_found")
                 showConfirmationMessage()
             }
         }
