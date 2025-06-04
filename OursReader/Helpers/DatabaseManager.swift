@@ -56,37 +56,6 @@ extension DatabaseManager {
         }
     }
     
-    // add friend to this user
-    func addFriend(friend: UserObject, completion: @escaping (Result<Void, Error>) -> Void ) {
-        //Update firestore user data by userid
-        guard let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() else {
-            completion(.failure(NSError(domain: "Invalid Current User", code: 0, userInfo: nil)))
-            return
-        }
-        
-        let currentUserID = currentUser.uid
-        
-        guard let friendID = friend.userID else {
-            completion(.failure(NSError(domain: "Invalid Friend UserID", code: 0, userInfo: nil)))
-            return
-        }
-        
-        let userDocument = db.collection(Key.user).document(currentUserID)
-        
-        userDocument.updateData([
-            Key.connections_userID: FieldValue.arrayUnion([friendID])
-        ]) { error in
-            if let error = error {
-                print("Error adding friend: \(error.localizedDescription)")
-                completion(.failure(error))
-            } else {
-                print("Friend added successfully")
-                completion(.success(()))
-            }
-        }
-        
-    }
-    
     // Update a user's data in Firestore
     func updateUser(user: UserObject, completion: @escaping (Result<Void, Error>) -> Void) {
         guard let userID = user.userID else {
@@ -99,7 +68,6 @@ extension DatabaseManager {
             Key.fcmToken: user.fcmToken ?? "",
             Key.email: user.email ?? "",
             Key.login_type: user.login_type?.rawValue ?? 0,
-//            "connections_userID": user.connections_userID ?? []
         ]
         
         db.collection(Key.user).document(userID).updateData(data) { error in
@@ -180,8 +148,206 @@ extension DatabaseManager {
             }
         }
     }
+}
+
+// MARK: - Friend Management
+extension DatabaseManager {
+    // Add friend to this user
+    func addFriend(friend: UserObject, completion: @escaping (Result<Void, Error>) -> Void ) {
+        guard let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() else {
+            completion(.failure(NSError(domain: "Invalid Current User", code: 0, userInfo: nil)))
+            return
+        }
+        
+        let currentUserID = currentUser.uid
+        
+        guard let friendID = friend.userID else {
+            completion(.failure(NSError(domain: "Invalid Friend UserID", code: 0, userInfo: nil)))
+            return
+        }
+        
+        let userDocument = db.collection(Key.user).document(currentUserID)
+        
+        userDocument.updateData([
+            Key.connections_userID: FieldValue.arrayUnion([friendID])
+        ]) { error in
+            if let error = error {
+                print("Error adding friend: \(error.localizedDescription)")
+                completion(.failure(error))
+            } else {
+                print("Friend added successfully")
+                completion(.success(()))
+            }
+        }
+    }
     
-    //MARK: Push Setting
+    // Get all friends of the current user
+    func getFriendsList(completion: @escaping (Result<[UserObject], Error>) -> Void) {
+        guard let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() else {
+            completion(.failure(NSError(domain: "No current user", code: 0, userInfo: nil)))
+            return
+        }
+        
+        let currentUserID = currentUser.uid
+        
+        // First get the current user document to get the connections_userID array
+        db.collection(Key.user).document(currentUserID).getDocument { (document, error) in
+            if let error = error {
+                print("Error getting user document: \(error.localizedDescription)")
+                completion(.failure(error))
+                return
+            }
+            
+            guard let document = document, document.exists else {
+                completion(.failure(NSError(domain: "User document not found", code: 0, userInfo: nil)))
+                return
+            }
+            
+            // Extract the connections_userID array
+            guard let connections = document.data()?[Key.connections_userID] as? [String], !connections.isEmpty else {
+                // User has no friends
+                completion(.success([]))
+                return
+            }
+            
+            // Fetch only the friend documents we need using their IDs
+            let friendsRef = self.db.collection(Key.user).whereField(FieldPath.documentID(), in: connections)
+            friendsRef.getDocuments { (snapshot, error) in
+                if let error = error {
+                    print("Error getting friends documents: \(error.localizedDescription)")
+                    completion(.failure(error))
+                    return
+                }
+                
+                var friends: [UserObject] = []
+                
+                for document in snapshot?.documents ?? [] {
+                    let data = document.data()
+                    let friendID = document.documentID
+                    let name = data[Key.name] as? String
+                    let email = data[Key.email] as? String
+                    
+                    // Create a minimal UserObject with just the essential fields
+                    let friend = UserObject(
+                        name: name,
+                        userID: friendID,
+                        fcmToken: nil,  // Only fetch essential data
+                        email: email,
+                        login_type: nil,
+                        connections_userID: nil
+                    )
+                    
+                    friends.append(friend)
+                }
+                
+                completion(.success(friends))
+            }
+        }
+    }
+    
+    // Async version for modern Swift concurrency
+    func getFriendsListAsync() async throws -> [UserObject] {
+        guard let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() else {
+            throw NSError(domain: "No current user", code: 0, userInfo: nil)
+        }
+        
+        let currentUserID = currentUser.uid
+        
+        // Get the current user document to retrieve connections_userID array
+        let userDocSnapshot = try await db.collection(Key.user).document(currentUserID).getDocument()
+        
+        guard userDocSnapshot.exists else {
+            throw NSError(domain: "User document not found", code: 0, userInfo: nil)
+        }
+        
+        // Extract connections
+        guard let connections = userDocSnapshot.data()?[Key.connections_userID] as? [String], !connections.isEmpty else {
+            return []  // No friends
+        }
+        
+        // Query friends documents
+        let friendsSnapshot = try await db.collection(Key.user)
+            .whereField(FieldPath.documentID(), in: connections)
+            .getDocuments()
+        
+        // Process and return friends
+        return friendsSnapshot.documents.compactMap { document in
+            let data = document.data()
+            let friendID = document.documentID
+            let name = data[Key.name] as? String
+            let email = data[Key.email] as? String
+            
+            return UserObject(
+                name: name,
+                userID: friendID,
+                fcmToken: nil,
+                email: email,
+                login_type: nil,
+                connections_userID: nil
+            )
+        }
+    }
+    
+    // Remove a friend from the current user's friend list
+    func removeFriend(friendID: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() else {
+            completion(.failure(NSError(domain: "No current user", code: 0, userInfo: nil)))
+            return
+        }
+        
+        let currentUserID = currentUser.uid
+        
+        // Update the connections array in a transaction for data consistency
+        db.runTransaction({ (transaction, errorPointer) -> Any? in
+            // Get current user document
+            let userDocRef = self.db.collection(DatabaseManager.Key.user).document(currentUserID)
+            let userDoc: DocumentSnapshot
+            do {
+                userDoc = try transaction.getDocument(userDocRef)
+            } catch let fetchError as NSError {
+                errorPointer?.pointee = fetchError
+                return nil
+            }
+            
+            // Update current user's connections
+            guard var connections = userDoc.data()?[DatabaseManager.Key.connections_userID] as? [String] else {
+                return nil
+            }
+            connections.removeAll { $0 == friendID }
+            transaction.updateData([DatabaseManager.Key.connections_userID: connections], forDocument: userDocRef)
+            
+            // Fix Swift 6 async warning - replace try? with explicit error handling
+            let friendDocRef = self.db.collection(DatabaseManager.Key.user).document(friendID)
+            
+            // Instead of using try?, handle the document fetch without throwing
+            do {
+                let friendDoc = try transaction.getDocument(friendDocRef)
+                if let friendConnections = friendDoc.data()?[DatabaseManager.Key.connections_userID] as? [String] {
+                    var updatedFriendConnections = friendConnections
+                    updatedFriendConnections.removeAll { $0 == currentUserID }
+                    transaction.updateData([DatabaseManager.Key.connections_userID: updatedFriendConnections], 
+                                           forDocument: friendDocRef)
+                }
+            } catch {
+                // Just log the error but continue with the transaction since this is optional
+                print("Could not fetch friend document: \(error.localizedDescription)")
+                // We don't need to rethrow or fail - just continue
+            }
+            
+            return nil
+        }) { (_, error) in
+            if let error = error {
+                print("Transaction failed: \(error)")
+                completion(.failure(error))
+            } else {
+                completion(.success(()))
+            }
+        }
+    }
+}
+
+// MARK: - Push Setting
+extension DatabaseManager {
     // Get user push setting in Firestore
     func getUserPushSetting(completion: @escaping (Result<[Push_Setting], Error>) -> () ) {
         guard let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() else {
@@ -325,5 +491,4 @@ extension DatabaseManager {
             }
         }
     }
-
 }

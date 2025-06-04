@@ -4,6 +4,15 @@
     "" : {
 
     },
+    "Add" : {
+
+    },
+    "Add Friend" : {
+
+    },
+    "Cancel" : {
+
+    },
     "Connect" : {
 
     },
@@ -63,6 +72,9 @@
           }
         }
       }
+    },
+    "Friends" : {
+
     },
     "general_confirm" : {
       "extractionState" : "manual",
@@ -329,6 +341,9 @@
       }
     },
     "Profile" : {
+
+    },
+    "Remove Friend" : {
 
     },
     "Send Info" : {

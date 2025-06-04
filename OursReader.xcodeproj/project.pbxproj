@@ -78,6 +78,9 @@
 		993EDAD22BEB48BA002C18C7 /* DeviceFinderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993EDAD12BEB48BA002C18C7 /* DeviceFinderViewModel.swift */; };
 		993EDAD42BEB59FB002C18C7 /* FriendList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993EDAD32BEB59FB002C18C7 /* FriendList.swift */; };
 		993EDADD2BEC6D65002C18C7 /* FriendDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993EDADC2BEC6D65002C18C7 /* FriendDetail.swift */; };
+		994344592DEEED3B002FD942 /* FriendSharedComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994344582DEEED3B002FD942 /* FriendSharedComponents.swift */; };
+		9943445A2DEEED3B002FD942 /* AddFriend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994344572DEEED3B002FD942 /* AddFriend.swift */; };
+		9943445C2DEEF2C9002FD942 /* FriendRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9943445B2DEEF2C9002FD942 /* FriendRow.swift */; };
 		997291252C9C2D6E0070DFAC /* DashboardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997291242C9C2D6E0070DFAC /* DashboardModel.swift */; };
 		997D30632CB6672B00A3B692 /* AppSecurity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997D30622CB6672B00A3B692 /* AppSecurity.swift */; };
 		997D30662CB75BF200A3B692 /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = 997D30652CB75BF200A3B692 /* FirebaseAppCheck */; };
@@ -109,6 +112,7 @@
 		998614732BBD21EF00E0996D /* FloatingPromptTextField in Frameworks */ = {isa = PBXBuildFile; productRef = 998614722BBD21EF00E0996D /* FloatingPromptTextField */; };
 		998614762BBD287300E0996D /* ColorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614752BBD287300E0996D /* ColorHelper.swift */; };
 		998614822BBD35AC00E0996D /* Color+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614812BBD35AC00E0996D /* Color+.swift */; };
+		998CD2142DEFD9A100F64329 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998CD2132DEFD9A100F64329 /* EmptyStateView.swift */; };
 		99BA2CFC2D9250D3003AD65C /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 99BA2CFB2D9250D3003AD65C /* FirebaseDatabase */; };
 		99BA2CFE2D9250D3003AD65C /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 99BA2CFD2D9250D3003AD65C /* FirebaseDatabaseSwift */; };
 		99BA2D042D9250D3003AD65C /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = 99BA2D032D9250D3003AD65C /* FirebaseFunctions */; };
@@ -256,6 +260,9 @@
 		993EDAD12BEB48BA002C18C7 /* DeviceFinderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceFinderViewModel.swift; sourceTree = "<group>"; };
 		993EDAD32BEB59FB002C18C7 /* FriendList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendList.swift; sourceTree = "<group>"; };
 		993EDADC2BEC6D65002C18C7 /* FriendDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendDetail.swift; sourceTree = "<group>"; };
+		994344572DEEED3B002FD942 /* AddFriend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriend.swift; sourceTree = "<group>"; };
+		994344582DEEED3B002FD942 /* FriendSharedComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSharedComponents.swift; sourceTree = "<group>"; };
+		9943445B2DEEF2C9002FD942 /* FriendRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRow.swift; sourceTree = "<group>"; };
 		997291242C9C2D6E0070DFAC /* DashboardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardModel.swift; sourceTree = "<group>"; };
 		997D30622CB6672B00A3B692 /* AppSecurity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSecurity.swift; sourceTree = "<group>"; };
 		998614122BA80EA300E0996D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -286,6 +293,7 @@
 		9986146F2BBD21A500E0996D /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
 		998614752BBD287300E0996D /* ColorHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorHelper.swift; sourceTree = "<group>"; };
 		998614812BBD35AC00E0996D /* Color+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+.swift"; sourceTree = "<group>"; };
+		998CD2132DEFD9A100F64329 /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
 		99DA2D752D6586BE007D178A /* OursReaderDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OursReaderDebug.entitlements; sourceTree = "<group>"; };
 		99DA2D792D65B575007D178A /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
 		99E210292C0168F1006F27A7 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
@@ -539,6 +547,9 @@
 				993EDAD12BEB48BA002C18C7 /* DeviceFinderViewModel.swift */,
 				993EDAD32BEB59FB002C18C7 /* FriendList.swift */,
 				993EDADC2BEC6D65002C18C7 /* FriendDetail.swift */,
+				994344572DEEED3B002FD942 /* AddFriend.swift */,
+				9943445B2DEEF2C9002FD942 /* FriendRow.swift */,
+				994344582DEEED3B002FD942 /* FriendSharedComponents.swift */,
 			);
 			path = Friend;
 			sourceTree = "<group>";
@@ -689,6 +700,7 @@
 		9986145D2BBBAC7500E0996D /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				998CD2132DEFD9A100F64329 /* EmptyStateView.swift */,
 				591BAAC32CBB7B33001FAE1C /* BottomSheet */,
 				99EB5FA12C0D9C2A00F2AF29 /* Toast */,
 				593EB1F92C01EB6C00DD430F /* General */,
@@ -1059,7 +1071,10 @@
 				998614682BBD20D100E0996D /* EnvironmentValues.swift in Sources */,
 				59E75E9C2ADF53AA007A549C /* ContentView.swift in Sources */,
 				998614692BBD20D100E0996D /* FloatingPromptTextField.swift in Sources */,
+				994344592DEEED3B002FD942 /* FriendSharedComponents.swift in Sources */,
+				9943445A2DEEED3B002FD942 /* AddFriend.swift in Sources */,
 				993EDACA2BEB2C9C002C18C7 /* PeerDevice.swift in Sources */,
+				998CD2142DEFD9A100F64329 /* EmptyStateView.swift in Sources */,
 				993EDAC72BE9F6EB002C18C7 /* Dashboard.swift in Sources */,
 				593EB1FB2C01EB8500DD430F /* GeneralReminder.swift in Sources */,
 				997291252C9C2D6E0070DFAC /* DashboardModel.swift in Sources */,
@@ -1104,6 +1119,7 @@
 				598053E22BA6EDBB008056F3 /* DatabaseManager.swift in Sources */,
 				998614582BB429C100E0996D /* LoginRoute.swift in Sources */,
 				99E2102A2C0168F1006F27A7 /* Storage.swift in Sources */,
+				9943445C2DEEF2C9002FD942 /* FriendRow.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
