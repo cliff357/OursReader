@@ -55,9 +55,9 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
             token = t
         }
         
-        var loginType: UserType?
+        var loginType: LoginType?
         if let t = Storage.getInt(Storage.Key.userLoginType) {
-            loginType = UserType.init(rawValue: t)
+            loginType = LoginType.init(rawValue: t)
         }
         
         Auth.auth().addStateDidChangeListener { auth, user in
@@ -185,7 +185,7 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
                     if result {
                         print("user already exist")
                     } else {
-                        Storage.save(Storage.Key.userLoginType, UserType.google.rawValue)
+                        Storage.save(Storage.Key.userLoginType, LoginType.google.rawValue)
                         
                         DatabaseManager.shared.addUser(user:  UserObject(name: self.nickName,
                                                                          userID: user?.uid,
@@ -308,7 +308,7 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
                     if result {
                         print("user already exist")
                     } else {
-                        Storage.save(Storage.Key.userLoginType, UserType.apple.rawValue)
+                        Storage.save(Storage.Key.userLoginType, LoginType.apple.rawValue)
                         
                         DatabaseManager.shared.addUser(user:  UserObject(name: self.nickName,
                                                                          userID: user?.uid,
@@ -351,7 +351,7 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
                     token = t
                 }
                 
-                Storage.save(Storage.Key.userLoginType, UserType.email.rawValue)
+                Storage.save(Storage.Key.userLoginType, LoginType.email.rawValue)
                 
                 DatabaseManager.shared.addUser(user:  UserObject(name: self.nickName,
                                                                  userID: user.uid,

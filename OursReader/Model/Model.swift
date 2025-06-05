@@ -22,7 +22,7 @@ struct BookDetail {
     var lastReadIndex: Int
 }
 
-enum UserType: Int, Codable{
+enum LoginType: Int, Codable{
     case apple
     case google
     case email
@@ -50,7 +50,7 @@ struct UserObject: Codable, Identifiable {
     let userID: String?
     let fcmToken: String?
     let email: String?
-    let login_type: UserType?
+    let login_type: LoginType?
     var connections_userID: [String]?
     var push_setting: Push_Setting? = Push_Setting.defaultSetting
     
@@ -80,6 +80,6 @@ struct SendableUserObject: Codable {
     let userID: String?
     let fcmToken: String?
     let email: String?
-    let login_type: UserType?
+    let login_type: LoginType?
     var connections_userID: [String]?
 }

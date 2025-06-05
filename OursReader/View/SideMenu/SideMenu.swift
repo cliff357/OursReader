@@ -18,7 +18,7 @@ struct SideMenu: View {
                let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
                 return "v\(version) (\(build))" // 格式：v1.0.0 (1)
             }
-            return "版本資訊無法取得"
+            return String(localized: "version_unavailable")
         }
 
     
@@ -59,8 +59,13 @@ struct SideMenu: View {
                                     .cornerRadius(10)
                             }
                         }
-                        Text(version)
-                            .foregroundColor(Color.black)
+                        
+                        HStack {
+                            Text(String(localized:"version_info"))
+                                .foregroundColor(Color.black)
+                            Text(version.isEmpty ? String(localized:"version_unavailable") : version)
+                                .foregroundColor(Color.black)
+                        }
                     }
                     .padding()
                     .frame(width: 270, alignment: .leading)

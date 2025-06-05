@@ -8,74 +8,149 @@
 import SwiftUI
 
 struct FriendList: View {
-    @StateObject var model = DeviceFinderViewModel()
-    @State private var toast: Toast? = nil
+    @StateObject private var viewModel = FriendListViewModel()
+    @State private var showAddFriendSheet = false
     
     var body: some View {
-        ZStack {
-            //Should check have user grand notification permission, otherwise, should not able to exchange data
-            
-            ColorManager.shared.background.ignoresSafeArea()
-
-            List(model.peers) { peer in
+        NavigationStack {
+            ZStack {
+                ColorManager.shared.background.ignoresSafeArea()
+                
                 VStack {
+                    // Custom header with add button
                     HStack {
-                        Image(systemName: "person.wave.2")
-                            .imageScale(.large)
-                            .foregroundColor(ColorManager.shared.rice_white)
+                        Text(String(localized:"friend_list_title"))
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .foregroundColor(ColorManager.shared.red1)
                         
-                        Text(peer.peerId.displayName)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        
+                        Spacer()
                         
                         Button {
-                            if model.joinedPeer.contains(where: { $0.peerId == peer.peerId }) {
-                                model.sendUserData()
-                            } else {
-                                model.selectedPeer = peer
+                            showAddFriendSheet = true
+                        } label: {
+                            HStack(spacing: 5) {
+                                Image(systemName: "person.badge.plus")
+                                Text(String(localized:"friend_add_button"))
                             }
+                            .padding(8)
+                            .background(ColorManager.shared.rice_white.opacity(0.3))
+                            .cornerRadius(8)
+                            .foregroundColor(ColorManager.shared.red1)
                         }
-                        label: {
-                            Text(model.joinedPeer.contains(where: { $0.peerId == peer.peerId }) ?
-                                 "發出邀請" : "連結中" ) //TODO : "連結中" need to cross check with firebase friendlist 
-                            .foregroundColor(ColorManager.shared.rice_white)
-                            
+                    }
+                    .padding(.horizontal)
+                    .padding(.top, 8)
+                    
+                    // Main content
+                    Group {
+                        if viewModel.isLoading {
+                            ProgressView()
+                                .tint(ColorManager.shared.rice_white)
+                        } else if viewModel.friends.isEmpty {
+                            emptyStateView
+                        } else {
+                            friendListView
                         }
                     }
                 }
-                .listRowBackground(ColorManager.shared.dark_brown2)
-                .padding(.vertical, 5)
             }
-            .scrollContentBackground(.hidden)
-            
-            //Receive  message from other peer
-            .alert(item: $model.permissionRequest, content: { request in
-                Alert(
-                    title: Text("Add  \(request.peerId.displayName)?"),
-                    primaryButton: .default(Text("Ok"), action: {
-                        request.onRequest(true)
-                        model.peerJoin(peerId: request.peerId)
-                    }),
-                    secondaryButton: .cancel(Text("No"), action: {
-                        request.onRequest(false)
-                    })
-                )
-            })
-            .onAppear {
-                model.startBrowsing()
+            .sheet(isPresented: $showAddFriendSheet) {
+                NavigationStack {
+                    AddFriend()
+                }
             }
-            .onDisappear {
-                model.finishBrowsing()
+            .onAppear(perform: viewModel.loadFriends)
+            .refreshable {
+                await viewModel.loadFriendsAsync()
             }
         }
-//        .onChange(of: model.toastMsg, { oldValue, newValue in
-//            toast = Toast(style: .warning, message: newValue)
-//        })
-//        .toastView(toast: $toast)
-            
+    }
+    
+    // MARK: - View Components
+    
+    private var emptyStateView: some View {
+        EmptyStateView(
+            icon: "person.2.slash",
+            title: String(localized:"friend_empty_state_title"),
+            message: String(localized:"friend_empty_state_message"),
+            buttonTitle: String(localized:"friend_add_button"),
+            action: { showAddFriendSheet = true }
+        )
+    }
+    
+    private var friendListView: some View {
+        ScrollView {
+            LazyVStack(spacing: 12) {
+                ForEach(viewModel.friends) { friend in
+                    FriendRow(friend: friend)
+                        .contextMenu {
+                            Button(role: .destructive) {
+                                viewModel.removeFriend(friend)
+                            } label: {
+                                Label(String(localized:"friend_remove_button"), systemImage: "person.badge.minus")
+                            }
+                        }
+                }
+            }
+            .padding(.horizontal)
+            .padding(.top)
+        }
     }
 }
 
-//#Preview {
-//    FriendList()
-//}
+// MARK: - View Model
+class FriendListViewModel: ObservableObject {
+    @Published var friends: [UserObject] = []
+    @Published var isLoading = false
+    
+    func loadFriends() {
+        isLoading = true
+        
+        DatabaseManager.shared.getFriendsList { [weak self] result in
+            DispatchQueue.main.async {
+                self?.isLoading = false
+                
+                switch result {
+                case .success(let friends):
+                    self?.friends = friends
+                case .failure(let error):
+                    self?.friends = []
+                    print("Error loading friends: \(error.localizedDescription)")
+                    // Error handling here if needed
+                }
+            }
+        }
+    }
+    
+    // Added async version for refreshable
+    @MainActor
+    func loadFriendsAsync() async {
+        isLoading = true
+        
+        do {
+            friends = try await DatabaseManager.shared.getFriendsListAsync()
+        } catch {
+            friends = []
+            print("Error loading friends: \(error.localizedDescription)")
+        }
+        
+        isLoading = false
+    }
+    
+    func removeFriend(_ friend: UserObject) {
+        guard let friendID = friend.userID else { return }
+        
+        DatabaseManager.shared.removeFriend(friendID: friendID) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    self?.friends.removeAll { $0.userID == friendID }
+                case .failure(let error):
+                    print("Error removing friend: \(error.localizedDescription)")
+                    // Error handling here if needed
+                }
+            }
+        }
+    }
+}

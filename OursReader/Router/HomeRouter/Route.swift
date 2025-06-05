@@ -18,8 +18,6 @@ enum HomeRoute: Route {
     case login
     case home
     case signup
-    case friendDetail
-   
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(self.hashValue)
@@ -33,8 +31,6 @@ enum HomeRoute: Route {
         case (.home, .home):
             return true
         case (.signup, .signup):
-            return true
-        case (.friendDetail, .friendDetail):
             return true
         default:
             return false
@@ -51,8 +47,6 @@ extension HomeRoute: View {
             Home().navigationBarHidden(true)
         case .signup:
             Signup()
-        case .friendDetail:
-            FriendDetail()
         }
     }
 }
