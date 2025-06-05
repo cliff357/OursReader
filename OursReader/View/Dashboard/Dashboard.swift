@@ -58,13 +58,10 @@ struct Dashboard: View {
         switch currentPage {
         case 0:
             selectedButtonListType = .push_notification
-            selectedTab = .push
         case 1:
             selectedButtonListType = .widget
-            selectedTab = .widget
         case 2:
             selectedButtonListType = .ebook
-            selectedTab = .ebook
         default:
             break
         }
