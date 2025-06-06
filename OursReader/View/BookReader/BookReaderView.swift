@@ -2,7 +2,7 @@ import SwiftUI
 
 struct BookReaderView: View {
     @Environment(\.presentationMode) var presentationMode
-    @Environment(\.dismiss) var dismiss // Add dismiss environment value
+    @Environment(\.dismiss) var dismiss
     @State var book: Ebook
     @State private var currentPageIndex = 0
     @State private var showControls = true
@@ -10,58 +10,54 @@ struct BookReaderView: View {
     @State private var progressPercentage: Double = 0
     @State private var isButtonActionInProgress = false
     
+    // New states for push animation
+    @State private var pageOffset: CGFloat = 0
+    @State private var nextPageIndex: Int?
+    @State private var animationDirection: PageTurnDirection?
+    
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .top) {
                 Color(.systemBackground).edgesIgnoringSafeArea(.all)
                 
-                // Content area (text and page content)
                 VStack(spacing: 0) {
-                    // Only show top navigation when controls are visible
+                    // Top navigation bar when controls are visible
                     if showControls {
                         topControlBar()
-                            .zIndex(1) // Ensure navbar is above other elements
                     }
                     
-                    // Page content
-                    if !book.content.isEmpty && currentPageIndex < book.content.count {
-                        ScrollView {
-                            Text(book.content[currentPageIndex])
-                                .padding()
-                                .padding(.bottom, 20)
-                                .onTapGesture {
-                                    // Only toggle controls when tapping on the text
-                                    withAnimation {
-                                        showControls.toggle()
-                                    }
-                                }
+                    // Content area with animation - takes remaining space
+                    ZStack {
+                        // Current page
+                        if !book.content.isEmpty && currentPageIndex < book.content.count {
+                            pageView(for: currentPageIndex)
+                                .offset(x: pageOffset)
                         }
-                    } else {
-                        Text("No content available")
-                            .foregroundColor(.secondary)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .onTapGesture {
-                                withAnimation {
-                                    showControls.toggle()
-                                }
-                            }
+                        
+                        // Next page (during animation)
+                        if let nextIdx = nextPageIndex, nextIdx >= 0, nextIdx < book.content.count {
+                            pageView(for: nextIdx)
+                                .offset(x: animationDirection == .next ? 
+                                       geometry.size.width + pageOffset : 
+                                       -geometry.size.width + pageOffset)
+                        }
                     }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
                 
-                // Bottom page indicator overlay
+                // Bottom indicator overlay
                 VStack {
                     Spacer()
                     if showControls {
                         bottomPageIndicator()
+                            .padding(.bottom, 20)
                     }
                 }
-                .padding(.bottom, 20)
                 
                 // Bookmarks sheet
                 if showBookmarks {
                     bookmarkSheet()
-                        .zIndex(2) // Highest z-index to be above everything
+                        .zIndex(2)
                 }
             }
             .onAppear {
@@ -89,15 +85,36 @@ struct BookReaderView: View {
                 })
         )
         .navigationBarHidden(true)
-        .statusBar(hidden: !showControls) // Also hide status bar when controls are hidden
+        .statusBar(hidden: !showControls)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            withAnimation {
+                showControls.toggle()
+            }
+        }
+    }
+    
+    // Page view for specific index
+    private func pageView(for index: Int) -> some View {
+        ScrollView {
+            Text(book.content[index])
+                .padding()
+                .padding(.bottom, 20)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(.systemBackground))
+        .contentShape(Rectangle())
+        .onTapGesture {
+            withAnimation {
+                showControls.toggle()
+            }
+        }
     }
     
     // Top navigation bar
     private func topControlBar() -> some View {
         HStack {
             Button {
-                // Explicitly specify we don't want this to toggle controls
-                // by using dismiss() directly without animation
                 dismiss()
             } label: {
                 Image(systemName: "xmark")
@@ -108,49 +125,12 @@ struct BookReaderView: View {
                     .background(Color.gray.opacity(0.2))
                     .clipShape(Circle())
             }
-            .buttonStyle(BorderlessButtonStyle()) // Important: use BorderlessButtonStyle instead
+            .buttonStyle(BorderlessButtonStyle())
             
             Spacer()
-            
-//            HStack(spacing: 15) {
-//                Text("\(currentPageIndex + 1)/\(book.totalPages)")
-//                    .font(.caption)
-//                    .foregroundColor(.secondary)
-//                    .padding(.horizontal, 4)
-//                
-//                Button {
-//                    // Add a flag to prevent control toggle
-//                    toggleBookmark()
-//                } label: {
-//                    Image(systemName: isCurrentPageBookmarked() ? "bookmark.fill" : "bookmark")
-//                        .font(.system(size: 18))
-//                        .foregroundColor(.primary)
-//                        .frame(width: 44, height: 44)
-//                        .contentShape(Circle())
-//                        .background(Color.gray.opacity(0.2))
-//                        .clipShape(Circle())
-//                }
-//                .buttonStyle(BorderlessButtonStyle()) // Important
-//                
-//                Button {
-//                    // Use withAnimation but keep it separate from toggle controls
-//                    withAnimation {
-//                        showBookmarks.toggle()
-//                    }
-//                } label: {
-//                    Image(systemName: "list.bullet")
-//                        .font(.system(size: 18))
-//                        .foregroundColor(.primary)
-//                        .frame(width: 44, height: 44)
-//                        .contentShape(Circle())
-//                        .background(Color.gray.opacity(0.2))
-//                        .clipShape(Circle())
-//                }
-//                .buttonStyle(BorderlessButtonStyle()) // Important
-//            }
         }
         .padding()
-        .background(Color(.systemBackground).opacity(0.9))
+        .background(Color(.systemBackground).opacity(0.95)) // More opacity for better visibility
     }
     
     // Bottom page indicator
@@ -238,7 +218,7 @@ struct BookReaderView: View {
         }
     }
     
-    // Function to update progress percentage (still needed for bookmarks)
+    // Function to update progress percentage
     private func updateProgressPercentage() {
         if book.totalPages > 0 {
             progressPercentage = Double(currentPageIndex + 1) / Double(book.totalPages)
@@ -247,36 +227,67 @@ struct BookReaderView: View {
         }
     }
     
-    // Add an enum for page turn direction
+    // Page turn direction enum
     private enum PageTurnDirection {
         case previous, next
     }
     
-    // New consolidated page turn function to handle both animations
+    // Page turning with push animation
     private func turnPageWithAnimation(direction: PageTurnDirection) {
         guard !isButtonActionInProgress else { return }
         isButtonActionInProgress = true
+        animationDirection = direction
         
         switch direction {
         case .next:
             if currentPageIndex < book.content.count - 1 {
+                // Set up next page animation
+                nextPageIndex = currentPageIndex + 1
+                
+                // Start the push animation
                 withAnimation(.easeInOut(duration: 0.3)) {
-                    currentPageIndex += 1
-                    updateProgressPercentage()
+                    pageOffset = -UIScreen.main.bounds.width
                 }
+                
+                // After animation completes, update the page
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    currentPageIndex = nextPageIndex!
+                    updateProgressPercentage()
+                    
+                    // Reset for next animation
+                    pageOffset = 0
+                    nextPageIndex = nil
+                    animationDirection = nil
+                    isButtonActionInProgress = false
+                }
+            } else {
+                isButtonActionInProgress = false
             }
+            
         case .previous:
             if currentPageIndex > 0 {
+                // Set up previous page animation
+                nextPageIndex = currentPageIndex - 1
+                
+                // Start the push animation
                 withAnimation(.easeInOut(duration: 0.3)) {
-                    currentPageIndex -= 1
-                    updateProgressPercentage()
+                    pageOffset = UIScreen.main.bounds.width
                 }
+                
+                // After animation completes, update the page
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    currentPageIndex = nextPageIndex!
+                    updateProgressPercentage()
+                    
+                    // Reset for next animation
+                    pageOffset = 0
+                    nextPageIndex = nil
+                    animationDirection = nil
+                    isButtonActionInProgress = false
+                }
+            } else {
+                isButtonActionInProgress = false
             }
-        }
-        
-        // Reset button action state after a delay
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-            isButtonActionInProgress = false
         }
     }
     
@@ -287,15 +298,26 @@ struct BookReaderView: View {
               targetPage < book.content.count, 
               targetPage != currentPageIndex else { return }
         
+        // Determine direction based on target page
+        let direction: PageTurnDirection = targetPage > currentPageIndex ? .next : .previous
+        animationDirection = direction
+        nextPageIndex = targetPage
         isButtonActionInProgress = true
         
+        // Start the push animation
         withAnimation(.easeInOut(duration: 0.3)) {
-            currentPageIndex = targetPage
-            updateProgressPercentage()
+            pageOffset = direction == .next ? -UIScreen.main.bounds.width : UIScreen.main.bounds.width
         }
         
-        // Reset button action state after a delay
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+        // After animation completes, update the page
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            currentPageIndex = targetPage
+            updateProgressPercentage()
+            
+            // Reset for next animation
+            pageOffset = 0
+            nextPageIndex = nil
+            animationDirection = nil
             isButtonActionInProgress = false
         }
     }
