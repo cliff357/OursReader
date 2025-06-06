@@ -20,31 +20,32 @@ struct BookDetailView: View {
                         Text(book.title)
                             .font(.title)
                             .fontWeight(.bold)
+                            .foregroundColor(ColorManager.shared.dark_brown2)
                         
                         Text("by \(book.author)")
                             .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(ColorManager.shared.dark_brown)
                         
                         // Add reading progress indicator
                         if book.totalPages > 0 {
                             VStack(alignment: .leading, spacing: 4) {
                                 Text("Reading Progress")
                                     .font(.caption)
-                                    .foregroundColor(.secondary)
+                                    .foregroundColor(ColorManager.shared.dark_brown)
                                 
                                 ZStack(alignment: .leading) {
                                     RoundedRectangle(cornerRadius: 4)
-                                        .fill(Color.gray.opacity(0.3))
+                                        .fill(ColorManager.shared.dark_brown.opacity(0.3))
                                         .frame(height: 6)
                                     
                                     RoundedRectangle(cornerRadius: 4)
-                                        .fill(Color.blue)
+                                        .fill(ColorManager.shared.red1)
                                         .frame(width: calculateProgressWidth(totalWidth: 120), height: 6)
                                 }
                                 
                                 Text("\(book.currentPage + 1) of \(book.totalPages) pages")
                                     .font(.caption2)
-                                    .foregroundColor(.secondary)
+                                    .foregroundColor(ColorManager.shared.dark_brown)
                             }
                             .padding(.top, 6)
                         }
@@ -56,10 +57,10 @@ struct BookDetailView: View {
                         }) {
                             Text("Read Now")
                                 .font(.headline)
-                                .foregroundColor(.white)
+                                .foregroundColor(ColorManager.shared.rice_white)
                                 .padding()
                                 .frame(maxWidth: .infinity)
-                                .background(Color.blue)
+                                .background(ColorManager.shared.red1)
                                 .cornerRadius(10)
                         }
                     }
@@ -67,30 +68,35 @@ struct BookDetailView: View {
                 .padding(.horizontal)
                 
                 Divider()
+                    .background(ColorManager.shared.dark_brown.opacity(0.3))
                 
                 // Book description
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Description")
                         .font(.headline)
+                        .foregroundColor(ColorManager.shared.dark_brown2)
                     
                     Text(book.instruction)
                         .font(.body)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(ColorManager.shared.dark_brown)
                 }
                 .padding(.horizontal)
                 
                 Divider()
+                    .background(ColorManager.shared.dark_brown.opacity(0.3))
                 
                 // Book information
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Information")
                         .font(.headline)
+                        .foregroundColor(ColorManager.shared.dark_brown2)
                     
                     HStack {
                         Text("Pages:")
                             .fontWeight(.medium)
+                            .foregroundColor(ColorManager.shared.dark_brown2)
                         Text("\(book.totalPages)")
-                            .foregroundColor(.secondary)
+                            .foregroundColor(ColorManager.shared.dark_brown)
                         Spacer()
                     }
                 }
@@ -98,7 +104,9 @@ struct BookDetailView: View {
             }
             .padding(.vertical)
         }
+        .background(ColorManager.shared.background)
         .navigationTitle(book.name)
+        .navigationBarTitleTextColor(ColorManager.shared.dark_brown2)
         .fullScreenCover(isPresented: $showingReader) {
             BookReaderView(book: book)
         }

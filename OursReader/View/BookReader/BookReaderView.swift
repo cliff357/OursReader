@@ -18,7 +18,7 @@ struct BookReaderView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .top) {
-                Color(.systemBackground).edgesIgnoringSafeArea(.all)
+                ColorManager.shared.background.edgesIgnoringSafeArea(.all)
                 
                 VStack(spacing: 0) {
                     // Top navigation bar when controls are visible
@@ -98,11 +98,12 @@ struct BookReaderView: View {
     private func pageView(for index: Int) -> some View {
         ScrollView {
             Text(book.content[index])
+                .foregroundColor(.black)
                 .padding()
                 .padding(.bottom, 20)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(.systemBackground))
+        .background(ColorManager.shared.background)
         .contentShape(Rectangle())
         .onTapGesture {
             withAnimation {
@@ -119,7 +120,7 @@ struct BookReaderView: View {
             } label: {
                 Image(systemName: "xmark")
                     .font(.system(size: 18))
-                    .foregroundColor(.primary)
+                    .foregroundColor(.black)
                     .frame(width: 44, height: 44)
                     .contentShape(Circle())
                     .background(Color.gray.opacity(0.2))
@@ -130,7 +131,7 @@ struct BookReaderView: View {
             Spacer()
         }
         .padding()
-        .background(Color(.systemBackground).opacity(0.95)) // More opacity for better visibility
+        .background(ColorManager.shared.background.opacity(0.95)) // More opacity for better visibility
     }
     
     // Bottom page indicator
@@ -142,9 +143,10 @@ struct BookReaderView: View {
                 .font(.system(size: 16))
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
-                .background(Color.black.opacity(0.6))
-                .foregroundColor(.white)
+                .background(ColorManager.shared.background.opacity(0.8))
+                .foregroundColor(.black)
                 .cornerRadius(20)
+                .shadow(color: .gray.opacity(0.3), radius: 2, x: 0, y: 1)
             
             Spacer()
         }
@@ -164,10 +166,12 @@ struct BookReaderView: View {
                 HStack {
                     Text("Bookmarks")
                         .font(.headline)
+                        .foregroundColor(.black)
                     Spacer()
                     Button("Done") {
                         showBookmarks = false
                     }
+                    .foregroundColor(.blue)
                 }
                 .padding()
                 
@@ -187,8 +191,10 @@ struct BookReaderView: View {
                             }) {
                                 HStack {
                                     Text("Page \(page + 1)")
+                                        .foregroundColor(.black)
                                     Spacer()
                                     Text("→")
+                                        .foregroundColor(.blue)
                                 }
                             }
                         }
@@ -196,7 +202,7 @@ struct BookReaderView: View {
                 }
             }
             .frame(height: 300)
-            .background(Color(.systemBackground))
+            .background(ColorManager.shared.background)
             .cornerRadius(15)
             .shadow(radius: 10)
             .padding()
