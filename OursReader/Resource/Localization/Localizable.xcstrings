@@ -4,6 +4,38 @@
     "" : {
 
     },
+    "%lld" : {
+
+    },
+    "%lld / %lld" : {
+      "localizations" : {
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld / %2$lld"
+          }
+        }
+      }
+    },
+    "%lld of %lld pages" : {
+      "localizations" : {
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld of %2$lld pages"
+          }
+        }
+      }
+    },
+    "→" : {
+
+    },
+    "Bookmarks" : {
+
+    },
+    "by %@" : {
+
+    },
     "copy" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -37,6 +69,12 @@
           }
         }
       }
+    },
+    "Description" : {
+
+    },
+    "Done" : {
+
     },
     "ebook" : {
       "extractionState" : "manual",
@@ -554,6 +592,9 @@
     "Hello, World!" : {
 
     },
+    "Information" : {
+
+    },
     "Loading..." : {
 
     },
@@ -710,6 +751,12 @@
         }
       }
     },
+    "No bookmarks yet" : {
+
+    },
+    "No content available" : {
+
+    },
     "or" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -726,6 +773,12 @@
           }
         }
       }
+    },
+    "Page %lld" : {
+
+    },
+    "Pages:" : {
+
     },
     "profile" : {
       "extractionState" : "manual",
@@ -984,6 +1037,12 @@
           }
         }
       }
+    },
+    "Read Now" : {
+
+    },
+    "Reading Progress" : {
+
     },
     "settings" : {
       "extractionState" : "manual",
