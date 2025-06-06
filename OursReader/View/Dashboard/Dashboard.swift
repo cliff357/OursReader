@@ -125,19 +125,22 @@ struct Dashboard: View {
 
                 case .ebook:
                     ForEach(ebookList, id: \.id) { ebook in
-                        RoundedRectangle(cornerRadius: 15)
-                            .fill(type.color)
-                            .frame(height: 150)
-                            .overlay {
-                                VStack(alignment: .leading) {
-                                    Text(ebook.title).font(.headline)
-                                    Text(ebook.name).font(.subheadline).foregroundColor(.gray)
-                                    Text(ebook.instruction).font(.body).foregroundColor(.gray).lineLimit(2)
-                                    Spacer()
+                        NavigationLink(destination: BookDetailView(book: ebook)) {
+                            RoundedRectangle(cornerRadius: 15)
+                                .fill(type.color)
+                                .frame(height: 150)
+                                .overlay {
+                                    VStack(alignment: .leading) {
+                                        Text(ebook.title).font(.headline)
+                                        Text(ebook.name).font(.subheadline).foregroundColor(.gray)
+                                        Text(ebook.instruction).font(.body).foregroundColor(.gray).lineLimit(2)
+                                        Spacer()
+                                    }
+                                    .padding(15)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
                                 }
-                                .padding(15)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            }
+                        }
+                        .buttonStyle(PlainButtonStyle())
                     }
                 }
             }
