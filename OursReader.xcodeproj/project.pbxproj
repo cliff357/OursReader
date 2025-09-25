@@ -112,6 +112,7 @@
 		998614762BBD287300E0996D /* ColorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614752BBD287300E0996D /* ColorHelper.swift */; };
 		998614822BBD35AC00E0996D /* Color+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614812BBD35AC00E0996D /* Color+.swift */; };
 		998CD2142DEFD9A100F64329 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998CD2132DEFD9A100F64329 /* EmptyStateView.swift */; };
+		99B8073A2DF6966F007A0E49 /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B807392DF6966F007A0E49 /* CloudKitManager.swift */; };
 		99B8F6FE2DF18AF0007A0E49 /* BookDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B8F6FB2DF18AF0007A0E49 /* BookDetailView.swift */; };
 		99B8F6FF2DF18AF0007A0E49 /* BookReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B8F6FC2DF18AF0007A0E49 /* BookReaderView.swift */; };
 		99BA2CFC2D9250D3003AD65C /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 99BA2CFB2D9250D3003AD65C /* FirebaseDatabase */; };
@@ -294,6 +295,7 @@
 		998614752BBD287300E0996D /* ColorHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorHelper.swift; sourceTree = "<group>"; };
 		998614812BBD35AC00E0996D /* Color+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+.swift"; sourceTree = "<group>"; };
 		998CD2132DEFD9A100F64329 /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
+		99B807392DF6966F007A0E49 /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
 		99B8F6FB2DF18AF0007A0E49 /* BookDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailView.swift; sourceTree = "<group>"; };
 		99B8F6FC2DF18AF0007A0E49 /* BookReaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookReaderView.swift; sourceTree = "<group>"; };
 		99DA2D752D6586BE007D178A /* OursReaderDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OursReaderDebug.entitlements; sourceTree = "<group>"; };
@@ -526,6 +528,7 @@
 				593EB1D52C01DEC000DD430F /* Reminder */,
 				593EB2032C01EFFF00DD430F /* LM.swift */,
 				998614432BB1770300E0996D /* NotificationManager.swift */,
+				99B807392DF6966F007A0E49 /* CloudKitManager.swift */,
 				598053E12BA6EDBB008056F3 /* DatabaseManager.swift */,
 				99E210292C0168F1006F27A7 /* Storage.swift */,
 				593EB1CB2C01DC1700DD430F /* ToastManager.swift */,
@@ -1067,6 +1070,7 @@
 				998614762BBD287300E0996D /* ColorHelper.swift in Sources */,
 				598053E82BA6F169008056F3 /* Error.swift in Sources */,
 				593EB1F72C01EAC300DD430F /* GeneralErrorReminder.swift in Sources */,
+				99B8073A2DF6966F007A0E49 /* CloudKitManager.swift in Sources */,
 				591BAACB2CBB7B63001FAE1C /* AddPushBottomsheet.swift in Sources */,
 				59E75EC42ADF5749007A549C /* Model.swift in Sources */,
 				998614612BBBBA7F00E0996D /* DividerWithText.swift in Sources */,

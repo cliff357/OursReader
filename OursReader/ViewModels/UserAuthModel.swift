@@ -84,6 +84,16 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
                 
                 self.sendFirebaseTokenToWatch()
                 
+                CloudKitManager.shared.checkUserStatus { [weak self] result in
+                    switch result {
+                    case .success(_):
+                        // User is logged into CloudKit, link with Firebase
+                        self?.linkUserWithCloudKit()
+                    case .failure(let error):
+                        print("CloudKit status check failed: \(error.localizedDescription)")
+                    }
+                }
+                
             } else {
                 self.isLoggedIn = false
                 let router = HomeRouter.shared
@@ -380,6 +390,23 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
                 completion("Login success")
                 
                 
+            }
+        }
+    }
+    
+    //MARK: Link Firebase user with CloudKit
+    func linkUserWithCloudKit() {
+        guard let currentUser = getCurrentFirebaseUser() else {
+            print("No Firebase user logged in to link with CloudKit")
+            return
+        }
+        
+        CloudKitManager.shared.linkFirebaseUser(firebaseUserID: currentUser.uid) { result in
+            switch result {
+            case .success:
+                print("Successfully linked Firebase user to CloudKit")
+            case .failure(let error):
+                print("Failed to link Firebase user to CloudKit: \(error.localizedDescription)")
             }
         }
     }
