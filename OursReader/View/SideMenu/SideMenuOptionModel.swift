@@ -13,8 +13,7 @@ enum SideMenuOptionModel: Int, CaseIterable, Equatable {
     case widget
     case friendList
     case settings
-    
-    
+
     var title: String {
         switch self {
         case .dashboard:
@@ -33,11 +32,11 @@ enum SideMenuOptionModel: Int, CaseIterable, Equatable {
     var systemImageName: String {
         switch self {
         case .dashboard:
-            return "filemenu.and.cursorarrow"
+            return "house"
         case .profile:
             return "person"
         case .widget:
-            return "square.and.pencil"
+            return "app.dashed"
         case .friendList:
             return "person.2"
         case .settings:

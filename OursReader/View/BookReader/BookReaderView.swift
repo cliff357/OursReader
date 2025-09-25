@@ -129,9 +129,37 @@ struct BookReaderView: View {
             .buttonStyle(BorderlessButtonStyle())
             
             Spacer()
+            
+            // Bookmark button
+            Button {
+                toggleBookmark()
+            } label: {
+                Image(systemName: isCurrentPageBookmarked() ? "bookmark.fill" : "bookmark")
+                    .font(.system(size: 18))
+                    .foregroundColor(.black)
+                    .frame(width: 44, height: 44)
+                    .contentShape(Circle())
+                    .background(Color.gray.opacity(0.2))
+                    .clipShape(Circle())
+            }
+            .buttonStyle(BorderlessButtonStyle())
+            
+            // Bookmarks list button
+            Button {
+                showBookmarks.toggle()
+            } label: {
+                Image(systemName: "list.bullet")
+                    .font(.system(size: 18))
+                    .foregroundColor(.black)
+                    .frame(width: 44, height: 44)
+                    .contentShape(Circle())
+                    .background(Color.gray.opacity(0.2))
+                    .clipShape(Circle())
+            }
+            .buttonStyle(BorderlessButtonStyle())
         }
         .padding()
-        .background(ColorManager.shared.background.opacity(0.95)) // More opacity for better visibility
+        .background(ColorManager.shared.background.opacity(0.95))
     }
     
     // Bottom page indicator
@@ -234,13 +262,15 @@ struct BookReaderView: View {
     }
     
     // Page turn direction enum
-    private enum PageTurnDirection {
-        case previous, next
+    enum PageTurnDirection {
+        case next
+        case previous
     }
     
-    // Page turning with push animation
+    // Turn page with animation
     private func turnPageWithAnimation(direction: PageTurnDirection) {
         guard !isButtonActionInProgress else { return }
+        
         isButtonActionInProgress = true
         animationDirection = direction
         

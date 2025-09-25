@@ -51,21 +51,28 @@ struct BookDetailView: View {
                         }
                         
                         Spacer()
-                        
-                        Button(action: {
-                            showingReader = true
-                        }) {
-                            Text("Read Now")
-                                .font(.headline)
-                                .foregroundColor(ColorManager.shared.rice_white)
-                                .padding()
-                                .frame(maxWidth: .infinity)
-                                .background(ColorManager.shared.red1)
-                                .cornerRadius(10)
-                        }
                     }
                 }
                 .padding(.horizontal)
+                
+                Divider()
+                    .background(ColorManager.shared.dark_brown.opacity(0.3))
+                
+                // Action buttons
+                HStack {
+                    Button(action: {
+                        showingReader = true
+                    }) {
+                        Label("Read Now", systemImage: "book.fill")
+                            .font(.headline)
+                            .foregroundColor(ColorManager.shared.rice_white)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(ColorManager.shared.red1)
+                            .cornerRadius(10)
+                    }
+                }
+                .padding(.vertical)
                 
                 Divider()
                     .background(ColorManager.shared.dark_brown.opacity(0.3))
