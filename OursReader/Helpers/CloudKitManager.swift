@@ -5,6 +5,73 @@ import UIKit
 class CloudKitManager {
     static let shared = CloudKitManager()
     
+    // 通知名稱
+    static let booksDidChangeNotification = NSNotification.Name("BooksDidChangeNotification")
+    
+    private init() {
+        // Initialize mock data when manager is created
+        DispatchQueue.main.async {
+            DataAPIManager.shared.initializeMockData()
+        }
+    }
+    
+    // MARK: - Book Operations (使用 DataAPIManager)
+    
+    func fetchPublicBooks(completion: @escaping (Result<[CloudBook], Error>) -> Void) {
+    }
+    
+    func fetchPrivateBooks(completion: @escaping (Result<[CloudBook], Error>) -> Void) {
+        DataAPIManager.shared.fetchPrivateBooks(completion: completion)
+    }
+    
+    func fetchUserBookshelf(firebaseUserID: String, completion: @escaping (Result<[UserBook], Error>) -> Void) {
+        DataAPIManager.shared.fetchUserBookshelf(firebaseUserID: firebaseUserID, completion: completion)
+    }
+    
+    func addBookToUserBookshelf(_ bookID: String, firebaseUserID: String, completion: @escaping (Result<UserBook, Error>) -> Void) {
+        DataAPIManager.shared.addBookToUserBookshelf(bookID, firebaseUserID: firebaseUserID, completion: completion)
+    }
+    
+    func removeBookFromUserBookshelf(bookID: String, firebaseUserID: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        DataAPIManager.shared.removeBookFromUserBookshelf(bookID: bookID, firebaseUserID: firebaseUserID, completion: completion)
+    }
+    
+    func updateUserBookProgress(bookID: String, firebaseUserID: String, currentPage: Int, bookmarkedPages: [Int], completion: @escaping (Result<UserBook, Error>) -> Void) {
+        DataAPIManager.shared.updateUserBookProgress(bookID: bookID, firebaseUserID: firebaseUserID, currentPage: currentPage, bookmarkedPages: bookmarkedPages, completion: completion)
+    }
+    
+    func fetchReadingProgress(bookID: String, firebaseUserID: String, completion: @escaping (Result<(currentPage: Int, bookmarkedPages: [Int]), Error>) -> Void) {
+        DataAPIManager.shared.fetchReadingProgress(bookID: bookID, firebaseUserID: firebaseUserID, completion: completion)
+    }
+    
+    func saveBookToPublicDatabase(_ book: CloudBook, completion: @escaping (Result<String, Error>) -> Void) {
+        DataAPIManager.shared.saveBookToPublicDatabase(book) { result in
+            switch result {
+            case .success(let bookID):
+                // 發送通知
+                NotificationCenter.default.post(name: Self.booksDidChangeNotification, object: nil)
+                completion(.success(bookID))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    func saveBookToPrivateDatabase(_ book: CloudBook, completion: @escaping (Result<String, Error>) -> Void) {
+        DataAPIManager.shared.saveBookToPrivateDatabase(book) { result in
+            switch result {
+            case .success(let bookID):
+                // 發送通知
+                NotificationCenter.default.post(name: Self.booksDidChangeNotification, object: nil)
+                completion(.success(bookID))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    // MARK: - Original CloudKit Methods (保留用於日後真正連接 iCloud)
+    
     // CloudKit container identifier
     private let containerIdentifier = "iCloud.com.cliffchan.manwareader"
     
@@ -68,6 +135,27 @@ class CloudKitManager {
                     completion(.failure(error))
                 } else {
                     completion(.success(()))
+                }
+            }
+        }
+    }
+    
+    // 添加 loadCoverImage 方法（目前返回 mock 數據）
+    func loadCoverImage(recordName: String, isPublic: Bool, completion: @escaping (Result<UIImage, Error>) -> Void) {
+        // Mock implementation - 嘗試從 Assets 中載入圖片
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            if let image = UIImage(named: recordName) {
+                completion(.success(image))
+            } else {
+                // 如果找不到指定圖片，返回預設圖片
+                let defaultImages = ["cover_image_1", "cover_image_2", "cover_image_3"]
+                let randomImage = defaultImages.randomElement() ?? "cover_image_1"
+                
+                if let image = UIImage(named: randomImage) {
+                    completion(.success(image))
+                } else {
+                    let error = NSError(domain: "com.cliffchan.manwareader", code: 404, userInfo: [NSLocalizedDescriptionKey: "Cover image not found"])
+                    completion(.failure(error))
                 }
             }
         }

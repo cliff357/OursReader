@@ -42,6 +42,10 @@ struct MainView: View {
             .navigationBarTitleDisplayMode(.inline)
             .navigationViewStyle(.stack)
         }
+        .onAppear {
+            // 確保數據 API 被初始化
+            DataAPIManager.shared.initializeMockData()
+        }
     }
 }
 

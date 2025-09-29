@@ -754,6 +754,9 @@
     "No bookmarks yet" : {
 
     },
+    "No books available" : {
+
+    },
     "or" : {
       "extractionState" : "manual",
       "localizations" : {

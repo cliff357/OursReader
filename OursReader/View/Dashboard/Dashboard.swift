@@ -10,8 +10,12 @@ import SwiftUI
 struct Dashboard: View {
     @StateObject private var pushNotificationViewModel = PushSettingListViewModel()
     @State private var tabProgress: CGFloat = 0
-    @State private var selectedTab: Tab?
+    @State private var selectedTab: Tab? = .push  // 設置默認值
     @State private var selectedButtonListType: ButtonListType = .push_notification
+    
+    // 新增用於存儲 CloudBook 數據的狀態
+    @State private var publicBooks: [CloudBook] = []
+    @State private var isLoadingBooks = false
     
     var body: some View {
         ZStack {
@@ -48,6 +52,58 @@ struct Dashboard: View {
                 }
             }
         }
+        .onAppear {
+            loadBooksData()
+        }
+    }
+    
+    // 載入書籍數據 - 添加錯誤處理
+    private func loadBooksData() {
+        guard !isLoadingBooks else { return } // 防止重複載入
+        
+        isLoadingBooks = true
+        print("Loading books data...")
+        
+        CloudKitManager.shared.fetchPublicBooks { result in
+            DispatchQueue.main.async {
+                self.isLoadingBooks = false
+                switch result {
+                case .success(let books):
+                    print("Successfully loaded \(books.count) books")
+                    self.publicBooks = books
+                case .failure(let error):
+                    print("Failed to load books: \(error.localizedDescription)")
+                    // 設置一些預設數據以便測試
+                    self.setupFallbackData()
+                }
+            }
+        }
+    }
+    
+    // 添加 fallback 數據
+    private func setupFallbackData() {
+        publicBooks = [
+            CloudBook(
+                recordID: nil,
+                name: "Fallback Book 1",
+                introduction: "This is a fallback book for testing",
+                coverURL: nil,
+                author: "Test Author",
+                content: ["Chapter 1: Test content"],
+                firebaseBookID: nil,
+                coverImage: nil
+            ),
+            CloudBook(
+                recordID: nil,
+                name: "Fallback Book 2", 
+                introduction: "Another fallback book",
+                coverURL: nil,
+                author: "Test Author 2",
+                content: ["Chapter 1: More test content"],
+                firebaseBookID: nil,
+                coverImage: nil
+            )
+        ]
     }
 
     private func updateTabProgress(_ value: CGFloat, geometrySize: CGSize) {
@@ -104,7 +160,7 @@ struct Dashboard: View {
         ScrollView(.vertical) {
             LazyVGrid(columns: Array(repeating: GridItem(), count: 2)) {
                 switch type {
-                case .push_notification,.widget:
+                case .push_notification, .widget:
                     ForEach(widgetList, id: \.id) { widget in
                         RoundedRectangle(cornerRadius: 15)
                             .fill(type.color)
@@ -124,23 +180,49 @@ struct Dashboard: View {
                     }
 
                 case .ebook:
-                    ForEach(ebookList, id: \.id) { ebook in
-                        NavigationLink(destination: BookDetailView(book: ebook)) {
+                    if isLoadingBooks {
+                        // 顯示載入指示器
+                        ForEach(0..<4, id: \.self) { index in
                             RoundedRectangle(cornerRadius: 15)
-                                .fill(type.color)
+                                .fill(type.color.opacity(0.3))
                                 .frame(height: 150)
                                 .overlay {
-                                    VStack(alignment: .leading) {
-                                        Text(ebook.title).font(.headline)
-                                        Text(ebook.name).font(.subheadline).foregroundColor(.gray)
-                                        Text(ebook.instruction).font(.body).foregroundColor(.gray).lineLimit(2)
-                                        Spacer()
+                                    VStack {
+                                        ProgressView()
+                                            .progressViewStyle(CircularProgressViewStyle())
+                                        Text("Loading...")
+                                            .font(.caption)
+                                            .foregroundColor(.white)
+                                            .padding(.top, 4)
                                     }
-                                    .padding(15)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
                                 }
                         }
-                        .buttonStyle(PlainButtonStyle())
+                    } else if publicBooks.isEmpty {
+                        // 顯示空狀態
+                        ForEach(0..<2, id: \.self) { index in
+                            RoundedRectangle(cornerRadius: 15)
+                                .fill(type.color.opacity(0.5))
+                                .frame(height: 150)
+                                .overlay {
+                                    VStack {
+                                        Image(systemName: "book.closed")
+                                            .font(.system(size: 30))
+                                            .foregroundColor(.white.opacity(0.7))
+                                        Text("No books available")
+                                            .font(.caption)
+                                            .foregroundColor(.white.opacity(0.7))
+                                            .padding(.top, 4)
+                                    }
+                                }
+                        }
+                    } else {
+                        // 使用 CloudBook 數據 - 恢復 NavigationLink
+                        ForEach(publicBooks, id: \.id) { cloudBook in
+                            NavigationLink(destination: BookDetailView(book: cloudBook.toEbook())) {
+                                CloudBookGridItem(book: cloudBook, color: type.color)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                        }
                     }
                 }
             }
@@ -160,6 +242,67 @@ struct Dashboard: View {
             selectedButtonListType = .ebook
         }
     }
+}
+
+// 新的 CloudBook 網格項目視圖
+struct CloudBookGridItem: View {
+    let book: CloudBook
+    let color: Color
     
-    
+    var body: some View {
+        RoundedRectangle(cornerRadius: 15)
+            .fill(color)
+            .frame(height: 150)
+            .overlay {
+                VStack(alignment: .leading, spacing: 8) {
+                    // 書籍封面圖片區域
+                    HStack {
+                        if let coverImage = book.coverImage {
+                            Image(uiImage: coverImage)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 40, height: 50)
+                                .cornerRadius(4)
+                                .clipped()
+                        } else {
+                            Rectangle()
+                                .fill(Color.white.opacity(0.3))
+                                .frame(width: 40, height: 50)
+                                .cornerRadius(4)
+                                .overlay(
+                                    Image(systemName: "book.closed")
+                                        .foregroundColor(.white)
+                                        .font(.system(size: 16))
+                                )
+                        }
+                        Spacer()
+                    }
+                    
+                    // 書籍信息
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(book.name)
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .lineLimit(2)
+                        
+                        Text("by \(book.author)")
+                            .font(.caption)
+                            .foregroundColor(.white.opacity(0.8))
+                        
+                        Text(book.introduction)
+                            .font(.caption)
+                            .foregroundColor(.white.opacity(0.7))
+                            .lineLimit(2)
+                    }
+                    
+                    Spacer()
+                }
+                .padding(12)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+    }
+}
+
+#Preview {
+    Dashboard()
 }

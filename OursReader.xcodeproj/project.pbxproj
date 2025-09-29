@@ -127,6 +127,10 @@
 		99E2102A2C0168F1006F27A7 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E210292C0168F1006F27A7 /* Storage.swift */; };
 		99EB5FA32C0D9C5600F2AF29 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EB5FA22C0D9C5500F2AF29 /* ToastView.swift */; };
 		99EFE3472D5CA69100EA82EC /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 99EFE3462D5CA69100EA82EC /* Localizable.xcstrings */; };
+		99F0C5EB2E8534A9008711EC /* DataAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F0C5EA2E8534A9008711EC /* DataAPIManager.swift */; };
+		99F0C5EE2E8534C1008711EC /* CloudBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F0C5EC2E8534C1008711EC /* CloudBook.swift */; };
+		99F0C5EF2E8534C1008711EC /* UserBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F0C5ED2E8534C1008711EC /* UserBook.swift */; };
+		99F0C5F12E8534D2008711EC /* DashboardBooksManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F0C5F02E8534D2008711EC /* DashboardBooksManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -303,6 +307,10 @@
 		99E210292C0168F1006F27A7 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		99EB5FA22C0D9C5500F2AF29 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		99EFE3462D5CA69100EA82EC /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		99F0C5EA2E8534A9008711EC /* DataAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataAPIManager.swift; sourceTree = "<group>"; };
+		99F0C5EC2E8534C1008711EC /* CloudBook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudBook.swift; sourceTree = "<group>"; };
+		99F0C5ED2E8534C1008711EC /* UserBook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBook.swift; sourceTree = "<group>"; };
+		99F0C5F02E8534D2008711EC /* DashboardBooksManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardBooksManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -484,6 +492,8 @@
 				5953369D2B05018100BB11D7 /* Tab.swift */,
 				993EDAC92BEB2C9C002C18C7 /* PeerDevice.swift */,
 				993EDACE2BEB2CE2002C18C7 /* PermissionRequest.swift */,
+				99F0C5EC2E8534C1008711EC /* CloudBook.swift */,
+				99F0C5ED2E8534C1008711EC /* UserBook.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -527,8 +537,10 @@
 			children = (
 				593EB1D52C01DEC000DD430F /* Reminder */,
 				593EB2032C01EFFF00DD430F /* LM.swift */,
+				99F0C5F02E8534D2008711EC /* DashboardBooksManager.swift */,
 				998614432BB1770300E0996D /* NotificationManager.swift */,
 				99B807392DF6966F007A0E49 /* CloudKitManager.swift */,
+				99F0C5EA2E8534A9008711EC /* DataAPIManager.swift */,
 				598053E12BA6EDBB008056F3 /* DatabaseManager.swift */,
 				99E210292C0168F1006F27A7 /* Storage.swift */,
 				593EB1CB2C01DC1700DD430F /* ToastManager.swift */,
@@ -1085,6 +1097,7 @@
 				593EB2152C01FA1200DD430F /* SplashView.swift in Sources */,
 				998614682BBD20D100E0996D /* EnvironmentValues.swift in Sources */,
 				59E75E9C2ADF53AA007A549C /* ContentView.swift in Sources */,
+				99F0C5F12E8534D2008711EC /* DashboardBooksManager.swift in Sources */,
 				998614692BBD20D100E0996D /* FloatingPromptTextField.swift in Sources */,
 				994344592DEEED3B002FD942 /* FriendSharedComponents.swift in Sources */,
 				9943445A2DEEED3B002FD942 /* AddFriend.swift in Sources */,
@@ -1096,6 +1109,9 @@
 				99DA2D7A2D65B575007D178A /* KeychainManager.swift in Sources */,
 				595336A02B0503D800BB11D7 /* Home.swift in Sources */,
 				593EB2122C01F9F400DD430F /* MainView.swift in Sources */,
+				99F0C5EB2E8534A9008711EC /* DataAPIManager.swift in Sources */,
+				99F0C5EE2E8534C1008711EC /* CloudBook.swift in Sources */,
+				99F0C5EF2E8534C1008711EC /* UserBook.swift in Sources */,
 				9986146A2BBD20D100E0996D /* HeightPreferenceKey.swift in Sources */,
 				59E75E9A2ADF53AA007A549C /* OursReaderApp.swift in Sources */,
 				993EDAD22BEB48BA002C18C7 /* DeviceFinderViewModel.swift in Sources */,
