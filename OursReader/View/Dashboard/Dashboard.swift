@@ -218,7 +218,8 @@ struct Dashboard: View {
                     } else {
                         // 使用 CloudBook 數據 - 恢復 NavigationLink
                         ForEach(publicBooks, id: \.id) { cloudBook in
-                            NavigationLink(destination: BookDetailView(book: cloudBook.toEbook())) {
+                            NavigationLink(destination: BookDetailView(book: cloudBook.toEbook())
+                                .accentColor(.black)) { // 設置導航目標的強調色為黑色
                                 CloudBookGridItem(book: cloudBook, color: type.color)
                             }
                             .buttonStyle(PlainButtonStyle())

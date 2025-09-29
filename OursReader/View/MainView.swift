@@ -28,13 +28,14 @@ struct MainView: View {
                                 .environmentObject(userAuth)
                                 .navigationDestination(for: HomeRoute.self, destination: { $0 })
                         }
+                        .accentColor(.black) // 設置 NavigationStack 的強調色
                     } else {
                         NavigationStack(path: $homeRouter.path ) {
                             Login()
                                 .environmentObject(userAuth)
                                 .navigationDestination(for: HomeRoute.self, destination: { $0 })
                         }
-                        
+                        .accentColor(.black) // 設置 NavigationStack 的強調色
                     }
                 }
             }
@@ -42,9 +43,24 @@ struct MainView: View {
             .navigationBarTitleDisplayMode(.inline)
             .navigationViewStyle(.stack)
         }
+        .accentColor(.black) // 設置整體強調色
         .onAppear {
             // 確保數據 API 被初始化
             DataAPIManager.shared.initializeMockData()
+            
+            // 設置全局導航欄外觀
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = UIColor(ColorManager.shared.background)
+            appearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+            appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
+            
+            // 設置返回按鈕顏色為黑色
+            UINavigationBar.appearance().tintColor = UIColor.black
+            
+            UINavigationBar.appearance().standardAppearance = appearance
+            UINavigationBar.appearance().scrollEdgeAppearance = appearance
+            UINavigationBar.appearance().compactAppearance = appearance
         }
     }
 }

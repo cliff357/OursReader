@@ -61,7 +61,8 @@ struct Home: View {
         }
         .padding(15)
         .background(ColorManager.shared.background)
-        .foregroundStyle(Color.black)
+        .foregroundStyle(Color.black) // 確保所有文字都是黑色
+        .accentColor(.black) // 設置強調色為黑色
     }
 }
 

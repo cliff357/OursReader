@@ -57,7 +57,8 @@ struct CloudBookListView: View {
                 ScrollView {
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 160))], spacing: 20) {
                         ForEach(books) { book in
-                            NavigationLink(destination: BookDetailView(book: book.toEbook())) {
+                            NavigationLink(destination: BookDetailView(book: book.toEbook())
+                                .accentColor(.black)) { // 設置導航目標的強調色為黑色
                                 BookItemView(book: book)
                             }
                         }
