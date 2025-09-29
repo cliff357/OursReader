@@ -256,8 +256,9 @@ struct CloudBookGridItem: View {
             .frame(height: 150)
             .overlay {
                 VStack(alignment: .leading, spacing: 8) {
-                    // 書籍封面圖片區域
-                    HStack {
+                    // 書籍封面圖片和標題區域 - 水平排列
+                    HStack(alignment: .top, spacing: 8) {
+                        // 封面圖片
                         if let coverImage = book.coverImage {
                             Image(uiImage: coverImage)
                                 .resizable()
@@ -267,34 +268,43 @@ struct CloudBookGridItem: View {
                                 .clipped()
                         } else {
                             Rectangle()
-                                .fill(Color.white.opacity(0.3))
+                                .fill(ColorManager.shared.red1.opacity(0.3))
                                 .frame(width: 40, height: 50)
                                 .cornerRadius(4)
                                 .overlay(
                                     Image(systemName: "book.closed")
-                                        .foregroundColor(.white)
+                                        .foregroundColor(ColorManager.shared.red1)
                                         .font(.system(size: 16))
                                 )
                         }
+                        
+                        // 書籍標題 - 放在圖片右邊，可以顯示2行
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(book.name)
+                                .font(.headline)
+                                .foregroundColor(ColorManager.shared.red1)
+                                .lineLimit(2)
+                                .multilineTextAlignment(.leading)
+                            
+                            Spacer()
+                        }
+                        
                         Spacer()
                     }
                     
-                    // 書籍信息
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(book.name)
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .lineLimit(2)
-                        
-                        Text("by \(book.author)")
-                            .font(.caption)
-                            .foregroundColor(.white.opacity(0.8))
-                        
-                        Text(book.introduction)
-                            .font(.caption)
-                            .foregroundColor(.white.opacity(0.7))
-                            .lineLimit(2)
-                    }
+                    // 作者名 - 和簡介一樣的寬度和排版
+                    Text("by \(book.author)")
+                        .font(.caption)
+                        .foregroundColor(ColorManager.shared.red1.opacity(0.8))
+                        .lineLimit(1)
+                        .multilineTextAlignment(.leading)
+                    
+                    // 簡介放在下方
+                    Text(book.introduction)
+                        .font(.caption)
+                        .foregroundColor(ColorManager.shared.red1.opacity(0.7))
+                        .lineLimit(2)
+                        .multilineTextAlignment(.leading)
                     
                     Spacer()
                 }

@@ -18,6 +18,7 @@ class CloudKitManager {
     // MARK: - Book Operations (使用 DataAPIManager)
     
     func fetchPublicBooks(completion: @escaping (Result<[CloudBook], Error>) -> Void) {
+        DataAPIManager.shared.fetchPublicBooks(completion: completion)
     }
     
     func fetchPrivateBooks(completion: @escaping (Result<[CloudBook], Error>) -> Void) {
