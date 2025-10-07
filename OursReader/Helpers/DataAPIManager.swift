@@ -129,9 +129,11 @@ class DataAPIManager {
     
     // Fetch Public Books
     func fetchPublicBooks(completion: @escaping (Result<[CloudBook], Error>) -> Void) {
-        // Simulate network delay
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            completion(.success(self.mockPublicBooks))
+        // 如果有當前用戶，返回用戶書籍；否則返回空
+        if let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() {
+            fetchUserBooks(firebaseUserID: currentUser.uid, completion: completion)
+        } else {
+            completion(.success([]))
         }
     }
     
@@ -148,6 +150,16 @@ class DataAPIManager {
         // Simulate network delay
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
             let userBooks = self.mockUserBooks.filter { $0.userID == firebaseUserID }
+            completion(.success(userBooks))
+        }
+    }
+    
+    // 添加新的用戶書籍 API
+    func fetchUserBooks(firebaseUserID: String, completion: @escaping (Result<[CloudBook], Error>) -> Void) {
+        // 從 mockPublicBooks 中過濾屬於該用戶的書籍（模擬）
+        let userBooks = mockPublicBooks // 重用現有數據作為模擬
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             completion(.success(userBooks))
         }
     }
@@ -174,7 +186,7 @@ class DataAPIManager {
             bookID: bookID,
             userID: firebaseUserID,
             currentPage: 0,
-            bookmarkedPages: [],
+            bookmarkedPages: [], // 空的 Int 數組，不是 [Any]
             dateAdded: Date(),
             lastRead: nil,
             book: book
@@ -229,36 +241,35 @@ class DataAPIManager {
     func fetchReadingProgress(bookID: String, firebaseUserID: String, completion: @escaping (Result<(currentPage: Int, bookmarkedPages: [Int]), Error>) -> Void) {
         // Find progress in UserBooks
         if let userBook = mockUserBooks.first(where: { $0.bookID == bookID && $0.userID == firebaseUserID }) {
-            completion(.success((currentPage: userBook.currentPage, bookmarkedPages: userBook.bookmarkedPages)))
+            // currentPage 改為返回 0，因為只存本地
+            completion(.success((currentPage: 0, bookmarkedPages: userBook.bookmarkedPages)))
         } else {
             // No progress found, return default
             completion(.success((currentPage: 0, bookmarkedPages: [])))
         }
     }
     
-    // Save Book (for adding new books)
+    // Save Book (for adding new books) - 更新為兼容新架構
     func saveBookToPublicDatabase(_ book: CloudBook, completion: @escaping (Result<String, Error>) -> Void) {
-        var newBook = book
-        newBook = CloudBook(
-            recordID: nil,
-            name: book.name,
-            introduction: book.introduction,
-            coverURL: book.coverURL,
-            author: book.author,
-            content: book.content,
-            firebaseBookID: book.firebaseBookID,
-            coverImage: book.coverImage
-        )
-        
-        mockPublicBooks.append(newBook)
-        
-        // Simulate network delay
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            completion(.success(newBook.id))
+        // 重定向到用戶書籍保存
+        if let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() {
+            saveUserBook(book, firebaseUserID: currentUser.uid, completion: completion)
+        } else {
+            completion(.failure(NSError(domain: "com.cliffchan.manwareader", code: 401, userInfo: [NSLocalizedDescriptionKey: "User not logged in"])))
         }
     }
     
     func saveBookToPrivateDatabase(_ book: CloudBook, completion: @escaping (Result<String, Error>) -> Void) {
+        // 重定向到用戶書籍保存
+        if let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() {
+            saveUserBook(book, firebaseUserID: currentUser.uid, completion: completion)
+        } else {
+            completion(.failure(NSError(domain: "com.cliffchan.manwareader", code: 401, userInfo: [NSLocalizedDescriptionKey: "User not logged in"])))
+        }
+    }
+    
+    // 新增用戶書籍保存方法
+    func saveUserBook(_ book: CloudBook, firebaseUserID: String, completion: @escaping (Result<String, Error>) -> Void) {
         var newBook = book
         newBook = CloudBook(
             recordID: nil,
@@ -268,10 +279,12 @@ class DataAPIManager {
             author: book.author,
             content: book.content,
             firebaseBookID: book.firebaseBookID,
-            coverImage: book.coverImage
+            coverImage: book.coverImage,
+            currentPage: book.currentPage,
+            bookmarkedPages: book.bookmarkedPages
         )
         
-        mockPrivateBooks.append(newBook)
+        mockPublicBooks.append(newBook)
         
         // Simulate network delay
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {

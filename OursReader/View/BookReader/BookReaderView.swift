@@ -390,14 +390,14 @@ struct BookReaderView: View {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let progress):
-                    // 如果雲端進度比本地進度新，使用雲端進度
-                    if progress.currentPage > self.currentPageIndex {
-                        self.currentPageIndex = progress.currentPage
-                        self.book.currentPage = progress.currentPage
-                        self.updateProgressPercentage()
-                    }
+                    // currentPage 不從雲端載入，保持本地值
+                    // if progress.currentPage > self.currentPageIndex {
+                    //     self.currentPageIndex = progress.currentPage
+                    //     self.book.currentPage = progress.currentPage
+                    //     self.updateProgressPercentage()
+                    // }
                     
-                    // 合併書簽
+                    // 只合併書簽
                     let mergedBookmarks = Array(Set(self.book.bookmarkedPages + progress.bookmarkedPages)).sorted()
                     self.book.bookmarkedPages = mergedBookmarks
                     
@@ -414,41 +414,40 @@ struct BookReaderView: View {
         // 取消之前的計時器
         saveTimer?.invalidate()
         
-        // 設置新的計時器，2秒後自動保存
+        // 設置新的計時器，2秒後自動保存書簽（不保存 currentPage）
         saveTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { _ in
-            saveProgressToCloud()
+            self.saveBookmarksToCloud()
         }
     }
     
     private func saveProgressImmediately() {
         saveTimer?.invalidate()
-        saveProgressToCloud()
+        saveBookmarksToCloud()
     }
     
-    private func saveProgressToCloud() {
+    private func saveBookmarksToCloud() {
         guard let currentUser = UserAuthModel.shared.getCurrentFirebaseUser(),
-              currentPageIndex != lastSavedPage || !book.bookmarkedPages.isEmpty else {
+              !book.bookmarkedPages.isEmpty else {
             return
         }
         
         CloudKitManager.shared.updateUserBookProgress(
             bookID: book.id,
             firebaseUserID: currentUser.uid,
-            currentPage: currentPageIndex,
+            currentPage: currentPageIndex, // 傳入但不會被保存到雲端
             bookmarkedPages: book.bookmarkedPages
         ) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(_):
-                    self.lastSavedPage = self.currentPageIndex
-                    print("Reading progress saved successfully")
+                    print("Bookmarks saved successfully")
                     
-                    // 給用戶一個觸覺反饋
+                    // 給用戶一個輕微的觸覺反饋
                     let impactFeedback = UIImpactFeedbackGenerator(style: .light)
                     impactFeedback.impactOccurred()
                     
                 case .failure(let error):
-                    print("Failed to save reading progress: \(error.localizedDescription)")
+                    print("Failed to save bookmarks: \(error.localizedDescription)")
                     
                     // 錯誤觸覺反饋
                     let errorFeedback = UINotificationFeedbackGenerator()

@@ -29,6 +29,8 @@ struct Home: View {
                         .tag(Optional.some(SideMenuOptionModel.widget))
                     FriendList()
                         .tag(Optional.some(SideMenuOptionModel.friendList))
+                    CloudBookListView() // 新增我的書籍頁面
+                        .tag(Optional.some(SideMenuOptionModel.myBooks))
                     Text("Settings")
                         .tag(Optional.some(SideMenuOptionModel.settings))
                 }

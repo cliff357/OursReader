@@ -131,6 +131,10 @@
 		99F0C5EE2E8534C1008711EC /* CloudBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F0C5EC2E8534C1008711EC /* CloudBook.swift */; };
 		99F0C5EF2E8534C1008711EC /* UserBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F0C5ED2E8534C1008711EC /* UserBook.swift */; };
 		99F0C5F12E8534D2008711EC /* DashboardBooksManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F0C5F02E8534D2008711EC /* DashboardBooksManager.swift */; };
+		99F0C5F32E8A6BAC008711EC /* CloudKitTestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F0C5F22E8A6BAC008711EC /* CloudKitTestHelper.swift */; };
+		99F0C5F52E8F7963008711EC /* AddBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F0C5F42E8F7963008711EC /* AddBookView.swift */; };
+		99F0C5F72E8F7967008711EC /* CloudBookListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F0C5F62E8F7967008711EC /* CloudBookListView.swift */; };
+		99F0C5F92E939C41008711EC /* BaseSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F0C5F82E939C41008711EC /* BaseSheetView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -311,6 +315,10 @@
 		99F0C5EC2E8534C1008711EC /* CloudBook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudBook.swift; sourceTree = "<group>"; };
 		99F0C5ED2E8534C1008711EC /* UserBook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBook.swift; sourceTree = "<group>"; };
 		99F0C5F02E8534D2008711EC /* DashboardBooksManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardBooksManager.swift; sourceTree = "<group>"; };
+		99F0C5F22E8A6BAC008711EC /* CloudKitTestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitTestHelper.swift; sourceTree = "<group>"; };
+		99F0C5F42E8F7963008711EC /* AddBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBookView.swift; sourceTree = "<group>"; };
+		99F0C5F62E8F7967008711EC /* CloudBookListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudBookListView.swift; sourceTree = "<group>"; };
+		99F0C5F82E939C41008711EC /* BaseSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSheetView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -540,6 +548,7 @@
 				99F0C5F02E8534D2008711EC /* DashboardBooksManager.swift */,
 				998614432BB1770300E0996D /* NotificationManager.swift */,
 				99B807392DF6966F007A0E49 /* CloudKitManager.swift */,
+				99F0C5F22E8A6BAC008711EC /* CloudKitTestHelper.swift */,
 				99F0C5EA2E8534A9008711EC /* DataAPIManager.swift */,
 				598053E12BA6EDBB008056F3 /* DatabaseManager.swift */,
 				99E210292C0168F1006F27A7 /* Storage.swift */,
@@ -554,7 +563,9 @@
 		5993CE6F2C939F2500855103 /* Book */ = {
 			isa = PBXGroup;
 			children = (
+				99F0C5F42E8F7963008711EC /* AddBookView.swift */,
 				5993CE682C939F0200855103 /* BookDetailPage.swift */,
+				99F0C5F62E8F7967008711EC /* CloudBookListView.swift */,
 			);
 			path = Book;
 			sourceTree = "<group>";
@@ -717,6 +728,7 @@
 		9986145D2BBBAC7500E0996D /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				99F0C5F82E939C41008711EC /* BaseSheetView.swift */,
 				998CD2132DEFD9A100F64329 /* EmptyStateView.swift */,
 				591BAAC32CBB7B33001FAE1C /* BottomSheet */,
 				99EB5FA12C0D9C2A00F2AF29 /* Toast */,
@@ -1078,8 +1090,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				99F0C5F32E8A6BAC008711EC /* CloudKitTestHelper.swift in Sources */,
 				998614192BAAB3A500E0996D /* SideMenu.swift in Sources */,
 				998614762BBD287300E0996D /* ColorHelper.swift in Sources */,
+				99F0C5F52E8F7963008711EC /* AddBookView.swift in Sources */,
+				99F0C5F72E8F7967008711EC /* CloudBookListView.swift in Sources */,
 				598053E82BA6F169008056F3 /* Error.swift in Sources */,
 				593EB1F72C01EAC300DD430F /* GeneralErrorReminder.swift in Sources */,
 				99B8073A2DF6966F007A0E49 /* CloudKitManager.swift in Sources */,
@@ -1142,6 +1157,7 @@
 				5953369E2B05018100BB11D7 /* Tab.swift in Sources */,
 				593EB1D92C01DED300DD430F /* BaseReminder.swift in Sources */,
 				9986145F2BBBAC8500E0996D /* UnderlineTextField.swift in Sources */,
+				99F0C5F92E939C41008711EC /* BaseSheetView.swift in Sources */,
 				998614442BB1770300E0996D /* NotificationManager.swift in Sources */,
 				998614822BBD35AC00E0996D /* Color+.swift in Sources */,
 				9986141B2BAAB79600E0996D /* SideMenuHeaderView.swift in Sources */,

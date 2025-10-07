@@ -13,57 +13,44 @@ class DashboardBooksManager: ObservableObject {
     func loadDashboardBooks() {
         isLoading = true
         
-        // 同時載入公開書籍和用戶書架
-        let group = DispatchGroup()
-        var publicBooks: [CloudBook] = []
-        var userBooks: [UserBook] = []
-        
-        // 載入公開書籍
-        group.enter()
-        CloudKitManager.shared.fetchPublicBooks { result in
-            switch result {
-            case .success(let books):
-                publicBooks = books
-            case .failure(let error):
-                print("Failed to load public books: \(error)")
-            }
-            group.leave()
-        }
-        
-        // 載入用戶書架（如果有登入用戶）
+        // 在簡化架構中，直接載入用戶書籍
         if let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() {
-            group.enter()
-            CloudKitManager.shared.fetchUserBookshelf(firebaseUserID: currentUser.uid) { result in
-                switch result {
-                case .success(let books):
-                    userBooks = books
-                case .failure(let error):
-                    print("Failed to load user books: \(error)")
+            CloudKitManager.shared.fetchUserBooks(firebaseUserID: currentUser.uid) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let books):
+                        self.processBooksData(userBooks: books)
+                    case .failure(let error):
+                        print("Failed to load user books: \(error)")
+                        self.processBooksData(userBooks: [])
+                    }
+                    self.isLoading = false
                 }
-                group.leave()
             }
-        }
-        
-        // 所有數據載入完成後處理
-        group.notify(queue: .main) {
-            self.processBooksData(publicBooks: publicBooks, userBooks: userBooks)
-            self.isLoading = false
+        } else {
+            // 沒有用戶時返回空數據
+            DispatchQueue.main.async {
+                self.processBooksData(userBooks: [])
+                self.isLoading = false
+            }
         }
     }
     
-    private func processBooksData(publicBooks: [CloudBook], userBooks: [UserBook]) {
-        // 設置精選書籍（取前6本公開書籍）
-        featuredBooks = Array(publicBooks.prefix(6))
+    private func processBooksData(userBooks: [CloudBook]) {
+        // 設置精選書籍（取前6本用戶書籍）
+        featuredBooks = Array(userBooks.prefix(6))
         
-        // 設置最近閱讀的書籍（從用戶書架中取最近讀過的）
+        // 設置最近閱讀的書籍（根據 currentPage 排序，顯示有進度的書）
         recentBooks = userBooks
-            .compactMap { $0.book }
-            .sorted { book1, book2 in
-                // 這裡可以根據最後閱讀時間排序
-                return book1.currentPage > book2.currentPage
-            }
+            .filter { $0.currentPage > 0 } // 只顯示有閱讀進度的書
+            .sorted { $0.currentPage > $1.currentPage } // 按進度排序
             .prefix(4)
             .map { $0 }
+        
+        // 如果沒有有進度的書，就取最前面的幾本
+        if recentBooks.isEmpty {
+            recentBooks = Array(userBooks.prefix(4))
+        }
     }
     
     // 獲取要在 Dashboard 中顯示的書籍

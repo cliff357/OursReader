@@ -30,10 +30,22 @@
     "→" : {
 
     },
+    "Add Book" : {
+
+    },
+    "Book Cover" : {
+
+    },
     "Bookmarks" : {
 
     },
     "by %@" : {
+
+    },
+    "Cancel" : {
+
+    },
+    "Choose Cover Image" : {
 
     },
     "copy" : {
@@ -52,6 +64,12 @@
           }
         }
       }
+    },
+    "Create New Book" : {
+
+    },
+    "Create your own book" : {
+
     },
     "dashboard" : {
       "extractionState" : "manual",
@@ -734,6 +752,12 @@
         }
       }
     },
+    "Long press E-Book tab to add test books!" : {
+
+    },
+    "My Books" : {
+
+    },
     "nick_name" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -754,7 +778,13 @@
     "No bookmarks yet" : {
 
     },
-    "No books available" : {
+    "No books yet" : {
+
+    },
+    "No Image" : {
+
+    },
+    "OK" : {
 
     },
     "or" : {
@@ -1044,6 +1074,12 @@
     "Reading Progress" : {
 
     },
+    "Remove Image" : {
+
+    },
+    "Retry" : {
+
+    },
     "settings" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1097,6 +1133,12 @@
           }
         }
       }
+    },
+    "Tap to add" : {
+
+    },
+    "Upload Status" : {
+
     },
     "version_info" : {
       "extractionState" : "manual",
@@ -1167,6 +1209,9 @@
       }
     },
     "Widget" : {
+
+    },
+    "正在添加測試書籍..." : {
 
     }
   },
