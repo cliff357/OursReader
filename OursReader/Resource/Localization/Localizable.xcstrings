@@ -33,6 +33,9 @@
     "Add Book" : {
 
     },
+    "Are you sure you want to remove '%@' from your library? This action cannot be undone." : {
+
+    },
     "Book Cover" : {
 
     },
@@ -1072,6 +1075,12 @@
 
     },
     "Reading Progress" : {
+
+    },
+    "Remove" : {
+
+    },
+    "Remove Book" : {
 
     },
     "Remove Image" : {

@@ -246,13 +246,54 @@ class CloudKitManager {
     func deleteUserBook(bookID: String, firebaseUserID: String, completion: @escaping (Result<Void, Error>) -> Void) {
         let recordID = CKRecord.ID(recordName: bookID)
         
-        privateDatabase.delete(withRecordID: recordID) { deletedRecordID, error in
-            DispatchQueue.main.async {
-                if let error = error {
+        print("🗑️ Attempting to delete record with ID: \(recordID.recordName)")
+        print("👤 For user: \(firebaseUserID)")
+        
+        // 先驗證記錄是否存在並屬於該用戶
+        privateDatabase.fetch(withRecordID: recordID) { record, error in
+            if let error = error {
+                print("❌ Failed to fetch record for deletion: \(error.localizedDescription)")
+                DispatchQueue.main.async {
                     completion(.failure(error))
-                } else {
-                    NotificationCenter.default.post(name: Self.booksDidChangeNotification, object: nil)
-                    completion(.success(()))
+                }
+                return
+            }
+            
+            guard let record = record else {
+                print("❌ Record not found for deletion: \(recordID.recordName)")
+                let notFoundError = NSError(domain: "com.cliffchan.manwareader", code: 404, userInfo: [NSLocalizedDescriptionKey: "Record not found"])
+                DispatchQueue.main.async {
+                    completion(.failure(notFoundError))
+                }
+                return
+            }
+            
+            // 驗證記錄屬於該用戶
+            if let recordUserID = record["userID"] as? String, recordUserID != firebaseUserID {
+                print("❌ Access denied: Record belongs to different user")
+                let accessError = NSError(domain: "com.cliffchan.manwareader", code: 403, userInfo: [NSLocalizedDescriptionKey: "Access denied"])
+                DispatchQueue.main.async {
+                    completion(.failure(accessError))
+                }
+                return
+            }
+            
+            print("✅ Record found and verified, proceeding with deletion...")
+            
+            // 執行刪除
+            self.privateDatabase.delete(withRecordID: recordID) { deletedRecordID, error in
+                DispatchQueue.main.async {
+                    if let error = error {
+                        print("❌ CloudKit delete failed: \(error.localizedDescription)")
+                        completion(.failure(error))
+                    } else if let deletedRecordID = deletedRecordID {
+                        print("✅ Successfully deleted record: \(deletedRecordID.recordName)")
+                        NotificationCenter.default.post(name: Self.booksDidChangeNotification, object: nil)
+                        completion(.success(()))
+                    } else {
+                        print("⚠️ Delete operation completed but no record ID returned")
+                        completion(.success(()))
+                    }
                 }
             }
         }
