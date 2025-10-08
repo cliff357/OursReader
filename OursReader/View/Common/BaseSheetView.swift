@@ -101,6 +101,7 @@ struct SheetInputSection: View {
                 TextField(placeholder, text: $text, axis: .vertical)
                     .padding(12)
                     .background(Color.white)
+                    .foregroundColor(.black) // 添加文字顏色為黑色
                     .cornerRadius(8)
                     .overlay(
                         RoundedRectangle(cornerRadius: 8)
@@ -111,6 +112,7 @@ struct SheetInputSection: View {
                 TextField(placeholder, text: $text)
                     .padding(12)
                     .background(Color.white)
+                    .foregroundColor(.black) // 添加文字顏色為黑色
                     .cornerRadius(8)
                     .overlay(
                         RoundedRectangle(cornerRadius: 8)

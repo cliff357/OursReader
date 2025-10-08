@@ -235,8 +235,8 @@ struct Dashboard: View {
                                     }
                                 }
                         } else {
-                            // 先顯示用戶書籍數據
-                            ForEach(publicBooks.prefix(5), id: \.id) { userBook in // 限制顯示數量，為加書按鈕留空間
+                            // 先顯示用戶書籍數據 - 移除數量限制
+                            ForEach(publicBooks, id: \.id) { userBook in // 移除 .prefix(5) 限制，顯示所有書籍
                                 NavigationLink(destination: BookDetailView(book: userBook.toEbook())
                                     .accentColor(.black)) {
                                     CloudBookGridItem(book: userBook, color: type.color)
