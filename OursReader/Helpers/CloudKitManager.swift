@@ -69,8 +69,6 @@ class CloudKitManager {
         
         // 測試 private database 訪問 - 完全移除排序
         let testQuery = CKQuery(recordType: "Book", predicate: NSPredicate(value: true))
-        // 完全移除排序描述符
-        // testQuery.sortDescriptors = [NSSortDescriptor(key: "modificationDate", ascending: false)]
         
         privateDatabase.perform(testQuery, inZoneWith: nil) { records, error in
             if let error = error {
@@ -122,66 +120,249 @@ class CloudKitManager {
     // MARK: - User Books Operations (簡化版 - 只有用戶個人書籍)
     
     func fetchUserBooks(firebaseUserID: String, completion: @escaping (Result<[CloudBook], Error>) -> Void) {
-        // 檢查 userID 字段是否可查詢
         let predicate = NSPredicate(format: "userID == %@", firebaseUserID)
         let query = CKQuery(recordType: "Book", predicate: predicate)
-        
-        // 完全移除排序描述符，在客戶端排序
-        // query.sortDescriptors = [NSSortDescriptor(key: "modificationDate", ascending: false)]
         
         privateDatabase.fetch(withQuery: query) { result in
             switch result {
             case .success(let result):
-                let books = result.matchResults.compactMap { (_, recordResult) -> CloudBook? in
+                let dispatchGroup = DispatchGroup()
+                var books: [CloudBook] = []
+                var hasError: Error?
+                
+                for (_, recordResult) in result.matchResults {
                     switch recordResult {
                     case .success(let record):
-                        return self.cloudBookFromRecord(record)
+                        dispatchGroup.enter()
+                        
+                        // 檢查 isChunked 字段（Int64 格式）
+                        let isChunkedValue = record["isChunked"] as? Int64 ?? 1 // 默認為分片
+                        let isChunked = isChunkedValue == 1
+                        
+                        if isChunked {
+                            // 載入分片書籍
+                            self.loadChunkedBook(record) { bookResult in
+                                switch bookResult {
+                                case .success(let book):
+                                    books.append(book)
+                                case .failure(let error):
+                                    hasError = error
+                                    print("❌ 載入分片書籍失敗：\(error.localizedDescription)")
+                                }
+                                dispatchGroup.leave()
+                            }
+                        } else {
+                            // 舊格式書籍（理論上不應該有，但保留兼容性）
+                            let book = self.cloudBookFromRecord(record)
+                            books.append(book)
+                            dispatchGroup.leave()
+                        }
+                        
                     case .failure(let error):
                         print("Error fetching book record: \(error.localizedDescription)")
-                        return nil
                     }
                 }
                 
-                // 在客戶端進行排序 - 按書名排序
-                let sortedBooks = books.sorted { book1, book2 in
-                    return book1.name.localizedCaseInsensitiveCompare(book2.name) == .orderedAscending
+                dispatchGroup.notify(queue: .main) {
+                    if let error = hasError {
+                        completion(.failure(error))
+                    } else {
+                        let sortedBooks = books.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+                        completion(.success(sortedBooks))
+                    }
                 }
-                
-                completion(.success(sortedBooks))
                 
             case .failure(let error):
                 print("Error fetching user books: \(error.localizedDescription)")
-                
-                // 如果是字段不可查詢的錯誤，提供詳細指導
-                if let ckError = error as? CKError, ckError.code.rawValue == 12 {
-                    print("🔧 CloudKit Schema Issue Detected:")
-                    if error.localizedDescription.contains("userID") {
-                        print("   The 'userID' field is not marked as 'Queryable' in CloudKit Dashboard")
-                        print("   Please follow the schema setup instructions to fix this")
-                    } else {
-                        print("   Field is not marked as queryable or sortable in CloudKit Dashboard")
-                        print("   Please check your CloudKit Record Type configuration")
-                    }
-                }
-                
-                // Fallback to mock data
                 DataAPIManager.shared.fetchUserBooks(firebaseUserID: firebaseUserID, completion: completion)
             }
         }
     }
     
     func saveUserBook(_ book: CloudBook, firebaseUserID: String, completion: @escaping (Result<String, Error>) -> Void) {
-        let record = recordFromCloudBook(book, recordType: "Book")
-        record["userID"] = firebaseUserID // 添加用戶ID字段
+        // 統一使用分片儲存，不管大小
+        print("📚 統一使用分片儲存所有書籍...")
+        saveUserBookWithChunking(book, firebaseUserID: firebaseUserID, completion: completion)
+    }
+    
+    // MARK: - 分片保存（所有書籍）
+    private func saveUserBookWithChunking(_ book: CloudBook, firebaseUserID: String, completion: @escaping (Result<String, Error>) -> Void) {
+        print("🔄 開始分片保存書籍...")
         
-        privateDatabase.save(record) { savedRecord, error in
-            DispatchQueue.main.async {
-                if let error = error {
-                    completion(.failure(error))
-                } else if let savedRecord = savedRecord {
-                    NotificationCenter.default.post(name: Self.booksDidChangeNotification, object: nil)
-                    completion(.success(savedRecord.recordID.recordName))
+        // 1. 創建主記錄（不包含內容）
+        let mainRecord = CKRecord(recordType: "Book")
+        mainRecord["userID"] = firebaseUserID
+        mainRecord["name"] = book.name
+        mainRecord["introduction"] = book.introduction
+        mainRecord["author"] = book.author
+        mainRecord["isChunked"] = Int64(1) // 使用 Int64 代替 Boolean，1=true
+        mainRecord["totalChunks"] = 0 // 先設為 0，稍後更新
+        mainRecord["bookmarkedPages"] = book.bookmarkedPages.map { Int64($0) }
+        
+        if let firebaseBookID = book.firebaseBookID {
+            mainRecord["firebaseBookID"] = firebaseBookID
+        }
+        
+        if let coverURL = book.coverURL {
+            mainRecord["coverURL"] = coverURL
+        }
+        
+        // Handle cover image
+        if let coverImage = book.coverImage {
+            if let imageData = coverImage.jpegData(compressionQuality: 0.8) {
+                let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString + ".jpg")
+                do {
+                    try imageData.write(to: tempURL)
+                    let asset = CKAsset(fileURL: tempURL)
+                    mainRecord["coverImage"] = asset
+                } catch {
+                    print("Error saving image to temp file: \(error)")
                 }
+            }
+        }
+        
+        // 2. 分割內容成小塊
+        let chunks = chunkContent(book.content)
+        mainRecord["totalChunks"] = Int64(chunks.count)
+        
+        print("📦 分割成 \(chunks.count) 個內容塊")
+        
+        // 3. 保存主記錄
+        privateDatabase.save(mainRecord) { savedMainRecord, error in
+            if let error = error {
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
+                return
+            }
+            
+            guard let savedMainRecord = savedMainRecord else {
+                DispatchQueue.main.async {
+                    completion(.failure(NSError(domain: "com.cliffchan.manwareader", code: 500, userInfo: [NSLocalizedDescriptionKey: "Failed to save main record"])))
+                }
+                return
+            }
+            
+            let mainRecordID = savedMainRecord.recordID.recordName
+            
+            // 4. 保存內容塊
+            self.saveContentChunks(chunks, mainRecordID: mainRecordID, userID: firebaseUserID) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success():
+                        NotificationCenter.default.post(name: Self.booksDidChangeNotification, object: nil)
+                        completion(.success(mainRecordID))
+                    case .failure(let error):
+                        completion(.failure(error))
+                    }
+                }
+            }
+        }
+    }
+    
+    // MARK: - 分割內容（調整分塊大小）
+    private func chunkContent(_ content: [String]) -> [[String]] {
+        var chunks: [[String]] = []
+        var currentChunk: [String] = []
+        var currentSize = 0
+        
+        let maxChunkSize = 300 * 1024 // 300KB per chunk，更保守的大小
+        
+        for page in content {
+            let pageSize = page.data(using: .utf8)?.count ?? page.count
+            
+            if currentSize + pageSize > maxChunkSize && !currentChunk.isEmpty {
+                // 當前塊已滿，開始新塊
+                chunks.append(currentChunk)
+                currentChunk = [page]
+                currentSize = pageSize
+            } else {
+                // 添加到當前塊
+                currentChunk.append(page)
+                currentSize += pageSize
+            }
+        }
+        
+        // 添加最後一塊
+        if !currentChunk.isEmpty {
+            chunks.append(currentChunk)
+        }
+        
+        return chunks
+    }
+    
+    // MARK: - 保存內容塊
+    private func saveContentChunks(_ chunks: [[String]], mainRecordID: String, userID: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        let dispatchGroup = DispatchGroup()
+        var hasError: Error?
+        
+        for (index, chunk) in chunks.enumerated() {
+            dispatchGroup.enter()
+            
+            let chunkRecord = CKRecord(recordType: "BookChunk")
+            chunkRecord["userID"] = userID
+            chunkRecord["mainBookID"] = mainRecordID
+            chunkRecord["chunkIndex"] = Int64(index)
+            chunkRecord["content"] = chunk
+            
+            privateDatabase.save(chunkRecord) { _, error in
+                if let error = error {
+                    hasError = error
+                    print("❌ 保存內容塊 \(index) 失敗: \(error.localizedDescription)")
+                } else {
+                    print("✅ 保存內容塊 \(index) 成功")
+                }
+                dispatchGroup.leave()
+            }
+        }
+        
+        dispatchGroup.notify(queue: .global()) {
+            if let error = hasError {
+                completion(.failure(error))
+            } else {
+                completion(.success(()))
+            }
+        }
+    }
+    
+    // MARK: - 載入分片書籍
+    private func loadChunkedBook(_ mainRecord: CKRecord, completion: @escaping (Result<CloudBook, Error>) -> Void) {
+        let mainRecordID = mainRecord.recordID.recordName
+        let totalChunks = mainRecord["totalChunks"] as? Int64 ?? 0
+        
+        print("📚 載入分片書籍：\(mainRecord["name"] as? String ?? "Unknown") (共 \(totalChunks) 塊)")
+        
+        let predicate = NSPredicate(format: "mainBookID == %@", mainRecordID)
+        let query = CKQuery(recordType: "BookChunk", predicate: predicate)
+        
+        privateDatabase.fetch(withQuery: query) { result in
+            switch result {
+            case .success(let result):
+                var chunks: [(Int, [String])] = []
+                
+                for (_, recordResult) in result.matchResults {
+                    switch recordResult {
+                    case .success(let chunkRecord):
+                        let chunkIndex = chunkRecord["chunkIndex"] as? Int64 ?? 0
+                        let content = chunkRecord["content"] as? [String] ?? []
+                        chunks.append((Int(chunkIndex), content))
+                    case .failure(let error):
+                        print("Error loading chunk: \(error.localizedDescription)")
+                    }
+                }
+                
+                // 按索引排序並合併內容
+                chunks.sort { $0.0 < $1.0 }
+                let mergedContent = chunks.flatMap { $0.1 }
+                
+                // 創建 CloudBook
+                var book = self.cloudBookFromRecord(mainRecord)
+                book.content = mergedContent
+                
+                completion(.success(book))
+                
+            case .failure(let error):
+                completion(.failure(error))
             }
         }
     }
@@ -193,6 +374,7 @@ class CloudKitManager {
             return
         }
         
+        // 對於分片書籍的更新，我們需要特殊處理
         privateDatabase.fetch(withRecordID: recordID) { record, error in
             if let error = error {
                 completion(.failure(error))
@@ -204,138 +386,115 @@ class CloudKitManager {
                 return
             }
             
-            // 更新記錄 - 移除 currentPage 的更新
-            record["name"] = book.name
-            record["introduction"] = book.introduction
-            record["author"] = book.author
-            record["content"] = book.content
-            record["bookmarkedPages"] = book.bookmarkedPages.map { Int64($0) }
+            // 檢查是否為分片書籍（Int64 格式）
+            let isChunkedValue = record["isChunked"] as? Int64 ?? 1 // 默認為分片
+            let isChunked = isChunkedValue == 1
             
-            // 保存 coverURL 字段
-            if let coverURL = book.coverURL {
-                record["coverURL"] = coverURL
-            }
-            
-            // Handle cover image if exists
-            if let coverImage = book.coverImage {
-                if let imageData = coverImage.jpegData(compressionQuality: 0.8) {
-                    let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString + ".jpg")
-                    do {
-                        try imageData.write(to: tempURL)
-                        let asset = CKAsset(fileURL: tempURL)
-                        record["coverImage"] = asset
-                    } catch {
-                        print("Error saving image to temp file: \(error)")
+            if isChunked {
+                // 分片書籍的更新：只更新主記錄的元數據
+                record["name"] = book.name
+                record["introduction"] = book.introduction
+                record["author"] = book.author
+                record["bookmarkedPages"] = book.bookmarkedPages.map { Int64($0) }
+                
+                // 保存 coverURL 字段
+                if let coverURL = book.coverURL {
+                    record["coverURL"] = coverURL
+                }
+                
+                // Handle cover image if exists
+                if let coverImage = book.coverImage {
+                    if let imageData = coverImage.jpegData(compressionQuality: 0.8) {
+                        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString + ".jpg")
+                        do {
+                            try imageData.write(to: tempURL)
+                            let asset = CKAsset(fileURL: tempURL)
+                            record["coverImage"] = asset
+                        } catch {
+                            print("Error saving image to temp file: \(error)")
+                        }
                     }
                 }
-            }
-            
-            self.privateDatabase.save(record) { savedRecord, error in
-                DispatchQueue.main.async {
+                
+                // 如果內容有變化，需要重新保存分片
+                let chunks = self.chunkContent(book.content)
+                record["totalChunks"] = Int64(chunks.count)
+                
+                self.privateDatabase.save(record) { savedRecord, error in
                     if let error = error {
-                        completion(.failure(error))
-                    } else if let savedRecord = savedRecord {
-                        NotificationCenter.default.post(name: Self.booksDidChangeNotification, object: nil)
-                        completion(.success(savedRecord.recordID.recordName))
+                        DispatchQueue.main.async {
+                            completion(.failure(error))
+                        }
+                        return
+                    }
+                    
+                    guard let savedRecord = savedRecord else {
+                        DispatchQueue.main.async {
+                            completion(.failure(NSError(domain: "com.cliffchan.manwareader", code: 500, userInfo: [NSLocalizedDescriptionKey: "Failed to update main record"])))
+                        }
+                        return
+                    }
+                    
+                    let mainRecordID = savedRecord.recordID.recordName
+                    
+                    // 刪除舊的內容塊並保存新的
+                    self.updateContentChunks(chunks, mainRecordID: mainRecordID, userID: firebaseUserID) { result in
+                        DispatchQueue.main.async {
+                            switch result {
+                            case .success():
+                                NotificationCenter.default.post(name: Self.booksDidChangeNotification, object: nil)
+                                completion(.success(savedRecord.recordID.recordName))
+                            case .failure(let error):
+                                completion(.failure(error))
+                            }
+                        }
                     }
                 }
+            } else {
+                // 這種情況不應該發生，因為我們現在統一使用分片
+                print("⚠️ 發現非分片書籍，重新保存為分片格式")
+                self.saveUserBook(book, firebaseUserID: firebaseUserID, completion: completion)
             }
         }
     }
     
-    func deleteUserBook(bookID: String, firebaseUserID: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        let recordID = CKRecord.ID(recordName: bookID)
+    // MARK: - 更新內容塊
+    private func updateContentChunks(_ chunks: [[String]], mainRecordID: String, userID: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        // 先刪除舊的內容塊
+        let predicate = NSPredicate(format: "mainBookID == %@", mainRecordID)
+        let query = CKQuery(recordType: "BookChunk", predicate: predicate)
         
-        print("🗑️ Attempting to delete record with ID: \(recordID.recordName)")
-        print("👤 For user: \(firebaseUserID)")
-        
-        // 先驗證記錄是否存在並屬於該用戶
-        privateDatabase.fetch(withRecordID: recordID) { record, error in
-            if let error = error {
-                print("❌ Failed to fetch record for deletion: \(error.localizedDescription)")
-                DispatchQueue.main.async {
-                    completion(.failure(error))
-                }
-                return
-            }
-            
-            guard let record = record else {
-                print("❌ Record not found for deletion: \(recordID.recordName)")
-                let notFoundError = NSError(domain: "com.cliffchan.manwareader", code: 404, userInfo: [NSLocalizedDescriptionKey: "Record not found"])
-                DispatchQueue.main.async {
-                    completion(.failure(notFoundError))
-                }
-                return
-            }
-            
-            // 驗證記錄屬於該用戶
-            if let recordUserID = record["userID"] as? String, recordUserID != firebaseUserID {
-                print("❌ Access denied: Record belongs to different user")
-                let accessError = NSError(domain: "com.cliffchan.manwareader", code: 403, userInfo: [NSLocalizedDescriptionKey: "Access denied"])
-                DispatchQueue.main.async {
-                    completion(.failure(accessError))
-                }
-                return
-            }
-            
-            print("✅ Record found and verified, proceeding with deletion...")
-            
-            // 執行刪除
-            self.privateDatabase.delete(withRecordID: recordID) { deletedRecordID, error in
-                DispatchQueue.main.async {
-                    if let error = error {
-                        print("❌ CloudKit delete failed: \(error.localizedDescription)")
-                        completion(.failure(error))
-                    } else if let deletedRecordID = deletedRecordID {
-                        print("✅ Successfully deleted record: \(deletedRecordID.recordName)")
-                        NotificationCenter.default.post(name: Self.booksDidChangeNotification, object: nil)
-                        completion(.success(()))
-                    } else {
-                        print("⚠️ Delete operation completed but no record ID returned")
-                        completion(.success(()))
+        privateDatabase.fetch(withQuery: query) { result in
+            switch result {
+            case .success(let result):
+                let deleteGroup = DispatchGroup()
+                
+                // 刪除舊的分片
+                for (_, recordResult) in result.matchResults {
+                    switch recordResult {
+                    case .success(let chunkRecord):
+                        deleteGroup.enter()
+                        self.privateDatabase.delete(withRecordID: chunkRecord.recordID) { _, error in
+                            if let error = error {
+                                print("⚠️ 刪除舊分片失敗：\(error.localizedDescription)")
+                            }
+                            deleteGroup.leave()
+                        }
+                    case .failure(let error):
+                        print("獲取分片記錄失敗：\(error.localizedDescription)")
                     }
                 }
+                
+                deleteGroup.notify(queue: .global()) {
+                    // 保存新的分片
+                    self.saveContentChunks(chunks, mainRecordID: mainRecordID, userID: userID, completion: completion)
+                }
+                
+            case .failure(let error):
+                print("查詢舊分片失敗：\(error.localizedDescription)")
+                // 即使查詢失敗，也嘗試保存新分片
+                self.saveContentChunks(chunks, mainRecordID: mainRecordID, userID: userID, completion: completion)
             }
-        }
-    }
-    
-    // MARK: - 移除舊的公開/私人書籍方法，統一使用用戶書籍
-    
-    @available(*, deprecated, message: "Use fetchUserBooks instead")
-    func fetchPublicBooks(completion: @escaping (Result<[CloudBook], Error>) -> Void) {
-        // 如果有當前用戶，返回用戶的書籍；否則返回空數組
-        if let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() {
-            fetchUserBooks(firebaseUserID: currentUser.uid, completion: completion)
-        } else {
-            completion(.success([]))
-        }
-    }
-    
-    @available(*, deprecated, message: "Use fetchUserBooks instead")
-    func fetchPrivateBooks(completion: @escaping (Result<[CloudBook], Error>) -> Void) {
-        // 重定向到 fetchUserBooks
-        if let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() {
-            fetchUserBooks(firebaseUserID: currentUser.uid, completion: completion)
-        } else {
-            completion(.success([]))
-        }
-    }
-    
-    @available(*, deprecated, message: "Use saveUserBook instead")
-    func saveBookToPublicDatabase(_ book: CloudBook, completion: @escaping (Result<String, Error>) -> Void) {
-        if let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() {
-            saveUserBook(book, firebaseUserID: currentUser.uid, completion: completion)
-        } else {
-            completion(.failure(NSError(domain: "com.cliffchan.manwareader", code: 401, userInfo: [NSLocalizedDescriptionKey: "User not logged in"])))
-        }
-    }
-    
-    @available(*, deprecated, message: "Use saveUserBook instead")
-    func saveBookToPrivateDatabase(_ book: CloudBook, completion: @escaping (Result<String, Error>) -> Void) {
-        if let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() {
-            saveUserBook(book, firebaseUserID: currentUser.uid, completion: completion)
-        } else {
-            completion(.failure(NSError(domain: "com.cliffchan.manwareader", code: 401, userInfo: [NSLocalizedDescriptionKey: "User not logged in"])))
         }
     }
 
@@ -346,12 +505,12 @@ class CloudKitManager {
             recordID: record.recordID,
             name: record["name"] as? String ?? "",
             introduction: record["introduction"] as? String ?? "",
-            coverURL: record["coverURL"] as? String, // 從 CloudKit 讀取 coverURL
+            coverURL: record["coverURL"] as? String,
             author: record["author"] as? String ?? "",
-            content: record["content"] as? [String] ?? [],
+            content: [], // 初始化為空數組，稍後在分片載入時會被填充
             firebaseBookID: record["firebaseBookID"] as? String,
-            coverImage: nil, // Will be loaded separately from Asset
-            currentPage: 0, // 改為默認值 0，不從 CloudKit 讀取
+            coverImage: nil,
+            currentPage: 0,
             bookmarkedPages: (record["bookmarkedPages"] as? [Int64])?.map { Int($0) } ?? []
         )
     }
@@ -368,19 +527,16 @@ class CloudKitManager {
         record["introduction"] = book.introduction
         record["author"] = book.author
         record["content"] = book.content
-        // 移除 currentPage 的保存
         record["bookmarkedPages"] = book.bookmarkedPages.map { Int64($0) }
         
         if let firebaseBookID = book.firebaseBookID {
             record["firebaseBookID"] = firebaseBookID
         }
         
-        // 保存 coverURL 字段
         if let coverURL = book.coverURL {
             record["coverURL"] = coverURL
         }
         
-        // Handle cover image if exists - 保存為 Asset
         if let coverImage = book.coverImage {
             if let imageData = coverImage.jpegData(compressionQuality: 0.8) {
                 let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString + ".jpg")
@@ -397,7 +553,7 @@ class CloudKitManager {
         return record
     }
 
-    // MARK: - User Status Check
+    // MARK: - User Status Check (重新添加缺失的方法)
     
     func checkUserStatus(completion: @escaping (Result<CKUserIdentity?, Error>) -> Void) {
         container.fetchUserRecordID { userRecordID, error in
@@ -454,7 +610,7 @@ class CloudKitManager {
         }
     }
 
-    // MARK: - Image Operations (添加缺失的方法)
+    // MARK: - Image Operations (確保方法存在)
     
     func loadCoverImage(recordName: String, isPublic: Bool, completion: @escaping (Result<UIImage, Error>) -> Void) {
         let recordID = CKRecord.ID(recordName: recordName)
@@ -573,7 +729,7 @@ class CloudKitManager {
         }.resume()
     }
 
-    // MARK: - Reading Progress Methods (添加缺失的方法)
+    // MARK: - Reading Progress Methods (確保方法存在)
     
     func fetchReadingProgress(bookID: String, firebaseUserID: String, completion: @escaping (Result<(currentPage: Int, bookmarkedPages: [Int]), Error>) -> Void) {
         // 修正查詢條件 - 使用正確的記錄ID查詢方式
@@ -649,6 +805,172 @@ class CloudKitManager {
                     }
                 }
             }
+        }
+    }
+    
+    func deleteUserBook(bookID: String, firebaseUserID: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        let recordID = CKRecord.ID(recordName: bookID)
+        
+        print("🗑️ Attempting to delete record with ID: \(recordID.recordName)")
+        print("👤 For user: \(firebaseUserID)")
+        
+        // 先驗證記錄是否存在並屬於該用戶
+        privateDatabase.fetch(withRecordID: recordID) { record, error in
+            if let error = error {
+                print("❌ Failed to fetch record for deletion: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
+                return
+            }
+            
+            guard let record = record else {
+                print("❌ Record not found for deletion: \(recordID.recordName)")
+                let notFoundError = NSError(domain: "com.cliffchan.manwareader", code: 404, userInfo: [NSLocalizedDescriptionKey: "Record not found"])
+                DispatchQueue.main.async {
+                    completion(.failure(notFoundError))
+                }
+                return
+            }
+            
+            // 驗證記錄屬於該用戶
+            if let recordUserID = record["userID"] as? String, recordUserID != firebaseUserID {
+                print("❌ Access denied: Record belongs to different user")
+                let accessError = NSError(domain: "com.cliffchan.manwareader", code: 403, userInfo: [NSLocalizedDescriptionKey: "Access denied"])
+                DispatchQueue.main.async {
+                    completion(.failure(accessError))
+                }
+                return
+            }
+            
+            print("✅ Record found and verified, proceeding with deletion...")
+            
+            // 檢查是否為分片書籍，如果是則需要同時刪除分片
+            let isChunkedValue = record["isChunked"] as? Int64 ?? 1
+            let isChunked = isChunkedValue == 1
+            
+            if isChunked {
+                // 先刪除所有分片
+                self.deleteBookChunks(mainBookID: recordID.recordName) { chunkResult in
+                    // 無論分片刪除是否成功，都繼續刪除主記錄
+                    self.privateDatabase.delete(withRecordID: recordID) { deletedRecordID, error in
+                        DispatchQueue.main.async {
+                            if let error = error {
+                                print("❌ CloudKit delete failed: \(error.localizedDescription)")
+                                completion(.failure(error))
+                            } else if let deletedRecordID = deletedRecordID {
+                                print("✅ Successfully deleted record: \(deletedRecordID.recordName)")
+                                NotificationCenter.default.post(name: Self.booksDidChangeNotification, object: nil)
+                                completion(.success(()))
+                            } else {
+                                print("⚠️ Delete operation completed but no record ID returned")
+                                completion(.success(()))
+                            }
+                        }
+                    }
+                }
+            } else {
+                // 非分片書籍，直接刪除
+                self.privateDatabase.delete(withRecordID: recordID) { deletedRecordID, error in
+                    DispatchQueue.main.async {
+                        if let error = error {
+                            print("❌ CloudKit delete failed: \(error.localizedDescription)")
+                            completion(.failure(error))
+                        } else if let deletedRecordID = deletedRecordID {
+                            print("✅ Successfully deleted record: \(deletedRecordID.recordName)")
+                            NotificationCenter.default.post(name: Self.booksDidChangeNotification, object: nil)
+                            completion(.success(()))
+                        } else {
+                            print("⚠️ Delete operation completed but no record ID returned")
+                            completion(.success(()))
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    // MARK: - 刪除書籍分片的輔助方法
+    private func deleteBookChunks(mainBookID: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        let predicate = NSPredicate(format: "mainBookID == %@", mainBookID)
+        let query = CKQuery(recordType: "BookChunk", predicate: predicate)
+        
+        privateDatabase.fetch(withQuery: query) { result in
+            switch result {
+            case .success(let result):
+                let deleteGroup = DispatchGroup()
+                var deleteErrors: [Error] = []
+                
+                for (_, recordResult) in result.matchResults {
+                    switch recordResult {
+                    case .success(let chunkRecord):
+                        deleteGroup.enter()
+                        self.privateDatabase.delete(withRecordID: chunkRecord.recordID) { _, error in
+                            if let error = error {
+                                deleteErrors.append(error)
+                                print("⚠️ 刪除分片失敗：\(error.localizedDescription)")
+                            } else {
+                                print("✅ 成功刪除分片：\(chunkRecord.recordID.recordName)")
+                            }
+                            deleteGroup.leave()
+                        }
+                    case .failure(let error):
+                        print("獲取分片記錄失敗：\(error.localizedDescription)")
+                    }
+                }
+                
+                deleteGroup.notify(queue: .global()) {
+                    if deleteErrors.isEmpty {
+                        completion(.success(()))
+                    } else {
+                        completion(.failure(deleteErrors.first!))
+                    }
+                }
+                
+            case .failure(let error):
+                print("查詢分片失敗：\(error.localizedDescription)")
+                completion(.failure(error))
+            }
+        }
+    }
+
+    // MARK: - 移除舊的公開/私人書籍方法，統一使用用戶書籍
+    
+    @available(*, deprecated, message: "Use fetchUserBooks instead")
+    func fetchPublicBooks(completion: @escaping (Result<[CloudBook], Error>) -> Void) {
+        // 如果有當前用戶，返回用戶的書籍；否則返回空數組
+        if let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() {
+            fetchUserBooks(firebaseUserID: currentUser.uid, completion: completion)
+        } else {
+            completion(.success([]))
+        }
+    }
+    
+    @available(*, deprecated, message: "Use fetchUserBooks instead")
+    func fetchPrivateBooks(completion: @escaping (Result<[CloudBook], Error>) -> Void) {
+        // 重定向到 fetchUserBooks
+        if let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() {
+            fetchUserBooks(firebaseUserID: currentUser.uid, completion: completion)
+        } else {
+            completion(.success([]))
+        }
+    }
+    
+    @available(*, deprecated, message: "Use saveUserBook instead")
+    func saveBookToPublicDatabase(_ book: CloudBook, completion: @escaping (Result<String, Error>) -> Void) {
+        if let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() {
+            saveUserBook(book, firebaseUserID: currentUser.uid, completion: completion)
+        } else {
+            completion(.failure(NSError(domain: "com.cliffchan.manwareader", code: 401, userInfo: [NSLocalizedDescriptionKey: "User not logged in"])))
+        }
+    }
+    
+    @available(*, deprecated, message: "Use saveUserBook instead")
+    func saveBookToPrivateDatabase(_ book: CloudBook, completion: @escaping (Result<String, Error>) -> Void) {
+        if let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() {
+            saveUserBook(book, firebaseUserID: currentUser.uid, completion: completion)
+        } else {
+            completion(.failure(NSError(domain: "com.cliffchan.manwareader", code: 401, userInfo: [NSLocalizedDescriptionKey: "User not logged in"])))
         }
     }
 }

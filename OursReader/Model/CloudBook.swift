@@ -12,7 +12,7 @@ struct CloudBook: Identifiable {
     let introduction: String
     let coverURL: String?
     let author: String
-    let content: [String]
+    var content: [String] // 改為 var，允許修改
     
     // Optional link to a Firebase book ID if this represents a book from Firebase
     let firebaseBookID: String?

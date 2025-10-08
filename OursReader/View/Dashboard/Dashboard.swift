@@ -19,6 +19,7 @@ struct Dashboard: View {
 
     // 新增狀態變量
     @State private var isInsertingTestBooks = false
+    @State private var showingImport = false // 新增導入狀態
     
     var body: some View {
         ZStack {
@@ -57,6 +58,12 @@ struct Dashboard: View {
         }
         .onAppear {
             loadBooksData()
+        }
+        .sheet(isPresented: $showingImport) {
+            BookImportView {
+                // 書籍導入成功後重新載入
+                loadBooksData()
+            }
         }
     }
     
@@ -209,10 +216,14 @@ struct Dashboard: View {
                         }
                     } else {
                         if publicBooks.isEmpty {
-                            // 如果沒有書籍，顯示「加書」按鈕和空狀態
+                            // 如果沒有書籍，顯示「加書」按鈕和「導入」按鈕
                             DashboardAddBookItemWithSheet(color: type.color) {
-                                // 重新載入書籍數據
                                 loadBooksData()
+                            }
+                            
+                            // 新增「導入」按鈕
+                            DashboardImportBookItem(color: type.color) {
+                                showingImport = true
                             }
                             
                             // 顯示空狀態（除了加書按鈕）
@@ -246,8 +257,12 @@ struct Dashboard: View {
                             
                             // 將「加書」按鈕放在最後
                             DashboardAddBookItemWithSheet(color: type.color) {
-                                // 重新載入書籍數據
                                 loadBooksData()
+                            }
+                            
+                            // 新增「導入」按鈕
+                            DashboardImportBookItem(color: type.color) {
+                                showingImport = true
                             }
                         }
                     }
@@ -448,6 +463,41 @@ struct DashboardAddBookItemWithSheet: View {
                 onBookAdded()
             }
         }
+    }
+}
+
+// 新增 Dashboard 的「導入書籍」按鈕視圖
+struct DashboardImportBookItem: View {
+    let color: Color
+    let onTap: () -> Void
+    
+    var body: some View {
+        Button(action: onTap) {
+            RoundedRectangle(cornerRadius: 15)
+                .fill(color.opacity(0.8))
+                .frame(height: 150)
+                .overlay {
+                    VStack(spacing: 12) {
+                        Image(systemName: "square.and.arrow.down.fill")
+                            .font(.system(size: 40))
+                            .foregroundColor(ColorManager.shared.red1)
+                        
+                        Text("Import Books")
+                            .font(.headline)
+                            .foregroundColor(ColorManager.shared.red1)
+                        
+                        Text("From JSON files")
+                            .font(.caption)
+                            .foregroundColor(ColorManager.shared.red1.opacity(0.8))
+                            .multilineTextAlignment(.center)
+                    }
+                }
+                .overlay(
+                    RoundedRectangle(cornerRadius: 15)
+                        .stroke(ColorManager.shared.red1.opacity(0.3), style: StrokeStyle(lineWidth: 2, dash: [10, 5]))
+                )
+        }
+        .buttonStyle(PlainButtonStyle())
     }
 }
 

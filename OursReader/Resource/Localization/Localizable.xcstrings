@@ -508,6 +508,9 @@
         }
       }
     },
+    "From JSON files" : {
+
+    },
     "general_cancel" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -613,7 +616,16 @@
     "Hello, World!" : {
 
     },
+    "Import Books" : {
+
+    },
+    "Import from Files" : {
+
+    },
     "Information" : {
+
+    },
+    "JSON format" : {
 
     },
     "Loading..." : {
@@ -1220,7 +1232,28 @@
     "Widget" : {
 
     },
+    "最近的文件" : {
+
+    },
+    "取消" : {
+
+    },
+    "完成" : {
+
+    },
+    "導入書籍" : {
+
+    },
+    "導入結果" : {
+
+    },
     "正在添加測試書籍..." : {
+
+    },
+    "確定" : {
+
+    },
+    "選擇一種方式來導入你的書籍" : {
 
     }
   },

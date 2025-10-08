@@ -5,6 +5,7 @@ struct CloudBookListView: View {
     @State private var isLoading = true
     @State private var errorMessage: String?
     @State private var showingAddBook = false // 新增狀態
+    @State private var showingImport = false // 新增導入狀態
     
     var onAddBookTapped: (() -> Void)? 
     
@@ -51,12 +52,27 @@ struct CloudBookListView: View {
                         AddBookItemView {
                             showingAddBook = true
                         }
+                        
+                        // 新增「導入」按鈕
+                        ImportBookItemView {
+                            showingImport = true
+                        }
                     }
                     .padding()
                 }
             }
         }
         .navigationTitle("My Books")
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    showingImport = true
+                } label: {
+                    Image(systemName: "square.and.arrow.down")
+                        .foregroundColor(.black)
+                }
+            }
+        }
         .onAppear {
             loadBooks()
         }
@@ -69,6 +85,12 @@ struct CloudBookListView: View {
         .sheet(isPresented: $showingAddBook) {
             AddBookView { newBook in
                 // 書籍添加成功後重新載入列表
+                loadBooks()
+            }
+        }
+        .sheet(isPresented: $showingImport) {
+            BookImportView {
+                // 書籍導入成功後重新載入列表
                 loadBooks()
             }
         }
@@ -240,6 +262,49 @@ struct AddBookItemView: View {
                 Text("Tap to add")
                     .font(.caption)
                     .foregroundColor(ColorManager.shared.green1.opacity(0.7)) // 改為 green1，保持透明度
+            }
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+}
+
+// 新增「導入書籍」按鈕視圖
+struct ImportBookItemView: View {
+    let onTap: () -> Void
+    
+    var body: some View {
+        Button(action: onTap) {
+            VStack {
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(ColorManager.shared.red1.opacity(0.1))
+                    .frame(width: 140, height: 200)
+                    .overlay(
+                        VStack(spacing: 12) {
+                            Image(systemName: "square.and.arrow.down.fill")
+                                .font(.system(size: 40))
+                                .foregroundColor(ColorManager.shared.red1)
+                            
+                            Text("Import Books")
+                                .font(.headline)
+                                .foregroundColor(ColorManager.shared.red1)
+                        }
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(ColorManager.shared.red1, style: StrokeStyle(lineWidth: 2, dash: [8, 4]))
+                    )
+                
+                Text("Import from Files")
+                    .font(.headline)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(ColorManager.shared.red1)
+                    .frame(width: 140)
+                    .padding(.top, 4)
+                
+                Text("JSON format")
+                    .font(.caption)
+                    .foregroundColor(ColorManager.shared.red1.opacity(0.7))
             }
         }
         .buttonStyle(PlainButtonStyle())
