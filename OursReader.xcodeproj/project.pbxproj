@@ -70,6 +70,8 @@
 		990DE4312D5C829E00C8776F /* readerWatchOS Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 990DE4242D5C829C00C8776F /* readerWatchOS Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		991A513D2E96584B001C7775 /* BookImportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991A513C2E96584B001C7775 /* BookImportManager.swift */; };
 		991A513F2E965899001C7775 /* BookImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991A513E2E965899001C7775 /* BookImportView.swift */; };
+		991A51432E976C2E001C7775 /* universal_book_scraper.py in Resources */ = {isa = PBXBuildFile; fileRef = 991A51422E976C2E001C7775 /* universal_book_scraper.py */; };
+		991A51452E976C9C001C7775 /* ScriptManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991A51442E976C9C001C7775 /* ScriptManager.swift */; };
 		993EDABE2BDA4675002C18C7 /* SwiftEntryKit in Frameworks */ = {isa = PBXBuildFile; productRef = 993EDABD2BDA4675002C18C7 /* SwiftEntryKit */; };
 		993EDAC22BDBB71B002C18C7 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 993EDAC12BDBB71B002C18C7 /* FirebaseFirestore */; };
 		993EDAC42BDBB71B002C18C7 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 993EDAC32BDBB71B002C18C7 /* FirebaseFirestoreSwift */; };
@@ -267,6 +269,8 @@
 		990DE4242D5C829C00C8776F /* readerWatchOS Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "readerWatchOS Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		991A513C2E96584B001C7775 /* BookImportManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookImportManager.swift; sourceTree = "<group>"; };
 		991A513E2E965899001C7775 /* BookImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookImportView.swift; sourceTree = "<group>"; };
+		991A51422E976C2E001C7775 /* universal_book_scraper.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; name = universal_book_scraper.py; path = script/universal_book_scraper.py; sourceTree = "<group>"; };
+		991A51442E976C9C001C7775 /* ScriptManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptManager.swift; sourceTree = "<group>"; };
 		993EDAC62BE9F6EA002C18C7 /* Dashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dashboard.swift; sourceTree = "<group>"; };
 		993EDAC92BEB2C9C002C18C7 /* PeerDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeerDevice.swift; sourceTree = "<group>"; };
 		993EDACC2BEB2CBF002C18C7 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
@@ -551,6 +555,7 @@
 				593EB2032C01EFFF00DD430F /* LM.swift */,
 				991A513C2E96584B001C7775 /* BookImportManager.swift */,
 				99F0C5F02E8534D2008711EC /* DashboardBooksManager.swift */,
+				991A51442E976C9C001C7775 /* ScriptManager.swift */,
 				998614432BB1770300E0996D /* NotificationManager.swift */,
 				99B807392DF6966F007A0E49 /* CloudKitManager.swift */,
 				99F0C5F22E8A6BAC008711EC /* CloudKitTestHelper.swift */,
@@ -599,6 +604,7 @@
 		59E75E8D2ADF53AA007A549C = {
 			isa = PBXGroup;
 			children = (
+				991A51422E976C2E001C7775 /* universal_book_scraper.py */,
 				59E75E982ADF53AA007A549C /* OursReader */,
 				59E75EA92ADF53AB007A549C /* OursReaderTests */,
 				59E75EB32ADF53AB007A549C /* OursReaderUITests */,
@@ -1044,6 +1050,7 @@
 				593EB1E62C01DF1B00DD430F /* WorkSans-Italic.ttf in Resources */,
 				593EB1E72C01DF1B00DD430F /* WorkSans-Medium.ttf in Resources */,
 				593EB1E52C01DF1B00DD430F /* WorkSans-Bold.ttf in Resources */,
+				991A51432E976C2E001C7775 /* universal_book_scraper.py in Resources */,
 				593EB1EA2C01DF1B00DD430F /* WorkSans-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1140,6 +1147,7 @@
 				993EDAD22BEB48BA002C18C7 /* DeviceFinderViewModel.swift in Sources */,
 				997D30632CB6672B00A3B692 /* AppSecurity.swift in Sources */,
 				593EB1FF2C01EED600DD430F /* View+.swift in Sources */,
+				991A51452E976C9C001C7775 /* ScriptManager.swift in Sources */,
 				998614502BB4253200E0996D /* Route.swift in Sources */,
 				993EDAD42BEB59FB002C18C7 /* FriendList.swift in Sources */,
 				593EB2042C01EFFF00DD430F /* LM.swift in Sources */,

@@ -17,7 +17,7 @@ class UniversalBookScraper:
         
         # 新增重試配置
         self.max_retries = 3  # 最大重試次數
-        self.retry_delay = 5  # 重試延遲（秒）
+        self.retry_delay = 10  # 重試延遲（秒）
         
         # 新增統計變量
         self.stats = {
@@ -524,7 +524,7 @@ class UniversalBookScraper:
         safe_title = safe_title.replace(' ', '_')[:50]
         timestamp = time.strftime("%Y%m%d_%H%M%S")
         
-        if is_continue:
+        if (is_continue):
             # 續傳模式：更新原文件名，但加上新的時間戳
             status_suffix = "updated_complete" if is_complete else "updated_partial"
             filename = f"{safe_title}_{status_suffix}_{timestamp}.json"
@@ -583,7 +583,7 @@ class UniversalBookScraper:
                     chapter_title = title_text
                     break
         
-        # 提取內容
+        # 提取內容 - 修改這部分來正確處理 <p> 標籤
         content = ""
         for selector in content_selectors:
             content_element = soup.select_one(selector)
@@ -592,7 +592,8 @@ class UniversalBookScraper:
                 for script in content_element(["script", "style", "nav", "header", "footer"]):
                     script.decompose()
                 
-                content = content_element.get_text()
+                # 🔧 新增：專門處理 <p> 標籤以保留分行
+                content = self.extract_content_with_paragraphs(content_element)
                 content = self.clean_content(content)
                 
                 # 檢查內容長度，太短可能不是正文
@@ -601,6 +602,73 @@ class UniversalBookScraper:
         
         return chapter_title, content
     
+    def extract_content_with_paragraphs(self, content_element):
+        """專門處理 <p> 標籤，保留段落分行"""
+        # 找到所有 <p> 標籤
+        paragraphs = content_element.find_all('p')
+        
+        if paragraphs:
+            # 如果有 <p> 標籤，逐個處理
+            paragraph_texts = []
+            for p in paragraphs:
+                text = p.get_text().strip()
+                if text:  # 只添加非空段落
+                    paragraph_texts.append(text)
+            
+            # 用雙換行分隔段落
+            return '\n\n'.join(paragraph_texts)
+        else:
+            # 如果沒有 <p> 標籤，使用原有邏輯
+            return content_element.get_text()
+
+    def clean_content(self, text):
+        """清理文本內容（保留分行格式）"""
+        # 首先移除常見的廣告文字和無關內容
+        ad_patterns = [
+            r'.*?章節錯誤.*?',
+            r'.*?舉報.*?',
+            r'.*?收藏.*?',
+            r'.*?投票.*?',
+            r'.*?推薦.*?',
+            r'.*?廣告.*?',
+            r'.*?免費閱讀.*?',
+            r'.*?點擊進入.*?',
+            r'.*?更多精彩.*?',
+            r'本章未完.*?點擊下一頁繼續閱讀.*?',
+        ]
+        
+        for pattern in ad_patterns:
+            text = re.sub(pattern, '', text, flags=re.IGNORECASE)
+        
+        # 🔧 修改：更好地處理段落間距
+        # 保留由 extract_content_with_paragraphs 產生的雙換行
+        # 但清理多餘的空白行（超過兩個換行的情況）
+        text = re.sub(r'\n\s*\n\s*\n+', '\n\n', text)
+        
+        # 清理每行開頭和結尾的空白，但保留換行
+        lines = text.split('\n')
+        cleaned_lines = []
+        
+        for line in lines:
+            # 清理每行的首尾空白和多餘的空格
+            cleaned_line = re.sub(r'[ \t]+', ' ', line.strip())
+            cleaned_lines.append(cleaned_line)
+        
+        # 重新組合，保留分行
+        text = '\n'.join(cleaned_lines)
+        
+        # 移除開頭和結尾的空白行
+        text = text.strip()
+        
+        # 🔧 修改：確保段落之間保持雙換行
+        # 將單個換行後跟非空行的情況轉換為雙換行（如果不是已經是雙換行）
+        text = re.sub(r'(?<!\n)\n(?!\n)(?=\S)', '\n\n', text)
+        
+        # 最後清理：將多於兩個的連續換行縮減為兩個
+        text = re.sub(r'\n{3,}', '\n\n', text)
+        
+        return text
+
     def find_next_page_url(self, soup, current_url):
         """智能尋找下一頁連結"""
         # 常見的下一頁選擇器和文字
@@ -674,13 +742,8 @@ class UniversalBookScraper:
         return book_title, author
     
     def clean_content(self, text):
-        """清理文本內容"""
-        # 移除多餘空白和換行
-        text = re.sub(r'\n\s*\n', '\n\n', text)
-        text = re.sub(r'[ \t]+', ' ', text)
-        text is text.strip()
-        
-        # 移除常見的廣告文字和無關內容
+        """清理文本內容（保留分行格式）"""
+        # 首先移除常見的廣告文字和無關內容
         ad_patterns = [
             r'.*?章節錯誤.*?',
             r'.*?舉報.*?',
@@ -696,6 +759,33 @@ class UniversalBookScraper:
         
         for pattern in ad_patterns:
             text = re.sub(pattern, '', text, flags=re.IGNORECASE)
+        
+        # 🔧 修改：更好地處理段落間距
+        # 保留由 extract_content_with_paragraphs 產生的雙換行
+        # 但清理多餘的空白行（超過兩個換行的情況）
+        text = re.sub(r'\n\s*\n\s*\n+', '\n\n', text)
+        
+        # 清理每行開頭和結尾的空白，但保留換行
+        lines = text.split('\n')
+        cleaned_lines = []
+        
+        for line in lines:
+            # 清理每行的首尾空白和多餘的空格
+            cleaned_line = re.sub(r'[ \t]+', ' ', line.strip())
+            cleaned_lines.append(cleaned_line)
+        
+        # 重新組合，保留分行
+        text = '\n'.join(cleaned_lines)
+        
+        # 移除開頭和結尾的空白行
+        text = text.strip()
+        
+        # 🔧 修改：確保段落之間保持雙換行
+        # 將單個換行後跟非空行的情況轉換為雙換行（如果不是已經是雙換行）
+        text = re.sub(r'(?<!\n)\n(?!\n)(?=\S)', '\n\n', text)
+        
+        # 最後清理：將多於兩個的連續換行縮減為兩個
+        text = re.sub(r'\n{3,}', '\n\n', text)
         
         return text
     
