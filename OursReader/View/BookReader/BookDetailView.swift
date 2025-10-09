@@ -17,12 +17,19 @@ struct BookDetailView: View {
             VStack(alignment: .leading, spacing: 20) {
                 // Book cover image and title
                 HStack(alignment: .top, spacing: 20) {
-                    Image(book.coverImage)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 120, height: 180)
-                        .cornerRadius(8)
-                        .shadow(radius: 5)
+                    // 🔧 修改：使用新的預設封面或程式化生成
+                    Group {
+                        if book.coverImage == "default_cover" {
+                            DefaultBookCoverView(width: 120, height: 180, showTitle: true, title: book.title)
+                        } else {
+                            Image(book.coverImage)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 120, height: 180)
+                                .cornerRadius(8)
+                                .shadow(radius: 5)
+                        }
+                    }
                     
                     VStack(alignment: .leading, spacing: 8) {
                         Text(book.title)

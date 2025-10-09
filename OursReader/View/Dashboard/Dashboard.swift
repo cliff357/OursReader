@@ -189,12 +189,6 @@ struct Dashboard: View {
                         updateSelectedButtonListType(for: tab)
                     }
                 }
-                // 添加長按手勢，只在 E-Book tab 上有效
-                .onLongPressGesture(minimumDuration: 1.0) {
-                    if tab == .ebook && !lockTabSelection {
-                        insertTestBooks()
-                    }
-                }
             }
         }
         .background {
@@ -208,24 +202,6 @@ struct Dashboard: View {
         }
         .background(Color.gray.opacity(0.1), in: .capsule)
         .padding(.horizontal, 15)
-        // 添加載入覆蓋層
-        .overlay {
-            if isInsertingTestBooks {
-                HStack(spacing: 8) {
-                    ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle())
-                        .scaleEffect(0.8)
-                    Text("正在添加測試書籍...")
-                        .font(.caption)
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 8)
-                .background(Color.black.opacity(0.8))
-                .foregroundColor(.white)
-                .cornerRadius(20)
-                .transition(.opacity.combined(with: .scale))
-            }
-        }
     }
     
     @ViewBuilder
@@ -378,42 +354,6 @@ struct Dashboard: View {
             selectedButtonListType = .ebook
         }
     }
-
-    // 新增插入測試書籍的方法
-    private func insertTestBooks() {
-        guard !isInsertingTestBooks else { return }
-        
-        print("📚 User triggered test books insertion via long press")
-        
-        // 檢查是否有登入用戶
-        guard let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() else {
-            print("⚠️ No user logged in, cannot insert test books")
-            return
-        }
-        
-        isInsertingTestBooks = true
-        
-        // 給用戶觸覺反饋
-        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
-        impactFeedback.impactOccurred()
-        
-        // 插入測試書籍
-        CloudKitTestHelper.shared.insertTestBooksToCloud()
-        
-        // 2秒後停止載入狀態並重新載入書籍
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            self.isInsertingTestBooks = false
-            
-            // 重新載入書籍數據
-            self.loadBooksData()
-            
-            // 成功觸覺反饋
-            let successFeedback = UINotificationFeedbackGenerator()
-            successFeedback.notificationOccurred(.success)
-            
-            print("✅ Test books insertion completed!")
-        }
-    }
 }
 
 // 新的 CloudBook 網格項目視圖
@@ -429,25 +369,8 @@ struct CloudBookGridItem: View {
                 VStack(alignment: .leading, spacing: 8) {
                     // 書籍封面圖片和標題區域 - 水平排列
                     HStack(alignment: .top, spacing: 8) {
-                        // 封面圖片
-                        if let coverImage = book.coverImage {
-                            Image(uiImage: coverImage)
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: 40, height: 50)
-                                .cornerRadius(4)
-                                .clipped()
-                        } else {
-                            Rectangle()
-                                .fill(ColorManager.shared.red1.opacity(0.3))
-                                .frame(width: 40, height: 50)
-                                .cornerRadius(4)
-                                .overlay(
-                                    Image(systemName: "book.closed")
-                                        .foregroundColor(ColorManager.shared.red1)
-                                        .font(.system(size: 16))
-                                )
-                        }
+                        // 🔧 修改：使用新的預設封面視圖
+                        DummyBookCoverView()
                         
                         // 書籍標題 - 放在圖片右邊，可以顯示2行
                         VStack(alignment: .leading, spacing: 4) {
@@ -482,6 +405,13 @@ struct CloudBookGridItem: View {
                 .padding(12)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
+    }
+}
+
+// 🔧 修改：使用新的預設封面視圖
+struct DummyBookCoverView: View {
+    var body: some View {
+        DefaultBookCoverView(width: 40, height: 50)
     }
 }
 

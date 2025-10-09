@@ -226,17 +226,13 @@ struct BookItemView: View {
     }
     
     private func loadFallbackImage() {
-        // 嘗試從 firebaseBookID 找到對應的本地書籍圖片
-        if let firebaseBookID = book.firebaseBookID,
-           let localBook = ebookList.first(where: { $0.id == firebaseBookID }),
-           let localImage = UIImage(named: localBook.coverImage) {
-            self.coverImage = localImage
-        } else {
-            // 使用預設封面圖片
-            let defaultImages = ["cover_image_1", "cover_image_2", "cover_image_3"]
-            let randomImage = defaultImages.randomElement() ?? "cover_image_1"
-            self.coverImage = UIImage(named: randomImage)
-        }
+        // 🔧 修改：使用新的預設封面生成器
+        self.coverImage = DefaultBookCoverView.generateUIImage(width: 140, height: 200, title: book.name)
+    }
+    
+    // 🔧 修改：創建新的 dummy 封面圖片方法
+    private func createDummyCoverImage() -> UIImage? {
+        return DefaultBookCoverView.generateUIImage(width: 140, height: 200, title: "DUMMY")
     }
 }
 

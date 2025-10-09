@@ -35,7 +35,7 @@ extension CloudBook {
             title: name,
             instruction: introduction,
             author: author,
-            coverImage: coverURL ?? "cover_image_1", // Default placeholder if no cover URL
+            coverImage: coverURL ?? "",
             content: content,
             currentPage: currentPage,
             bookmarkedPages: bookmarkedPages

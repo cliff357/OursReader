@@ -139,7 +139,7 @@ class CloudKitManager {
                         let isChunkedValue = record["isChunked"] as? Int64 ?? 1 // 默認為分片
                         let isChunked = isChunkedValue == 1
                         
-                        if isChunked {
+                        if (isChunked) {
                             // 載入分片書籍
                             self.loadChunkedBook(record) { bookResult in
                                 switch bookResult {
@@ -618,27 +618,22 @@ class CloudKitManager {
         
         database.fetch(withRecordID: recordID) { record, error in
             if let error = error {
-                // Fallback to local images
+                // 🔧 修改：直接使用程式化生成的預設封面
                 DispatchQueue.main.async {
-                    if let image = UIImage(named: recordName) {
-                        completion(.success(image))
-                    } else {
-                        let defaultImages = ["cover_image_1", "cover_image_2", "cover_image_3"]
-                        let randomImage = defaultImages.randomElement() ?? "cover_image_1"
-                        if let image = UIImage(named: randomImage) {
-                            completion(.success(image))
-                        } else {
-                            completion(.failure(error))
-                        }
-                    }
+                    let defaultImage = DefaultBookCoverView.generateUIImage(
+                        width: 140, 
+                        height: 200, 
+                        title: recordName
+                    )
+                    completion(.success(defaultImage))
                 }
                 return
             }
             
             guard let record = record else {
                 DispatchQueue.main.async {
-                    let error = NSError(domain: "com.cliffchan.manwareader", code: 404, userInfo: [NSLocalizedDescriptionKey: "Record not found"])
-                    completion(.failure(error))
+                    let defaultImage = DefaultBookCoverView.generateUIImage(width: 140, height: 200)
+                    completion(.success(defaultImage))
                 }
                 return
             }
@@ -661,17 +656,15 @@ class CloudKitManager {
             else if let coverURL = record["coverURL"] as? String {
                 self.loadImageFromURL(coverURL, completion: completion)
             }
-            // 最後使用 fallback
+            // 🔧 修改：最後使用程式化生成的預設封面
             else {
                 DispatchQueue.main.async {
-                    let defaultImages = ["cover_image_1", "cover_image_2", "cover_image_3"]
-                    let randomImage = defaultImages.randomElement() ?? "cover_image_1"
-                    if let image = UIImage(named: randomImage) {
-                        completion(.success(image))
-                    } else {
-                        let error = NSError(domain: "com.cliffchan.manwareader", code: 404, userInfo: [NSLocalizedDescriptionKey: "Cover image not found"])
-                        completion(.failure(error))
-                    }
+                    let defaultImage = DefaultBookCoverView.generateUIImage(
+                        width: 140, 
+                        height: 200, 
+                        title: record["name"] as? String
+                    )
+                    completion(.success(defaultImage))
                 }
             }
         }
@@ -682,51 +675,30 @@ class CloudKitManager {
         if let coverURL = record["coverURL"] as? String {
             loadImageFromURL(coverURL, completion: completion)
         } else {
-            // 使用 fallback
+            // 🔧 修改：使用程式化生成的預設封面
             DispatchQueue.main.async {
-                let defaultImages = ["cover_image_1", "cover_image_2", "cover_image_3"]
-                let randomImage = defaultImages.randomElement() ?? "cover_image_1"
-                if let image = UIImage(named: randomImage) {
-                    completion(.success(image))
-                } else {
-                    let error = NSError(domain: "com.cliffchan.manwareader", code: 404, userInfo: [NSLocalizedDescriptionKey: "Cover image not found"])
-                    completion(.failure(error))
-                }
+                let defaultImage = DefaultBookCoverView.generateUIImage(
+                    width: 140, 
+                    height: 200, 
+                    title: record["name"] as? String
+                )
+                completion(.success(defaultImage))
             }
         }
     }
     
     // 新增輔助方法：從 URL 載入圖片
     private func loadImageFromURL(_ urlString: String, completion: @escaping (Result<UIImage, Error>) -> Void) {
-        // 如果是本地圖片名稱，直接載入
-        if let image = UIImage(named: urlString) {
-            DispatchQueue.main.async {
-                completion(.success(image))
-            }
-            return
+        // 🔧 修改：不再嘗試從本地載入圖片，直接使用程式化生成的預設封面
+        DispatchQueue.main.async {
+            let defaultImage = DefaultBookCoverView.generateUIImage(width: 140, height: 200)
+            completion(.success(defaultImage))
         }
-        
-        // 如果是 URL，從網絡載入
-        guard let url = URL(string: urlString) else {
-            DispatchQueue.main.async {
-                let error = NSError(domain: "com.cliffchan.manwareader", code: 400, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
-                completion(.failure(error))
-            }
-            return
-        }
-        
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            DispatchQueue.main.async {
-                if let error = error {
-                    completion(.failure(error))
-                } else if let data = data, let image = UIImage(data: data) {
-                    completion(.success(image))
-                } else {
-                    let error = NSError(domain: "com.cliffchan.manwareader", code: 500, userInfo: [NSLocalizedDescriptionKey: "Failed to load image from URL"])
-                    completion(.failure(error))
-                }
-            }
-        }.resume()
+    }
+    
+    // 🔧 修改：創建統一的 dummy 書本圖片
+    private func createDummyBookImage() -> UIImage {
+        return DefaultBookCoverView.generateUIImage(width: 140, height: 200, title: "BOOK")
     }
 
     // MARK: - Reading Progress Methods (確保方法存在)

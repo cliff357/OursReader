@@ -72,6 +72,7 @@
 		991A513F2E965899001C7775 /* BookImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991A513E2E965899001C7775 /* BookImportView.swift */; };
 		991A51432E976C2E001C7775 /* universal_book_scraper.py in Resources */ = {isa = PBXBuildFile; fileRef = 991A51422E976C2E001C7775 /* universal_book_scraper.py */; };
 		991A51452E976C9C001C7775 /* ScriptManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991A51442E976C9C001C7775 /* ScriptManager.swift */; };
+		991A518D2E97AD25001C7775 /* DefaultBookCoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991A518C2E97AD25001C7775 /* DefaultBookCoverView.swift */; };
 		993EDABE2BDA4675002C18C7 /* SwiftEntryKit in Frameworks */ = {isa = PBXBuildFile; productRef = 993EDABD2BDA4675002C18C7 /* SwiftEntryKit */; };
 		993EDAC22BDBB71B002C18C7 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 993EDAC12BDBB71B002C18C7 /* FirebaseFirestore */; };
 		993EDAC42BDBB71B002C18C7 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 993EDAC32BDBB71B002C18C7 /* FirebaseFirestoreSwift */; };
@@ -271,6 +272,7 @@
 		991A513E2E965899001C7775 /* BookImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookImportView.swift; sourceTree = "<group>"; };
 		991A51422E976C2E001C7775 /* universal_book_scraper.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; name = universal_book_scraper.py; path = script/universal_book_scraper.py; sourceTree = "<group>"; };
 		991A51442E976C9C001C7775 /* ScriptManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptManager.swift; sourceTree = "<group>"; };
+		991A518C2E97AD25001C7775 /* DefaultBookCoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultBookCoverView.swift; sourceTree = "<group>"; };
 		993EDAC62BE9F6EA002C18C7 /* Dashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dashboard.swift; sourceTree = "<group>"; };
 		993EDAC92BEB2C9C002C18C7 /* PeerDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeerDevice.swift; sourceTree = "<group>"; };
 		993EDACC2BEB2CBF002C18C7 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
@@ -742,6 +744,7 @@
 			children = (
 				99F0C5F82E939C41008711EC /* BaseSheetView.swift */,
 				998CD2132DEFD9A100F64329 /* EmptyStateView.swift */,
+				991A518C2E97AD25001C7775 /* DefaultBookCoverView.swift */,
 				591BAAC32CBB7B33001FAE1C /* BottomSheet */,
 				99EB5FA12C0D9C2A00F2AF29 /* Toast */,
 				593EB1F92C01EB6C00DD430F /* General */,
@@ -1122,6 +1125,7 @@
 				991A513F2E965899001C7775 /* BookImportView.swift in Sources */,
 				998614172BA8110B00E0996D /* UserAuthModel.swift in Sources */,
 				593EB1DB2C01DED300DD430F /* ReminderManager.swift in Sources */,
+				991A518D2E97AD25001C7775 /* DefaultBookCoverView.swift in Sources */,
 				9986145C2BBBAA6600E0996D /* Signup.swift in Sources */,
 				593EB2152C01FA1200DD430F /* SplashView.swift in Sources */,
 				998614682BBD20D100E0996D /* EnvironmentValues.swift in Sources */,

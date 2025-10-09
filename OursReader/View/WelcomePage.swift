@@ -90,6 +90,22 @@ struct WelcomePage: View {
             .frame(width: UIScreen.main.bounds.width )
         }
         .navigationTitle("nick_name")
+        .navigationBarHidden(true) // 完全隱藏導航欄
+        .onAppear {
+            setupTransparentNavigationBar()
+        }
+    }
+    
+    // 🔧 新增：設置透明導航欄的方法
+    private func setupTransparentNavigationBar() {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithTransparentBackground()
+        appearance.backgroundColor = UIColor.clear
+        appearance.shadowColor = UIColor.clear
+        
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        UINavigationBar.appearance().compactAppearance = appearance
     }
 }
 

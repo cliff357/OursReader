@@ -39,4 +39,10 @@ class ScriptManager {
         
         return "版本檢測失敗"
     }
+    
+    // 預留給未來的腳本管理功能
+    func getScriptContent() -> String {
+        // 這裡可以返回 Python 腳本內容
+        return "# Python script content will be here"
+    }
 }
