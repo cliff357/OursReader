@@ -7,6 +7,9 @@ struct CloudBookListView: View {
     @State private var showingAddBook = false // 新增狀態
     @State private var showingImport = false // 新增導入狀態
     
+    // 🔧 新增：防止重複操作的狀態
+    @State private var isImportInProgress = false
+    
     var onAddBookTapped: (() -> Void)? 
     
     var body: some View {
@@ -53,9 +56,17 @@ struct CloudBookListView: View {
                             showingAddBook = true
                         }
                         
-                        // 新增「導入」按鈕
+                        // 「導入」按鈕 - 🔧 修正防重複點擊
                         ImportBookItemView {
+                            // 防止重複點擊
+                            guard !isImportInProgress else { return }
+                            
+                            isImportInProgress = true
                             showingImport = true
+                            
+                            // 添加觸覺反饋
+                            let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+                            impactFeedback.impactOccurred()
                         }
                     }
                     .padding()
@@ -66,11 +77,19 @@ struct CloudBookListView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
+                    // 🔧 修正工具欄導入按鈕
+                    guard !isImportInProgress else { return }
+                    
+                    isImportInProgress = true
                     showingImport = true
+                    
+                    let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+                    impactFeedback.impactOccurred()
                 } label: {
                     Image(systemName: "square.and.arrow.down")
                         .foregroundColor(.black)
                 }
+                .disabled(isImportInProgress) // 防止重複點擊
             }
         }
         .onAppear {
@@ -90,8 +109,16 @@ struct CloudBookListView: View {
         }
         .sheet(isPresented: $showingImport) {
             BookImportView {
-                // 書籍導入成功後重新載入列表
+                // 🔧 修正：導入完成後重置狀態並重新載入
+                isImportInProgress = false
                 loadBooks()
+            }
+        }
+        // 🔧 新增：監控 showingImport 狀態變化
+        .onChange(of: showingImport) { oldValue, newValue in
+            if !newValue {
+                // 當 sheet 關閉時重置狀態
+                isImportInProgress = false
             }
         }
     }

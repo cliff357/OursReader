@@ -10,7 +10,7 @@ import SwiftUI
 struct Dashboard: View {
     @StateObject private var pushNotificationViewModel = PushSettingListViewModel()
     @State private var tabProgress: CGFloat = 0
-    @State private var selectedTab: Tab? = .push  // 設置默認值
+    @State private var selectedTab: Tab? = .push
     @State private var selectedButtonListType: ButtonListType = .push_notification
     
     // 新增用於存儲 CloudBook 數據的狀態
@@ -19,7 +19,11 @@ struct Dashboard: View {
 
     // 新增狀態變量
     @State private var isInsertingTestBooks = false
-    @State private var showingImport = false // 新增導入狀態
+    @State private var showingImport = false
+    
+    // 🔧 新增：用於防止導入時頁面跳轉的狀態
+    @State private var isImportButtonPressed = false
+    @State private var lockTabSelection = false
     
     var body: some View {
         ZStack {
@@ -46,13 +50,18 @@ struct Dashboard: View {
                         }
                         .scrollTargetLayout()
                         .offsetX { value in
-                            updateTabProgress(value, geometrySize: geometry.size)
+                            // 🔧 修正：當正在導入時，不更新 tab progress
+                            if !lockTabSelection {
+                                updateTabProgress(value, geometrySize: geometry.size)
+                            }
                         }
                     }
                     .scrollPosition(id: $selectedTab)
                     .scrollIndicators(.hidden)
                     .scrollTargetBehavior(.paging)
                     .scrollClipDisabled()
+                    // 🔧 新增：當鎖定時禁用滾動
+                    .scrollDisabled(lockTabSelection)
                 }
             }
         }
@@ -61,8 +70,46 @@ struct Dashboard: View {
         }
         .sheet(isPresented: $showingImport) {
             BookImportView {
-                // 書籍導入成功後重新載入
+                // 🔧 修正：導入完成後的處理
                 loadBooksData()
+                
+                // 重置狀態
+                isImportButtonPressed = false
+                lockTabSelection = false
+                
+                // 確保停留在 E-Book 頁面
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        selectedTab = .ebook
+                        selectedButtonListType = .ebook
+                    }
+                }
+            }
+        }
+        // 🔧 修正：監控導入狀態變化
+        .onChange(of: showingImport) { oldValue, newValue in
+            if !newValue {
+                // 當導入 sheet 關閉時
+                isImportButtonPressed = false
+                lockTabSelection = false
+                
+                // 確保回到 E-Book 頁面
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        selectedTab = .ebook
+                        selectedButtonListType = .ebook
+                    }
+                }
+            }
+        }
+        // 🔧 新增：監控 selectedTab 變化，防止意外跳轉
+        .onChange(of: selectedTab) { oldValue, newValue in
+            if lockTabSelection && newValue != .ebook {
+                // 如果正在導入過程中且不是 ebook 標籤，強制回到 ebook
+                DispatchQueue.main.async {
+                    selectedTab = .ebook
+                    selectedButtonListType = .ebook
+                }
             }
         }
     }
@@ -100,6 +147,9 @@ struct Dashboard: View {
     }
 
     private func updateTabProgress(_ value: CGFloat, geometrySize: CGSize) {
+        // 🔧 新增：當鎖定時直接返回
+        guard !lockTabSelection else { return }
+        
         let progress = -value / (geometrySize.width * CGFloat(Tab.allCases.count - 1))
         tabProgress = max(min(progress, 1), 0)
 
@@ -128,6 +178,12 @@ struct Dashboard: View {
                 .padding(.vertical, 10)
                 .contentShape(.capsule)
                 .onTapGesture {
+                    // 🔧 修正：當導入在進行中時，防止標籤切換
+                    guard !lockTabSelection && !isImportButtonPressed else {
+                        print("🔒 Tab switching locked during import")
+                        return
+                    }
+                    
                     withAnimation(.snappy) {
                         selectedTab = tab
                         updateSelectedButtonListType(for: tab)
@@ -135,7 +191,7 @@ struct Dashboard: View {
                 }
                 // 添加長按手勢，只在 E-Book tab 上有效
                 .onLongPressGesture(minimumDuration: 1.0) {
-                    if tab == .ebook {
+                    if tab == .ebook && !lockTabSelection {
                         insertTestBooks()
                     }
                 }
@@ -221,12 +277,26 @@ struct Dashboard: View {
                                 loadBooksData()
                             }
                             
-                            // 新增「導入」按鈕
+                            // 新增「導入」按鈕 - 🔧 修正導入按鈕行為
                             DashboardImportBookItem(color: type.color) {
-                                showingImport = true
+                                print("🔥 DashboardImportBookItem onTap called")
+                                
+                                // 🔧 關鍵修正：立即鎖定標籤切換
+                                isImportButtonPressed = true
+                                lockTabSelection = true
+                                
+                                // 確保當前在 E-Book 頁面
+                                selectedTab = .ebook
+                                selectedButtonListType = .ebook
+                                
+                                // 延遲顯示導入界面，避免狀態衝突
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                    print("🔥 Showing import sheet")
+                                    showingImport = true
+                                }
                             }
                             
-                            // 顯示空狀態（除了加書按鈕）
+                            // 顯示空狀態
                             RoundedRectangle(cornerRadius: 15)
                                 .fill(type.color.opacity(0.5))
                                 .frame(height: 150)
@@ -246,8 +316,8 @@ struct Dashboard: View {
                                     }
                                 }
                         } else {
-                            // 先顯示用戶書籍數據 - 移除數量限制
-                            ForEach(publicBooks, id: \.id) { userBook in // 移除 .prefix(5) 限制，顯示所有書籍
+                            // 先顯示用戶書籍數據
+                            ForEach(publicBooks, id: \.id) { userBook in
                                 NavigationLink(destination: BookDetailView(book: userBook.toEbook())
                                     .accentColor(.black)) {
                                     CloudBookGridItem(book: userBook, color: type.color)
@@ -260,9 +330,23 @@ struct Dashboard: View {
                                 loadBooksData()
                             }
                             
-                            // 新增「導入」按鈕
+                            // 新增「導入」按鈕 - 🔧 修正導入按鈕行為
                             DashboardImportBookItem(color: type.color) {
-                                showingImport = true
+                                print("🔥 DashboardImportBookItem onTap called (with books)")
+                                
+                                // 🔧 關鍵修正：立即鎖定標籤切換
+                                isImportButtonPressed = true
+                                lockTabSelection = true
+                                
+                                // 確保當前在 E-Book 頁面
+                                selectedTab = .ebook
+                                selectedButtonListType = .ebook
+                                
+                                // 延遲顯示導入界面
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                    print("🔥 Showing import sheet (with books)")
+                                    showingImport = true
+                                }
                             }
                         }
                     }
@@ -404,7 +488,6 @@ struct DashboardAddBookItem: View {
                     Image(systemName: "plus.circle.fill")
                         .font(.system(size: 40))
                         .foregroundColor(.white)
-                    
                     Text("Add Book")
                         .font(.headline)
                         .foregroundColor(.white)
@@ -440,7 +523,6 @@ struct DashboardAddBookItemWithSheet: View {
                         Image(systemName: "plus.circle.fill")
                             .font(.system(size: 40))
                             .foregroundColor(ColorManager.shared.green1) // 改為 green1
-                        
                         Text("Add Book")
                             .font(.headline)
                             .foregroundColor(ColorManager.shared.green1) // 改為 green1
@@ -472,7 +554,13 @@ struct DashboardImportBookItem: View {
     let onTap: () -> Void
     
     var body: some View {
-        Button(action: onTap) {
+        Button(action: {
+            // 🔧 添加觸覺反饋和防重複點擊
+            let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+            impactFeedback.impactOccurred()
+            
+            onTap()
+        }) {
             RoundedRectangle(cornerRadius: 15)
                 .fill(color.opacity(0.8))
                 .frame(height: 150)
@@ -481,7 +569,6 @@ struct DashboardImportBookItem: View {
                         Image(systemName: "square.and.arrow.down.fill")
                             .font(.system(size: 40))
                             .foregroundColor(ColorManager.shared.red1)
-                        
                         Text("Import Books")
                             .font(.headline)
                             .foregroundColor(ColorManager.shared.red1)
@@ -498,6 +585,8 @@ struct DashboardImportBookItem: View {
                 )
         }
         .buttonStyle(PlainButtonStyle())
+        // 🔧 添加防止重複點擊的 disabled 狀態（可選）
+        .disabled(false) // 你可以根據需要添加狀態管理
     }
 }
 
