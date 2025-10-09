@@ -27,13 +27,109 @@
         }
       }
     },
+    "• iCloud Drive 掃描：自動尋找 iCloud 中的書籍文件" : {
+
+    },
+    "• iCloud 同步：所有設備間自動同步" : {
+
+    },
+    "• 不得用於商業用途或侵犯版權" : {
+
+    },
+    "• 僅供個人學習和教學用途" : {
+
+    },
+    "• 僅限合法使用公開資源" : {
+
+    },
+    "• 最近文件：快速重新導入最近使用的文件" : {
+
+    },
+    "• 手動添加：直接在 App 中輸入書籍內容" : {
+
+    },
+    "• 支援的格式：JSON 文件" : {
+
+    },
+    "• 續傳功能：支援斷點續傳和自動恢復" : {
+
+    },
+    "• 自動分片儲存：處理大型書籍文件" : {
+
+    },
+    "• 請遵守網站的 robots.txt 和使用條款" : {
+
+    },
     "→" : {
+
+    },
+    "⚖️ 重要提醒" : {
+
+    },
+    "💡 技術說明" : {
+
+    },
+    "📖 完整使用指南（含 Python 腳本）" : {
+
+    },
+    "📝 使用說明" : {
+
+    },
+    "🔄 其他導入方式" : {
+
+    },
+    "🔧 腳本功能" : {
+
+    },
+    "🔧 腳本功能特色：" : {
+
+    },
+    "1. 下載並保存腳本到電腦" : {
+
+    },
+    "1. 確保電腦已安裝 Python 3.6+" : {
+
+    },
+    "2. 安裝必要套件：requests, beautifulsoup4" : {
+
+    },
+    "2. 打開終端機/命令提示字元" : {
+
+    },
+    "3. 運行：python universal_book_scraper.py" : {
+
+    },
+    "3. 運行腳本：python universal_book_scraper.py" : {
+
+    },
+    "4. 輸入小說第一章的 URL" : {
+
+    },
+    "4. 輸入小說第一章的完整 URL" : {
+
+    },
+    "5. 等待爬取完成，獲得 JSON 文件" : {
+
+    },
+    "5. 等待自動爬取完成" : {
+
+    },
+    "Are you sure you want to remove '%@' from your library? This action cannot be undone." : {
+
+    },
+    "Book Cover" : {
 
     },
     "Bookmarks" : {
 
     },
     "by %@" : {
+
+    },
+    "Cancel" : {
+
+    },
+    "Choose Cover Image" : {
 
     },
     "copy" : {
@@ -487,6 +583,9 @@
         }
       }
     },
+    "From JSON files" : {
+
+    },
     "general_cancel" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -592,7 +691,19 @@
     "Hello, World!" : {
 
     },
+    "Import Books" : {
+
+    },
+    "Import from Files" : {
+
+    },
+    "Import your books" : {
+
+    },
     "Information" : {
+
+    },
+    "JSON format" : {
 
     },
     "Loading..." : {
@@ -734,6 +845,9 @@
         }
       }
     },
+    "My Books" : {
+
+    },
     "nick_name" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -752,6 +866,15 @@
       }
     },
     "No bookmarks yet" : {
+
+    },
+    "No books yet" : {
+
+    },
+    "No Image" : {
+
+    },
+    "OK" : {
 
     },
     "or" : {
@@ -1035,10 +1158,25 @@
         }
       }
     },
+    "Python 爬蟲腳本" : {
+
+    },
     "Read Now" : {
 
     },
     "Reading Progress" : {
+
+    },
+    "Remove" : {
+
+    },
+    "Remove Book" : {
+
+    },
+    "Remove Image" : {
+
+    },
+    "Retry" : {
 
     },
     "settings" : {
@@ -1094,6 +1232,18 @@
           }
         }
       }
+    },
+    "Tap Import Books to get started!" : {
+
+    },
+    "universal_book_scraper.py" : {
+
+    },
+    "Upload Status" : {
+
+    },
+    "Use Python script to\ncrawl books or import\nJSON files directly" : {
+
     },
     "version_info" : {
       "extractionState" : "manual",
@@ -1164,6 +1314,51 @@
       }
     },
     "Widget" : {
+
+    },
+    "下載 Python 腳本" : {
+
+    },
+    "使用步驟：" : {
+
+    },
+    "使用說明" : {
+
+    },
+    "最近的文件" : {
+
+    },
+    "分享 Python 腳本" : {
+
+    },
+    "刪除中..." : {
+
+    },
+    "取消" : {
+
+    },
+    "完成" : {
+
+    },
+    "導入書籍" : {
+
+    },
+    "導入結果" : {
+
+    },
+    "書籍導入完整指南" : {
+
+    },
+    "正在添加測試書籍..." : {
+
+    },
+    "確定" : {
+
+    },
+    "請稍候，正在從雲端移除書籍..." : {
+
+    },
+    "選擇一種方式來導入你的書籍" : {
 
     }
   },

@@ -161,10 +161,10 @@ struct OursReaderApp: App {
 //    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     var body: some Scene {
-        
         WindowGroup {
             ZStack {
                 MainView()
+                    .accentColor(.black) // 設置全局強調色為黑色
 //                if showSplashView {
 //                    SplashView()
 //                }

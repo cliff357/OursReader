@@ -12,6 +12,7 @@ enum SideMenuOptionModel: Int, CaseIterable, Equatable {
     case profile
     case widget
     case friendList
+    case myBooks // 新增我的書籍選項
     case settings
 
     var title: String {
@@ -24,6 +25,8 @@ enum SideMenuOptionModel: Int, CaseIterable, Equatable {
             return String(localized:"widget")
         case .friendList:
             return String(localized:"friendList")
+        case .myBooks:
+            return "My Books"
         case .settings:
             return String(localized:"settings")
         }
@@ -39,6 +42,8 @@ enum SideMenuOptionModel: Int, CaseIterable, Equatable {
             return "app.dashed"
         case .friendList:
             return "person.2"
+        case .myBooks:
+            return "books.vertical"
         case .settings:
             return "gear"
         }

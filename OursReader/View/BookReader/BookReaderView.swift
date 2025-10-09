@@ -3,12 +3,16 @@ import SwiftUI
 struct BookReaderView: View {
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.dismiss) var dismiss
-    @State var book: Ebook
+    @Binding var book: Ebook // 改為 @Binding 以便與 BookDetailView 同步
     @State private var currentPageIndex = 0
     @State private var showControls = true
     @State private var showBookmarks = false
     @State private var progressPercentage: Double = 0
     @State private var isButtonActionInProgress = false
+    
+    // 新增進度同步相關狀態
+    @State private var lastSavedPage = 0
+    @State private var saveTimer: Timer?
     
     // New states for push animation
     @State private var pageOffset: CGFloat = 0
@@ -62,10 +66,20 @@ struct BookReaderView: View {
             }
             .onAppear {
                 currentPageIndex = book.currentPage
+                lastSavedPage = book.currentPage
                 updateProgressPercentage()
+                loadReadingProgress()
             }
             .onDisappear {
+                // 確保離開時更新 book 的進度
                 book.currentPage = currentPageIndex
+                saveProgressImmediately()
+                saveTimer?.invalidate()
+            }
+            .onChange(of: currentPageIndex) { oldValue, newValue in
+                // 當頁面改變時，延遲保存進度並立即更新 book 對象
+                book.currentPage = newValue
+                scheduleProgressSave()
             }
         }
         .gesture(
@@ -98,7 +112,7 @@ struct BookReaderView: View {
     private func pageView(for index: Int) -> some View {
         ScrollView {
             Text(book.content[index])
-                .foregroundColor(.black)
+                .foregroundColor(.black) // 改為黑色文字
                 .padding()
                 .padding(.bottom, 20)
         }
@@ -120,7 +134,7 @@ struct BookReaderView: View {
             } label: {
                 Image(systemName: "xmark")
                     .font(.system(size: 18))
-                    .foregroundColor(.black)
+                    .foregroundColor(.black) // 改為黑色圖標
                     .frame(width: 44, height: 44)
                     .contentShape(Circle())
                     .background(Color.gray.opacity(0.2))
@@ -136,7 +150,7 @@ struct BookReaderView: View {
             } label: {
                 Image(systemName: isCurrentPageBookmarked() ? "bookmark.fill" : "bookmark")
                     .font(.system(size: 18))
-                    .foregroundColor(.black)
+                    .foregroundColor(.black) // 改為黑色圖標
                     .frame(width: 44, height: 44)
                     .contentShape(Circle())
                     .background(Color.gray.opacity(0.2))
@@ -150,7 +164,7 @@ struct BookReaderView: View {
             } label: {
                 Image(systemName: "list.bullet")
                     .font(.system(size: 18))
-                    .foregroundColor(.black)
+                    .foregroundColor(.black) // 改為黑色圖標
                     .frame(width: 44, height: 44)
                     .contentShape(Circle())
                     .background(Color.gray.opacity(0.2))
@@ -172,7 +186,7 @@ struct BookReaderView: View {
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
                 .background(ColorManager.shared.background.opacity(0.8))
-                .foregroundColor(.black)
+                .foregroundColor(.black) // 改為黑色文字
                 .cornerRadius(20)
                 .shadow(color: .gray.opacity(0.3), radius: 2, x: 0, y: 1)
             
@@ -194,12 +208,12 @@ struct BookReaderView: View {
                 HStack {
                     Text("Bookmarks")
                         .font(.headline)
-                        .foregroundColor(.black)
+                        .foregroundColor(.black) // 改為黑色文字
                     Spacer()
                     Button("Done") {
                         showBookmarks = false
                     }
-                    .foregroundColor(.blue)
+                    .foregroundColor(.black) // 改為黑色按鈕文字
                 }
                 .padding()
                 
@@ -207,7 +221,7 @@ struct BookReaderView: View {
                 
                 if book.bookmarkedPages.isEmpty {
                     Text("No bookmarks yet")
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.black.opacity(0.7)) // 改為深灰色文字
                         .padding()
                 } else {
                     List {
@@ -219,14 +233,15 @@ struct BookReaderView: View {
                             }) {
                                 HStack {
                                     Text("Page \(page + 1)")
-                                        .foregroundColor(.black)
+                                        .foregroundColor(.black) // 改為黑色文字
                                     Spacer()
                                     Text("→")
-                                        .foregroundColor(.blue)
+                                        .foregroundColor(.black) // 改為黑色箭頭
                                 }
                             }
                         }
                     }
+                    .scrollContentBackground(.hidden) // 隱藏背景以顯示自訂顏色
                 }
             }
             .frame(height: 300)
@@ -250,6 +265,9 @@ struct BookReaderView: View {
         } else {
             book.bookmarkedPages.append(currentPageIndex)
         }
+        
+        // 立即保存書簽
+        scheduleProgressSave()
     }
     
     // Function to update progress percentage
@@ -357,8 +375,90 @@ struct BookReaderView: View {
             isButtonActionInProgress = false
         }
     }
+    
+    // MARK: - 進度同步功能
+    
+    private func loadReadingProgress() {
+        guard let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() else {
+            return
+        }
+        
+        CloudKitManager.shared.fetchReadingProgress(
+            bookID: book.id,
+            firebaseUserID: currentUser.uid
+        ) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let progress):
+                    // currentPage 不從雲端載入，保持本地值
+                    // if progress.currentPage > self.currentPageIndex {
+                    //     self.currentPageIndex = progress.currentPage
+                    //     self.book.currentPage = progress.currentPage
+                    //     self.updateProgressPercentage()
+                    // }
+                    
+                    // 只合併書簽
+                    let mergedBookmarks = Array(Set(self.book.bookmarkedPages + progress.bookmarkedPages)).sorted()
+                    self.book.bookmarkedPages = mergedBookmarks
+                    
+                    self.lastSavedPage = self.currentPageIndex
+                    
+                case .failure(let error):
+                    print("Failed to load reading progress: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+    
+    private func scheduleProgressSave() {
+        // 取消之前的計時器
+        saveTimer?.invalidate()
+        
+        // 設置新的計時器，2秒後自動保存書簽（不保存 currentPage）
+        saveTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { _ in
+            self.saveBookmarksToCloud()
+        }
+    }
+    
+    private func saveProgressImmediately() {
+        saveTimer?.invalidate()
+        saveBookmarksToCloud()
+    }
+    
+    private func saveBookmarksToCloud() {
+        guard let currentUser = UserAuthModel.shared.getCurrentFirebaseUser(),
+              !book.bookmarkedPages.isEmpty else {
+            return
+        }
+        
+        CloudKitManager.shared.updateUserBookProgress(
+            bookID: book.id,
+            firebaseUserID: currentUser.uid,
+            currentPage: currentPageIndex, // 傳入但不會被保存到雲端
+            bookmarkedPages: book.bookmarkedPages
+        ) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(_):
+                    print("Bookmarks saved successfully")
+                    
+                    // 給用戶一個輕微的觸覺反饋
+                    let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+                    impactFeedback.impactOccurred()
+                    
+                case .failure(let error):
+                    print("Failed to save bookmarks: \(error.localizedDescription)")
+                    
+                    // 錯誤觸覺反饋
+                    let errorFeedback = UINotificationFeedbackGenerator()
+                    errorFeedback.notificationOccurred(.error)
+                }
+            }
+        }
+    }
 }
 
 #Preview {
-    BookReaderView(book: ebookList[0])
+    @State var sampleBook = ebookList[0]
+    return BookReaderView(book: $sampleBook)
 }
