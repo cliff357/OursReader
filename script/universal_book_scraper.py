@@ -13,7 +13,7 @@ class UniversalBookScraper:
         self.session.headers.update({
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
         })
-        self.delay = 2  # 爬取間隔，避免被封
+        self.delay = 60  # 爬取間隔，避免被封
         
         # 新增重試配置
         self.max_retries = 3  # 最大重試次數

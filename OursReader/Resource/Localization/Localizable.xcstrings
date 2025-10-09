@@ -114,9 +114,6 @@
     "5. 等待自動爬取完成" : {
 
     },
-    "Add Book" : {
-
-    },
     "Are you sure you want to remove '%@' from your library? This action cannot be undone." : {
 
     },
@@ -151,12 +148,6 @@
           }
         }
       }
-    },
-    "Create New Book" : {
-
-    },
-    "Create your own book" : {
-
     },
     "dashboard" : {
       "extractionState" : "manual",
@@ -706,6 +697,9 @@
     "Import from Files" : {
 
     },
+    "Import your books" : {
+
+    },
     "Information" : {
 
     },
@@ -850,9 +844,6 @@
           }
         }
       }
-    },
-    "Long press E-Book tab to add test books!" : {
-
     },
     "My Books" : {
 
@@ -1242,13 +1233,16 @@
         }
       }
     },
-    "Tap to add" : {
+    "Tap Import Books to get started!" : {
 
     },
     "universal_book_scraper.py" : {
 
     },
     "Upload Status" : {
+
+    },
+    "Use Python script to\ncrawl books or import\nJSON files directly" : {
 
     },
     "version_info" : {
