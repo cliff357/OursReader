@@ -6,7 +6,6 @@ struct BookImportView: View {
     @State private var showingFilePicker = false
     @State private var showingAlert = false
     @State private var alertMessage = ""
-    @State private var showingAddBook = false
     @State private var showingInstructions = false
     @Environment(\.dismiss) private var dismiss
     
@@ -55,7 +54,7 @@ struct BookImportView: View {
                     }
                     .buttonStyle(PlainButtonStyle())
                     
-                    // 導入選項
+                    // 導入選項 - 🔧 移除手動添加選項
                     VStack(spacing: 15) {
                         // 文件選擇器
                         Button(action: {
@@ -83,18 +82,7 @@ struct BookImportView: View {
                         }
                         .disabled(importManager.isImporting)
                         
-                        // 手動添加
-                        Button(action: {
-                            showingAddBook = true
-                        }) {
-                            ImportOptionView(
-                                icon: "plus.circle.fill",
-                                title: "手動添加",
-                                subtitle: "逐本輸入書籍內容",
-                                color: .orange
-                            )
-                        }
-                        .disabled(importManager.isImporting)
+                        // 🔧 移除手動添加選項
                     }
                     
                     // 導入進度
@@ -164,12 +152,6 @@ struct BookImportView: View {
             case .failure(let error):
                 alertMessage = "文件選擇失敗：\(error.localizedDescription)"
                 showingAlert = true
-            }
-        }
-        .sheet(isPresented: $showingAddBook) {
-            AddBookView { newBook in
-                // 書籍添加成功後通知父視圖
-                onBooksImported()
             }
         }
         .sheet(isPresented: $showingInstructions) {

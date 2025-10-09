@@ -4,7 +4,6 @@ struct CloudBookListView: View {
     @State private var books: [CloudBook] = []
     @State private var isLoading = true
     @State private var errorMessage: String?
-    @State private var showingAddBook = false // 新增狀態
     @State private var showingImport = false // 新增導入狀態
     
     // 🔧 新增：防止重複操作的狀態
@@ -51,12 +50,7 @@ struct CloudBookListView: View {
                             }
                         }
                         
-                        // 將「加書」按鈕移到最底部
-                        AddBookItemView {
-                            showingAddBook = true
-                        }
-                        
-                        // 「導入」按鈕 - 🔧 修正防重複點擊
+                        // 🔧 移除「加書」按鈕，只保留「導入」按鈕
                         ImportBookItemView {
                             // 防止重複點擊
                             guard !isImportInProgress else { return }
@@ -100,12 +94,6 @@ struct CloudBookListView: View {
         }
         .onReceive(NotificationCenter.default.publisher(for: CloudKitManager.booksDidChangeNotification)) { _ in
             loadBooks()
-        }
-        .sheet(isPresented: $showingAddBook) {
-            AddBookView { newBook in
-                // 書籍添加成功後重新載入列表
-                loadBooks()
-            }
         }
         .sheet(isPresented: $showingImport) {
             BookImportView {
@@ -249,49 +237,6 @@ struct BookItemView: View {
             let randomImage = defaultImages.randomElement() ?? "cover_image_1"
             self.coverImage = UIImage(named: randomImage)
         }
-    }
-}
-
-// 新增「加書」按鈕視圖
-struct AddBookItemView: View {
-    let onTap: () -> Void
-    
-    var body: some View {
-        Button(action: onTap) {
-            VStack {
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(ColorManager.shared.green1.opacity(0.1)) // 背景色改為 green1
-                    .frame(width: 140, height: 200)
-                    .overlay(
-                        VStack(spacing: 12) {
-                            Image(systemName: "plus.circle.fill")
-                                .font(.system(size: 40))
-                                .foregroundColor(ColorManager.shared.green1) // 改為 green1
-                            
-                            Text("Add Book")
-                                .font(.headline)
-                                .foregroundColor(ColorManager.shared.green1) // 改為 green1
-                        }
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(ColorManager.shared.green1, style: StrokeStyle(lineWidth: 2, dash: [8, 4])) // 邊框改為 green1
-                    )
-                
-                Text("Create New Book")
-                    .font(.headline)
-                    .lineLimit(2)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(ColorManager.shared.green1) // 改為 green1
-                    .frame(width: 140)
-                    .padding(.top, 4)
-                
-                Text("Tap to add")
-                    .font(.caption)
-                    .foregroundColor(ColorManager.shared.green1.opacity(0.7)) // 改為 green1，保持透明度
-            }
-        }
-        .buttonStyle(PlainButtonStyle())
     }
 }
 

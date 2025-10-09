@@ -9,6 +9,7 @@ struct BookDetailView: View {
     // 新增刪除相關狀態
     @State private var showingDeleteAlert = false
     @State private var isDeleting = false
+    @State private var deleteProgress = "正在刪除..." // 新增：刪除進度文字
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
@@ -137,11 +138,18 @@ struct BookDetailView: View {
                 Button(action: {
                     showingDeleteAlert = true
                 }) {
+                    // 🔧 修正：顯示載入狀態或刪除圖標
                     if isDeleting {
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle())
-                            .scaleEffect(0.7)
-                            .frame(width: 20, height: 20)
+                        HStack(spacing: 6) {
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: .red))
+                                .scaleEffect(0.8)
+                                .frame(width: 16, height: 16)
+                            
+                            Text("刪除中...")
+                                .font(.caption2)
+                                .foregroundColor(.red)
+                        }
                     } else {
                         Image(systemName: "trash")
                             .foregroundColor(.red)
@@ -158,6 +166,38 @@ struct BookDetailView: View {
             }
         } message: {
             Text("Are you sure you want to remove '\(book.title)' from your library? This action cannot be undone.")
+        }
+        // 🔧 新增：全屏載入覆蓋層
+        .overlay {
+            if isDeleting {
+                ZStack {
+                    // 半透明背景
+                    Color.black.opacity(0.3)
+                        .ignoresSafeArea()
+                    
+                    // 載入提示卡片
+                    VStack(spacing: 16) {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: ColorManager.shared.red1))
+                            .scaleEffect(1.5)
+                        
+                        Text(deleteProgress)
+                            .font(.headline)
+                            .foregroundColor(.black)
+                        
+                        Text("請稍候，正在從雲端移除書籍...")
+                            .font(.caption)
+                            .foregroundColor(.black.opacity(0.7))
+                            .multilineTextAlignment(.center)
+                    }
+                    .padding(24)
+                    .background(ColorManager.shared.background)
+                    .cornerRadius(16)
+                    .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 4)
+                    .padding(.horizontal, 40)
+                }
+                .transition(.opacity.combined(with: .scale(scale: 0.9)))
+            }
         }
         .onAppear {
             // 設置導航欄外觀
@@ -232,7 +272,7 @@ struct BookDetailView: View {
         return totalWidth * progress
     }
     
-    // MARK: - 刪除書籍功能
+    // MARK: - 刪除書籍功能（增強版本）
     
     private func deleteBook() {
         guard let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() else {
@@ -240,107 +280,140 @@ struct BookDetailView: View {
             return
         }
         
-        isDeleting = true
+        // 🔧 開始刪除流程，顯示載入狀態
+        withAnimation(.easeInOut(duration: 0.3)) {
+            isDeleting = true
+            deleteProgress = "正在準備刪除..."
+        }
         
         // 給用戶觸覺反饋
         let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
         impactFeedback.impactOccurred()
         
-        // 🔧 修改：首先需要找到對應的 CloudBook 來獲取正確的 recordID
+        // 🔧 分階段顯示進度
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.deleteProgress = "正在查找書籍記錄..."
+        }
+        
         print("🔍 Looking for book to delete: \(book.title) (ID: \(book.id))")
         
         // 先獲取用戶的所有書籍，找到對應的 CloudBook
         CloudKitManager.shared.fetchUserBooks(firebaseUserID: currentUser.uid) { result in
-            switch result {
-            case .success(let cloudBooks):
-                // 嘗試通過不同方式找到對應的書籍
-                var targetCloudBook: CloudBook?
-                
-                // 1. 優先通過 firebaseBookID 匹配
-                if let foundBook = cloudBooks.first(where: { $0.firebaseBookID == book.id }) {
-                    targetCloudBook = foundBook
-                    print("✅ Found book by firebaseBookID: \(book.id)")
-                }
-                // 2. 如果沒找到，嘗試通過書名和作者匹配
-                else if let foundBook = cloudBooks.first(where: { 
-                    $0.name == book.title && $0.author == book.author 
-                }) {
-                    targetCloudBook = foundBook
-                    print("✅ Found book by title and author: \(book.title)")
-                }
-                // 3. 最後嘗試只通過書名匹配
-                else if let foundBook = cloudBooks.first(where: { $0.name == book.title }) {
-                    targetCloudBook = foundBook
-                    print("✅ Found book by title only: \(book.title)")
-                }
-                
-                DispatchQueue.main.async {
-                    if let cloudBook = targetCloudBook {
-                        // 使用找到的 CloudBook 的 recordID 進行刪除
-                        self.deleteCloudBook(cloudBook, userID: currentUser.uid)
-                    } else {
-                        print("❌ Could not find matching CloudBook for: \(self.book.title)")
-                        print("📋 Available books:")
-                        for (index, cb) in cloudBooks.enumerated() {
-                            print("   \(index + 1). '\(cb.name)' by \(cb.author) (ID: \(cb.id))")
-                        }
-                        
-                        self.isDeleting = false
-                        
-                        // 錯誤觸覺反饋
-                        let errorFeedback = UINotificationFeedbackGenerator()
-                        errorFeedback.notificationOccurred(.error)
-                    }
-                }
-                
-            case .failure(let error):
-                DispatchQueue.main.async {
-                    print("❌ Failed to fetch books for deletion: \(error.localizedDescription)")
-                    self.isDeleting = false
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let cloudBooks):
+                    self.deleteProgress = "正在定位目標書籍..."
                     
-                    // 錯誤觸覺反饋
-                    let errorFeedback = UINotificationFeedbackGenerator()
-                    errorFeedback.notificationOccurred(.error)
+                    // 延遲一點讓用戶看到進度更新
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        self.findAndDeleteCloudBook(cloudBooks: cloudBooks, userID: currentUser.uid)
+                    }
+                    
+                case .failure(let error):
+                    self.handleDeleteError("獲取書籍列表失敗: \(error.localizedDescription)")
                 }
             }
         }
     }
     
-    // 新增輔助方法：使用 CloudBook 的 recordID 進行刪除
-    private func deleteCloudBook(_ cloudBook: CloudBook, userID: String) {
+    // 🔧 新增：尋找並刪除 CloudBook 的輔助方法
+    private func findAndDeleteCloudBook(cloudBooks: [CloudBook], userID: String) {
+        // 嘗試通過不同方式找到對應的書籍
+        var targetCloudBook: CloudBook?
+        
+        // 1. 優先通過 firebaseBookID 匹配
+        if let foundBook = cloudBooks.first(where: { $0.firebaseBookID == book.id }) {
+            targetCloudBook = foundBook
+            print("✅ Found book by firebaseBookID: \(book.id)")
+        }
+        // 2. 如果沒找到，嘗試通過書名和作者匹配
+        else if let foundBook = cloudBooks.first(where: { 
+            $0.name == book.title && $0.author == book.author 
+        }) {
+            targetCloudBook = foundBook
+            print("✅ Found book by title and author: \(book.title)")
+        }
+        // 3. 最後嘗試只通過書名匹配
+        else if let foundBook = cloudBooks.first(where: { $0.name == book.title }) {
+            targetCloudBook = foundBook
+            print("✅ Found book by title only: \(book.title)")
+        }
+        
+        if let cloudBook = targetCloudBook {
+            deleteProgress = "找到目標書籍，正在從雲端刪除..."
+            
+            // 延遲一點後執行實際刪除
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.executeCloudBookDeletion(cloudBook, userID: userID)
+            }
+        } else {
+            handleDeleteError("找不到對應的書籍記錄")
+        }
+    }
+    
+    // 🔧 新增：執行實際刪除的方法
+    private func executeCloudBookDeletion(_ cloudBook: CloudBook, userID: String) {
         guard let recordID = cloudBook.recordID else {
-            print("❌ CloudBook has no recordID, cannot delete")
-            self.isDeleting = false
+            handleDeleteError("書籍記錄ID無效，無法刪除")
             return
         }
         
+        deleteProgress = "正在從 CloudKit 刪除..."
         print("🗑️ Deleting book with recordID: \(recordID.recordName)")
         
         CloudKitManager.shared.deleteUserBook(
-            bookID: recordID.recordName, // 使用正確的 recordID
+            bookID: recordID.recordName,
             firebaseUserID: userID
         ) { result in
             DispatchQueue.main.async {
-                self.isDeleting = false
-                
                 switch result {
                 case .success():
-                    print("✅ Book deleted successfully from CloudKit: \(self.book.title)")
-                    
-                    // 成功觸覺反饋
-                    let successFeedback = UINotificationFeedbackGenerator()
-                    successFeedback.notificationOccurred(.success)
-                    
-                    // 返回上一頁
-                    self.dismiss()
+                    self.handleDeleteSuccess()
                     
                 case .failure(let error):
-                    print("❌ Failed to delete book from CloudKit: \(error.localizedDescription)")
-                    
-                    // 錯誤觸覺反饋
-                    let errorFeedback = UINotificationFeedbackGenerator()
-                    errorFeedback.notificationOccurred(.error)
+                    self.handleDeleteError("刪除失敗: \(error.localizedDescription)")
                 }
+            }
+        }
+    }
+    
+    // 🔧 新增：處理刪除成功
+    private func handleDeleteSuccess() {
+        deleteProgress = "刪除完成！"
+        
+        print("✅ Book deleted successfully from CloudKit: \(book.title)")
+        
+        // 成功觸覺反饋
+        let successFeedback = UINotificationFeedbackGenerator()
+        successFeedback.notificationOccurred(.success)
+        
+        // 顯示成功狀態 1 秒後自動返回
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            withAnimation(.easeInOut(duration: 0.3)) {
+                self.isDeleting = false
+            }
+            
+            // 延遲一點後返回上一頁
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                self.dismiss()
+            }
+        }
+    }
+    
+    // 🔧 新增：處理刪除錯誤
+    private func handleDeleteError(_ errorMessage: String) {
+        print("❌ Delete error: \(errorMessage)")
+        
+        // 錯誤觸覺反饋
+        let errorFeedback = UINotificationFeedbackGenerator()
+        errorFeedback.notificationOccurred(.error)
+        
+        deleteProgress = "刪除失敗"
+        
+        // 顯示錯誤狀態 2 秒後隱藏載入覆蓋層
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            withAnimation(.easeInOut(duration: 0.3)) {
+                self.isDeleting = false
             }
         }
     }

@@ -272,12 +272,7 @@ struct Dashboard: View {
                         }
                     } else {
                         if publicBooks.isEmpty {
-                            // 如果沒有書籍，顯示「加書」按鈕和「導入」按鈕
-                            DashboardAddBookItemWithSheet(color: type.color) {
-                                loadBooksData()
-                            }
-                            
-                            // 新增「導入」按鈕 - 🔧 修正導入按鈕行為
+                            // 🔧 移除加書按鈕，只保留導入按鈕
                             DashboardImportBookItem(color: type.color) {
                                 print("🔥 DashboardImportBookItem onTap called")
                                 
@@ -308,10 +303,30 @@ struct Dashboard: View {
                                         Text("No books yet")
                                             .font(.caption)
                                             .foregroundColor(.white.opacity(0.7))
-                                        Text("Long press E-Book tab to add test books!")
+                                        Text("Tap Import Books to get started!")
                                             .font(.caption2)
                                             .foregroundColor(.white.opacity(0.5))
                                             .padding(.top, 2)
+                                            .multilineTextAlignment(.center)
+                                    }
+                                }
+                            
+                            // 🔧 新增一個額外的空狀態卡片說明
+                            RoundedRectangle(cornerRadius: 15)
+                                .fill(Color.gray.opacity(0.2))
+                                .frame(height: 150)
+                                .overlay {
+                                    VStack(spacing: 8) {
+                                        Image(systemName: "arrow.down.doc.fill")
+                                            .font(.system(size: 25))
+                                            .foregroundColor(.gray)
+                                        Text("Import your books")
+                                            .font(.caption)
+                                            .fontWeight(.medium)
+                                            .foregroundColor(.gray)
+                                        Text("Use Python script to\ncrawl books or import\nJSON files directly")
+                                            .font(.caption2)
+                                            .foregroundColor(.gray.opacity(0.8))
                                             .multilineTextAlignment(.center)
                                     }
                                 }
@@ -325,12 +340,7 @@ struct Dashboard: View {
                                 .buttonStyle(PlainButtonStyle())
                             }
                             
-                            // 將「加書」按鈕放在最後
-                            DashboardAddBookItemWithSheet(color: type.color) {
-                                loadBooksData()
-                            }
-                            
-                            // 新增「導入」按鈕 - 🔧 修正導入按鈕行為
+                            // 🔧 移除加書按鈕，只保留導入按鈕
                             DashboardImportBookItem(color: type.color) {
                                 print("🔥 DashboardImportBookItem onTap called (with books)")
                                 
@@ -472,79 +482,6 @@ struct CloudBookGridItem: View {
                 .padding(12)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
-    }
-}
-
-// 新增 Dashboard 的「加書」按鈕視圖
-struct DashboardAddBookItem: View {
-    let color: Color
-    
-    var body: some View {
-        RoundedRectangle(cornerRadius: 15)
-            .fill(color.opacity(0.8))
-            .frame(height: 150)
-            .overlay {
-                VStack(spacing: 12) {
-                    Image(systemName: "plus.circle.fill")
-                        .font(.system(size: 40))
-                        .foregroundColor(.white)
-                    Text("Add Book")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                    
-                    Text("Create your own book")
-                        .font(.caption)
-                        .foregroundColor(.white.opacity(0.8))
-                        .multilineTextAlignment(.center)
-                }
-            }
-            .overlay(
-                RoundedRectangle(cornerRadius: 15)
-                    .stroke(Color.white.opacity(0.3), style: StrokeStyle(lineWidth: 2, dash: [10, 5]))
-            )
-    }
-}
-
-// 新增帶有 Sheet 的「加書」按鈕視圖
-struct DashboardAddBookItemWithSheet: View {
-    let color: Color
-    let onBookAdded: () -> Void
-    @State private var showingAddBook = false
-    
-    var body: some View {
-        Button(action: {
-            showingAddBook = true
-        }) {
-            RoundedRectangle(cornerRadius: 15)
-                .fill(color.opacity(0.8))
-                .frame(height: 150)
-                .overlay {
-                    VStack(spacing: 12) {
-                        Image(systemName: "plus.circle.fill")
-                            .font(.system(size: 40))
-                            .foregroundColor(ColorManager.shared.green1) // 改為 green1
-                        Text("Add Book")
-                            .font(.headline)
-                            .foregroundColor(ColorManager.shared.green1) // 改為 green1
-                        
-                        Text("Create your own book")
-                            .font(.caption)
-                            .foregroundColor(ColorManager.shared.green1.opacity(0.8)) // 改為 green1，保持透明度
-                            .multilineTextAlignment(.center)
-                    }
-                }
-                .overlay(
-                    RoundedRectangle(cornerRadius: 15)
-                        .stroke(ColorManager.shared.green1.opacity(0.3), style: StrokeStyle(lineWidth: 2, dash: [10, 5])) // 邊框也改為 green1
-                )
-        }
-        .buttonStyle(PlainButtonStyle())
-        .sheet(isPresented: $showingAddBook) {
-            AddBookView { newBook in
-                // 書籍添加成功後通知父視圖
-                onBookAdded()
-            }
-        }
     }
 }
 
