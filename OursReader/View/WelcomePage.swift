@@ -45,7 +45,7 @@ struct WelcomePage: View {
             vm.nickName = nickname
             Storage.save(Storage.Key.nickName, nickname)
         }) {
-            Text("general_done")
+            Text(NSLocalizedString("general_done", comment: "Done button"))
                 .padding(20)
         }
         .background(ColorManager.shared.rice_white)
@@ -78,7 +78,9 @@ struct WelcomePage: View {
                     .transition(AnyTransition.opacity.combined(with: .scale))
                     .padding()
                 
-                ORTextField(text: $nickname,placeholder: String(localized: "nick_name"), floatingPrompt: String(localized: "nick_name"))
+                ORTextField(text: $nickname,
+                          placeholder: NSLocalizedString("welcome_page_nickname_placeholder", comment: "Nickname placeholder"), 
+                          floatingPrompt: NSLocalizedString("welcome_page_nickname_prompt", comment: "Nickname prompt"))
                     .padding(.bottom, 20)
                 
                 confirmButton()
@@ -89,7 +91,7 @@ struct WelcomePage: View {
             .padding()
             .frame(width: UIScreen.main.bounds.width )
         }
-        .navigationTitle("nick_name")
+        .navigationTitle(NSLocalizedString("welcome_page_title", comment: "Welcome page title"))
         .navigationBarHidden(true) // 完全隱藏導航欄
         .onAppear {
             setupTransparentNavigationBar()

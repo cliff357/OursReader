@@ -37,7 +37,7 @@ struct BookDetailView: View {
                             .fontWeight(.bold)
                             .foregroundColor(.black) // 改為黑色，確保高對比度
                         
-                        Text("by \(book.author)")
+                        Text(String(format: NSLocalizedString("book_by_author", comment: ""), book.author))
                             .font(.subheadline)
                             .foregroundColor(.black.opacity(0.7)) // 改為深灰色，保持清晰可讀
                         
@@ -45,7 +45,7 @@ struct BookDetailView: View {
                         if book.totalPages > 0 {
                             VStack(alignment: .leading, spacing: 4) {
                                 HStack {
-                                    Text("Reading Progress")
+                                    Text(LocalizedStringKey("book_reading_progress"))
                                         .font(.caption)
                                         .foregroundColor(.black.opacity(0.8)) // 改為較深的顏色
                                     
@@ -66,7 +66,7 @@ struct BookDetailView: View {
                                         .frame(width: calculateProgressWidth(totalWidth: 120), height: 6)
                                 }
                                 
-                                Text("\(book.currentPage + 1) of \(book.totalPages) pages")
+                                Text(String(format: NSLocalizedString("book_page_info", comment: ""), book.currentPage + 1, book.totalPages))
                                     .font(.caption2)
                                     .foregroundColor(.black.opacity(0.8)) // 改為較深的顏色
                                 
@@ -87,7 +87,7 @@ struct BookDetailView: View {
                 Button(action: {
                     showingReader = true
                 }) {
-                    Label("Read Now", systemImage: "book.fill")
+                    Label(LocalizedStringKey("book_read_now"), systemImage: "book.fill")
                         .font(.headline)
                         .foregroundColor(ColorManager.shared.rice_white)
                         .padding()
@@ -103,7 +103,7 @@ struct BookDetailView: View {
                 
                 // Book description
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Description")
+                    Text(LocalizedStringKey("book_description"))
                         .font(.headline)
                         .foregroundColor(.black) // 改為黑色
                     
@@ -118,12 +118,12 @@ struct BookDetailView: View {
                 
                 // Book information
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Information")
+                    Text(LocalizedStringKey("book_information"))
                         .font(.headline)
                         .foregroundColor(.black) // 改為黑色
                     
                     HStack {
-                        Text("Pages:")
+                        Text(LocalizedStringKey("book_pages_label"))
                             .fontWeight(.medium)
                             .foregroundColor(.black) // 改為黑色
                         Text("\(book.totalPages)")
@@ -153,7 +153,7 @@ struct BookDetailView: View {
                                 .scaleEffect(0.8)
                                 .frame(width: 16, height: 16)
                             
-                            Text("刪除中...")
+                            Text(LocalizedStringKey("general_deleting"))
                                 .font(.caption2)
                                 .foregroundColor(.red)
                         }
@@ -166,13 +166,13 @@ struct BookDetailView: View {
                 .disabled(isDeleting)
             }
         }
-        .alert("Remove Book", isPresented: $showingDeleteAlert) {
-            Button("Cancel", role: .cancel) {}
-            Button("Remove", role: .destructive) {
+        .alert(LocalizedStringKey("book_remove_title"), isPresented: $showingDeleteAlert) {
+            Button(LocalizedStringKey("general_cancel"), role: .cancel) {}
+            Button(LocalizedStringKey("general_remove"), role: .destructive) {
                 deleteBook()
             }
         } message: {
-            Text("Are you sure you want to remove '\(book.title)' from your library? This action cannot be undone.")
+            Text(String(format: NSLocalizedString("book_remove_confirmation", comment: ""), book.title))
         }
         // 🔧 新增：全屏載入覆蓋層
         .overlay {
@@ -192,7 +192,7 @@ struct BookDetailView: View {
                             .font(.headline)
                             .foregroundColor(.black)
                         
-                        Text("請稍候，正在從雲端移除書籍...")
+                        Text(LocalizedStringKey("book_deleting_please_wait"))
                             .font(.caption)
                             .foregroundColor(.black.opacity(0.7))
                             .multilineTextAlignment(.center)
@@ -290,7 +290,7 @@ struct BookDetailView: View {
         // 🔧 開始刪除流程，顯示載入狀態
         withAnimation(.easeInOut(duration: 0.3)) {
             isDeleting = true
-            deleteProgress = "正在準備刪除..."
+            deleteProgress = NSLocalizedString("book_delete_preparing", comment: "")
         }
         
         // 給用戶觸覺反饋
@@ -299,7 +299,7 @@ struct BookDetailView: View {
         
         // 🔧 分階段顯示進度
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.deleteProgress = "正在查找書籍記錄..."
+            self.deleteProgress = NSLocalizedString("book_delete_searching", comment: "")
         }
         
         print("🔍 Looking for book to delete: \(book.title) (ID: \(book.id))")
@@ -347,25 +347,25 @@ struct BookDetailView: View {
         }
         
         if let cloudBook = targetCloudBook {
-            deleteProgress = "找到目標書籍，正在從雲端刪除..."
+            deleteProgress = NSLocalizedString("book_delete_found_deleting", comment: "")
             
             // 延遲一點後執行實際刪除
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 self.executeCloudBookDeletion(cloudBook, userID: userID)
             }
         } else {
-            handleDeleteError("找不到對應的書籍記錄")
+            handleDeleteError(NSLocalizedString("book_delete_not_found", comment: ""))
         }
     }
     
     // 🔧 新增：執行實際刪除的方法
     private func executeCloudBookDeletion(_ cloudBook: CloudBook, userID: String) {
         guard let recordID = cloudBook.recordID else {
-            handleDeleteError("書籍記錄ID無效，無法刪除")
+            handleDeleteError(NSLocalizedString("book_delete_invalid_id", comment: ""))
             return
         }
         
-        deleteProgress = "正在從 CloudKit 刪除..."
+        deleteProgress = NSLocalizedString("book_delete_from_cloud", comment: "")
         print("🗑️ Deleting book with recordID: \(recordID.recordName)")
         
         CloudKitManager.shared.deleteUserBook(
@@ -386,7 +386,7 @@ struct BookDetailView: View {
     
     // 🔧 新增：處理刪除成功
     private func handleDeleteSuccess() {
-        deleteProgress = "刪除完成！"
+        deleteProgress = NSLocalizedString("book_delete_completed", comment: "")
         
         print("✅ Book deleted successfully from CloudKit: \(book.title)")
         

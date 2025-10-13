@@ -168,6 +168,14 @@ class CloudKitManager {
                         completion(.failure(error))
                     } else {
                         let sortedBooks = books.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+                        
+                        // 🔧 新增：標記所有已獲取的書籍為已下載
+                        for book in sortedBooks {
+                            if let bookID = book.firebaseBookID {
+                                UserAuthModel.shared.markBookAsDownloaded(bookID: bookID)
+                            }
+                        }
+                        
                         completion(.success(sortedBooks))
                     }
                 }
@@ -182,7 +190,16 @@ class CloudKitManager {
     func saveUserBook(_ book: CloudBook, firebaseUserID: String, completion: @escaping (Result<String, Error>) -> Void) {
         // 統一使用分片儲存，不管大小
         print("📚 統一使用分片儲存所有書籍...")
-        saveUserBookWithChunking(book, firebaseUserID: firebaseUserID, completion: completion)
+        saveUserBookWithChunking(book, firebaseUserID: firebaseUserID) { result in
+            // 🔧 新增：上傳成功後自動標記為已下載
+            if case .success(let recordID) = result {
+                if let bookID = book.firebaseBookID {
+                    UserAuthModel.shared.markBookAsDownloaded(bookID: bookID)
+                    print("📚 Book marked as downloaded: \(book.name)")
+                }
+            }
+            completion(result)
+        }
     }
     
     // MARK: - 分片保存（所有書籍）
@@ -832,6 +849,10 @@ class CloudKitManager {
                                 completion(.failure(error))
                             } else if let deletedRecordID = deletedRecordID {
                                 print("✅ Successfully deleted record: \(deletedRecordID.recordName)")
+                                
+                                // 🔧 新增：刪除成功後移除下載標記
+                                UserAuthModel.shared.removeBookDownloaded(bookID: bookID)
+                                
                                 NotificationCenter.default.post(name: Self.booksDidChangeNotification, object: nil)
                                 completion(.success(()))
                             } else {
@@ -850,6 +871,10 @@ class CloudKitManager {
                             completion(.failure(error))
                         } else if let deletedRecordID = deletedRecordID {
                             print("✅ Successfully deleted record: \(deletedRecordID.recordName)")
+                            
+                            // 🔧 新增：刪除成功後移除下載標記
+                            UserAuthModel.shared.removeBookDownloaded(bookID: bookID)
+                            
                             NotificationCenter.default.post(name: Self.booksDidChangeNotification, object: nil)
                             completion(.success(()))
                         } else {

@@ -670,49 +670,157 @@ class UniversalBookScraper:
         return text
 
     def find_next_page_url(self, soup, current_url):
-        """智能尋找下一頁連結"""
+        """智能尋找下一頁連結（增強版：支援"下一篇"和嵌套結構）"""
         # 常見的下一頁選擇器和文字
         next_selectors = [
+            # 原有選擇器
             'a[title*="下一"]', 'a[title*="下一頁"]', 'a[title*="下一章"]',
             'a:contains("下一")', 'a:contains("下一頁")', 'a:contains("下一章")',
             '.next', 'a.next', '#next', 'a#next',
             'a[id*="next"]', 'a[class*="next"]',
             '.chapter-nav .next', '.page-nav .next',
-            'a#j_chapterNext', '.j_chapterNext'
+            'a#j_chapterNext', '.j_chapterNext',
+            
+            # 🔧 新增：針對"下一篇"的選擇器
+            'a[title*="下一篇"]', 'a:contains("下一篇")',
+            '.article-nav-next', '.article-nav-next a',
+            'span.article-nav-next a', '.next-article a',
+            'a[rel="next"]', 'a[rel*="next"]'
         ]
         
-        # 也嘗試文字匹配
-        next_keywords = ["下一頁", "下一章", "下頁", "下章", "next", "Next"]
+        # 🔧 擴展關鍵字：加入"下一篇"相關
+        next_keywords = [
+            "下一頁", "下一章", "下頁", "下章", 
+            "下一篇", "下篇",  # 新增
+            "next", "Next", "NEXT"
+        ]
         
-        # 首先嘗試常見選擇器
+        print(f"🔍 開始尋找下一頁連結...")
+        
+        # 🔧 方法1：優先處理嵌套結構（如 span.article-nav-next 內的 a 標籤）
+        nested_containers = [
+            '.article-nav-next', 'span.article-nav-next', 
+            '.next-article', '.nav-next', '.post-nav-next'
+        ]
+        
+        for container_selector in nested_containers:
+            try:
+                container = soup.select_one(container_selector)
+                if container:
+                    print(f"   🎯 找到容器：{container_selector}")
+                    # 在容器內尋找 a 標籤
+                    link = container.find('a')
+                    if link and link.get('href'):
+                        href = link.get('href')
+                        if href and href != '#' and href != 'javascript:void(0)':
+                            full_url = urljoin(current_url, href)
+                            link_text = link.get_text().strip()
+                            print(f"   ✅ 嵌套結構找到：{link_text} -> {full_url}")
+                            return full_url
+            except Exception as e:
+                print(f"   ⚠️ 處理容器 {container_selector} 時出錯：{e}")
+                continue
+        
+        # 🔧 方法2：使用 rel="next" 屬性（這是標準的下一頁標記）
+        try:
+            rel_next = soup.find('a', {'rel': 'next'})
+            if rel_next and rel_next.get('href'):
+                href = rel_next.get('href')
+                if href and href != '#' and href != 'javascript:void(0)':
+                    full_url = urljoin(current_url, href)
+                    link_text = rel_next.get_text().strip()
+                    print(f"   ✅ rel='next' 找到：{link_text} -> {full_url}")
+                    return full_url
+        except Exception as e:
+            print(f"   ⚠️ 處理 rel='next' 時出錯：{e}")
+        
+        # 方法3：原有的選擇器方法
         for selector in next_selectors:
             try:
                 next_element = soup.select_one(selector)
                 if next_element and next_element.get('href'):
                     href = next_element.get('href')
                     if href and href != '#' and href != 'javascript:void(0)':
-                        return urljoin(current_url, href)
-            except:
+                        full_url = urljoin(current_url, href)
+                        print(f"   ✅ 選擇器找到：{selector} -> {full_url}")
+                        return full_url
+            except Exception as e:
+                print(f"   ⚠️ 處理選擇器 {selector} 時出錯：{e}")
                 continue
         
-        # 如果選擇器找不到，嘗試文字匹配
+        # 🔧 方法4：改進的文字匹配（更精確的匹配）
         for keyword in next_keywords:
+            print(f"   🔍 搜尋關鍵字：{keyword}")
+            
+            # 精確文字匹配
+            links = soup.find_all('a', string=re.compile(f'^{re.escape(keyword)}$', re.I))
+            for link in links:
+                href = link.get('href')
+                if href and href != '#' and href != 'javascript:void(0)':
+                    full_url = urljoin(current_url, href)
+                    print(f"   ✅ 精確文字匹配：{keyword} -> {full_url}")
+                    return full_url
+            
+            # 部分文字匹配
             links = soup.find_all('a', string=re.compile(keyword, re.I))
             for link in links:
-                href = link.get('href')
-                if href and href != '#' and href != 'javascript:void(0)':
-                    return urljoin(current_url, href)
+                link_text = link.get_text().strip()
+                # 避免匹配到"上一篇"等無關連結
+                if not re.search(r'上一|prev|previous', link_text, re.I):
+                    href = link.get('href')
+                    if href and href != '#' and href != 'javascript:void(0)':
+                        full_url = urljoin(current_url, href)
+                        print(f"   ✅ 部分文字匹配：{link_text} -> {full_url}")
+                        return full_url
         
-        # 最後嘗試包含關鍵字的連結
+        # 🔧 方法5：title 屬性匹配（加入下一篇）
         for keyword in next_keywords:
-            links = soup.find_all('a', attrs={'title': re.compile(keyword, re.I)})
-            for link in links:
-                href = link.get('href')
-                if href and href != '#' and href != 'javascript:void(0)':
-                    return urljoin(current_url, href)
+            try:
+                links = soup.find_all('a', attrs={'title': re.compile(keyword, re.I)})
+                for link in links:
+                    title = link.get('title', '')
+                    # 確保不是"上一篇"
+                    if not re.search(r'上一|prev|previous', title, re.I):
+                        href = link.get('href')
+                        if href and href != '#' and href != 'javascript:void(0)':
+                            full_url = urljoin(current_url, href)
+                            print(f"   ✅ title 屬性匹配：{title} -> {full_url}")
+                            return full_url
+            except Exception as e:
+                print(f"   ⚠️ 處理 title 屬性時出錯：{e}")
+                continue
         
+        # 🔧 方法6：包含文字的元素內查找連結（處理複雜嵌套）
+        for keyword in next_keywords:
+            try:
+                # 找到包含關鍵字的所有元素
+                elements = soup.find_all(string=re.compile(keyword, re.I))
+                for element in elements:
+                    parent = element.parent
+                    if parent:
+                        # 如果父元素是 a 標籤
+                        if parent.name == 'a':
+                            href = parent.get('href')
+                            if href and href != '#' and href != 'javascript:void(0)':
+                                full_url = urljoin(current_url, href)
+                                print(f"   ✅ 包含文字元素：{keyword} -> {full_url}")
+                                return full_url
+                        
+                        # 在父元素中尋找 a 標籤
+                        link = parent.find('a')
+                        if link and link.get('href'):
+                            href = link.get('href')
+                            if href and href != '#' and href != 'javascript:void(0)':
+                                full_url = urljoin(current_url, href)
+                                print(f"   ✅ 父元素內連結：{keyword} -> {full_url}")
+                                return full_url
+            except Exception as e:
+                print(f"   ⚠️ 處理包含文字元素時出錯：{e}")
+                continue
+        
+        print("   ❌ 沒有找到下一頁連結")
         return None
-    
+
     def extract_book_info(self, start_url, first_chapter):
         """從URL和第一章提取書名和作者"""
         # 從URL嘗試提取書名

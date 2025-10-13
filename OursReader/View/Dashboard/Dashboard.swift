@@ -9,6 +9,7 @@ import SwiftUI
 
 struct Dashboard: View {
     @StateObject private var pushNotificationViewModel = PushSettingListViewModel()
+    @StateObject private var bookCacheManager = BookCacheManager.shared
     @State private var tabProgress: CGFloat = 0
     @State private var selectedTab: Tab? = .push
     @State private var selectedButtonListType: ButtonListType = .push_notification
@@ -93,7 +94,7 @@ struct Dashboard: View {
                 isImportButtonPressed = false
                 lockTabSelection = false
                 
-                // 確保回到 E-Book 頁面
+                // 碮保回到 E-Book 頁面
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                     withAnimation(.easeInOut(duration: 0.3)) {
                         selectedTab = .ebook
@@ -276,10 +277,10 @@ struct Dashboard: View {
                                         Image(systemName: "book.closed")
                                             .font(.system(size: 30))
                                             .foregroundColor(.white.opacity(0.7))
-                                        Text("No books yet")
+                                        Text(String(localized: "dashboard_no_books_yet"))
                                             .font(.caption)
                                             .foregroundColor(.white.opacity(0.7))
-                                        Text("Tap Import Books to get started!")
+                                        Text(String(localized: "dashboard_tap_import_to_start"))
                                             .font(.caption2)
                                             .foregroundColor(.white.opacity(0.5))
                                             .padding(.top, 2)
@@ -296,11 +297,11 @@ struct Dashboard: View {
                                         Image(systemName: "arrow.down.doc.fill")
                                             .font(.system(size: 25))
                                             .foregroundColor(.gray)
-                                        Text("Import your books")
+                                        Text(String(localized: "book_import_title"))
                                             .font(.caption)
                                             .fontWeight(.medium)
                                             .foregroundColor(.gray)
-                                        Text("Use Python script to\ncrawl books or import\nJSON files directly")
+                                        Text(String(localized: "book_import_python_description"))
                                             .font(.caption2)
                                             .foregroundColor(.gray.opacity(0.8))
                                             .multilineTextAlignment(.center)
@@ -309,11 +310,11 @@ struct Dashboard: View {
                         } else {
                             // 先顯示用戶書籍數據
                             ForEach(publicBooks, id: \.id) { userBook in
-                                NavigationLink(destination: BookDetailView(book: userBook.toEbook())
-                                    .accentColor(.black)) {
-                                    CloudBookGridItem(book: userBook, color: type.color)
-                                }
-                                .buttonStyle(PlainButtonStyle())
+                                CloudBookGridItemWithCache(
+                                    book: userBook, 
+                                    color: type.color,
+                                    cacheManager: bookCacheManager
+                                )
                             }
                             
                             // 🔧 移除加書按鈕，只保留導入按鈕
@@ -387,7 +388,7 @@ struct CloudBookGridItem: View {
                     }
                     
                     // 作者名 - 和簡介一樣的寬度和排版
-                    Text("by \(book.author)")
+                    Text(String(format: NSLocalizedString("book_by_author", comment: "Author name"), book.author))
                         .font(.caption)
                         .foregroundColor(ColorManager.shared.red1.opacity(0.8))
                         .lineLimit(1)
@@ -405,6 +406,81 @@ struct CloudBookGridItem: View {
                 .padding(12)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
+    }
+}
+
+// 🔧 修改 CloudBookGridItemWithCache，加入下載狀態指示
+struct CloudBookGridItemWithCache: View {
+    let book: CloudBook
+    let color: Color
+    @ObservedObject var cacheManager: BookCacheManager
+    @State private var showingError = false
+    @State private var errorMessage = ""
+    
+    var body: some View {
+        NavigationLink(destination: destinationView) {
+            RoundedRectangle(cornerRadius: 15)
+                .fill(color)
+                .frame(height: 150)
+                .overlay {
+                    VStack(alignment: .leading, spacing: 8) {
+                        // 書籍封面圖片和標題區域
+                        HStack(alignment: .top, spacing: 8) {
+                            DummyBookCoverView()
+                            
+                            // 書籍標題
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(book.name)
+                                    .font(.headline)
+                                    .foregroundColor(ColorManager.shared.red1)
+                                    .lineLimit(2)
+                                    .multilineTextAlignment(.leading)
+                                
+                                Spacer()
+                            }
+                            
+                            Spacer()
+                            
+                            // 🔧 新增：下載狀態指示器
+                            if let bookID = book.firebaseBookID, UserAuthModel.shared.isBookDownloaded(bookID: bookID) {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .font(.system(size: 16))
+                                    .foregroundColor(ColorManager.shared.green1)
+                            }
+                        }
+                        
+                        // 作者名
+                        Text(String(format: NSLocalizedString("book_by_author", comment: "Author name"), book.author))
+                            .font(.caption)
+                            .foregroundColor(ColorManager.shared.red1.opacity(0.8))
+                            .lineLimit(1)
+                            .multilineTextAlignment(.leading)
+                        
+                        // 簡介
+                        Text(book.introduction)
+                            .font(.caption)
+                            .foregroundColor(ColorManager.shared.red1.opacity(0.7))
+                            .lineLimit(2)
+                            .multilineTextAlignment(.leading)
+                        
+                        Spacer()
+                    }
+                    .padding(12)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+    
+    @ViewBuilder
+    private var destinationView: some View {
+        if let localBook = cacheManager.getLocalBook(book.id) {
+            BookDetailView(book: localBook)
+                .accentColor(.black)
+        } else {
+            BookDetailView(book: book.toEbook())
+                .accentColor(.black)
+        }
     }
 }
 
@@ -436,11 +512,11 @@ struct DashboardImportBookItem: View {
                         Image(systemName: "square.and.arrow.down.fill")
                             .font(.system(size: 40))
                             .foregroundColor(ColorManager.shared.red1)
-                        Text("Import Books")
+                        Text(String(localized: "book_import_title"))
                             .font(.headline)
                             .foregroundColor(ColorManager.shared.red1)
                         
-                        Text("From JSON files")
+                        Text(String(localized: "book_import_from_json"))
                             .font(.caption)
                             .foregroundColor(ColorManager.shared.red1.opacity(0.8))
                             .multilineTextAlignment(.center)
@@ -454,6 +530,85 @@ struct DashboardImportBookItem: View {
         .buttonStyle(PlainButtonStyle())
         // 🔧 添加防止重複點擊的 disabled 狀態（可選）
         .disabled(false) // 你可以根據需要添加狀態管理
+    }
+}
+
+// 下載狀態圖標組件
+struct DownloadStatusIcon: View {
+    let book: CloudBook
+    @ObservedObject var cacheManager: BookCacheManager
+    @State private var downloadProgress: Double = 0.0
+    
+    var body: some View {
+        Button(action: handleDownloadAction) {
+            ZStack {
+                if cacheManager.isBookDownloaded(book.id) {
+                    // 已下載圖標
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 20))
+                        .foregroundColor(.green)
+                } else if cacheManager.isBookDownloading(book.id) {
+                    // 下載中圖標
+                    ZStack {
+                        Circle()
+                            .stroke(Color.gray.opacity(0.3), lineWidth: 2)
+                            .frame(width: 20, height: 20)
+                        
+                        Circle()
+                            .trim(from: 0, to: downloadProgress)
+                            .stroke(Color.blue, style: StrokeStyle(lineWidth: 2, lineCap: .round))
+                            .frame(width: 20, height: 20)
+                            .rotationEffect(.degrees(-90))
+                            .animation(.easeInOut, value: downloadProgress)
+                    }
+                } else {
+                    // 未下載圖標
+                    Image(systemName: "icloud.and.arrow.down")
+                        .font(.system(size: 20))
+                        .foregroundColor(.blue)
+                }
+            }
+        }
+        .buttonStyle(PlainButtonStyle())
+        .onReceive(Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()) { _ in
+            if cacheManager.isBookDownloading(book.id) {
+                downloadProgress = cacheManager.getDownloadProgress(book.id)
+            }
+        }
+    }
+    
+    private func handleDownloadAction() {
+        if cacheManager.isBookDownloaded(book.id) {
+            // 已下載：可選擇刪除本地副本
+            showDeleteConfirmation()
+        } else if !cacheManager.isBookDownloading(book.id) {
+            // 未下載且不在下載中：開始下載
+            startDownload()
+        }
+        // 下載中時不執行任何操作
+    }
+    
+    private func startDownload() {
+        print("🔽 開始下載書籍：\(book.name)")
+        
+        cacheManager.downloadBook(book) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success():
+                    print("✅ 書籍下載完成：\(book.name)")
+                    // 可以顯示成功提示
+                    
+                case .failure(let error):
+                    print("❌ 書籍下載失敗：\(error.localizedDescription)")
+                    // 顯示錯誤提示
+                }
+            }
+        }
+    }
+    
+    private func showDeleteConfirmation() {
+        // 實現刪除確認對話框
+        // 這裡可以使用 Alert 或 ActionSheet
     }
 }
 

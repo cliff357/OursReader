@@ -49,10 +49,14 @@ struct SideMenu: View {
                         Spacer()
                         Button {
                             isShowing = false
+                            
+                            // 🔧 新增：發送登出通知以清除書籍緩存
+                            NotificationCenter.default.post(name: .userDidLogout, object: nil)
+                            
                             UserAuthModel.shared.signOut()
                         } label: {
                             HStack {
-                                Text(String(localized:"logout"))
+                                Text(String(localized:"auth_logout_button"))
                                     .foregroundColor(.white)
                                     .padding()
                                     .background(ColorManager.shared.green1)

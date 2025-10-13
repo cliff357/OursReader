@@ -12,7 +12,7 @@ struct CloudBook: Identifiable {
     let introduction: String
     let coverURL: String?
     let author: String
-    var content: [String] // 改為 var，允許修改
+    var content: [String]
     
     // Optional link to a Firebase book ID if this represents a book from Firebase
     let firebaseBookID: String?
@@ -21,8 +21,22 @@ struct CloudBook: Identifiable {
     var coverImage: UIImage?
     
     // Reading progress - these are stored separately but can be loaded into this model
-    var currentPage: Int = 0
-    var bookmarkedPages: [Int] = []
+    var currentPage: Int
+    var bookmarkedPages: [Int]
+    
+    // 🔧 新增：明確的初始化器
+    init(recordID: CKRecord.ID?, name: String, introduction: String, coverURL: String?, author: String, content: [String], firebaseBookID: String?, coverImage: UIImage? = nil, currentPage: Int = 0, bookmarkedPages: [Int] = []) {
+        self.recordID = recordID
+        self.name = name
+        self.introduction = introduction
+        self.coverURL = coverURL
+        self.author = author
+        self.content = content
+        self.firebaseBookID = firebaseBookID
+        self.coverImage = coverImage
+        self.currentPage = currentPage
+        self.bookmarkedPages = bookmarkedPages
+    }
 }
 
 // Extension to convert between Ebook and CloudBook
@@ -30,29 +44,29 @@ extension CloudBook {
     // Convert to Ebook
     func toEbook() -> Ebook {
         return Ebook(
-            id: firebaseBookID ?? id,
-            name: name,
-            title: name,
-            instruction: introduction,
-            author: author,
-            coverImage: coverURL ?? "",
-            content: content,
-            currentPage: currentPage,
-            bookmarkedPages: bookmarkedPages
+            id: self.firebaseBookID ?? self.id,
+            title: self.name,
+            author: self.author,
+            coverImage: self.coverURL ?? "default_cover",
+            instruction: self.introduction,
+            pages: self.content,
+            totalPages: self.content.count,
+            currentPage: self.currentPage,
+            bookmarkedPages: self.bookmarkedPages
         )
     }
     
     // Create from Ebook
     static func fromEbook(_ ebook: Ebook) -> CloudBook {
         return CloudBook(
-            recordID: nil, // Will be assigned when saved
-            name: ebook.name,
+            recordID: nil,
+            name: ebook.title,
             introduction: ebook.instruction,
-            coverURL: nil, // Will be set when image is saved
+            coverURL: ebook.coverImage == "default_cover" ? nil : ebook.coverImage,
             author: ebook.author,
-            content: ebook.content,
+            content: ebook.pages,
             firebaseBookID: ebook.id,
-            coverImage: UIImage(named: ebook.coverImage), // Try to load the image
+            coverImage: nil,
             currentPage: ebook.currentPage,
             bookmarkedPages: ebook.bookmarkedPages
         )

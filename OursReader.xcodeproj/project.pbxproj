@@ -73,6 +73,9 @@
 		991A51432E976C2E001C7775 /* universal_book_scraper.py in Resources */ = {isa = PBXBuildFile; fileRef = 991A51422E976C2E001C7775 /* universal_book_scraper.py */; };
 		991A51452E976C9C001C7775 /* ScriptManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991A51442E976C9C001C7775 /* ScriptManager.swift */; };
 		991A518D2E97AD25001C7775 /* DefaultBookCoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991A518C2E97AD25001C7775 /* DefaultBookCoverView.swift */; };
+		991A522D2E9CAB01001C7775 /* BookCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991A522C2E9CAB01001C7775 /* BookCacheManager.swift */; };
+		991A522F2E9CB4CA001C7775 /* Ebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991A522E2E9CB4CA001C7775 /* Ebook.swift */; };
+		991A52312E9CB4E0001C7775 /* Ebook+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991A52302E9CB4E0001C7775 /* Ebook+Codable.swift */; };
 		993EDABE2BDA4675002C18C7 /* SwiftEntryKit in Frameworks */ = {isa = PBXBuildFile; productRef = 993EDABD2BDA4675002C18C7 /* SwiftEntryKit */; };
 		993EDAC22BDBB71B002C18C7 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 993EDAC12BDBB71B002C18C7 /* FirebaseFirestore */; };
 		993EDAC42BDBB71B002C18C7 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 993EDAC32BDBB71B002C18C7 /* FirebaseFirestoreSwift */; };
@@ -273,6 +276,9 @@
 		991A51422E976C2E001C7775 /* universal_book_scraper.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; name = universal_book_scraper.py; path = script/universal_book_scraper.py; sourceTree = "<group>"; };
 		991A51442E976C9C001C7775 /* ScriptManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptManager.swift; sourceTree = "<group>"; };
 		991A518C2E97AD25001C7775 /* DefaultBookCoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultBookCoverView.swift; sourceTree = "<group>"; };
+		991A522C2E9CAB01001C7775 /* BookCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCacheManager.swift; sourceTree = "<group>"; };
+		991A522E2E9CB4CA001C7775 /* Ebook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ebook.swift; sourceTree = "<group>"; };
+		991A52302E9CB4E0001C7775 /* Ebook+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ebook+Codable.swift"; sourceTree = "<group>"; };
 		993EDAC62BE9F6EA002C18C7 /* Dashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dashboard.swift; sourceTree = "<group>"; };
 		993EDAC92BEB2C9C002C18C7 /* PeerDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeerDevice.swift; sourceTree = "<group>"; };
 		993EDACC2BEB2CBF002C18C7 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
@@ -511,6 +517,7 @@
 				993EDAC92BEB2C9C002C18C7 /* PeerDevice.swift */,
 				993EDACE2BEB2CE2002C18C7 /* PermissionRequest.swift */,
 				99F0C5EC2E8534C1008711EC /* CloudBook.swift */,
+				991A522E2E9CB4CA001C7775 /* Ebook.swift */,
 				99F0C5ED2E8534C1008711EC /* UserBook.swift */,
 			);
 			path = Model;
@@ -556,6 +563,7 @@
 				593EB1D52C01DEC000DD430F /* Reminder */,
 				593EB2032C01EFFF00DD430F /* LM.swift */,
 				991A513C2E96584B001C7775 /* BookImportManager.swift */,
+				991A522C2E9CAB01001C7775 /* BookCacheManager.swift */,
 				99F0C5F02E8534D2008711EC /* DashboardBooksManager.swift */,
 				991A51442E976C9C001C7775 /* ScriptManager.swift */,
 				998614432BB1770300E0996D /* NotificationManager.swift */,
@@ -793,6 +801,7 @@
 			isa = PBXGroup;
 			children = (
 				598F58082B13A5ED003B4FCB /* View+Extensions.swift */,
+				991A52302E9CB4E0001C7775 /* Ebook+Codable.swift */,
 				998614812BBD35AC00E0996D /* Color+.swift */,
 				593EB1FE2C01EED600DD430F /* View+.swift */,
 			);
@@ -998,8 +1007,8 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
-				Base,
 				"zh-HK",
+				Base,
 			);
 			mainGroup = 59E75E8D2ADF53AA007A549C;
 			packageReferences = (
@@ -1164,9 +1173,11 @@
 				593EB1F42C01E6E500DD430F /* FontManager.swift in Sources */,
 				9986144A2BB3F9EE00E0996D /* Profile.swift in Sources */,
 				598F58092B13A5ED003B4FCB /* View+Extensions.swift in Sources */,
+				991A522F2E9CB4CA001C7775 /* Ebook.swift in Sources */,
 				598053EC2BA6FD19008056F3 /* Login.swift in Sources */,
 				593EB1F22C01E58700DD430F /* GeneralButton.swift in Sources */,
 				9986146B2BBD20D100E0996D /* ViewExtensions.swift in Sources */,
+				991A52312E9CB4E0001C7775 /* Ebook+Codable.swift in Sources */,
 				593EB1DA2C01DED300DD430F /* ErrorReminderManager.swift in Sources */,
 				593EB2012C01EF6600DD430F /* ErrorHelper.swift in Sources */,
 				599EC2F22BD4CEDA00F6DEB1 /* ORTextField.swift in Sources */,
@@ -1175,6 +1186,7 @@
 				9986145A2BBB9EEC00E0996D /* WelcomePage.swift in Sources */,
 				591BAADB2CBBF5A3001FAE1C /* EditPushSettingBottomsheet.swift in Sources */,
 				5953369E2B05018100BB11D7 /* Tab.swift in Sources */,
+				991A522D2E9CAB01001C7775 /* BookCacheManager.swift in Sources */,
 				593EB1D92C01DED300DD430F /* BaseReminder.swift in Sources */,
 				9986145F2BBBAC8500E0996D /* UnderlineTextField.swift in Sources */,
 				99F0C5F92E939C41008711EC /* BaseSheetView.swift in Sources */,
