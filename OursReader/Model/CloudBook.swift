@@ -43,8 +43,9 @@ struct CloudBook: Identifiable {
 extension CloudBook {
     // Convert to Ebook
     func toEbook() -> Ebook {
+        // 🔧 關鍵修正：統一使用 CloudKit Record ID，確保 ID 一致性
         return Ebook(
-            id: self.firebaseBookID ?? self.id,
+            id: self.id, // 使用 CloudKit Record ID，不再使用 firebaseBookID
             title: self.name,
             author: self.author,
             coverImage: self.coverURL ?? "default_cover",
@@ -65,7 +66,7 @@ extension CloudBook {
             coverURL: ebook.coverImage == "default_cover" ? nil : ebook.coverImage,
             author: ebook.author,
             content: ebook.pages,
-            firebaseBookID: ebook.id,
+            firebaseBookID: ebook.id, // 保留 firebaseBookID 作為參考
             coverImage: nil,
             currentPage: ebook.currentPage,
             bookmarkedPages: ebook.bookmarkedPages

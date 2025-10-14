@@ -142,67 +142,22 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
         do {
             try firebaseAuth.signOut()
             
-            // 🔧 新增：清除下載狀態
-            clearDownloadedBooks()
+            // 🔧 使用 BookCacheManager 清除所有緩存
+            BookCacheManager.shared.clearAllCache()
+            
+            // 🔧 發送登出通知
+            NotificationCenter.default.post(name: .userDidLogout, object: nil)
             
         } catch let signOutError as NSError {
             print("Error signing out: %@", signOutError)
         }
     }
     
-    // 🔧 新增：清除下載書籍狀態的方法
-    private func clearDownloadedBooks() {
-        guard let currentUser = getCurrentFirebaseUser() else {
-            return
-        }
-        
-        let userDefaultsKey = "downloadedBookIDs_\(currentUser.uid)"
-        UserDefaults.standard.removeObject(forKey: userDefaultsKey)
-        
-        print("Cleared downloaded books state for user: \(currentUser.uid)")
-    }
-    
-    // 🔧 新增：標記書籍為已下載
-    func markBookAsDownloaded(bookID: String) {
-        guard let currentUser = getCurrentFirebaseUser() else {
-            return
-        }
-        
-        let userDefaultsKey = "downloadedBookIDs_\(currentUser.uid)"
-        var downloadedIDs = UserDefaults.standard.array(forKey: userDefaultsKey) as? [String] ?? []
-        
-        if !downloadedIDs.contains(bookID) {
-            downloadedIDs.append(bookID)
-            UserDefaults.standard.set(downloadedIDs, forKey: userDefaultsKey)
-        }
-    }
-    
-    // 🔧 新增：檢查書籍是否已下載
-    func isBookDownloaded(bookID: String) -> Bool {
-        guard let currentUser = getCurrentFirebaseUser() else {
-            return false
-        }
-        
-        let userDefaultsKey = "downloadedBookIDs_\(currentUser.uid)"
-        let downloadedIDs = UserDefaults.standard.array(forKey: userDefaultsKey) as? [String] ?? []
-        
-        return downloadedIDs.contains(bookID)
-    }
-    
-    // 🔧 新增：移除書籍下載標記
-    func removeBookDownloaded(bookID: String) {
-        guard let currentUser = getCurrentFirebaseUser() else {
-            return
-        }
-        
-        let userDefaultsKey = "downloadedBookIDs_\(currentUser.uid)"
-        var downloadedIDs = UserDefaults.standard.array(forKey: userDefaultsKey) as? [String] ?? []
-        
-        if let index = downloadedIDs.firstIndex(of: bookID) {
-            downloadedIDs.remove(at: index)
-            UserDefaults.standard.set(downloadedIDs, forKey: userDefaultsKey)
-        }
-    }
+    // 🔧 移除所有下載狀態相關方法（不再需要）
+    // private func clearDownloadedBooks() { ... } - 刪除
+    // func markBookAsDownloaded(bookID: String) { ... } - 刪除
+    // func isBookDownloaded(bookID: String) -> Bool { ... } - 刪除
+    // func removeBookDownloaded(bookID: String) { ... } - 刪除
     
     func getCurrentFirebaseUser() -> User? {
         if let user = Auth.auth().currentUser {

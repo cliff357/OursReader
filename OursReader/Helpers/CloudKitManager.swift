@@ -135,24 +135,16 @@ class CloudKitManager {
                     case .success(let record):
                         dispatchGroup.enter()
                         
-                        // 檢查 isChunked 字段（Int64 格式）
-                        let isChunkedValue = record["isChunked"] as? Int64 ?? 1 // 默認為分片
+                        let isChunkedValue = record["isChunked"] as? Int64 ?? 1
                         let isChunked = isChunkedValue == 1
                         
                         if (isChunked) {
-                            // 載入分片書籍
-                            self.loadChunkedBook(record) { bookResult in
-                                switch bookResult {
-                                case .success(let book):
-                                    books.append(book)
-                                case .failure(let error):
-                                    hasError = error
-                                    print("❌ 載入分片書籍失敗：\(error.localizedDescription)")
-                                }
-                                dispatchGroup.leave()
-                            }
+                            // 🔧 修正：只載入元數據，不載入完整內容
+                            var book = self.cloudBookFromRecord(record)
+                            book.content = [] // 清空內容，強制用戶下載
+                            books.append(book)
+                            dispatchGroup.leave()
                         } else {
-                            // 舊格式書籍（理論上不應該有，但保留兼容性）
                             let book = self.cloudBookFromRecord(record)
                             books.append(book)
                             dispatchGroup.leave()
@@ -169,11 +161,9 @@ class CloudKitManager {
                     } else {
                         let sortedBooks = books.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
                         
-                        // 🔧 新增：標記所有已獲取的書籍為已下載
-                        for book in sortedBooks {
-                            if let bookID = book.firebaseBookID {
-                                UserAuthModel.shared.markBookAsDownloaded(bookID: bookID)
-                            }
+                        // 同步下載狀態
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            self.syncDownloadStatusForBooks(sortedBooks)
                         }
                         
                         completion(.success(sortedBooks))
@@ -187,15 +177,65 @@ class CloudKitManager {
         }
     }
     
+    // 🔧 修正：移除自動保存書籍到本地的邏輯
+    private func saveLoadedBooksToLocal(_ books: [CloudBook]) {
+        // 🔧 完全移除自動保存邏輯，只檢查並同步狀態
+        // 不再自動保存任何書籍到本地
+        print("📚 Books loaded: \(books.count), checking local status only")
+    }
+
+    // 🔧 修正：只同步狀態，不自動下載
+    private func syncDownloadStatusForBooks(_ books: [CloudBook]) {
+        let cacheManager = BookCacheManager.shared
+        var syncedCount = 0
+        var removedCount = 0
+        
+        for book in books {
+            if cacheManager.checkLocalFileExists(book.id) {
+                // 文件存在且未標記 → 標記為已下載
+                if !cacheManager.isBookDownloaded(book.id) {
+                    cacheManager.markBookAsDownloaded(book.id)
+                    syncedCount += 1
+                }
+            } else {
+                // 文件不存在但已標記 → 移除標記
+                if cacheManager.isBookDownloaded(book.id) {
+                    cacheManager.removeBookCache(book.id)
+                    removedCount += 1
+                }
+            }
+        }
+        
+        if syncedCount > 0 || removedCount > 0 {
+            print("✅ Sync complete: +\(syncedCount) marked, -\(removedCount) unmarked")
+            NotificationCenter.default.post(name: Self.booksDidChangeNotification, object: nil)
+        }
+    }
+    
     func saveUserBook(_ book: CloudBook, firebaseUserID: String, completion: @escaping (Result<String, Error>) -> Void) {
-        // 統一使用分片儲存，不管大小
-        print("📚 統一使用分片儲存所有書籍...")
         saveUserBookWithChunking(book, firebaseUserID: firebaseUserID) { result in
-            // 🔧 新增：上傳成功後自動標記為已下載
             if case .success(let recordID) = result {
-                if let bookID = book.firebaseBookID {
-                    UserAuthModel.shared.markBookAsDownloaded(bookID: bookID)
-                    print("📚 Book marked as downloaded: \(book.name)")
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    DispatchQueue.global(qos: .userInitiated).async {
+                        do {
+                            let fileManager = FileManager.default
+                            let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+                            let bookURL = documentsURL.appendingPathComponent("book_\(book.id).json")
+                            
+                            let ebookData = book.toEbook()
+                            let jsonData = try JSONEncoder().encode([ebookData])
+                            try jsonData.write(to: bookURL)
+                            
+                            DispatchQueue.main.async {
+                                BookCacheManager.shared.markBookAsDownloaded(book.id)
+                                print("✅ Book uploaded and cached: \(book.name)")
+                                
+                                NotificationCenter.default.post(name: Self.booksDidChangeNotification, object: nil)
+                            }
+                        } catch {
+                            print("⚠️ Failed to cache uploaded book: \(error.localizedDescription)")
+                        }
+                    }
                 }
             }
             completion(result)
@@ -204,9 +244,6 @@ class CloudKitManager {
     
     // MARK: - 分片保存（所有書籍）
     private func saveUserBookWithChunking(_ book: CloudBook, firebaseUserID: String, completion: @escaping (Result<String, Error>) -> Void) {
-        print("🔄 開始分片保存書籍...")
-        
-        // 1. 創建主記錄（不包含內容）
         let mainRecord = CKRecord(recordType: "Book")
         mainRecord["userID"] = firebaseUserID
         mainRecord["name"] = book.name
@@ -242,9 +279,6 @@ class CloudKitManager {
         let chunks = chunkContent(book.content)
         mainRecord["totalChunks"] = Int64(chunks.count)
         
-        print("📦 分割成 \(chunks.count) 個內容塊")
-        
-        // 3. 保存主記錄
         privateDatabase.save(mainRecord) { savedMainRecord, error in
             if let error = error {
                 DispatchQueue.main.async {
@@ -325,9 +359,7 @@ class CloudKitManager {
             privateDatabase.save(chunkRecord) { _, error in
                 if let error = error {
                     hasError = error
-                    print("❌ 保存內容塊 \(index) 失敗: \(error.localizedDescription)")
-                } else {
-                    print("✅ 保存內容塊 \(index) 成功")
+                    print("❌ Failed to save chunk \(index): \(error.localizedDescription)")
                 }
                 dispatchGroup.leave()
             }
@@ -343,11 +375,10 @@ class CloudKitManager {
     }
     
     // MARK: - 載入分片書籍
-    private func loadChunkedBook(_ mainRecord: CKRecord, completion: @escaping (Result<CloudBook, Error>) -> Void) {
+    // 🔧 修正：改為 internal（默認訪問級別），讓 BookCacheManager 可以調用
+    func loadChunkedBook(_ mainRecord: CKRecord, completion: @escaping (Result<CloudBook, Error>) -> Void) {
         let mainRecordID = mainRecord.recordID.recordName
         let totalChunks = mainRecord["totalChunks"] as? Int64 ?? 0
-        
-        print("📚 載入分片書籍：\(mainRecord["name"] as? String ?? "Unknown") (共 \(totalChunks) 塊)")
         
         let predicate = NSPredicate(format: "mainBookID == %@", mainRecordID)
         let query = CKQuery(recordType: "BookChunk", predicate: predicate)
@@ -517,7 +548,8 @@ class CloudKitManager {
 
     // MARK: - Helper Methods (更新)
     
-    private func cloudBookFromRecord(_ record: CKRecord) -> CloudBook {
+    // 🔧 修正：改為 internal，讓 BookCacheManager 可以調用
+    func cloudBookFromRecord(_ record: CKRecord) -> CloudBook {
         return CloudBook(
             recordID: record.recordID,
             name: record["name"] as? String ?? "",
@@ -800,8 +832,8 @@ class CloudKitManager {
     func deleteUserBook(bookID: String, firebaseUserID: String, completion: @escaping (Result<Void, Error>) -> Void) {
         let recordID = CKRecord.ID(recordName: bookID)
         
-        print("🗑️ Attempting to delete record with ID: \(recordID.recordName)")
-        print("👤 For user: \(firebaseUserID)")
+        // 保留關鍵 log
+        print("🗑️ Deleting book: \(recordID.recordName)")
         
         // 先驗證記錄是否存在並屬於該用戶
         privateDatabase.fetch(withRecordID: recordID) { record, error in
@@ -814,7 +846,7 @@ class CloudKitManager {
             }
             
             guard let record = record else {
-                print("❌ Record not found for deletion: \(recordID.recordName)")
+                print("❌ Book not found: \(recordID.recordName)")
                 let notFoundError = NSError(domain: "com.cliffchan.manwareader", code: 404, userInfo: [NSLocalizedDescriptionKey: "Record not found"])
                 DispatchQueue.main.async {
                     completion(.failure(notFoundError))
@@ -832,38 +864,26 @@ class CloudKitManager {
                 return
             }
             
-            print("✅ Record found and verified, proceeding with deletion...")
-            
-            // 檢查是否為分片書籍，如果是則需要同時刪除分片
             let isChunkedValue = record["isChunked"] as? Int64 ?? 1
             let isChunked = isChunkedValue == 1
             
             if isChunked {
-                // 先刪除所有分片
                 self.deleteBookChunks(mainBookID: recordID.recordName) { chunkResult in
-                    // 無論分片刪除是否成功，都繼續刪除主記錄
                     self.privateDatabase.delete(withRecordID: recordID) { deletedRecordID, error in
                         DispatchQueue.main.async {
                             if let error = error {
-                                print("❌ CloudKit delete failed: \(error.localizedDescription)")
+                                print("❌ Delete failed: \(error.localizedDescription)")
                                 completion(.failure(error))
-                            } else if let deletedRecordID = deletedRecordID {
-                                print("✅ Successfully deleted record: \(deletedRecordID.recordName)")
-                                
-                                // 🔧 新增：刪除成功後移除下載標記
-                                UserAuthModel.shared.removeBookDownloaded(bookID: bookID)
-                                
-                                NotificationCenter.default.post(name: Self.booksDidChangeNotification, object: nil)
-                                completion(.success(()))
                             } else {
-                                print("⚠️ Delete operation completed but no record ID returned")
+                                print("✅ Book deleted successfully")
+                                BookCacheManager.shared.removeBookCache(bookID)
+                                NotificationCenter.default.post(name: Self.booksDidChangeNotification, object: nil)
                                 completion(.success(()))
                             }
                         }
                     }
                 }
             } else {
-                // 非分片書籍，直接刪除
                 self.privateDatabase.delete(withRecordID: recordID) { deletedRecordID, error in
                     DispatchQueue.main.async {
                         if let error = error {
@@ -872,8 +892,8 @@ class CloudKitManager {
                         } else if let deletedRecordID = deletedRecordID {
                             print("✅ Successfully deleted record: \(deletedRecordID.recordName)")
                             
-                            // 🔧 新增：刪除成功後移除下載標記
-                            UserAuthModel.shared.removeBookDownloaded(bookID: bookID)
+                            // 🔧 修改：只移除本地緩存
+                            BookCacheManager.shared.removeBookCache(bookID)
                             
                             NotificationCenter.default.post(name: Self.booksDidChangeNotification, object: nil)
                             completion(.success(()))
@@ -905,14 +925,11 @@ class CloudKitManager {
                         self.privateDatabase.delete(withRecordID: chunkRecord.recordID) { _, error in
                             if let error = error {
                                 deleteErrors.append(error)
-                                print("⚠️ 刪除分片失敗：\(error.localizedDescription)")
-                            } else {
-                                print("✅ 成功刪除分片：\(chunkRecord.recordID.recordName)")
                             }
                             deleteGroup.leave()
                         }
                     case .failure(let error):
-                        print("獲取分片記錄失敗：\(error.localizedDescription)")
+                        print("❌ Failed to fetch chunk: \(error.localizedDescription)")
                     }
                 }
                 
@@ -925,7 +942,7 @@ class CloudKitManager {
                 }
                 
             case .failure(let error):
-                print("查詢分片失敗：\(error.localizedDescription)")
+                print("❌ Failed to query chunks: \(error.localizedDescription)")
                 completion(.failure(error))
             }
         }

@@ -7,88 +7,10 @@
     "%lld" : {
 
     },
-    "• iCloud Drive 掃描：自動尋找 iCloud 中的書籍文件" : {
-
-    },
-    "• iCloud 同步：所有設備間自動同步" : {
-
-    },
-    "• 不得用於商業用途或侵犯版權" : {
-
-    },
-    "• 僅供個人學習和教學用途" : {
-
-    },
-    "• 僅限合法使用公開資源" : {
-
-    },
-    "• 最近文件：快速重新導入最近使用的文件" : {
-
-    },
-    "• 手動添加：直接在 App 中輸入書籍內容" : {
-
-    },
-    "• 支援的格式：JSON 文件" : {
-
-    },
-    "• 續傳功能：支援斷點續傳和自動恢復" : {
-
-    },
-    "• 自動分片儲存：處理大型書籍文件" : {
-
-    },
-    "• 請遵守網站的 robots.txt 和使用條款" : {
+    "%lld%%" : {
 
     },
     "→" : {
-
-    },
-    "⚖️ 重要提醒" : {
-
-    },
-    "💡 技術說明" : {
-
-    },
-    "📝 使用說明" : {
-
-    },
-    "🔄 其他導入方式" : {
-
-    },
-    "🔧 腳本功能" : {
-
-    },
-    "🔧 腳本功能特色：" : {
-
-    },
-    "1. 下載並保存腳本到電腦" : {
-
-    },
-    "1. 確保電腦已安裝 Python 3.6+" : {
-
-    },
-    "2. 安裝必要套件：requests, beautifulsoup4" : {
-
-    },
-    "2. 打開終端機/命令提示字元" : {
-
-    },
-    "3. 運行：python universal_book_scraper.py" : {
-
-    },
-    "3. 運行腳本：python universal_book_scraper.py" : {
-
-    },
-    "4. 輸入小說第一章的 URL" : {
-
-    },
-    "4. 輸入小說第一章的完整 URL" : {
-
-    },
-    "5. 等待爬取完成，獲得 JSON 文件" : {
-
-    },
-    "5. 等待自動爬取完成" : {
 
     },
     "auth_login_button" : {
@@ -163,6 +85,9 @@
 
     },
     "Book Cover" : {
+
+    },
+    "Book not found" : {
 
     },
     "book_bookmarks" : {
@@ -370,7 +295,38 @@
       }
     },
     "book_description" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Description"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "簡介"
+          }
+        }
+      }
+    },
+    "book_detail_placeholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hello, World!"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你好，世界！"
+          }
+        }
+      }
     },
     "book_downloaded" : {
       "extractionState" : "manual",
@@ -419,6 +375,278 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "書籍導入完整指南"
+          }
+        }
+      }
+    },
+    "book_import_download_script" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Download Python Script"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下載 Python 腳本"
+          }
+        }
+      }
+    },
+    "book_import_feature_extract" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Smart content extraction"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "智能內容提取，保留分行格式"
+          }
+        }
+      }
+    },
+    "book_import_feature_extract_desc" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auto-identify title and content, preserve line breaks"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自動識別標題和內容，保留分行"
+          }
+        }
+      }
+    },
+    "book_import_feature_extract_full" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Smart Extraction"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "智能提取"
+          }
+        }
+      }
+    },
+    "book_import_feature_recovery" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auto-recovery (60s wait on disconnect)"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "網絡中斷自動恢復（60秒等待）"
+          }
+        }
+      }
+    },
+    "book_import_feature_recovery_desc" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wait 60s then auto-recover on network disconnect"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "網絡中斷時等待 60 秒後自動恢復"
+          }
+        }
+      }
+    },
+    "book_import_feature_recovery_full" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auto-recovery Function"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自動恢復功能"
+          }
+        }
+      }
+    },
+    "book_import_feature_resume" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resume capability"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "斷點續傳功能"
+          }
+        }
+      }
+    },
+    "book_import_feature_resume_desc" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resume from breakpoint after interruption"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "支援斷點續傳，中斷後可繼續"
+          }
+        }
+      }
+    },
+    "book_import_feature_resume_full" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resume Capability"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "續傳功能"
+          }
+        }
+      }
+    },
+    "book_import_feature_retry" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auto-retry (up to 3 times)"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自動重試機制（最多3次）"
+          }
+        }
+      }
+    },
+    "book_import_feature_retry_desc" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Up to 3 retries, 5s interval"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最多重試 3 次，間隔 5 秒"
+          }
+        }
+      }
+    },
+    "book_import_feature_retry_full" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auto-retry Mechanism"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自動重試機制"
+          }
+        }
+      }
+    },
+    "book_import_feature_stats" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detailed progress stats"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "詳細進度統計"
+          }
+        }
+      }
+    },
+    "book_import_feature_stats_desc" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scraping progress, success rate, speed stats"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "爬取進度、成功率、速度統計"
+          }
+        }
+      }
+    },
+    "book_import_feature_stats_full" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detailed Statistics"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "詳細統計"
           }
         }
       }
@@ -490,6 +718,23 @@
         }
       }
     },
+    "book_import_important_reminder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "⚖️ Important Reminder"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "⚖️ 重要提醒"
+          }
+        }
+      }
+    },
     "book_import_instructions" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -503,6 +748,91 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "使用說明"
+          }
+        }
+      }
+    },
+    "book_import_legal_reminder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "⚖️ Important: Only use legal public resources for educational purposes"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "⚖️ 重要提醒：僅限合法使用公開資源，且僅供教學用途"
+          }
+        }
+      }
+    },
+    "book_import_method_icloud" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• iCloud Drive Scan: Auto-find book files in iCloud"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• iCloud Drive 掃描：自動尋找 iCloud 中的書籍文件"
+          }
+        }
+      }
+    },
+    "book_import_method_manual" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Manual Add: Directly input book content in app"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 手動添加：直接在 App 中輸入書籍內容"
+          }
+        }
+      }
+    },
+    "book_import_method_recent" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Recent Files: Quickly re-import recent files"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 最近文件：快速重新導入最近使用的文件"
+          }
+        }
+      }
+    },
+    "book_import_other_methods_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "🔄 Other Import Methods"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "🔄 其他導入方式"
           }
         }
       }
@@ -557,6 +887,74 @@
         }
       }
     },
+    "book_import_reminder_commercial" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Do not use for commercial purposes or copyright infringement"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 不得用於商業用途或侵犯版權"
+          }
+        }
+      }
+    },
+    "book_import_reminder_legal" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Only use legal public resources"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 僅限合法使用公開資源"
+          }
+        }
+      }
+    },
+    "book_import_reminder_personal" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• For personal learning and educational purposes only"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 僅供個人學習和教學用途"
+          }
+        }
+      }
+    },
+    "book_import_reminder_robots" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Follow website's robots.txt and terms of use"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 請遵守網站的 robots.txt 和使用條款"
+          }
+        }
+      }
+    },
     "book_import_result" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -587,6 +985,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "掃描 iCloud Drive"
+          }
+        }
+      }
+    },
+    "book_import_script_features_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "🔧 Script Features:"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "🔧 腳本功能特色："
+          }
+        }
+      }
+    },
+    "book_import_script_functions" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "🔧 Script Functions"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "🔧 腳本功能"
           }
         }
       }
@@ -642,6 +1074,295 @@
         }
       }
     },
+    "book_import_step1_1_1" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1. Download and save the script to your computer"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1. 下載並保存腳本到電腦"
+          }
+        }
+      }
+    },
+    "book_import_step1_1_2" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2. Open Terminal/Command Prompt"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2. 打開終端機/命令提示字元"
+          }
+        }
+      }
+    },
+    "book_import_step1_1_3" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3. Run: python universal_book_scraper.py"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3. 運行：python universal_book_scraper.py"
+          }
+        }
+      }
+    },
+    "book_import_step1_1_4" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "4. Enter the full URL of the first chapter"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "4. 輸入小說第一章的完整 URL"
+          }
+        }
+      }
+    },
+    "book_import_step1_1_5" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5. Wait for automatic scraping to complete"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5. 等待自動爬取完成"
+          }
+        }
+      }
+    },
+    "book_import_step1_1_content" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prepare environment on your computer:\n• Ensure Python 3.6+ is installed\n• Install required packages: pip install requests beautifulsoup4\n• Get the latest universal_book_scraper.py script"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在電腦上準備環境：\n• 確保已安裝 Python 3.6+\n• 安裝必要套件：pip install requests beautifulsoup4\n• 獲取最新版本的 universal_book_scraper.py 腳本"
+          }
+        }
+      }
+    },
+    "book_import_step1_1_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get and Run Python Scraper Script"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "獲取並運行 Python 爬蟲腳本"
+          }
+        }
+      }
+    },
+    "book_import_step1_2_content" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "After scraping:\n• JSON file will be generated in the same folder\n• File name format: BookName_DateTime.json\n• This is your book file, ready to transfer to phone"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "爬取完成後：\n• 在腳本相同資料夾下會生成 JSON 文件\n• 文件名格式：書名_日期時間.json\n• 這個就是你的書籍文件，準備傳輸到手機"
+          }
+        }
+      }
+    },
+    "book_import_step1_2_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get Book File"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "獲取書籍文件"
+          }
+        }
+      }
+    },
+    "book_import_step1_subtitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use Python script to get books from public resources"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用 Python 腳本從公開資源獲取書籍"
+          }
+        }
+      }
+    },
+    "book_import_step1_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get Book Files"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "獲取書籍文件"
+          }
+        }
+      }
+    },
+    "book_import_step2_1_content" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share via AirDrop:\n• Right-click the JSON file on computer\n• Select AirDrop to your iPhone\n• Choose 'Save to Files' on phone\n• Select save location (recommend iCloud Drive)"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用 AirDrop 分享：\n• 在電腦上右鍵點擊 JSON 文件\n• 選擇 AirDrop 分享給你的 iPhone\n• 在手機上選擇「儲存到檔案」\n• 選擇儲存位置（建議存到 iCloud Drive）"
+          }
+        }
+      }
+    },
+    "book_import_step2_1_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transfer File to Phone"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "傳輸文件到手機"
+          }
+        }
+      }
+    },
+    "book_import_step2_2_content" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In OurReader App:\n• Tap 'Import Books' button\n• Select 'From File Picker'\n• Find and select your JSON file\n• Wait for import to complete"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在 OurReader App 中：\n• 點擊「導入書籍」按鈕\n• 選擇「從文件選擇」\n• 找到並選擇你的 JSON 文件\n• 等待導入完成"
+          }
+        }
+      }
+    },
+    "book_import_step2_2_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import in App"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在 App 中導入"
+          }
+        }
+      }
+    },
+    "book_import_step2_subtitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transfer book file to phone and import"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "將書籍文件傳輸到手機並導入"
+          }
+        }
+      }
+    },
+    "book_import_step2_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import to App"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "導入到 App"
+          }
+        }
+      }
+    },
     "book_import_subtitle" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -655,6 +1376,91 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "選擇一種方式來導入你的書籍"
+          }
+        }
+      }
+    },
+    "book_import_tech_note_chunking" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Auto-chunking: Handle large book files"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 自動分片儲存：處理大型書籍文件"
+          }
+        }
+      }
+    },
+    "book_import_tech_note_format" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Supported format: JSON files"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 支援的格式：JSON 文件"
+          }
+        }
+      }
+    },
+    "book_import_tech_note_icloud" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• iCloud Sync: Auto-sync across all devices"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• iCloud 同步：所有設備間自動同步"
+          }
+        }
+      }
+    },
+    "book_import_tech_note_resume" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Resume capability: Support breakpoint resume and auto-recovery"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 續傳功能：支援斷點續傳和自動恢復"
+          }
+        }
+      }
+    },
+    "book_import_tech_notes_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "💡 Technical Notes"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "💡 技術說明"
           }
         }
       }
@@ -675,8 +1481,141 @@
         }
       }
     },
+    "book_import_usage_instructions" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "📝 Usage Instructions"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "📝 使用說明"
+          }
+        }
+      }
+    },
+    "book_import_usage_step1" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1. Ensure Python 3.6+ is installed"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1. 確保電腦已安裝 Python 3.6+"
+          }
+        }
+      }
+    },
+    "book_import_usage_step2" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2. Install required packages: requests, beautifulsoup4"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2. 安裝必要套件：requests, beautifulsoup4"
+          }
+        }
+      }
+    },
+    "book_import_usage_step3" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3. Run script: python universal_book_scraper.py"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3. 運行腳本：python universal_book_scraper.py"
+          }
+        }
+      }
+    },
+    "book_import_usage_step4" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "4. Enter first chapter URL"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "4. 輸入小說第一章的 URL"
+          }
+        }
+      }
+    },
+    "book_import_usage_step5" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5. Wait for scraping to complete, get JSON file"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5. 等待爬取完成，獲得 JSON 文件"
+          }
+        }
+      }
+    },
+    "book_import_usage_steps" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usage Steps:"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用步驟："
+          }
+        }
+      }
+    },
     "book_information" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Information"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "書籍資訊"
+          }
+        }
+      }
     },
     "book_no_bookmarks" : {
       "extractionState" : "manual",
@@ -875,7 +1814,21 @@
 
     },
     "dashboard" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dashboard"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dashboard"
+          }
+        }
+      }
     },
     "dashboard_my_books" : {
       "extractionState" : "stale",
@@ -943,74 +1896,371 @@
         }
       }
     },
-    "ebook" : {
+    "Download to Read" : {
 
+    },
+    "ebook" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "E-Book"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "電子書"
+          }
+        }
+      }
     },
     "error_setting_not_found" : {
 
     },
     "friend_add_button" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新增"
+          }
+        }
+      }
     },
     "friend_add_by_id" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Friend by ID"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通過 ID 新增朋友"
+          }
+        }
+      }
     },
     "friend_add_failed" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed to add friend: "
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新增朋友失敗："
+          }
+        }
+      }
     },
     "friend_add_title" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Friend"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新增朋友"
+          }
+        }
+      }
     },
     "friend_added_success" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Friend added successfully"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "成功新增朋友"
+          }
+        }
+      }
     },
     "friend_connect" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connect"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "連接"
+          }
+        }
+      }
     },
     "friend_copied_to_clipboard" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copied to clipboard"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已複製到剪貼板"
+          }
+        }
+      }
     },
     "friend_default_name" : {
 
     },
     "friend_empty_state_message" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start adding friends to share books"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "開始新增朋友以分享書籍"
+          }
+        }
+      }
     },
     "friend_empty_state_title" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Friends Yet"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "暫時沒有朋友"
+          }
+        }
+      }
     },
     "friend_enter_id" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter friend's ID"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "輸入朋友的 ID"
+          }
+        }
+      }
     },
     "friend_find_nearby" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Find Nearby Friends"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "尋找附近的朋友"
+          }
+        }
+      }
     },
-    "friend_linking_request %@" : {
-
+    "friend_linking_request" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linking Request from %@"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 的連接請求"
+          }
+        }
+      }
     },
     "friend_linking_start" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connect"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "連接"
+          }
+        }
+      }
     },
     "friend_list_title" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Friends"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "朋友列表"
+          }
+        }
+      }
     },
     "friend_nearby_title" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nearby Devices"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "附近的設備"
+          }
+        }
+      }
     },
     "friend_not_signed_in" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not signed in"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未登入"
+          }
+        }
+      }
     },
     "friend_remove_button" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove Friend"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "移除朋友"
+          }
+        }
+      }
     },
     "friend_send_info" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send Info"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "發送資料"
+          }
+        }
+      }
     },
     "friend_user_not_found" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "User not found"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "找不到該用戶"
+          }
+        }
+      }
     },
     "friend_your_user_id" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your User ID"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你的用戶 ID"
+          }
+        }
+      }
     },
     "friendList" : {
 
@@ -1084,10 +2334,38 @@
       }
     },
     "general_no" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "否"
+          }
+        }
+      }
     },
     "general_ok" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "好"
+          }
+        }
+      }
     },
     "general_or" : {
       "extractionState" : "manual",
@@ -1247,6 +2525,23 @@
 
     },
     "OK" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "好"
+          }
+        }
+      }
+    },
+    "Please try downloading again" : {
 
     },
     "profile" : {
@@ -1256,7 +2551,21 @@
 
     },
     "push_add_more_title" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add More"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新增更多"
+          }
+        }
+      }
     },
     "push_add_new" : {
 
@@ -1283,7 +2592,21 @@
 
     },
     "push_notification" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Push"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "推送"
+          }
+        }
+      }
     },
     "push_remove" : {
 
@@ -1307,10 +2630,38 @@
 
     },
     "sign_up" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign Up"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "註冊"
+          }
+        }
+      }
     },
     "sign_up_button" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign Up"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "註冊"
+          }
+        }
+      }
     },
     "universal_book_scraper.py" : {
 
@@ -1421,15 +2772,23 @@
       }
     },
     "widget" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Widget"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "小工具"
+          }
+        }
+      }
     },
     "Widget" : {
-
-    },
-    "下載 Python 腳本" : {
-
-    },
-    "使用步驟：" : {
 
     }
   },

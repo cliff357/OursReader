@@ -65,6 +65,12 @@ struct BookReaderView: View {
                 }
             }
             .onAppear {
+                // 🔧 新增：顯示閱讀器載入的書籍資訊
+                print("📚 [BookReaderView] onAppear")
+                print("   Book: \(book.title)")
+                print("   Content pages: \(book.content.count)")
+                print("   Can read: \(book.content.isEmpty ? "❌ NO CONTENT" : "✅ YES")")
+                
                 currentPageIndex = book.currentPage
                 lastSavedPage = book.currentPage
                 updateProgressPercentage()

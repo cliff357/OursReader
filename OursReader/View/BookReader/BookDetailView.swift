@@ -12,6 +12,10 @@ struct BookDetailView: View {
     @State private var deleteProgress = "正在刪除..." // 新增：刪除進度文字
     @Environment(\.dismiss) private var dismiss
     
+    // 🔧 新增：下載相關狀態
+    @State private var isDownloading = false
+    @State private var downloadProgress: Double = 0.0
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
@@ -83,20 +87,10 @@ struct BookDetailView: View {
                 Divider()
                     .background(ColorManager.shared.dark_brown.opacity(0.3))
                 
-                // Action buttons - 只保留閱讀按鈕
-                Button(action: {
-                    showingReader = true
-                }) {
-                    Label(LocalizedStringKey("book_read_now"), systemImage: "book.fill")
-                        .font(.headline)
-                        .foregroundColor(ColorManager.shared.rice_white)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(ColorManager.shared.red1)
-                        .cornerRadius(10)
-                }
-                .padding(.horizontal, 20)
-                .padding(.vertical)
+                // 🔧 修改：Read 按鈕整合下載功能
+                readOrDownloadButton
+                    .padding(.horizontal, 20)
+                    .padding(.vertical)
                 
                 Divider()
                     .background(Color.secondary.opacity(0.3)) // 使用系統顏色
@@ -105,29 +99,29 @@ struct BookDetailView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(LocalizedStringKey("book_description"))
                         .font(.headline)
-                        .foregroundColor(.black) // 改為黑色
+                        .foregroundColor(.black)
                     
                     Text(book.instruction)
                         .font(.body)
-                        .foregroundColor(.black.opacity(0.8)) // 改為深灰色，確保易讀
+                        .foregroundColor(.black.opacity(0.8))
                 }
                 .padding(.horizontal)
                 
                 Divider()
-                    .background(Color.black.opacity(0.2)) // 改為較深的分隔線
+                    .background(Color.black.opacity(0.2))
                 
                 // Book information
                 VStack(alignment: .leading, spacing: 8) {
                     Text(LocalizedStringKey("book_information"))
                         .font(.headline)
-                        .foregroundColor(.black) // 改為黑色
+                        .foregroundColor(.black)
                     
                     HStack {
                         Text(LocalizedStringKey("book_pages_label"))
                             .fontWeight(.medium)
-                            .foregroundColor(.black) // 改為黑色
+                            .foregroundColor(.black)
                         Text("\(book.totalPages)")
-                            .foregroundColor(.black.opacity(0.7)) // 改為深灰色
+                            .foregroundColor(.black.opacity(0.7))
                         Spacer()
                     }
                 }
@@ -207,6 +201,21 @@ struct BookDetailView: View {
             }
         }
         .onAppear {
+            // 🔧 新增：顯示 BookDetailView 載入的書籍資訊
+            print("📖 [BookDetailView] onAppear")
+            print("   Book: \(book.title)")
+            print("   ID: \(book.id)")
+            print("   Total pages: \(book.totalPages)")
+            print("   Current page: \(book.currentPage)")
+            print("   Content loaded: \(book.pages.isEmpty ? "❌ EMPTY" : "✅ \(book.pages.count) pages")")
+            
+            // 檢查本地緩存狀態
+            let isDownloaded = BookCacheManager.shared.isBookDownloaded(book.id)
+            let fileExists = BookCacheManager.shared.checkLocalFileExists(book.id)
+            print("   Cache status:")
+            print("     - Marked as downloaded: \(isDownloaded ? "✅" : "❌")")
+            print("     - File exists: \(fileExists ? "✅" : "❌")")
+            
             // 設置導航欄外觀
             let appearance = UINavigationBarAppearance()
             appearance.configureWithOpaqueBackground()
@@ -235,6 +244,96 @@ struct BookDetailView: View {
         .onChange(of: book.currentPage) { oldValue, newValue in
             // 當書籍進度改變時，重新計算進度條
             print("Book progress updated: \(newValue)")
+        }
+    }
+    
+    // 🔧 新增：Read/Download 按鈕
+    @ViewBuilder
+    private var readOrDownloadButton: some View {
+        let isDownloaded = BookCacheManager.shared.isBookDownloaded(book.id)
+        
+        Button(action: {
+            if isDownloaded {
+                // 已下載：打開閱讀器
+                showingReader = true
+            } else {
+                // 未下載：開始下載
+                startDownload()
+            }
+        }) {
+            HStack {
+                if isDownloading {
+                    // 下載中：顯示進度條
+                    ProgressView(value: downloadProgress)
+                        .progressViewStyle(LinearProgressViewStyle(tint: .white))
+                        .frame(height: 4)
+                    
+                    Text("\(Int(downloadProgress * 100))%")
+                        .font(.caption)
+                        .foregroundColor(.white)
+                } else if isDownloaded {
+                    // 已下載：顯示閱讀圖標
+                    Image(systemName: "book.fill")
+                        .font(.headline)
+                    Text(LocalizedStringKey("book_read_now"))
+                        .font(.headline)
+                } else {
+                    // 未下載：顯示下載圖標
+                    Image(systemName: "icloud.and.arrow.down")
+                        .font(.headline)
+                    Text("Download to Read")
+                        .font(.headline)
+                }
+            }
+            .foregroundColor(ColorManager.shared.rice_white)
+            .padding()
+            .frame(maxWidth: .infinity)
+            .background(isDownloading ? Color.gray : ColorManager.shared.red1)
+            .cornerRadius(10)
+        }
+        .disabled(isDownloading)
+    }
+    
+    // 🔧 新增：開始下載方法
+    private func startDownload() {
+        isDownloading = true
+        downloadProgress = 0.0
+        
+        // 創建假的 CloudBook 用於下載
+        let cloudBook = CloudBook.fromEbook(book)
+        
+        // 模擬進度更新（實際應該從 BookCacheManager 獲取）
+        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
+            if downloadProgress < 0.9 {
+                downloadProgress += 0.05
+            }
+            
+            // 如果真的下載完成或取消，停止計時器
+            if BookCacheManager.shared.isBookDownloaded(book.id) || !isDownloading {
+                timer.invalidate()
+            }
+        }
+        
+        BookCacheManager.shared.downloadBook(cloudBook) { result in
+            DispatchQueue.main.async {
+                downloadProgress = 1.0
+                
+                // 延遲一下讓用戶看到 100%
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    isDownloading = false
+                    
+                    switch result {
+                    case .success():
+                        print("✅ Download completed, opening reader...")
+                        // 下載完成後自動打開閱讀器
+                        showingReader = true
+                        
+                    case .failure(let error):
+                        print("❌ Download failed: \(error.localizedDescription)")
+                        // 可以選擇顯示錯誤提示
+                    }
+                }
+            }
         }
     }
     
