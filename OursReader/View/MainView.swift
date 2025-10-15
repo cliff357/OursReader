@@ -12,38 +12,30 @@ struct MainView: View {
     @StateObject var homeRouter: HomeRouter = HomeRouter.shared
     @StateObject var loginRouter: LoginRouter = LoginRouter.shared
     
-//    @StateObject var reminderManager = ReminderManager.shared
-//    @StateObject var errorReminderManager = ErrorReminderManager.shared
-    
     var body: some View {
         VStack {
             Group {
-                if userAuth.nickName.isEmpty {
-                    WelcomePage()
-                        .environmentObject(userAuth)
-                } else {
-                    if userAuth.isLoggedIn {
-                        NavigationStack(path: $homeRouter.path ) {
-                            Home()
-                                .environmentObject(userAuth)
-                                .navigationDestination(for: HomeRoute.self, destination: { $0 })
-                        }
-                        .accentColor(.black) // 設置 NavigationStack 的強調色
-                    } else {
-                        NavigationStack(path: $homeRouter.path ) {
-                            Login()
-                                .environmentObject(userAuth)
-                                .navigationDestination(for: HomeRoute.self, destination: { $0 })
-                        }
-                        .accentColor(.black) // 設置 NavigationStack 的強調色
+                // 🔧 移除 WelcomePage 檢查，直接根據登入狀態決定顯示內容
+                if userAuth.isLoggedIn {
+                    NavigationStack(path: $homeRouter.path ) {
+                        Home()
+                            .environmentObject(userAuth)
+                            .navigationDestination(for: HomeRoute.self, destination: { $0 })
                     }
+                    .accentColor(.black)
+                } else {
+                    NavigationStack(path: $homeRouter.path ) {
+                        Login()
+                            .environmentObject(userAuth)
+                            .navigationDestination(for: HomeRoute.self, destination: { $0 })
+                    }
+                    .accentColor(.black)
                 }
             }
-            
             .navigationBarTitleDisplayMode(.inline)
             .navigationViewStyle(.stack)
         }
-        .accentColor(.black) // 設置整體強調色
+        .accentColor(.black)
         .onAppear {
             // 確保數據 API 被初始化
             DataAPIManager.shared.initializeMockData()

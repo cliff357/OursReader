@@ -14,17 +14,17 @@ struct Dashboard: View {
     @State private var selectedTab: Tab? = .push
     @State private var selectedButtonListType: ButtonListType = .push_notification
     
-    // 新增用於存儲 CloudBook 數據的狀態
     @State private var publicBooks: [CloudBook] = []
     @State private var isLoadingBooks = false
-
-    // 新增狀態變量
     @State private var isInsertingTestBooks = false
     @State private var showingImport = false
-    
-    // 🔧 新增：用於防止導入時頁面跳轉的狀態
     @State private var isImportButtonPressed = false
     @State private var lockTabSelection = false
+    
+    // 🔧 新增：用戶名稱輸入相關狀態
+    @State private var showingUserNameInput = false
+    @State private var userName = ""
+    @State private var hasCheckedUserName = false
     
     var body: some View {
         ZStack {
@@ -51,7 +51,6 @@ struct Dashboard: View {
                         }
                         .scrollTargetLayout()
                         .offsetX { value in
-                            // 🔧 修正：當正在導入時，不更新 tab progress
                             if !lockTabSelection {
                                 updateTabProgress(value, geometrySize: geometry.size)
                             }
@@ -61,19 +60,20 @@ struct Dashboard: View {
                     .scrollIndicators(.hidden)
                     .scrollTargetBehavior(.paging)
                     .scrollClipDisabled()
-                    // 🔧 新增：當鎖定時禁用滾動
                     .scrollDisabled(lockTabSelection)
                 }
             }
         }
         .onAppear {
-            // 🔧 先同步本地文件狀態
-            bookCacheManager.syncDownloadStatusFromLocalFiles()
+            // 🔧 新增：首次進入時檢查用戶名稱
+            if !hasCheckedUserName {
+                checkUserName()
+                hasCheckedUserName = true
+            }
             
-            // 然後載入書籍數據
+            bookCacheManager.syncDownloadStatusFromLocalFiles()
             loadBooksData()
             
-            // 監聽書籍變化通知
             NotificationCenter.default.addObserver(
                 forName: CloudKitManager.booksDidChangeNotification,
                 object: nil,
@@ -84,14 +84,10 @@ struct Dashboard: View {
         }
         .sheet(isPresented: $showingImport) {
             BookImportView {
-                // 🔧 修正：導入完成後的處理
                 loadBooksData()
-                
-                // 重置狀態
                 isImportButtonPressed = false
                 lockTabSelection = false
                 
-                // 確保停留在 E-Book 頁面
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     withAnimation(.easeInOut(duration: 0.3)) {
                         selectedTab = .ebook
@@ -100,14 +96,19 @@ struct Dashboard: View {
                 }
             }
         }
-        // 🔧 修正：監控導入狀態變化
+        // 🔧 新增：用戶名稱輸入 sheet
+        .fullScreenCover(isPresented: $showingUserNameInput) {
+            UserNameInputView(userName: $userName) {
+                UserAuthModel.shared.nickName = userName
+                Storage.save(Storage.Key.nickName, userName)
+                showingUserNameInput = false
+            }
+        }
         .onChange(of: showingImport) { oldValue, newValue in
             if !newValue {
-                // 當導入 sheet 關閉時
                 isImportButtonPressed = false
                 lockTabSelection = false
                 
-                // 確保回到 E-Book 頁面
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                     withAnimation(.easeInOut(duration: 0.3)) {
                         selectedTab = .ebook
@@ -116,14 +117,24 @@ struct Dashboard: View {
                 }
             }
         }
-        // 🔧 新增：監控 selectedTab 變化，防止意外跳轉
         .onChange(of: selectedTab) { oldValue, newValue in
             if lockTabSelection && newValue != .ebook {
-                // 如果正在導入過程中且不是 ebook 標籤，強制回到 ebook
                 DispatchQueue.main.async {
                     selectedTab = .ebook
                     selectedButtonListType = .ebook
                 }
+            }
+        }
+    }
+    
+    // 🔧 新增：檢查用戶名稱
+    private func checkUserName() {
+        let currentName = Storage.getString(Storage.Key.nickName) ?? ""
+        if currentName.isEmpty {
+            // 延遲一點顯示，讓 Dashboard 先完全載入
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                userName = ""
+                showingUserNameInput = true
             }
         }
     }
@@ -218,7 +229,7 @@ struct Dashboard: View {
     @ViewBuilder
     func BooklistView(type: ButtonListType) -> some View {
         ScrollView(.vertical) {
-            LazyVGrid(columns: Array(repeating: GridItem(), count: 2)) {
+            LazyVGrid(columns: Array(repeating: GridItem(), count: 2), spacing: 10) { // 🔧 調整：增加垂直間距
                 switch type {
                 case .push_notification, .widget:
                     ForEach(widgetList, id: \.id) { widget in
@@ -264,11 +275,9 @@ struct Dashboard: View {
                                 isImportButtonPressed = true
                                 lockTabSelection = true
                                 
-                                // 確保當前在 E-Book 頁面
                                 selectedTab = .ebook
                                 selectedButtonListType = .ebook
                                 
-                                // 延遲顯示導入界面，避免狀態衝突
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                     showingImport = true
                                 }
@@ -294,7 +303,6 @@ struct Dashboard: View {
                                     }
                                 }
                             
-                            // 🔧 新增一個額外的空狀態卡片說明
                             RoundedRectangle(cornerRadius: 15)
                                 .fill(Color.gray.opacity(0.2))
                                 .frame(height: 150)
@@ -323,20 +331,18 @@ struct Dashboard: View {
                                 )
                             }
                             
-                            // 🔧 移除加書按鈕，只保留導入按鈕
                             DashboardImportBookItem(color: type.color) {
                                 isImportButtonPressed = true
                                 lockTabSelection = true
                                 
-                                // 確保當前在 E-Book 頁面
                                 selectedTab = .ebook
                                 selectedButtonListType = .ebook
                                 
-                                // 延遲顯示導入界面
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                     showingImport = true
                                 }
                             }
+                            .gridCellColumns(2)
                         }
                     }
                 }

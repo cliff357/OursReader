@@ -107,7 +107,6 @@
 		998614522BB428F200E0996D /* HomeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614512BB428F200E0996D /* HomeRouter.swift */; };
 		998614542BB4295A00E0996D /* LoginRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614532BB4295A00E0996D /* LoginRouter.swift */; };
 		998614582BB429C100E0996D /* LoginRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614572BB429C100E0996D /* LoginRoute.swift */; };
-		9986145A2BBB9EEC00E0996D /* WelcomePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614592BBB9EEC00E0996D /* WelcomePage.swift */; };
 		9986145C2BBBAA6600E0996D /* Signup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9986145B2BBBAA6600E0996D /* Signup.swift */; };
 		9986145F2BBBAC8500E0996D /* UnderlineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9986145E2BBBAC8500E0996D /* UnderlineTextField.swift */; };
 		998614612BBBBA7F00E0996D /* DividerWithText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614602BBBBA7F00E0996D /* DividerWithText.swift */; };
@@ -131,6 +130,7 @@
 		99DA2D7F2D6C76CB007D178A /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 99DA2D7E2D6C76CB007D178A /* FirebaseAnalyticsSwift */; };
 		99DA2D812D6C76CB007D178A /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = 99DA2D802D6C76CB007D178A /* FirebaseAppCheck */; };
 		99DA2D8A2D6D5E9B007D178A /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 99DA2D892D6D5E9B007D178A /* FirebaseAuth */; };
+		99DAFB712E9F366B00943DA3 /* UserNameInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DAFB702E9F366400943DA3 /* UserNameInputView.swift */; };
 		99E2102A2C0168F1006F27A7 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E210292C0168F1006F27A7 /* Storage.swift */; };
 		99EB5FA32C0D9C5600F2AF29 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EB5FA22C0D9C5500F2AF29 /* ToastView.swift */; };
 		99EFE3472D5CA69100EA82EC /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 99EFE3462D5CA69100EA82EC /* Localizable.xcstrings */; };
@@ -302,7 +302,6 @@
 		998614512BB428F200E0996D /* HomeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeRouter.swift; sourceTree = "<group>"; };
 		998614532BB4295A00E0996D /* LoginRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRouter.swift; sourceTree = "<group>"; };
 		998614572BB429C100E0996D /* LoginRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRoute.swift; sourceTree = "<group>"; };
-		998614592BBB9EEC00E0996D /* WelcomePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomePage.swift; sourceTree = "<group>"; };
 		9986145B2BBBAA6600E0996D /* Signup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signup.swift; sourceTree = "<group>"; };
 		9986145E2BBBAC8500E0996D /* UnderlineTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderlineTextField.swift; sourceTree = "<group>"; };
 		998614602BBBBA7F00E0996D /* DividerWithText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DividerWithText.swift; sourceTree = "<group>"; };
@@ -322,6 +321,7 @@
 		99B8F6FC2DF18AF0007A0E49 /* BookReaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookReaderView.swift; sourceTree = "<group>"; };
 		99DA2D752D6586BE007D178A /* OursReaderDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OursReaderDebug.entitlements; sourceTree = "<group>"; };
 		99DA2D792D65B575007D178A /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
+		99DAFB702E9F366400943DA3 /* UserNameInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNameInputView.swift; sourceTree = "<group>"; };
 		99E210292C0168F1006F27A7 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		99EB5FA22C0D9C5500F2AF29 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		99EFE3462D5CA69100EA82EC /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -493,7 +493,6 @@
 				9986145D2BBBAC7500E0996D /* Common */,
 				593EB2112C01F9F400DD430F /* MainView.swift */,
 				593EB2142C01FA1200DD430F /* SplashView.swift */,
-				998614592BBB9EEC00E0996D /* WelcomePage.swift */,
 				598053EB2BA6FD19008056F3 /* Login.swift */,
 				9986145B2BBBAA6600E0996D /* Signup.swift */,
 				5953369F2B0503D800BB11D7 /* Home.swift */,
@@ -698,6 +697,7 @@
 		997291232C9C22BD0070DFAC /* Dashboard */ = {
 			isa = PBXGroup;
 			children = (
+				99DAFB702E9F366400943DA3 /* UserNameInputView.swift */,
 				591BAAD22CBBF05D001FAE1C /* PushSetting */,
 				993EDAC62BE9F6EA002C18C7 /* Dashboard.swift */,
 				997291242C9C2D6E0070DFAC /* DashboardModel.swift */,
@@ -1137,6 +1137,7 @@
 				998614682BBD20D100E0996D /* EnvironmentValues.swift in Sources */,
 				59E75E9C2ADF53AA007A549C /* ContentView.swift in Sources */,
 				99F0C5F12E8534D2008711EC /* DashboardBooksManager.swift in Sources */,
+				99DAFB712E9F366B00943DA3 /* UserNameInputView.swift in Sources */,
 				998614692BBD20D100E0996D /* FloatingPromptTextField.swift in Sources */,
 				994344592DEEED3B002FD942 /* FriendSharedComponents.swift in Sources */,
 				9943445A2DEEED3B002FD942 /* AddFriend.swift in Sources */,
@@ -1179,7 +1180,6 @@
 				599EC2F22BD4CEDA00F6DEB1 /* ORTextField.swift in Sources */,
 				99B8F6FE2DF18AF0007A0E49 /* BookDetailView.swift in Sources */,
 				99B8F6FF2DF18AF0007A0E49 /* BookReaderView.swift in Sources */,
-				9986145A2BBB9EEC00E0996D /* WelcomePage.swift in Sources */,
 				591BAADB2CBBF5A3001FAE1C /* EditPushSettingBottomsheet.swift in Sources */,
 				5953369E2B05018100BB11D7 /* Tab.swift in Sources */,
 				991A522D2E9CAB01001C7775 /* BookCacheManager.swift in Sources */,
