@@ -65,6 +65,12 @@ struct BookReaderView: View {
                 }
             }
             .onAppear {
+                // 🔧 新增：顯示閱讀器載入的書籍資訊
+                print("📚 [BookReaderView] onAppear")
+                print("   Book: \(book.title)")
+                print("   Content pages: \(book.content.count)")
+                print("   Can read: \(book.content.isEmpty ? "❌ NO CONTENT" : "✅ YES")")
+                
                 currentPageIndex = book.currentPage
                 lastSavedPage = book.currentPage
                 updateProgressPercentage()
@@ -181,7 +187,7 @@ struct BookReaderView: View {
         HStack {
             Spacer()
             
-            Text("\(currentPageIndex + 1) / \(book.totalPages)")
+            Text(String(format: NSLocalizedString("book_page_info", comment: ""), currentPageIndex + 1, book.totalPages))
                 .font(.system(size: 16))
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
@@ -206,11 +212,11 @@ struct BookReaderView: View {
             
             VStack {
                 HStack {
-                    Text("Bookmarks")
+                    Text(LocalizedStringKey("book_bookmarks"))
                         .font(.headline)
                         .foregroundColor(.black) // 改為黑色文字
                     Spacer()
-                    Button("Done") {
+                    Button(LocalizedStringKey("general_done")) {
                         showBookmarks = false
                     }
                     .foregroundColor(.black) // 改為黑色按鈕文字
@@ -220,7 +226,7 @@ struct BookReaderView: View {
                 Divider()
                 
                 if book.bookmarkedPages.isEmpty {
-                    Text("No bookmarks yet")
+                    Text(LocalizedStringKey("book_no_bookmarks"))
                         .foregroundColor(.black.opacity(0.7)) // 改為深灰色文字
                         .padding()
                 } else {
@@ -232,7 +238,7 @@ struct BookReaderView: View {
                                 showBookmarks = false
                             }) {
                                 HStack {
-                                    Text("Page \(page + 1)")
+                                    Text(String(format: NSLocalizedString("book_page_number", comment: ""), page + 1))
                                         .foregroundColor(.black) // 改為黑色文字
                                     Spacer()
                                     Text("→")

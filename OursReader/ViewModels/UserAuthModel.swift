@@ -141,10 +141,23 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
         let firebaseAuth = Auth.auth()
         do {
             try firebaseAuth.signOut()
+            
+            // 🔧 使用 BookCacheManager 清除所有緩存
+            BookCacheManager.shared.clearAllCache()
+            
+            // 🔧 發送登出通知
+            NotificationCenter.default.post(name: .userDidLogout, object: nil)
+            
         } catch let signOutError as NSError {
             print("Error signing out: %@", signOutError)
         }
     }
+    
+    // 🔧 移除所有下載狀態相關方法（不再需要）
+    // private func clearDownloadedBooks() { ... } - 刪除
+    // func markBookAsDownloaded(bookID: String) { ... } - 刪除
+    // func isBookDownloaded(bookID: String) -> Bool { ... } - 刪除
+    // func removeBookDownloaded(bookID: String) { ... } - 刪除
     
     func getCurrentFirebaseUser() -> User? {
         if let user = Auth.auth().currentUser {

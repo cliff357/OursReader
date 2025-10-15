@@ -21,7 +21,7 @@ struct Login: View {
                 
             }
         }) {
-            Text("login_title")
+            Text(String(localized: "auth_login_button"))
                 .padding(20)
                 .font(FontHelper.shared.workSansMedium16)
         }
@@ -34,7 +34,7 @@ struct Login: View {
         Button(action: {
             HomeRouter.shared.push(to: .signup)
         }) {
-            Text("sign_up")
+            Text(String(localized: "auth_signup_button"))
                 .font(FontHelper.shared.workSansMedium16)
                 .foregroundStyle(ColorManager.shared.rice_white)
         }
@@ -53,7 +53,6 @@ struct Login: View {
     }
     
     fileprivate func LoginInByAppleButton() -> some View {
-        
         Button(action: {
             vm.startSignInWithAppleFlow()
         }, label: {
@@ -65,8 +64,6 @@ struct Login: View {
                 .background(Circle().fill(Color.white))
                 .frame(width: 55, height: 55)
         })
-        
-        
     }
     
     var body: some View {
@@ -79,7 +76,6 @@ struct Login: View {
                 .position(x: 150, y: -100)
                 .ignoresSafeArea(.keyboard)
                 
-            
             Circle()
                 .fill(ColorManager.shared.dark_brown)
                 .frame(width: UIScreen.main.bounds.width * 1.7 , height: UIScreen.main.bounds.width * 1.7)
@@ -94,28 +90,21 @@ struct Login: View {
                     .padding(.bottom, 20)
                 
                 LoginByUsernameButton()
-                DividerWithText( label: String(localized:"or"), color: ColorManager.shared.rice_white)
+                DividerWithText( label: String(localized:"general_or"), color: ColorManager.shared.rice_white)
                 HStack {
                     LoginInByAppleButton()
                     LoginInByGoogleButton()
                 }
                 HStack {
-                    Text("login_no_account")
+                    Text(String(localized: "login_no_account"))
                         .foregroundStyle(ColorManager.shared.rice_white)
                         .font(FontHelper.shared.workSansMedium16)
                     SignUpButton()
                 }
-                
-                
             }
             .padding()
             .frame(width: UIScreen.main.bounds.width )
-//            .onChange(of: vm.isLoggedIn) { oldValue, newValue in
-//                if newValue {
-//                    HomeRouter.shared.push(to: .home)
-//                }
-//            }
-            .navigationTitle(String(localized:"login"))
+            .navigationTitle(String(localized:"auth_login_title"))
             .navigationBarTitleTextColor(ColorManager.shared.dark_brown2)
         }
     }

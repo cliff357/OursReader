@@ -15,25 +15,6 @@ struct Signup: View {
     @State var email: String = ""
     @State var password: String = ""
     @State var confirmPassword: String = ""
-
-    
-    fileprivate func SignupButton() -> some View {
-        Button(action: {
-            UserAuthModel.shared.createUser(email: email, password: password) { msg in
-                let reminderData = ReminderData(
-                    title: "!!",
-                    desc: msg ?? "",
-                    buttons: [GeneralButtonData(title: String(localized:"general_ok"), style: .fill, action: {})])
-                ReminderManager.shared.addReminder(reminder: reminderData)
-            }
-        }) {
-            Text(String(localized:"sign_up_button"))
-                .padding(20)
-        }
-        .background(ColorManager.shared.rice_white)
-        .foregroundStyle(ColorManager.shared.dark_brown2)
-        .clipShape(Capsule())
-    }
     
     var body: some View {
         ZStack{
@@ -64,6 +45,32 @@ struct Signup: View {
             .frame(width: UIScreen.main.bounds.width )
             .navigationTitle(String(localized:"sign_up"))
         }
+    }
+    
+    fileprivate func SignupButton() -> some View {
+        Button(action: {
+            // 🔧 修改：註冊成功後不再顯示用戶名稱輸入
+            // 讓用戶進入 Dashboard 後再輸入
+            UserAuthModel.shared.createUser(email: email, password: password) { msg in
+                if msg == nil {
+                    // 註冊成功，直接進入 Dashboard
+                    // Dashboard 的 onAppear 會檢查並顯示用戶名稱輸入
+                } else {
+                    // 註冊失敗，顯示錯誤
+                    let reminderData = ReminderData(
+                        title: "!!",
+                        desc: msg ?? "",
+                        buttons: [GeneralButtonData(title: String(localized:"general_ok"), style: .fill, action: {})])
+                    ReminderManager.shared.addReminder(reminder: reminderData)
+                }
+            }
+        }) {
+            Text(String(localized:"sign_up_button"))
+                .padding(20)
+        }
+        .background(ColorManager.shared.rice_white)
+        .foregroundStyle(ColorManager.shared.dark_brown2)
+        .clipShape(Capsule())
     }
 }
 

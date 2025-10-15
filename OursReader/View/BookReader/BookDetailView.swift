@@ -12,17 +12,28 @@ struct BookDetailView: View {
     @State private var deleteProgress = "正在刪除..." // 新增：刪除進度文字
     @Environment(\.dismiss) private var dismiss
     
+    // 🔧 新增：下載相關狀態
+    @State private var isDownloading = false
+    @State private var downloadProgress: Double = 0.0
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 // Book cover image and title
                 HStack(alignment: .top, spacing: 20) {
-                    Image(book.coverImage)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 120, height: 180)
-                        .cornerRadius(8)
-                        .shadow(radius: 5)
+                    // 🔧 修改：使用新的預設封面或程式化生成
+                    Group {
+                        if book.coverImage == "default_cover" {
+                            DefaultBookCoverView(width: 120, height: 180, showTitle: true, title: book.title)
+                        } else {
+                            Image(book.coverImage)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 120, height: 180)
+                                .cornerRadius(8)
+                                .shadow(radius: 5)
+                        }
+                    }
                     
                     VStack(alignment: .leading, spacing: 8) {
                         Text(book.title)
@@ -30,7 +41,7 @@ struct BookDetailView: View {
                             .fontWeight(.bold)
                             .foregroundColor(.black) // 改為黑色，確保高對比度
                         
-                        Text("by \(book.author)")
+                        Text(String(format: NSLocalizedString("book_by_author", comment: ""), book.author))
                             .font(.subheadline)
                             .foregroundColor(.black.opacity(0.7)) // 改為深灰色，保持清晰可讀
                         
@@ -38,7 +49,7 @@ struct BookDetailView: View {
                         if book.totalPages > 0 {
                             VStack(alignment: .leading, spacing: 4) {
                                 HStack {
-                                    Text("Reading Progress")
+                                    Text(LocalizedStringKey("book_reading_progress"))
                                         .font(.caption)
                                         .foregroundColor(.black.opacity(0.8)) // 改為較深的顏色
                                     
@@ -59,7 +70,7 @@ struct BookDetailView: View {
                                         .frame(width: calculateProgressWidth(totalWidth: 120), height: 6)
                                 }
                                 
-                                Text("\(book.currentPage + 1) of \(book.totalPages) pages")
+                                Text(String(format: NSLocalizedString("book_page_info", comment: ""), book.currentPage + 1, book.totalPages))
                                     .font(.caption2)
                                     .foregroundColor(.black.opacity(0.8)) // 改為較深的顏色
                                 
@@ -76,51 +87,41 @@ struct BookDetailView: View {
                 Divider()
                     .background(ColorManager.shared.dark_brown.opacity(0.3))
                 
-                // Action buttons - 只保留閱讀按鈕
-                Button(action: {
-                    showingReader = true
-                }) {
-                    Label("Read Now", systemImage: "book.fill")
-                        .font(.headline)
-                        .foregroundColor(ColorManager.shared.rice_white)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(ColorManager.shared.red1)
-                        .cornerRadius(10)
-                }
-                .padding(.horizontal, 20)
-                .padding(.vertical)
+                // 🔧 修改：Read 按鈕整合下載功能
+                readOrDownloadButton
+                    .padding(.horizontal, 20)
+                    .padding(.vertical)
                 
                 Divider()
                     .background(Color.secondary.opacity(0.3)) // 使用系統顏色
                 
                 // Book description
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Description")
+                    Text(LocalizedStringKey("book_description"))
                         .font(.headline)
-                        .foregroundColor(.black) // 改為黑色
+                        .foregroundColor(.black)
                     
                     Text(book.instruction)
                         .font(.body)
-                        .foregroundColor(.black.opacity(0.8)) // 改為深灰色，確保易讀
+                        .foregroundColor(.black.opacity(0.8))
                 }
                 .padding(.horizontal)
                 
                 Divider()
-                    .background(Color.black.opacity(0.2)) // 改為較深的分隔線
+                    .background(Color.black.opacity(0.2))
                 
                 // Book information
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Information")
+                    Text(LocalizedStringKey("book_information"))
                         .font(.headline)
-                        .foregroundColor(.black) // 改為黑色
+                        .foregroundColor(.black)
                     
                     HStack {
-                        Text("Pages:")
+                        Text(LocalizedStringKey("book_pages_label"))
                             .fontWeight(.medium)
-                            .foregroundColor(.black) // 改為黑色
+                            .foregroundColor(.black)
                         Text("\(book.totalPages)")
-                            .foregroundColor(.black.opacity(0.7)) // 改為深灰色
+                            .foregroundColor(.black.opacity(0.7))
                         Spacer()
                     }
                 }
@@ -146,7 +147,7 @@ struct BookDetailView: View {
                                 .scaleEffect(0.8)
                                 .frame(width: 16, height: 16)
                             
-                            Text("刪除中...")
+                            Text(LocalizedStringKey("general_deleting"))
                                 .font(.caption2)
                                 .foregroundColor(.red)
                         }
@@ -159,13 +160,13 @@ struct BookDetailView: View {
                 .disabled(isDeleting)
             }
         }
-        .alert("Remove Book", isPresented: $showingDeleteAlert) {
-            Button("Cancel", role: .cancel) {}
-            Button("Remove", role: .destructive) {
+        .alert(LocalizedStringKey("book_remove_title"), isPresented: $showingDeleteAlert) {
+            Button(LocalizedStringKey("general_cancel"), role: .cancel) {}
+            Button(LocalizedStringKey("general_remove"), role: .destructive) {
                 deleteBook()
             }
         } message: {
-            Text("Are you sure you want to remove '\(book.title)' from your library? This action cannot be undone.")
+            Text(String(format: NSLocalizedString("book_remove_confirmation", comment: ""), book.title))
         }
         // 🔧 新增：全屏載入覆蓋層
         .overlay {
@@ -185,7 +186,7 @@ struct BookDetailView: View {
                             .font(.headline)
                             .foregroundColor(.black)
                         
-                        Text("請稍候，正在從雲端移除書籍...")
+                        Text(LocalizedStringKey("book_deleting_please_wait"))
                             .font(.caption)
                             .foregroundColor(.black.opacity(0.7))
                             .multilineTextAlignment(.center)
@@ -200,6 +201,21 @@ struct BookDetailView: View {
             }
         }
         .onAppear {
+            // 🔧 新增：顯示 BookDetailView 載入的書籍資訊
+            print("📖 [BookDetailView] onAppear")
+            print("   Book: \(book.title)")
+            print("   ID: \(book.id)")
+            print("   Total pages: \(book.totalPages)")
+            print("   Current page: \(book.currentPage)")
+            print("   Content loaded: \(book.pages.isEmpty ? "❌ EMPTY" : "✅ \(book.pages.count) pages")")
+            
+            // 檢查本地緩存狀態
+            let isDownloaded = BookCacheManager.shared.isBookDownloaded(book.id)
+            let fileExists = BookCacheManager.shared.checkLocalFileExists(book.id)
+            print("   Cache status:")
+            print("     - Marked as downloaded: \(isDownloaded ? "✅" : "❌")")
+            print("     - File exists: \(fileExists ? "✅" : "❌")")
+            
             // 設置導航欄外觀
             let appearance = UINavigationBarAppearance()
             appearance.configureWithOpaqueBackground()
@@ -228,6 +244,96 @@ struct BookDetailView: View {
         .onChange(of: book.currentPage) { oldValue, newValue in
             // 當書籍進度改變時，重新計算進度條
             print("Book progress updated: \(newValue)")
+        }
+    }
+    
+    // 🔧 新增：Read/Download 按鈕
+    @ViewBuilder
+    private var readOrDownloadButton: some View {
+        let isDownloaded = BookCacheManager.shared.isBookDownloaded(book.id)
+        
+        Button(action: {
+            if isDownloaded {
+                // 已下載：打開閱讀器
+                showingReader = true
+            } else {
+                // 未下載：開始下載
+                startDownload()
+            }
+        }) {
+            HStack {
+                if isDownloading {
+                    // 下載中：顯示進度條
+                    ProgressView(value: downloadProgress)
+                        .progressViewStyle(LinearProgressViewStyle(tint: .white))
+                        .frame(height: 4)
+                    
+                    Text("\(Int(downloadProgress * 100))%")
+                        .font(.caption)
+                        .foregroundColor(.white)
+                } else if isDownloaded {
+                    // 已下載：顯示閱讀圖標
+                    Image(systemName: "book.fill")
+                        .font(.headline)
+                    Text(LocalizedStringKey("book_read_now"))
+                        .font(.headline)
+                } else {
+                    // 未下載：顯示下載圖標
+                    Image(systemName: "icloud.and.arrow.down")
+                        .font(.headline)
+                    Text("Download to Read")
+                        .font(.headline)
+                }
+            }
+            .foregroundColor(ColorManager.shared.rice_white)
+            .padding()
+            .frame(maxWidth: .infinity)
+            .background(isDownloading ? Color.gray : ColorManager.shared.red1)
+            .cornerRadius(10)
+        }
+        .disabled(isDownloading)
+    }
+    
+    // 🔧 新增：開始下載方法
+    private func startDownload() {
+        isDownloading = true
+        downloadProgress = 0.0
+        
+        // 創建假的 CloudBook 用於下載
+        let cloudBook = CloudBook.fromEbook(book)
+        
+        // 模擬進度更新（實際應該從 BookCacheManager 獲取）
+        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
+            if downloadProgress < 0.9 {
+                downloadProgress += 0.05
+            }
+            
+            // 如果真的下載完成或取消，停止計時器
+            if BookCacheManager.shared.isBookDownloaded(book.id) || !isDownloading {
+                timer.invalidate()
+            }
+        }
+        
+        BookCacheManager.shared.downloadBook(cloudBook) { result in
+            DispatchQueue.main.async {
+                downloadProgress = 1.0
+                
+                // 延遲一下讓用戶看到 100%
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    isDownloading = false
+                    
+                    switch result {
+                    case .success():
+                        print("✅ Download completed, opening reader...")
+                        // 下載完成後自動打開閱讀器
+                        showingReader = true
+                        
+                    case .failure(let error):
+                        print("❌ Download failed: \(error.localizedDescription)")
+                        // 可以選擇顯示錯誤提示
+                    }
+                }
+            }
         }
     }
     
@@ -283,7 +389,7 @@ struct BookDetailView: View {
         // 🔧 開始刪除流程，顯示載入狀態
         withAnimation(.easeInOut(duration: 0.3)) {
             isDeleting = true
-            deleteProgress = "正在準備刪除..."
+            deleteProgress = NSLocalizedString("book_delete_preparing", comment: "")
         }
         
         // 給用戶觸覺反饋
@@ -292,7 +398,7 @@ struct BookDetailView: View {
         
         // 🔧 分階段顯示進度
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.deleteProgress = "正在查找書籍記錄..."
+            self.deleteProgress = NSLocalizedString("book_delete_searching", comment: "")
         }
         
         print("🔍 Looking for book to delete: \(book.title) (ID: \(book.id))")
@@ -340,25 +446,25 @@ struct BookDetailView: View {
         }
         
         if let cloudBook = targetCloudBook {
-            deleteProgress = "找到目標書籍，正在從雲端刪除..."
+            deleteProgress = NSLocalizedString("book_delete_found_deleting", comment: "")
             
             // 延遲一點後執行實際刪除
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 self.executeCloudBookDeletion(cloudBook, userID: userID)
             }
         } else {
-            handleDeleteError("找不到對應的書籍記錄")
+            handleDeleteError(NSLocalizedString("book_delete_not_found", comment: ""))
         }
     }
     
     // 🔧 新增：執行實際刪除的方法
     private func executeCloudBookDeletion(_ cloudBook: CloudBook, userID: String) {
         guard let recordID = cloudBook.recordID else {
-            handleDeleteError("書籍記錄ID無效，無法刪除")
+            handleDeleteError(NSLocalizedString("book_delete_invalid_id", comment: ""))
             return
         }
         
-        deleteProgress = "正在從 CloudKit 刪除..."
+        deleteProgress = NSLocalizedString("book_delete_from_cloud", comment: "")
         print("🗑️ Deleting book with recordID: \(recordID.recordName)")
         
         CloudKitManager.shared.deleteUserBook(
@@ -379,7 +485,7 @@ struct BookDetailView: View {
     
     // 🔧 新增：處理刪除成功
     private func handleDeleteSuccess() {
-        deleteProgress = "刪除完成！"
+        deleteProgress = NSLocalizedString("book_delete_completed", comment: "")
         
         print("✅ Book deleted successfully from CloudKit: \(book.title)")
         

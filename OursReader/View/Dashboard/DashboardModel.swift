@@ -32,24 +32,6 @@ struct Widget {
     var actionCode: String
 }
 
-// 定義 Ebook 結構
-struct Ebook: Identifiable {
-    let id: String
-    let name: String
-    let title: String
-    let instruction: String
-    
-    // New properties
-    var author: String = "Unknown Author"
-    var coverImage: String = "cover_image_1"
-    var content: [String] = [] // Each string represents a page
-    var currentPage: Int = 0
-    var totalPages: Int {
-        return content.count
-    }
-    var bookmarkedPages: [Int] = []
-}
-
 let widgetList: [Widget] = [
     Widget(id: "widget_001", name: "Weather Widget", actionCode: "SHOW_WEATHER"),
     Widget(id: "widget_002", name: "Calendar Widget", actionCode: "OPEN_CALENDAR"),
@@ -60,56 +42,64 @@ let widgetList: [Widget] = [
 // 建立 ebook list
 let ebookList: [Ebook] = [
     Ebook(
-        id: "ebook_001", 
-        name: "Programming 101", 
-        title: "Introduction to Programming", 
-        instruction: "Learn the basics of programming languages.",
+        id: "ebook_001",
+        title: "Introduction to Programming",
         author: "John Doe",
-        coverImage: "cover_image_1",
-        content: [
-            "Chapter 1: What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++. What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.",
+        coverImage: "default_cover",
+        instruction: "Learn the basics of programming languages.",
+        pages: [
+            "Chapter 1: What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++. What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.What is Programming?\n\nProgramming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++.",
             "Programming involves tasks such as analysis, generating algorithms, profiling algorithms' accuracy and resource consumption, and the implementation of algorithms in a chosen programming language.",
             "The purpose of programming is to find a sequence of instructions that will automate the performance of a task on a computer, often for solving a given problem."
-        ]
+        ],
+        totalPages: 3,
+        currentPage: 0,
+        bookmarkedPages: []
     ),
     Ebook(
-        id: "ebook_002", 
-        name: "Mastering Python", 
-        title: "Advanced Python Techniques", 
-        instruction: "Master advanced features in Python.",
+        id: "ebook_002",
+        title: "Advanced Python Techniques",
         author: "Jane Smith",
-        coverImage: "cover_image_2",
-        content: [
+        coverImage: "default_cover",
+        instruction: "Master advanced features in Python.",
+        pages: [
             "Chapter 1: Python Decorators\n\nDecorators are a powerful and expressive feature in Python that allow you to modify the behavior of functions and methods.",
             "A decorator is a function that takes another function as an argument and extends its behavior without explicitly modifying it.",
             "This is a great example of the open/closed principle: code should be open for extension but closed for modification."
-        ]
+        ],
+        totalPages: 3,
+        currentPage: 0,
+        bookmarkedPages: []
     ),
     Ebook(
-        id: "ebook_003", 
-        name: "Design Patterns", 
-        title: "Understanding Software Design Patterns", 
-        instruction: "Explore common software design patterns.",
+        id: "ebook_003",
+        title: "Understanding Software Design Patterns",
         author: "Robert Martin",
-        coverImage: "cover_image_3",
-        content: [
+        coverImage: "default_cover",
+        instruction: "Explore common software design patterns.",
+        pages: [
             "Chapter 1: Introduction to Design Patterns\n\nDesign patterns are typical solutions to common problems in software design. Each pattern is like a blueprint that you can customize to solve a particular design problem in your code.",
             "Patterns are a toolkit of solutions to common problems in software design. They define a common language that helps your team communicate more efficiently.",
             "Design patterns differ by their complexity, level of detail, and scale of applicability to the entire system being designed."
-        ]
+        ],
+        totalPages: 3,
+        currentPage: 0,
+        bookmarkedPages: []
     ),
     Ebook(
-        id: "ebook_004", 
-        name: "Data Science with R", 
-        title: "Data Science Fundamentals", 
-        instruction: "Learn data science using R programming.",
+        id: "ebook_004",
+        title: "Data Science Fundamentals",
         author: "Emily Chen",
-        coverImage: "cover_image_1",
-        content: [
+        coverImage: "default_cover",
+        instruction: "Learn data science using R programming.",
+        pages: [
             "Chapter 1: Introduction to Data Science\n\nData science is an interdisciplinary field that uses scientific methods, processes, algorithms and systems to extract knowledge and insights from structured and unstructured data.",
             "R is a programming language and free software environment for statistical computing and graphics supported by the R Foundation for Statistical Computing.",
             "The R language is widely used among statisticians and data miners for developing statistical software and data analysis."
-        ]
+        ],
+        totalPages: 3,
+        currentPage: 0,
+        bookmarkedPages: []
     )
 ]
 

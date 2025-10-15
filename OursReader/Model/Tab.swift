@@ -26,11 +26,11 @@ enum Tab: Int, CaseIterable, Equatable {
     var name: String {
         switch self {
         case .push:
-            return String(localized: "push_notification")
+            return NSLocalizedString("push_notification", comment: "")
         case .widget:
-            return String(localized: "widget")
+            return NSLocalizedString("widget", comment: "")
         case .ebook:
-            return String(localized: "ebook")
+            return NSLocalizedString("ebook", comment: "")
         }
     }
     

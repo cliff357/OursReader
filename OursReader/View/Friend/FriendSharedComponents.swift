@@ -191,12 +191,12 @@ struct NearbyPeersView: View {
         .alert(item: $viewModel.permissionRequest) { request in
             let name = request.peerId.displayName
             return Alert(
-                title: Text("friend_linking_request \(name)"),
-                primaryButton: .default(Text("friend_linking_start"), action: {
+                title: Text(String(format: NSLocalizedString("friend_linking_request", comment: ""), name)),
+                primaryButton: .default(Text(LocalizedStringKey("friend_linking_start")), action: {
                     request.onRequest(true)
                     viewModel.peerJoin(peerId: request.peerId)
                 }),
-                secondaryButton: .cancel(Text("general_no"), action: {
+                secondaryButton: .cancel(Text(LocalizedStringKey("general_cancel")), action: {
                     request.onRequest(false)
                 })
             )
@@ -205,7 +205,7 @@ struct NearbyPeersView: View {
     
     private var headerView: some View {
         HStack {
-            Text(String(localized: "friend_nearby_title"))
+            Text(LocalizedStringKey("friend_nearby_title"))
                 .font(.headline)
                 .foregroundColor(ColorManager.shared.rice_white)
             
@@ -270,7 +270,7 @@ struct PeerCellView: View {
     }
     
     private var buttonLabel: some View {
-        Text(isPeerJoined ? String(localized: "friend_send_info") : String(localized: "friend_connect"))
+        Text(isPeerJoined ? LocalizedStringKey("friend_send_info") : LocalizedStringKey("friend_connect"))
             .padding(.horizontal, 10)
             .padding(.vertical, 5)
             .background(Color.gray)

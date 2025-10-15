@@ -21,12 +21,12 @@ struct BookImportView: View {
                             .font(.system(size: 60))
                             .foregroundColor(ColorManager.shared.red1)
                         
-                        Text("導入書籍")
+                        Text(LocalizedStringKey("book_import_title"))
                             .font(.largeTitle)
                             .fontWeight(.bold)
                             .foregroundColor(.black)
                         
-                        Text("選擇一種方式來導入你的書籍")
+                        Text(LocalizedStringKey("book_import_subtitle"))
                             .font(.body)
                             .foregroundColor(.black.opacity(0.7))
                             .multilineTextAlignment(.center)
@@ -39,7 +39,7 @@ struct BookImportView: View {
                         HStack {
                             Image(systemName: "info.circle.fill")
                                 .foregroundColor(ColorManager.shared.green1)
-                            Text("📖 完整使用指南（含 Python 腳本）")
+                            Text(LocalizedStringKey("book_import_guide_with_script"))
                                 .font(.headline)
                                 .foregroundColor(ColorManager.shared.green1)
                         }
@@ -62,8 +62,8 @@ struct BookImportView: View {
                         }) {
                             ImportOptionView(
                                 icon: "folder.fill",
-                                title: "從文件選擇",
-                                subtitle: "選擇 JSON 文件導入",
+                                title: NSLocalizedString("book_import_from_files", comment: ""),
+                                subtitle: NSLocalizedString("book_import_select_json", comment: ""),
                                 color: .blue
                             )
                         }
@@ -75,8 +75,8 @@ struct BookImportView: View {
                         }) {
                             ImportOptionView(
                                 icon: "icloud.fill",
-                                title: "掃描 iCloud Drive",
-                                subtitle: "自動尋找 JSON 書籍文件",
+                                title: NSLocalizedString("book_import_scan_icloud", comment: ""),
+                                subtitle: NSLocalizedString("book_import_auto_find_json", comment: ""),
                                 color: ColorManager.shared.green1
                             )
                         }
@@ -102,7 +102,7 @@ struct BookImportView: View {
                     // 最近導入的文件
                     if !importManager.recentFiles.isEmpty {
                         VStack(alignment: .leading, spacing: 10) {
-                            Text("最近的文件")
+                            Text(LocalizedStringKey("book_import_recent_files"))
                                 .font(.headline)
                                 .foregroundColor(.black)
                                 .padding(.horizontal)
@@ -123,18 +123,18 @@ struct BookImportView: View {
                 .padding()
             }
             .background(ColorManager.shared.background)
-            .navigationTitle("導入書籍")
+            .navigationTitle(LocalizedStringKey("book_import_title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("取消") {
+                    Button(LocalizedStringKey("general_cancel")) {
                         dismiss()
                     }
                     .foregroundColor(.black)
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("完成") {
+                    Button(LocalizedStringKey("general_done")) {
                         dismiss()
                     }
                     .foregroundColor(.black)
@@ -150,15 +150,15 @@ struct BookImportView: View {
             case .success(let urls):
                 importManager.importFromURLs(urls)
             case .failure(let error):
-                alertMessage = "文件選擇失敗：\(error.localizedDescription)"
+                alertMessage = String(format: NSLocalizedString("book_import_file_error", comment: ""), error.localizedDescription)
                 showingAlert = true
             }
         }
         .sheet(isPresented: $showingInstructions) {
             BookImportInstructionsView()
         }
-        .alert("導入結果", isPresented: $showingAlert) {
-            Button("確定") { 
+        .alert(LocalizedStringKey("book_import_result"), isPresented: $showingAlert) {
+            Button(LocalizedStringKey("general_ok")) { 
                 if alertMessage.contains("成功") {
                     onBooksImported()
                 }
@@ -190,7 +190,7 @@ struct BookImportInstructionsView: View {
                             .font(.system(size: 50))
                             .foregroundColor(ColorManager.shared.red1)
                         
-                        Text("書籍導入完整指南")
+                        Text(LocalizedStringKey("book_import_complete_guide"))
                             .font(.title)
                             .fontWeight(.bold)
                             .foregroundColor(.black)
@@ -202,41 +202,36 @@ struct BookImportInstructionsView: View {
                     // Step 1
                     InstructionStepView(
                         stepNumber: "1",
-                        title: "獲取書籍文件",
-                        subtitle: "使用 Python 腳本從公開資源獲取書籍",
+                        title: String(localized: "book_import_step1_title"),
+                        subtitle: String(localized: "book_import_step1_subtitle"),
                         color: ColorManager.shared.red1
                     ) {
                         VStack(alignment: .leading, spacing: 12) {
                             ImportantNoteView(
-                                text: "⚖️ 重要提醒：僅限合法使用公開資源，且僅供教學用途"
+                                text: String(localized: "book_import_legal_reminder")
                             )
                             
                             // 整合腳本功能到步驟 1.1
                             InstructionSubStepView(
                                 number: "1.1",
-                                title: "獲取並運行 Python 爬蟲腳本",
-                                content: """
-                                在電腦上準備環境：
-                                • 確保已安裝 Python 3.6+
-                                • 安裝必要套件：pip install requests beautifulsoup4
-                                • 獲取最新版本的 universal_book_scraper.py 腳本
-                                """
+                                title: String(localized: "book_import_step1_1_title"),
+                                content: String(localized: "book_import_step1_1_content")
                             ) {
                                 // 腳本功能說明和下載按鈕
                                 VStack(alignment: .leading, spacing: 12) {
                                     // 腳本功能特色
                                     VStack(alignment: .leading, spacing: 8) {
-                                        Text("🔧 腳本功能特色：")
+                                        Text(LocalizedStringKey("book_import_script_features_title"))
                                             .font(.caption)
                                             .fontWeight(.semibold)
                                             .foregroundColor(.black)
                                         
                                         VStack(alignment: .leading, spacing: 4) {
-                                            ScriptFeatureItem(icon: "🔄", feature: "自動重試機制（最多3次）")
-                                            ScriptFeatureItem(icon: "🛡️", feature: "網絡中斷自動恢復（60秒等待）")
-                                            ScriptFeatureItem(icon: "📂", feature: "斷點續傳功能")
-                                            ScriptFeatureItem(icon: "🎯", feature: "智能內容提取，保留分行格式")
-                                            ScriptFeatureItem(icon: "📊", feature: "詳細進度統計")
+                                            ScriptFeatureItem(icon: "🔄", feature: String(localized: "book_import_feature_retry"))
+                                            ScriptFeatureItem(icon: "🛡️", feature: String(localized: "book_import_feature_recovery"))
+                                            ScriptFeatureItem(icon: "📂", feature: String(localized: "book_import_feature_resume"))
+                                            ScriptFeatureItem(icon: "🎯", feature: String(localized: "book_import_feature_extract"))
+                                            ScriptFeatureItem(icon: "📊", feature: String(localized: "book_import_feature_stats"))
                                         }
                                         .padding(.leading, 8)
                                     }
@@ -248,7 +243,7 @@ struct BookImportInstructionsView: View {
                                         HStack {
                                             Image(systemName: "arrow.down.circle.fill")
                                                 .foregroundColor(.white)
-                                            Text("下載 Python 腳本")
+                                            Text(LocalizedStringKey("book_import_download_script"))
                                                 .fontWeight(.medium)
                                         }
                                         .foregroundColor(.white)
@@ -260,16 +255,16 @@ struct BookImportInstructionsView: View {
                                     
                                     // 使用步驟
                                     VStack(alignment: .leading, spacing: 6) {
-                                        Text("使用步驟：")
+                                        Text(LocalizedStringKey("book_import_usage_steps"))
                                             .font(.caption)
                                             .fontWeight(.semibold)
                                             .foregroundColor(.black)
                                         
-                                        Text("1. 下載並保存腳本到電腦")
-                                        Text("2. 打開終端機/命令提示字元")
-                                        Text("3. 運行：python universal_book_scraper.py")
-                                        Text("4. 輸入小說第一章的完整 URL")
-                                        Text("5. 等待自動爬取完成")
+                                        Text(LocalizedStringKey("book_import_step1_1_1"))
+                                        Text(LocalizedStringKey("book_import_step1_1_2"))
+                                        Text(LocalizedStringKey("book_import_step1_1_3"))
+                                        Text(LocalizedStringKey("book_import_step1_1_4"))
+                                        Text(LocalizedStringKey("book_import_step1_1_5"))
                                     }
                                     .font(.caption2)
                                     .foregroundColor(.black.opacity(0.8))
@@ -286,13 +281,8 @@ struct BookImportInstructionsView: View {
                             
                             InstructionSubStepView(
                                 number: "1.2",
-                                title: "獲取書籍文件",
-                                content: """
-                                爬取完成後：
-                                • 在腳本相同資料夾下會生成 JSON 文件
-                                • 文件名格式：書名_日期時間.json
-                                • 這個就是你的書籍文件，準備傳輸到手機
-                                """
+                                title: String(localized: "book_import_step1_2_title"),
+                                content: String(localized: "book_import_step1_2_content")
                             )
                         }
                     }
@@ -300,47 +290,35 @@ struct BookImportInstructionsView: View {
                     // Step 2
                     InstructionStepView(
                         stepNumber: "2",
-                        title: "導入到 App",
-                        subtitle: "將書籍文件傳輸到手機並導入",
+                        title: String(localized: "book_import_step2_title"),
+                        subtitle: String(localized: "book_import_step2_subtitle"),
                         color: ColorManager.shared.green1
                     ) {
                         VStack(alignment: .leading, spacing: 12) {
                             InstructionSubStepView(
                                 number: "2.1",
-                                title: "傳輸文件到手機",
-                                content: """
-                                使用 AirDrop 分享：
-                                • 在電腦上右鍵點擊 JSON 文件
-                                • 選擇 AirDrop 分享給你的 iPhone
-                                • 在手機上選擇「儲存到檔案」
-                                • 選擇儲存位置（建議存到 iCloud Drive）
-                                """
+                                title: String(localized: "book_import_step2_1_title"),
+                                content: String(localized: "book_import_step2_1_content")
                             )
                             
                             InstructionSubStepView(
                                 number: "2.2",
-                                title: "在 App 中導入",
-                                content: """
-                                在 OurReader App 中：
-                                • 點擊「導入書籍」按鈕
-                                • 選擇「從文件選擇」
-                                • 找到並選擇你的 JSON 文件
-                                • 等待導入完成
-                                """
+                                title: String(localized: "book_import_step2_2_title"),
+                                content: String(localized: "book_import_step2_2_content")
                             )
                         }
                     }
                     
                     // 其他方式
                     VStack(alignment: .leading, spacing: 15) {
-                        Text("🔄 其他導入方式")
+                        Text(LocalizedStringKey("book_import_other_methods_title"))
                             .font(.headline)
                             .foregroundColor(.black)
                         
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("• iCloud Drive 掃描：自動尋找 iCloud 中的書籍文件")
-                            Text("• 手動添加：直接在 App 中輸入書籍內容")
-                            Text("• 最近文件：快速重新導入最近使用的文件")
+                            Text(LocalizedStringKey("book_import_method_icloud"))
+                            Text(LocalizedStringKey("book_import_method_manual"))
+                            Text(LocalizedStringKey("book_import_method_recent"))
                         }
                         .font(.body)
                         .foregroundColor(.black.opacity(0.8))
@@ -351,14 +329,14 @@ struct BookImportInstructionsView: View {
                     
                     // 技術說明
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("💡 技術說明")
+                        Text(LocalizedStringKey("book_import_tech_notes_title"))
                             .font(.headline)
                             .foregroundColor(.black)
                         
-                        Text("• 支援的格式：JSON 文件")
-                        Text("• 自動分片儲存：處理大型書籍文件")
-                        Text("• iCloud 同步：所有設備間自動同步")
-                        Text("• 續傳功能：支援斷點續傳和自動恢復")
+                        Text(LocalizedStringKey("book_import_tech_note_format"))
+                        Text(LocalizedStringKey("book_import_tech_note_chunking"))
+                        Text(LocalizedStringKey("book_import_tech_note_icloud"))
+                        Text(LocalizedStringKey("book_import_tech_note_resume"))
                     }
                     .font(.caption)
                     .foregroundColor(.black.opacity(0.7))
@@ -369,11 +347,11 @@ struct BookImportInstructionsView: View {
                 .padding()
             }
             .background(ColorManager.shared.background)
-            .navigationTitle("使用說明")
+            .navigationTitle(LocalizedStringKey("book_import_instructions"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("完成") {
+                    Button(LocalizedStringKey("general_done")) {
                         dismiss()
                     }
                     .foregroundColor(.black)
@@ -550,7 +528,7 @@ struct ScriptShareView: View {
                             .font(.system(size: 50))
                             .foregroundColor(ColorManager.shared.red1)
                         
-                        Text("Python 爬蟲腳本")
+                        Text(LocalizedStringKey("book_import_python_script"))
                             .font(.title)
                             .fontWeight(.bold)
                             .foregroundColor(.black)
@@ -567,16 +545,16 @@ struct ScriptShareView: View {
                     
                     // 腳本功能說明
                     VStack(alignment: .leading, spacing: 15) {
-                        Text("🔧 腳本功能")
+                        Text(LocalizedStringKey("book_import_script_functions"))
                             .font(.headline)
                             .foregroundColor(.black)
                         
                         VStack(alignment: .leading, spacing: 8) {
-                            FeatureRow(icon: "🔄", title: "自動重試機制", description: "最多重試 3 次，間隔 5 秒")
-                            FeatureRow(icon: "🛡️", title: "自動恢復功能", description: "網絡中斷時等待 60 秒後自動恢復")
-                            FeatureRow(icon: "📂", title: "續傳功能", description: "支援斷點續傳，中斷後可繼續")
-                            FeatureRow(icon: "📊", title: "詳細統計", description: "爬取進度、成功率、速度統計")
-                            FeatureRow(icon: "🎯", title: "智能提取", description: "自動識別標題和內容，保留分行")
+                            FeatureRow(icon: "🔄", title: String(localized: "book_import_feature_retry_full"), description: String(localized: "book_import_feature_retry_desc"))
+                            FeatureRow(icon: "🛡️", title: String(localized: "book_import_feature_recovery_full"), description: String(localized: "book_import_feature_recovery_desc"))
+                            FeatureRow(icon: "📂", title: String(localized: "book_import_feature_resume_full"), description: String(localized: "book_import_feature_resume_desc"))
+                            FeatureRow(icon: "📊", title: String(localized: "book_import_feature_stats_full"), description: String(localized: "book_import_feature_stats_desc"))
+                            FeatureRow(icon: "🎯", title: String(localized: "book_import_feature_extract_full"), description: String(localized: "book_import_feature_extract_desc"))
                         }
                     }
                     .padding()
@@ -585,16 +563,16 @@ struct ScriptShareView: View {
                     
                     // 使用說明
                     VStack(alignment: .leading, spacing: 15) {
-                        Text("📝 使用說明")
+                        Text(LocalizedStringKey("book_import_usage_instructions"))
                             .font(.headline)
                             .foregroundColor(.black)
                         
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("1. 確保電腦已安裝 Python 3.6+")
-                            Text("2. 安裝必要套件：requests, beautifulsoup4")
-                            Text("3. 運行腳本：python universal_book_scraper.py")
-                            Text("4. 輸入小說第一章的 URL")
-                            Text("5. 等待爬取完成，獲得 JSON 文件")
+                            Text(LocalizedStringKey("book_import_usage_step1"))
+                            Text(LocalizedStringKey("book_import_usage_step2"))
+                            Text(LocalizedStringKey("book_import_usage_step3"))
+                            Text(LocalizedStringKey("book_import_usage_step4"))
+                            Text(LocalizedStringKey("book_import_usage_step5"))
                         }
                         .font(.body)
                         .foregroundColor(.black.opacity(0.8))
@@ -609,7 +587,7 @@ struct ScriptShareView: View {
                     }) {
                         HStack {
                             Image(systemName: "square.and.arrow.up.fill")
-                            Text("分享 Python 腳本")
+                            Text(LocalizedStringKey("book_import_share_script"))
                         }
                         .foregroundColor(.white)
                         .padding()
@@ -620,14 +598,14 @@ struct ScriptShareView: View {
                     
                     // 重要提醒
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("⚖️ 重要提醒")
+                        Text(LocalizedStringKey("book_import_important_reminder"))
                             .font(.headline)
                             .foregroundColor(.orange)
                         
-                        Text("• 僅限合法使用公開資源")
-                        Text("• 僅供個人學習和教學用途")
-                        Text("• 請遵守網站的 robots.txt 和使用條款")
-                        Text("• 不得用於商業用途或侵犯版權")
+                        Text(LocalizedStringKey("book_import_reminder_legal"))
+                        Text(LocalizedStringKey("book_import_reminder_personal"))
+                        Text(LocalizedStringKey("book_import_reminder_robots"))
+                        Text(LocalizedStringKey("book_import_reminder_commercial"))
                     }
                     .font(.caption)
                     .foregroundColor(.black.opacity(0.8))
@@ -642,11 +620,11 @@ struct ScriptShareView: View {
                 .padding()
             }
             .background(ColorManager.shared.background)
-            .navigationTitle("分享 Python 腳本")
+            .navigationTitle(LocalizedStringKey("book_import_share_script_title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("完成") {
+                    Button(LocalizedStringKey("general_done")) {
                         dismiss()
                     }
                     .foregroundColor(.black)
