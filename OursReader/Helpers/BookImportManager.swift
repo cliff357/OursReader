@@ -7,6 +7,11 @@ class BookImportManager: ObservableObject {
     @Published var alertMessage = ""
     @Published var recentFiles: [String] = []
     
+    // 新增進度相關屬性
+    @Published var uploadProgress: Double = 0.0
+    @Published var currentFileName = ""
+    @Published var showUploadProgress = false
+    
     private let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     
     init() {
@@ -15,13 +20,15 @@ class BookImportManager: ObservableObject {
     
     func importFromURLs(_ urls: [URL]) {
         isImporting = true
+        showUploadProgress = true
+        uploadProgress = 0.0
         importStatus = "準備導入..."
         
         var totalBooks = 0
         var successCount = 0
         
         DispatchQueue.global(qos: .userInitiated).async {
-            for url in urls {
+            for (urlIndex, url) in urls.enumerated() {
                 // 獲取安全範圍資源訪問權限
                 let accessing = url.startAccessingSecurityScopedResource()
                 defer {
@@ -30,15 +37,31 @@ class BookImportManager: ObservableObject {
                     }
                 }
                 
+                // 更新當前文件名和進度
+                DispatchQueue.main.async {
+                    self.currentFileName = url.lastPathComponent
+                    self.uploadProgress = Double(urlIndex) / Double(urls.count) * 0.2
+                    self.importStatus = "正在讀取：\(url.lastPathComponent)"
+                }
+                
                 do {
                     let data = try Data(contentsOf: url)
-                    let books = try JSONDecoder().decode([EbookData].self, from: data)
                     
+                    DispatchQueue.main.async {
+                        self.uploadProgress = Double(urlIndex) / Double(urls.count) * 0.2 + 0.1
+                        self.importStatus = "正在解析 JSON..."
+                    }
+                    
+                    let books = try JSONDecoder().decode([EbookData].self, from: data)
                     totalBooks += books.count
                     
-                    for book in books {
+                    for (bookIndex, book) in books.enumerated() {
                         DispatchQueue.main.async {
                             self.importStatus = "正在導入：\(book.title)"
+                            // 計算總體進度：20% 讀取 + 80% 導入
+                            let baseProgress = Double(urlIndex) / Double(urls.count) * 0.2 + 0.2
+                            let bookProgress = (Double(bookIndex) / Double(books.count)) * 0.6 / Double(urls.count)
+                            self.uploadProgress = baseProgress + bookProgress
                         }
                         
                         if self.importSingleBook(book) {
@@ -57,15 +80,26 @@ class BookImportManager: ObservableObject {
                     
                 } catch {
                     print("導入文件失敗: \(error)")
+                    DispatchQueue.main.async {
+                        self.importStatus = "文件讀取失敗：\(error.localizedDescription)"
+                    }
                 }
             }
             
             DispatchQueue.main.async {
-                self.isImporting = false
-                self.alertMessage = "導入完成！成功導入 \(successCount)/\(totalBooks) 本書"
+                self.uploadProgress = 1.0
+                self.importStatus = "導入完成！"
                 
-                // 發送通知更新書籍列表
-                NotificationCenter.default.post(name: CloudKitManager.booksDidChangeNotification, object: nil)
+                // 1.5秒後隱藏進度
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    self.isImporting = false
+                    self.showUploadProgress = false
+                    self.uploadProgress = 0.0
+                    self.alertMessage = "導入完成！成功導入 \(successCount)/\(totalBooks) 本書"
+                    
+                    // 發送通知更新書籍列表
+                    NotificationCenter.default.post(name: CloudKitManager.booksDidChangeNotification, object: nil)
+                }
             }
         }
     }

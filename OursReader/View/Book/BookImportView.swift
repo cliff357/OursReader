@@ -13,116 +13,127 @@ struct BookImportView: View {
     
     var body: some View {
         NavigationView {
-            ScrollView {
-                VStack(spacing: 30) {
-                    // 標題
-                    VStack(spacing: 10) {
-                        Image(systemName: "books.vertical.fill")
-                            .font(.system(size: 60))
-                            .foregroundColor(ColorManager.shared.red1)
-                        
-                        Text(LocalizedStringKey("book_import_title"))
-                            .font(.largeTitle)
-                            .fontWeight(.bold)
-                            .foregroundColor(.black)
-                        
-                        Text(LocalizedStringKey("book_import_subtitle"))
-                            .font(.body)
-                            .foregroundColor(.black.opacity(0.7))
-                            .multilineTextAlignment(.center)
-                    }
-                    
-                    // 使用說明按鈕（現在包含腳本下載功能）
-                    Button(action: {
-                        showingInstructions = true
-                    }) {
-                        HStack {
-                            Image(systemName: "info.circle.fill")
-                                .foregroundColor(ColorManager.shared.green1)
-                            Text(LocalizedStringKey("book_import_guide_with_script"))
-                                .font(.headline)
-                                .foregroundColor(ColorManager.shared.green1)
-                        }
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(ColorManager.shared.green1.opacity(0.1))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(ColorManager.shared.green1, lineWidth: 2)
-                        )
-                        .cornerRadius(12)
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                    
-                    // 導入選項 - 🔧 移除手動添加選項
-                    VStack(spacing: 15) {
-                        // 文件選擇器
-                        Button(action: {
-                            showingFilePicker = true
-                        }) {
-                            ImportOptionView(
-                                icon: "folder.fill",
-                                title: NSLocalizedString("book_import_from_files", comment: ""),
-                                subtitle: NSLocalizedString("book_import_select_json", comment: ""),
-                                color: .blue
-                            )
-                        }
-                        .disabled(importManager.isImporting)
-                        
-                        // iCloud Drive 掃描
-                        Button(action: {
-                            importManager.scanICloudDrive()
-                        }) {
-                            ImportOptionView(
-                                icon: "icloud.fill",
-                                title: NSLocalizedString("book_import_scan_icloud", comment: ""),
-                                subtitle: NSLocalizedString("book_import_auto_find_json", comment: ""),
-                                color: ColorManager.shared.green1
-                            )
-                        }
-                        .disabled(importManager.isImporting)
-                        
-                        // 🔧 移除手動添加選項
-                    }
-                    
-                    // 導入進度
-                    if importManager.isImporting {
+            ZStack {
+                ScrollView {
+                    VStack(spacing: 30) {
+                        // 標題
                         VStack(spacing: 10) {
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle(tint: ColorManager.shared.red1))
-                            Text(importManager.importStatus)
-                                .font(.caption)
-                                .foregroundColor(.black.opacity(0.7))
-                        }
-                        .padding()
-                        .background(ColorManager.shared.background.opacity(0.5))
-                        .cornerRadius(10)
-                    }
-                    
-                    // 最近導入的文件
-                    if !importManager.recentFiles.isEmpty {
-                        VStack(alignment: .leading, spacing: 10) {
-                            Text(LocalizedStringKey("book_import_recent_files"))
-                                .font(.headline)
-                                .foregroundColor(.black)
-                                .padding(.horizontal)
+                            Image(systemName: "books.vertical.fill")
+                                .font(.system(size: 60))
+                                .foregroundColor(ColorManager.shared.red1)
                             
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 12) {
-                                    ForEach(importManager.recentFiles, id: \.self) { fileName in
-                                        RecentFileView(fileName: fileName) {
-                                            importManager.importRecentFile(fileName)
+                            Text(LocalizedStringKey("book_import_title"))
+                                .font(.largeTitle)
+                                .fontWeight(.bold)
+                                .foregroundColor(.black)
+                            
+                            Text(LocalizedStringKey("book_import_subtitle"))
+                                .font(.body)
+                                .foregroundColor(.black.opacity(0.7))
+                                .multilineTextAlignment(.center)
+                        }
+                        
+                        // 使用說明按鈕（現在包含腳本下載功能）
+                        Button(action: {
+                            showingInstructions = true
+                        }) {
+                            HStack {
+                                Image(systemName: "info.circle.fill")
+                                    .foregroundColor(ColorManager.shared.green1)
+                                Text(LocalizedStringKey("book_import_guide_with_script"))
+                                    .font(.headline)
+                                    .foregroundColor(ColorManager.shared.green1)
+                            }
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(ColorManager.shared.green1.opacity(0.1))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(ColorManager.shared.green1, lineWidth: 2)
+                            )
+                            .cornerRadius(12)
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                        
+                        // 導入選項 - 🔧 移除手動添加選項
+                        VStack(spacing: 15) {
+                            // 文件選擇器
+                            Button(action: {
+                                showingFilePicker = true
+                            }) {
+                                ImportOptionView(
+                                    icon: "folder.fill",
+                                    title: NSLocalizedString("book_import_from_files", comment: ""),
+                                    subtitle: NSLocalizedString("book_import_select_json", comment: ""),
+                                    color: .blue
+                                )
+                            }
+                            .disabled(importManager.isImporting)
+                            
+                            // iCloud Drive 掃描
+                            Button(action: {
+                                importManager.scanICloudDrive()
+                            }) {
+                                ImportOptionView(
+                                    icon: "icloud.fill",
+                                    title: NSLocalizedString("book_import_scan_icloud", comment: ""),
+                                    subtitle: NSLocalizedString("book_import_auto_find_json", comment: ""),
+                                    color: ColorManager.shared.green1
+                                )
+                            }
+                            .disabled(importManager.isImporting)
+                            
+                            // 🔧 移除手動添加選項
+                        }
+                        
+                        // 導入進度
+                        if importManager.isImporting {
+                            VStack(spacing: 10) {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle(tint: ColorManager.shared.red1))
+                                Text(importManager.importStatus)
+                                    .font(.caption)
+                                    .foregroundColor(.black.opacity(0.7))
+                            }
+                            .padding()
+                            .background(ColorManager.shared.background.opacity(0.5))
+                            .cornerRadius(10)
+                        }
+                        
+                        // 最近導入的文件
+                        if !importManager.recentFiles.isEmpty {
+                            VStack(alignment: .leading, spacing: 10) {
+                                Text(LocalizedStringKey("book_import_recent_files"))
+                                    .font(.headline)
+                                    .foregroundColor(.black)
+                                    .padding(.horizontal)
+                                
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    HStack(spacing: 12) {
+                                        ForEach(importManager.recentFiles, id: \.self) { fileName in
+                                            RecentFileView(fileName: fileName) {
+                                                importManager.importRecentFile(fileName)
+                                            }
                                         }
                                     }
+                                    .padding(.horizontal)
                                 }
-                                .padding(.horizontal)
                             }
                         }
                     }
+                    .padding()
                 }
-                .padding()
+                .background(ColorManager.shared.background)
+                
+                // Upload Progress Overlay
+                if importManager.showUploadProgress {
+                    UploadProgressOverlay(
+                        fileName: importManager.currentFileName,
+                        progress: importManager.uploadProgress,
+                        status: importManager.importStatus
+                    )
+                }
             }
-            .background(ColorManager.shared.background)
             .navigationTitle(LocalizedStringKey("book_import_title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -880,6 +891,103 @@ struct RecentFileView: View {
             .cornerRadius(8)
         }
         .buttonStyle(PlainButtonStyle())
+    }
+}
+
+// MARK: - Upload Progress Overlay
+struct UploadProgressOverlay: View {
+    let fileName: String
+    let progress: Double
+    let status: String
+    
+    var body: some View {
+        ZStack {
+            // Semi-transparent background
+            Color.black.opacity(0.6)
+                .ignoresSafeArea()
+                .transition(.opacity)
+            
+            VStack(spacing: 25) {
+                // File Icon with Animation
+                ZStack {
+                    Circle()
+                        .fill(ColorManager.shared.red1.opacity(0.1))
+                        .frame(width: 120, height: 120)
+                    
+                    Image(systemName: "doc.text.fill")
+                        .font(.system(size: 50))
+                        .foregroundColor(ColorManager.shared.red1)
+                }
+                .scaleEffect(progress > 0 ? 1.0 : 0.8)
+                .animation(.spring(response: 0.3), value: progress)
+                
+                // File Name
+                Text(fileName)
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 20)
+                    .lineLimit(2)
+                
+                // Progress Section
+                VStack(spacing: 15) {
+                    // Progress Bar
+                    ZStack(alignment: .leading) {
+                        // Background
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color.white.opacity(0.2))
+                            .frame(height: 8)
+                        
+                        // Progress
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(ColorManager.shared.red1)
+                            .frame(width: max(0, progress) * 250, height: 8)
+                            .animation(.easeInOut(duration: 0.3), value: progress)
+                    }
+                    .frame(width: 250)
+                    
+                    // Percentage
+                    Text("\(Int(progress * 100))%")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .monospacedDigit()
+                }
+                
+                // Status Text
+                Text(status)
+                    .font(.subheadline)
+                    .foregroundColor(.white.opacity(0.9))
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 30)
+                    .frame(minHeight: 40)
+                
+                // Loading Indicator (for indeterminate states)
+                if progress < 0.05 || progress > 0.95 {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                        .scaleEffect(1.2)
+                }
+            }
+            .padding(40)
+            .background(
+                RoundedRectangle(cornerRadius: 25)
+                    .fill(
+                        LinearGradient(
+                            gradient: Gradient(colors: [
+                                Color(white: 0.15),
+                                Color(white: 0.25)
+                            ]),
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .shadow(color: .black.opacity(0.3), radius: 20, x: 0, y: 10)
+            )
+            .padding(30)
+        }
+        .transition(.opacity.combined(with: .scale))
+        .zIndex(999)
     }
 }
 
