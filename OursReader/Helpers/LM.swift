@@ -15,7 +15,7 @@ final class LocalizationManager {
     enum AppLanguage: String {
         case english = "en"
         case traditionalChinese = "zh-Hant"
-        case simplifiedChinese = "zh-Hans"
+        case simplifiedChinese = "zh-Hans" // 🔧 保留但不使用
         
         var apiValue: String {
             switch self {
@@ -25,12 +25,11 @@ final class LocalizationManager {
             }
         }
         
-        // 🔧 新增：Bundle 語言代碼
-        var bundleLanguageCode: String {
+        var localeIdentifier: String {
             switch self {
             case .english:              return "en"
-            case .traditionalChinese:   return "zh-Hant"
-            case .simplifiedChinese:    return "zh-Hans"
+            case .traditionalChinese:   return "zh-HK"
+            case .simplifiedChinese:    return "zh-HK" // 🔧 簡體也使用繁體
             }
         }
     }
@@ -49,7 +48,7 @@ final class LocalizationManager {
             if preferredLanguages.hasPrefix(AppLanguage.english.rawValue) {
                 return .english
             } else if preferredLanguages.hasPrefix(AppLanguage.simplifiedChinese.rawValue) {
-                return .simplifiedChinese
+                return .traditionalChinese // 🔧 簡體轉為繁體
             } else if preferredLanguages.hasPrefix(AppLanguage.traditionalChinese.rawValue) {
                 return .traditionalChinese
             }
@@ -60,27 +59,29 @@ final class LocalizationManager {
         set {
             if self.currentLanguage == newValue { return }
             Storage.save(Storage.Key.currentLanguage, newValue.rawValue)
+            print("✅ Language changed to: \(newValue.rawValue)")
         }
     }
     
-    // 🔧 新增：動態獲取本地化字串
+    // 🔧 修改：使用 Locale 方式獲取本地化字串（支持 .xcstrings）
     static func localized(_ key: String) -> String {
-        // 獲取當前語言的 Bundle
-        guard let bundlePath = Bundle.main.path(forResource: currentLanguage.bundleLanguageCode, ofType: "lproj"),
-              let bundle = Bundle(path: bundlePath) else {
-            // 如果找不到對應的 Bundle，使用主 Bundle
-            return NSLocalizedString(key, comment: "")
+        // 使用當前語言的 Locale
+        let locale = Locale(identifier: currentLanguage.localeIdentifier)
+        
+        // 使用 String(localized:locale:) 從 .xcstrings 獲取翻譯
+        let localizedString = String(localized: String.LocalizationValue(key), locale: locale)
+        
+        // 如果找到翻譯，返回
+        if localizedString != key {
+            return localizedString
         }
         
-        // 從對應語言的 Bundle 中獲取字串
-        let localizedString = bundle.localizedString(forKey: key, value: nil, table: nil)
-        
-        // 如果找不到翻譯，返回 key 本身
-        return localizedString != key ? localizedString : NSLocalizedString(key, comment: "")
+        // 如果沒有找到，使用默認的本地化
+        return NSLocalizedString(key, comment: "")
     }
 }
 
-// 🔧 新增：SwiftUI 擴展，方便使用
+// 🔧 SwiftUI 擴展
 extension String {
     /// 使用 LM 動態本地化
     var localized: String {
@@ -93,7 +94,7 @@ extension String {
     }
 }
 
-// 🔧 新增：SwiftUI Text 擴展
+// 🔧 SwiftUI Text 擴展
 extension Text {
     init(localizedKey: String) {
         self.init(LM.localized(localizedKey))

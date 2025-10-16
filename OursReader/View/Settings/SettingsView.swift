@@ -131,7 +131,7 @@ struct SettingsView: View {
                                         HStack {
                                             ProgressView()
                                                 .scaleEffect(0.8)
-                                            Text("storage_calculating")
+                                            Text("storage_calculating".localized)
                                                 .font(.caption)
                                                 .foregroundColor(.gray)
                                         }
@@ -183,7 +183,7 @@ struct SettingsView: View {
                                         HStack {
                                             Image(systemName: "arrow.clockwise")
                                                 .foregroundColor(.blue)
-                                            Text("storage_refresh")
+                                            Text("storage_refresh".localized)
                                                 .foregroundColor(.black)
                                             Spacer()
                                             if viewModel.isLoadingStorage {
@@ -222,7 +222,7 @@ struct SettingsView: View {
                         }) {
                             HStack {
                                 Image(systemName: "rectangle.portrait.and.arrow.right")
-                                Text(String(localized: "auth_logout_button"))
+                                Text("auth_logout_button".localized)
                             }
                             .foregroundColor(.white)
                             .padding()
@@ -235,11 +235,11 @@ struct SettingsView: View {
                     .padding()
                 }
             }
-            .navigationTitle(String(localized: "settings"))
+            .navigationTitle("settings".localized)
             .navigationBarTitleDisplayMode(.large)
-            .alert(String(localized: "confirm_logout"), isPresented: $viewModel.showLogoutAlert) {
-                Button(String(localized: "general_cancel"), role: .cancel) {}
-                Button(String(localized: "auth_logout_button"), role: .destructive) {
+            .alert("confirm_logout".localized, isPresented: $viewModel.showLogoutAlert) {
+                Button("general_cancel".localized, role: .cancel) {}
+                Button("auth_logout_button".localized, role: .destructive) {
                     NotificationCenter.default.post(
                         name: NSNotification.Name("userDidLogout"),
                         object: nil
@@ -248,7 +248,7 @@ struct SettingsView: View {
                     dismiss()
                 }
             } message: {
-                Text(String(localized: "logout_confirmation_message"))
+                Text("logout_confirmation_message".localized)
             }
             .onAppear {
                 viewModel.checkNotificationPermission()
@@ -470,12 +470,12 @@ class SettingsViewModel: ObservableObject {
     @Published var isLoadingStorage = false
     @Published var storageStats: StorageStatistics?
     
-    // 🔧 修改：語言設置 - 使用 LM.AppLanguage
+    // 🔧 修改：只保留繁體中文和英文
     @Published var selectedLanguage: String = ""
-    @Published var languageChangeID = UUID() // 🔧 新增：用於強制重新渲染
+    @Published var languageChangeID = UUID()
     
     var availableLanguages: [String] {
-        return ["English", "繁體中文", "簡體中文"]
+        return ["English", "繁體中文"]
     }
     
     // 🔧 新增：剩餘空間
@@ -510,7 +510,7 @@ class SettingsViewModel: ObservableObject {
            let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
             return "v\(version) (\(build))"
         }
-        return String(localized: "version_unavailable")
+        return "version_unavailable".localized
     }
     
     init() {
@@ -585,7 +585,7 @@ class SettingsViewModel: ObservableObject {
         }
     }
     
-    // 🔧 新增：載入當前語言
+    // 🔧 修改：載入當前語言（移除簡體中文）
     private func loadCurrentLanguage() {
         switch LM.currentLanguage {
         case .english:
@@ -593,38 +593,32 @@ class SettingsViewModel: ObservableObject {
         case .traditionalChinese:
             selectedLanguage = "繁體中文"
         case .simplifiedChinese:
-            selectedLanguage = "簡體中文"
+            selectedLanguage = "繁體中文" // 簡體也顯示為繁體
         }
     }
     
-    // 🔧 修改：即時更改語言 - 只重新渲染當前視圖
+    // 🔧 修改：即時更改語言（移除簡體中文）
     func changeLanguage(_ language: String) {
         let newLanguage: LM.AppLanguage
         
         switch language {
         case "English":
             newLanguage = .english
-        case "簡體中文":
-            newLanguage = .simplifiedChinese
         default: // "繁體中文"
             newLanguage = .traditionalChinese
         }
         
-        // 🔧 關鍵：先更新語言
+        // 設置新語言
         LM.currentLanguage = newLanguage
         
-        // 🔧 修改：只更新當前視圖，延遲一點點確保語言設置已生效
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            withAnimation(.easeInOut(duration: 0.3)) {
-                self.languageChangeID = UUID()
-            }
-        }
+        // 強制重新渲染
+        self.languageChangeID = UUID()
     }
     
     // 🔧 修改：重新整理儲存使用量，包含計算剩餘空間
     func refreshStorageUsage() {
         guard let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() else {
-            iCloudStorageUsed = "storage_not_signed_in"
+            iCloudStorageUsed = "storage_not_signed_in".localized
             return
         }
         
@@ -646,7 +640,7 @@ class SettingsViewModel: ObservableObject {
                     
                 case .failure(let error):
                     print("獲取儲存統計失敗: \(error.localizedDescription)")
-                    self?.iCloudStorageUsed = "storage_error"
+                    self?.iCloudStorageUsed = "storage_error".localized
                 }
             }
         }

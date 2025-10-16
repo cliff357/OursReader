@@ -423,17 +423,21 @@ struct CloudBookGridItemWithCache: View {
     let color: Color
     @ObservedObject var cacheManager: BookCacheManager
     @State private var navigateToDetail = false
+    @State private var localBook: Ebook? = nil
     
     var body: some View {
-        // 🔧 修正：使用 NavigationLink + isActive 來控制導航
         ZStack {
-            NavigationLink(
-                destination: destinationView,
-                isActive: $navigateToDetail
-            ) {
-                EmptyView()
+            // 🔧 修正：使用條件導航
+            if let localBook = localBook {
+                NavigationLink(
+                    destination: BookDetailView(book: localBook)
+                        .accentColor(.black),
+                    isActive: $navigateToDetail
+                ) {
+                    EmptyView()
+                }
+                .hidden()
             }
-            .hidden()
             
             Button(action: {
                 handleBookTap()
@@ -446,8 +450,13 @@ struct CloudBookGridItemWithCache: View {
             print("📖 Book: \(book.name)")
             print("   ID: \(book.id)")
             print("   Downloaded: \(cacheManager.isBookDownloaded(book.id))")
-            print("   Downloading: \(cacheManager.isBookDownloading(book.id))")
             print("   Content pages: \(book.content.count)")
+            
+            // 🔧 預載入本地書籍
+            if cacheManager.isBookDownloaded(book.id) {
+                localBook = cacheManager.getLocalBook(book.id)
+                print("   ✅ Local book loaded: \(localBook != nil)")
+            }
         }
     }
     
@@ -497,82 +506,65 @@ struct CloudBookGridItemWithCache: View {
             }
     }
     
-    // 🔧 修正：處理點擊書籍卡片的邏輯
+    // 🔧 修正：處理點擊邏輯
     private func handleBookTap() {
         if cacheManager.isBookDownloaded(book.id) {
-            // 已下載：直接導航到詳情頁
             print("📚 Opening downloaded book: \(book.name)")
-            navigateToDetail = true
+            
+            // 🔧 確保載入本地書籍
+            if localBook == nil {
+                localBook = cacheManager.getLocalBook(book.id)
+                print("   Loading local book: \(localBook != nil)")
+            }
+            
+            // 🔧 延遲一下確保狀態更新
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                if localBook != nil {
+                    print("   ✅ Navigating to BookDetailView")
+                    navigateToDetail = true
+                } else {
+                    print("   ❌ Failed to load local book")
+                }
+            }
         } else if cacheManager.isBookDownloading(book.id) {
-            // 下載中：顯示提示
             print("⏳ Book is downloading, please wait...")
         } else {
-            // 未下載：開始下載
             print("⬇️ Starting download for: \(book.name)")
             startDownload()
         }
     }
     
-    // 🔧 修正：開始下載方法，下載完成後自動打開
+    // 🔧 修正：下載完成後載入本地書籍
     private func startDownload() {
         cacheManager.downloadBook(book) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success():
                     print("✅ Download completed: \(book.name)")
-                    print("   📍 Checking if book is now marked as downloaded...")
-                    print("   ✓ Downloaded: \(cacheManager.isBookDownloaded(book.id))")
                     
-                    // 觸覺反饋
                     let feedback = UINotificationFeedbackGenerator()
                     feedback.notificationOccurred(.success)
                     
-                    // 🔧 關鍵修正：延遲一下確保狀態更新，然後自動打開書籍
+                    // 🔧 載入本地書籍並自動打開
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                         if cacheManager.isBookDownloaded(book.id) {
-                            print("   ✅ Opening book after successful download")
-                            navigateToDetail = true
-                        } else {
-                            print("   ⚠️ Book not marked as downloaded after download completed")
+                            localBook = cacheManager.getLocalBook(book.id)
+                            
+                            if localBook != nil {
+                                print("   ✅ Opening book after download")
+                                navigateToDetail = true
+                            } else {
+                                print("   ❌ Failed to load downloaded book")
+                            }
                         }
                     }
                     
                 case .failure(let error):
                     print("❌ Download failed: \(error.localizedDescription)")
-                    // 錯誤反饋
                     let feedback = UINotificationFeedbackGenerator()
                     feedback.notificationOccurred(.error)
                 }
             }
-        }
-    }
-    
-    @ViewBuilder
-    private var destinationView: some View {
-        if let localBook = cacheManager.getLocalBook(book.id) {
-            let _ = print("📚 [BookDetail] Loading from LOCAL cache: \(book.name)")
-            let _ = print("   Book ID: \(localBook.id)")
-            let _ = print("   Pages: \(localBook.totalPages)")
-            BookDetailView(book: localBook)
-                .accentColor(.black)
-        } else {
-            let _ = print("⚠️ [BookDetail] Book not found in cache")
-            let _ = print("   Looking for ID: \(book.id)")
-            let _ = print("   File exists: \(cacheManager.checkLocalFileExists(book.id))")
-            let _ = print("   Marked as downloaded: \(cacheManager.isBookDownloaded(book.id))")
-            
-            // 🔧 顯示錯誤視圖而不是空視圖
-            VStack {
-                Image(systemName: "exclamationmark.triangle")
-                    .font(.largeTitle)
-                    .foregroundColor(.orange)
-                Text("Book not found")
-                    .font(.headline)
-                Text("Please try downloading again")
-                    .font(.caption)
-                    .foregroundColor(.gray)
-            }
-            .padding()
         }
     }
 }
