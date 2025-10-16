@@ -59,7 +59,7 @@ class PushSettingListViewModel: ObservableObject {
                         self.pushSettings.remove(at: index) // 成功後從本地陣列中移除
                         completion(.success(()))
                     } else {
-                        completion(.failure(NSError(domain: "無法找到指定的設定", code: -1, userInfo: nil)))
+                        completion(.failure(NSError(domain: String(localized: "error_setting_not_found"), code: -1, userInfo: nil)))
                     }
                 case .failure(let error):
                     print("Failed to delete push setting: \(error.localizedDescription)")
@@ -80,7 +80,7 @@ class PushSettingListViewModel: ObservableObject {
                             self.pushSettings[index] = updatedSetting
                             completion(.success(()))
                         } else {
-                            completion(.failure(NSError(domain: "無法找到指定的設定", code: -1, userInfo: nil)))
+                            completion(.failure(NSError(domain: String(localized: "error_setting_not_found"), code: -1, userInfo: nil)))
                         }
                     case .failure(let error):
                         print("Failed to edit push setting: \(error.localizedDescription)")

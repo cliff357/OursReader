@@ -16,16 +16,16 @@ struct ORTextField: View {
     var body: some View {
         FloatingPromptTextField(text: $text, isSecure: isSecure ?? false) {
             Text(placeholder)
-                .foregroundStyle(Color.red1)
+                .foregroundStyle(ColorManager.shared.red1)
         }
         .floatingPrompt {
             Text(floatingPrompt)
-                .foregroundStyle(Color.green1)
+                .foregroundStyle(ColorManager.shared.green1)
         }
-        .textFieldForegroundStyle(Color.green1)
+        .textFieldForegroundStyle(ColorManager.shared.green1)
         .padding(10)
         .background(
-            Color.background,
+            ColorManager.shared.background,
             in: RoundedRectangle(
                 cornerRadius: 20,
                 style: .continuous

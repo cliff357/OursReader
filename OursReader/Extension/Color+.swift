@@ -2,7 +2,7 @@
 //  Color+.swift
 //  OursReader
 //
-//  Created by Autotoll Developer on 3/4/2024.
+//  Created by Cliff Chan on 3/4/2024.
 //
 
 import Foundation

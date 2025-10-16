@@ -151,16 +151,16 @@ struct AddPushSettingCellView: View {
             showAddSettingSheet.toggle()
         }) {
             RoundedRectangle(cornerRadius: 15)
-                .fill(Color.firstTab)
+                .fill(ColorManager.shared.firstTab)
                 .frame(height: 100)
                 .overlay {
                     ZStack {
                         VStack(alignment: .leading) {
-                            Text("加多幾個通知")
+                            Text(String(localized: "push_add_more_title"))
                                 .font(.headline)
                                 .foregroundColor(Color(hex: "BC2649"))
                             
-                            Text("發揮小宇宙")
+                            Text(String(localized: "push_use_your_power"))
                                 .font(.subheadline)
                                 .foregroundColor(.gray)
                         }

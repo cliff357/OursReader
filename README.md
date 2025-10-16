@@ -2,9 +2,9 @@ Feature in OursReader
 - User management  
 - testflight
 - xcode cloud 
-- peer to peer exchange data <--- now i am here
+- peer to peer exchange data 
 - push notification
-- interactive widget 
+- interactive widget <--- now i am here
 - live activities
 - account deletion
 - setup fastlane and github action
@@ -160,3 +160,14 @@ v1 既firebase function 淨係得條link ，v2 好好多
 頂。。。
 
 build app先！ 開心仔
+
+2025 6月3日
+中間太多野忙，原來酩就過8個月 ，一直都冇時間搞佢
+斷斷續續搞左好耐
+終於突破到
+
+成功整到隻watchos 既app出黎
+由開發到測試，都唔容易
+因為隻錶冇得直接插線
+要靠電話黎做中轉站裝隻app落手錶到，呢個問題都幾麻煩下。
+

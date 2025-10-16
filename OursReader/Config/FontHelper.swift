@@ -6,47 +6,70 @@
 //
 
 import SwiftUI
-import RswiftResources
 
-extension Font {
-    // Example:
-    public static var workSansMedium12: Font {
-        Font(R.font.workSansMedium(size: 12 + FontManager.currentFontSize.extraSize) ?? UIFont())
+
+class FontHelper {
+    
+    /// 單例實例
+    static let shared = FontHelper()
+    
+    /// 私有初始化，防止外部實例化
+    private init() {}
+    
+    // MARK: - 動態字體調整
+    /// 當前字體大小調整
+    var extraSize: CGFloat = FontManager.currentFontSize.extraSize
+    
+    // MARK: - 字體設定
+    var workSansMedium12: Font {
+        Font.custom("WorkSans-Medium", size: 12 + extraSize)
     }
-    public static var workSansMedium16: Font {
-        Font(R.font.workSansMedium(size: 16 + FontManager.currentFontSize.extraSize) ?? UIFont())
+    
+    var workSansMedium16: Font {
+        Font.custom("WorkSans-Medium", size: 16 + extraSize)
     }
-    public static var workSansMedium14: Font {
-        Font(R.font.workSansMedium(size: 14 + FontManager.currentFontSize.extraSize) ?? UIFont())
+    
+    var workSansMedium14: Font {
+        Font.custom("WorkSans-Medium", size: 14 + extraSize)
     }
-    public static var workSansMedium20: Font {
-        Font(R.font.workSansMedium(size: 20 + FontManager.currentFontSize.extraSize) ?? UIFont())
+    
+    var workSansMedium20: Font {
+        Font.custom("WorkSans-Medium", size: 20 + extraSize)
     }
-    public static var workSansMedium22: Font {
-        Font(R.font.workSansMedium(size: 22 + FontManager.currentFontSize.extraSize) ?? UIFont())
+    
+    var workSansMedium22: Font {
+        Font.custom("WorkSans-Medium", size: 22 + extraSize)
     }
-    public static var workSansMedium24: Font {
-        Font(R.font.workSansMedium(size: 24 + FontManager.currentFontSize.extraSize) ?? UIFont())
+    
+    var workSansMedium24: Font {
+        Font.custom("WorkSans-Medium", size: 24 + extraSize)
     }
-    public static var workSansMedium28: Font {
-        Font(R.font.workSansMedium(size: 28 + FontManager.currentFontSize.extraSize) ?? UIFont())
+    
+    var workSansMedium28: Font {
+        Font.custom("WorkSans-Medium", size: 28 + extraSize)
     }
-    public static var workSansMedium32: Font {
-        Font(R.font.workSansMedium(size: 32 + FontManager.currentFontSize.extraSize) ?? UIFont())
+    
+    var workSansMedium32: Font {
+        Font.custom("WorkSans-Medium", size: 32 + extraSize)
     }
-    public static var workSans12: Font {
-        Font(R.font.workSansRegular(size: 12 + FontManager.currentFontSize.extraSize) ?? UIFont())
+    
+    var workSans12: Font {
+        Font.custom("WorkSans-Regular", size: 12 + extraSize)
     }
-    public static var workSans14: Font {
-        Font(R.font.workSansRegular(size: 14 + FontManager.currentFontSize.extraSize) ?? UIFont())
+    
+    var workSans14: Font {
+        Font.custom("WorkSans-Regular", size: 14 + extraSize)
     }
-    public static var workSans16: Font {
-        Font(R.font.workSansRegular(size: 16 + FontManager.currentFontSize.extraSize) ?? UIFont())
+    
+    var workSans16: Font {
+        Font.custom("WorkSans-Regular", size: 16 + extraSize)
     }
-    public static var workSans28: Font {
-        Font(R.font.workSansRegular(size: 28 + FontManager.currentFontSize.extraSize) ?? UIFont())
+    
+    var workSans28: Font {
+        Font.custom("WorkSans-Regular", size: 28 + extraSize)
     }
-    public static var workSans32: Font {
-        Font(R.font.workSansRegular(size: 32 + FontManager.currentFontSize.extraSize) ?? UIFont())
+    
+    var workSans32: Font {
+        Font.custom("WorkSans-Regular", size: 32 + extraSize)
     }
 }

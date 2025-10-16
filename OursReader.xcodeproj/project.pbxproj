@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -31,7 +31,6 @@
 		593EB1FF2C01EED600DD430F /* View+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593EB1FE2C01EED600DD430F /* View+.swift */; };
 		593EB2012C01EF6600DD430F /* ErrorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593EB2002C01EF6600DD430F /* ErrorHelper.swift */; };
 		593EB2042C01EFFF00DD430F /* LM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593EB2032C01EFFF00DD430F /* LM.swift */; };
-		593EB20C2C01F1CD00DD430F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 593EB20E2C01F1CD00DD430F /* Localizable.strings */; };
 		593EB2122C01F9F400DD430F /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593EB2112C01F9F400DD430F /* MainView.swift */; };
 		593EB2152C01FA1200DD430F /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593EB2142C01FA1200DD430F /* SplashView.swift */; };
 		5953369E2B05018100BB11D7 /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5953369D2B05018100BB11D7 /* Tab.swift */; };
@@ -57,7 +56,6 @@
 		598053EA2BA6F760008056F3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 598053E92BA6F760008056F3 /* GoogleService-Info.plist */; };
 		598053EC2BA6FD19008056F3 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598053EB2BA6FD19008056F3 /* Login.swift */; };
 		598F58092B13A5ED003B4FCB /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598F58082B13A5ED003B4FCB /* View+Extensions.swift */; };
-		5993CE692C939F0200855103 /* BookDetailPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5993CE682C939F0200855103 /* BookDetailPage.swift */; };
 		599EC2F22BD4CEDA00F6DEB1 /* ORTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599EC2F12BD4CEDA00F6DEB1 /* ORTextField.swift */; };
 		59E06A1D2BA6C87B00FE18FD /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 59E06A1C2BA6C87B00FE18FD /* FirebaseAnalytics */; };
 		59E75E9A2ADF53AA007A549C /* OursReaderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E75E992ADF53AA007A549C /* OursReaderApp.swift */; };
@@ -68,6 +66,15 @@
 		59E75EB52ADF53AB007A549C /* OursReaderUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E75EB42ADF53AB007A549C /* OursReaderUITests.swift */; };
 		59E75EB72ADF53AB007A549C /* OursReaderUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E75EB62ADF53AB007A549C /* OursReaderUITestsLaunchTests.swift */; };
 		59E75EC42ADF5749007A549C /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E75EC32ADF5749007A549C /* Model.swift */; };
+		990DE4312D5C829E00C8776F /* readerWatchOS Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 990DE4242D5C829C00C8776F /* readerWatchOS Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		991A513D2E96584B001C7775 /* BookImportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991A513C2E96584B001C7775 /* BookImportManager.swift */; };
+		991A513F2E965899001C7775 /* BookImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991A513E2E965899001C7775 /* BookImportView.swift */; };
+		991A51432E976C2E001C7775 /* universal_book_scraper.py in Resources */ = {isa = PBXBuildFile; fileRef = 991A51422E976C2E001C7775 /* universal_book_scraper.py */; };
+		991A51452E976C9C001C7775 /* ScriptManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991A51442E976C9C001C7775 /* ScriptManager.swift */; };
+		991A518D2E97AD25001C7775 /* DefaultBookCoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991A518C2E97AD25001C7775 /* DefaultBookCoverView.swift */; };
+		991A522D2E9CAB01001C7775 /* BookCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991A522C2E9CAB01001C7775 /* BookCacheManager.swift */; };
+		991A522F2E9CB4CA001C7775 /* Ebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991A522E2E9CB4CA001C7775 /* Ebook.swift */; };
+		991A52312E9CB4E0001C7775 /* Ebook+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991A52302E9CB4E0001C7775 /* Ebook+Codable.swift */; };
 		993EDABE2BDA4675002C18C7 /* SwiftEntryKit in Frameworks */ = {isa = PBXBuildFile; productRef = 993EDABD2BDA4675002C18C7 /* SwiftEntryKit */; };
 		993EDAC22BDBB71B002C18C7 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 993EDAC12BDBB71B002C18C7 /* FirebaseFirestore */; };
 		993EDAC42BDBB71B002C18C7 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 993EDAC32BDBB71B002C18C7 /* FirebaseFirestoreSwift */; };
@@ -77,7 +84,9 @@
 		993EDACF2BEB2CE2002C18C7 /* PermissionRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993EDACE2BEB2CE2002C18C7 /* PermissionRequest.swift */; };
 		993EDAD22BEB48BA002C18C7 /* DeviceFinderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993EDAD12BEB48BA002C18C7 /* DeviceFinderViewModel.swift */; };
 		993EDAD42BEB59FB002C18C7 /* FriendList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993EDAD32BEB59FB002C18C7 /* FriendList.swift */; };
-		993EDADD2BEC6D65002C18C7 /* FriendDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993EDADC2BEC6D65002C18C7 /* FriendDetail.swift */; };
+		994344592DEEED3B002FD942 /* FriendSharedComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994344582DEEED3B002FD942 /* FriendSharedComponents.swift */; };
+		9943445A2DEEED3B002FD942 /* AddFriend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994344572DEEED3B002FD942 /* AddFriend.swift */; };
+		9943445C2DEEF2C9002FD942 /* FriendRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9943445B2DEEF2C9002FD942 /* FriendRow.swift */; };
 		997291252C9C2D6E0070DFAC /* DashboardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997291242C9C2D6E0070DFAC /* DashboardModel.swift */; };
 		997D30632CB6672B00A3B692 /* AppSecurity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997D30622CB6672B00A3B692 /* AppSecurity.swift */; };
 		997D30662CB75BF200A3B692 /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = 997D30652CB75BF200A3B692 /* FirebaseAppCheck */; };
@@ -92,13 +101,11 @@
 		9986141F2BAD330C00E0996D /* SideMenuOptionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9986141E2BAD330C00E0996D /* SideMenuOptionModel.swift */; };
 		998614442BB1770300E0996D /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614432BB1770300E0996D /* NotificationManager.swift */; };
 		998614462BB1799B00E0996D /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 998614452BB1799B00E0996D /* FirebaseMessaging */; };
-		9986144A2BB3F9EE00E0996D /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614492BB3F9EE00E0996D /* Profile.swift */; };
 		9986144E2BB41F5000E0996D /* BasicRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9986144D2BB41F5000E0996D /* BasicRouter.swift */; };
 		998614502BB4253200E0996D /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9986144F2BB4253200E0996D /* Route.swift */; };
 		998614522BB428F200E0996D /* HomeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614512BB428F200E0996D /* HomeRouter.swift */; };
 		998614542BB4295A00E0996D /* LoginRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614532BB4295A00E0996D /* LoginRouter.swift */; };
 		998614582BB429C100E0996D /* LoginRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614572BB429C100E0996D /* LoginRoute.swift */; };
-		9986145A2BBB9EEC00E0996D /* WelcomePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614592BBB9EEC00E0996D /* WelcomePage.swift */; };
 		9986145C2BBBAA6600E0996D /* Signup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9986145B2BBBAA6600E0996D /* Signup.swift */; };
 		9986145F2BBBAC8500E0996D /* UnderlineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9986145E2BBBAC8500E0996D /* UnderlineTextField.swift */; };
 		998614612BBBBA7F00E0996D /* DividerWithText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614602BBBBA7F00E0996D /* DividerWithText.swift */; };
@@ -109,9 +116,31 @@
 		998614732BBD21EF00E0996D /* FloatingPromptTextField in Frameworks */ = {isa = PBXBuildFile; productRef = 998614722BBD21EF00E0996D /* FloatingPromptTextField */; };
 		998614762BBD287300E0996D /* ColorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614752BBD287300E0996D /* ColorHelper.swift */; };
 		998614822BBD35AC00E0996D /* Color+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998614812BBD35AC00E0996D /* Color+.swift */; };
-		999651D82C0C62C400EC7C43 /* RswiftLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 999651D72C0C62C400EC7C43 /* RswiftLibrary */; };
+		998CD2142DEFD9A100F64329 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998CD2132DEFD9A100F64329 /* EmptyStateView.swift */; };
+		99B8073A2DF6966F007A0E49 /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B807392DF6966F007A0E49 /* CloudKitManager.swift */; };
+		99B8F6FE2DF18AF0007A0E49 /* BookDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B8F6FB2DF18AF0007A0E49 /* BookDetailView.swift */; };
+		99B8F6FF2DF18AF0007A0E49 /* BookReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B8F6FC2DF18AF0007A0E49 /* BookReaderView.swift */; };
+		99BA2CFC2D9250D3003AD65C /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 99BA2CFB2D9250D3003AD65C /* FirebaseDatabase */; };
+		99BA2CFE2D9250D3003AD65C /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 99BA2CFD2D9250D3003AD65C /* FirebaseDatabaseSwift */; };
+		99BA2D042D9250D3003AD65C /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = 99BA2D032D9250D3003AD65C /* FirebaseFunctions */; };
+		99BA2D572D925265003AD65C /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 99BA2D562D925265003AD65C /* FirebaseFirestore */; };
+		99DA2D7A2D65B575007D178A /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DA2D792D65B575007D178A /* KeychainManager.swift */; };
+		99DA2D7D2D6C76CB007D178A /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 99DA2D7C2D6C76CB007D178A /* FirebaseAnalytics */; };
+		99DA2D7F2D6C76CB007D178A /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 99DA2D7E2D6C76CB007D178A /* FirebaseAnalyticsSwift */; };
+		99DA2D812D6C76CB007D178A /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = 99DA2D802D6C76CB007D178A /* FirebaseAppCheck */; };
+		99DA2D8A2D6D5E9B007D178A /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 99DA2D892D6D5E9B007D178A /* FirebaseAuth */; };
+		99DAFB712E9F366B00943DA3 /* UserNameInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DAFB702E9F366400943DA3 /* UserNameInputView.swift */; };
+		99DAFBB82EA08EBD00943DA3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DAFBB62EA08EBD00943DA3 /* SettingsView.swift */; };
 		99E2102A2C0168F1006F27A7 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E210292C0168F1006F27A7 /* Storage.swift */; };
 		99EB5FA32C0D9C5600F2AF29 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EB5FA22C0D9C5500F2AF29 /* ToastView.swift */; };
+		99EFE3472D5CA69100EA82EC /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 99EFE3462D5CA69100EA82EC /* Localizable.xcstrings */; };
+		99F0C5EB2E8534A9008711EC /* DataAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F0C5EA2E8534A9008711EC /* DataAPIManager.swift */; };
+		99F0C5EE2E8534C1008711EC /* CloudBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F0C5EC2E8534C1008711EC /* CloudBook.swift */; };
+		99F0C5EF2E8534C1008711EC /* UserBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F0C5ED2E8534C1008711EC /* UserBook.swift */; };
+		99F0C5F12E8534D2008711EC /* DashboardBooksManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F0C5F02E8534D2008711EC /* DashboardBooksManager.swift */; };
+		99F0C5F32E8A6BAC008711EC /* CloudKitTestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F0C5F22E8A6BAC008711EC /* CloudKitTestHelper.swift */; };
+		99F0C5F52E8F7963008711EC /* AddBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F0C5F42E8F7963008711EC /* AddBookView.swift */; };
+		99F0C5F92E939C41008711EC /* BaseSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F0C5F82E939C41008711EC /* BaseSheetView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -143,6 +172,13 @@
 			remoteGlobalIDString = 59E75E952ADF53AA007A549C;
 			remoteInfo = OursReader;
 		};
+		990DE42F2D5C829E00C8776F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 59E75E8E2ADF53AA007A549C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 990DE4232D5C829C00C8776F;
+			remoteInfo = "readerWatchOS Watch App";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -156,6 +192,17 @@
 				598053992BA6DA8E008056F3 /* SendMissExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		990DE4322D5C829E00C8776F /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				990DE4312D5C829E00C8776F /* readerWatchOS Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -185,8 +232,6 @@
 		593EB1FE2C01EED600DD430F /* View+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+.swift"; sourceTree = "<group>"; };
 		593EB2002C01EF6600DD430F /* ErrorHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorHelper.swift; sourceTree = "<group>"; };
 		593EB2032C01EFFF00DD430F /* LM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LM.swift; sourceTree = "<group>"; };
-		593EB20D2C01F1CD00DD430F /* zh-HK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-HK"; path = "zh-HK.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		593EB20F2C01F1D300DD430F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		593EB2112C01F9F400DD430F /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		593EB2142C01FA1200DD430F /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		5953369D2B05018100BB11D7 /* Tab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tab.swift; sourceTree = "<group>"; };
@@ -210,7 +255,6 @@
 		598053E92BA6F760008056F3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		598053EB2BA6FD19008056F3 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
 		598F58082B13A5ED003B4FCB /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
-		5993CE682C939F0200855103 /* BookDetailPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailPage.swift; sourceTree = "<group>"; };
 		599EC2F12BD4CEDA00F6DEB1 /* ORTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ORTextField.swift; sourceTree = "<group>"; };
 		59E75E962ADF53AA007A549C /* OursReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OursReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		59E75E992ADF53AA007A549C /* OursReaderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OursReaderApp.swift; sourceTree = "<group>"; };
@@ -223,13 +267,24 @@
 		59E75EB42ADF53AB007A549C /* OursReaderUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OursReaderUITests.swift; sourceTree = "<group>"; };
 		59E75EB62ADF53AB007A549C /* OursReaderUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OursReaderUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		59E75EC32ADF5749007A549C /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		990DE4242D5C829C00C8776F /* readerWatchOS Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "readerWatchOS Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		991A513C2E96584B001C7775 /* BookImportManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookImportManager.swift; sourceTree = "<group>"; };
+		991A513E2E965899001C7775 /* BookImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookImportView.swift; sourceTree = "<group>"; };
+		991A51422E976C2E001C7775 /* universal_book_scraper.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; name = universal_book_scraper.py; path = script/universal_book_scraper.py; sourceTree = "<group>"; };
+		991A51442E976C9C001C7775 /* ScriptManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptManager.swift; sourceTree = "<group>"; };
+		991A518C2E97AD25001C7775 /* DefaultBookCoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultBookCoverView.swift; sourceTree = "<group>"; };
+		991A522C2E9CAB01001C7775 /* BookCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCacheManager.swift; sourceTree = "<group>"; };
+		991A522E2E9CB4CA001C7775 /* Ebook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ebook.swift; sourceTree = "<group>"; };
+		991A52302E9CB4E0001C7775 /* Ebook+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ebook+Codable.swift"; sourceTree = "<group>"; };
 		993EDAC62BE9F6EA002C18C7 /* Dashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dashboard.swift; sourceTree = "<group>"; };
 		993EDAC92BEB2C9C002C18C7 /* PeerDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeerDevice.swift; sourceTree = "<group>"; };
 		993EDACC2BEB2CBF002C18C7 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		993EDACE2BEB2CE2002C18C7 /* PermissionRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionRequest.swift; sourceTree = "<group>"; };
 		993EDAD12BEB48BA002C18C7 /* DeviceFinderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceFinderViewModel.swift; sourceTree = "<group>"; };
 		993EDAD32BEB59FB002C18C7 /* FriendList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendList.swift; sourceTree = "<group>"; };
-		993EDADC2BEC6D65002C18C7 /* FriendDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendDetail.swift; sourceTree = "<group>"; };
+		994344572DEEED3B002FD942 /* AddFriend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriend.swift; sourceTree = "<group>"; };
+		994344582DEEED3B002FD942 /* FriendSharedComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSharedComponents.swift; sourceTree = "<group>"; };
+		9943445B2DEEF2C9002FD942 /* FriendRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRow.swift; sourceTree = "<group>"; };
 		997291242C9C2D6E0070DFAC /* DashboardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardModel.swift; sourceTree = "<group>"; };
 		997D30622CB6672B00A3B692 /* AppSecurity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSecurity.swift; sourceTree = "<group>"; };
 		998614122BA80EA300E0996D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -240,13 +295,11 @@
 		9986141E2BAD330C00E0996D /* SideMenuOptionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuOptionModel.swift; sourceTree = "<group>"; };
 		998614432BB1770300E0996D /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		998614482BB17C9A00E0996D /* OursReader.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OursReader.entitlements; sourceTree = "<group>"; };
-		998614492BB3F9EE00E0996D /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		9986144D2BB41F5000E0996D /* BasicRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicRouter.swift; sourceTree = "<group>"; };
 		9986144F2BB4253200E0996D /* Route.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
 		998614512BB428F200E0996D /* HomeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeRouter.swift; sourceTree = "<group>"; };
 		998614532BB4295A00E0996D /* LoginRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRouter.swift; sourceTree = "<group>"; };
 		998614572BB429C100E0996D /* LoginRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRoute.swift; sourceTree = "<group>"; };
-		998614592BBB9EEC00E0996D /* WelcomePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomePage.swift; sourceTree = "<group>"; };
 		9986145B2BBBAA6600E0996D /* Signup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signup.swift; sourceTree = "<group>"; };
 		9986145E2BBBAC8500E0996D /* UnderlineTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderlineTextField.swift; sourceTree = "<group>"; };
 		998614602BBBBA7F00E0996D /* DividerWithText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DividerWithText.swift; sourceTree = "<group>"; };
@@ -260,9 +313,29 @@
 		9986146F2BBD21A500E0996D /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
 		998614752BBD287300E0996D /* ColorHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorHelper.swift; sourceTree = "<group>"; };
 		998614812BBD35AC00E0996D /* Color+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+.swift"; sourceTree = "<group>"; };
+		998CD2132DEFD9A100F64329 /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
+		99B807392DF6966F007A0E49 /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
+		99B8F6FB2DF18AF0007A0E49 /* BookDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailView.swift; sourceTree = "<group>"; };
+		99B8F6FC2DF18AF0007A0E49 /* BookReaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookReaderView.swift; sourceTree = "<group>"; };
+		99DA2D752D6586BE007D178A /* OursReaderDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OursReaderDebug.entitlements; sourceTree = "<group>"; };
+		99DA2D792D65B575007D178A /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
+		99DAFB702E9F366400943DA3 /* UserNameInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNameInputView.swift; sourceTree = "<group>"; };
+		99DAFBB62EA08EBD00943DA3 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		99E210292C0168F1006F27A7 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		99EB5FA22C0D9C5500F2AF29 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
+		99EFE3462D5CA69100EA82EC /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		99F0C5EA2E8534A9008711EC /* DataAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataAPIManager.swift; sourceTree = "<group>"; };
+		99F0C5EC2E8534C1008711EC /* CloudBook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudBook.swift; sourceTree = "<group>"; };
+		99F0C5ED2E8534C1008711EC /* UserBook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBook.swift; sourceTree = "<group>"; };
+		99F0C5F02E8534D2008711EC /* DashboardBooksManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardBooksManager.swift; sourceTree = "<group>"; };
+		99F0C5F22E8A6BAC008711EC /* CloudKitTestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitTestHelper.swift; sourceTree = "<group>"; };
+		99F0C5F42E8F7963008711EC /* AddBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBookView.swift; sourceTree = "<group>"; };
+		99F0C5F82E939C41008711EC /* BaseSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSheetView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		990DE4252D5C829C00C8776F /* readerWatchOS Watch App */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "readerWatchOS Watch App"; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		598053822BA6DA8D008056F3 /* Frameworks */ = {
@@ -295,7 +368,6 @@
 				998614732BBD21EF00E0996D /* FloatingPromptTextField in Frameworks */,
 				997D30712CBD04DA00A3B692 /* FirebaseAppCheck in Frameworks */,
 				993EDAC42BDBB71B002C18C7 /* FirebaseFirestoreSwift in Frameworks */,
-				999651D82C0C62C400EC7C43 /* RswiftLibrary in Frameworks */,
 				998614462BB1799B00E0996D /* FirebaseMessaging in Frameworks */,
 				993EDABE2BDA4675002C18C7 /* SwiftEntryKit in Frameworks */,
 				59E06A1D2BA6C87B00FE18FD /* FirebaseAnalytics in Frameworks */,
@@ -315,6 +387,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		990DE4212D5C829C00C8776F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				99BA2CFE2D9250D3003AD65C /* FirebaseDatabaseSwift in Frameworks */,
+				99BA2D572D925265003AD65C /* FirebaseFirestore in Frameworks */,
+				99DA2D7F2D6C76CB007D178A /* FirebaseAnalyticsSwift in Frameworks */,
+				99DA2D812D6C76CB007D178A /* FirebaseAppCheck in Frameworks */,
+				99DA2D7D2D6C76CB007D178A /* FirebaseAnalytics in Frameworks */,
+				99DA2D8A2D6D5E9B007D178A /* FirebaseAuth in Frameworks */,
+				99BA2CFC2D9250D3003AD65C /* FirebaseDatabase in Frameworks */,
+				99BA2D042D9250D3003AD65C /* FirebaseFunctions in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -393,7 +480,7 @@
 		593EB2072C01F13E00DD430F /* Localization */ = {
 			isa = PBXGroup;
 			children = (
-				593EB20E2C01F1CD00DD430F /* Localizable.strings */,
+				99EFE3462D5CA69100EA82EC /* Localizable.xcstrings */,
 			);
 			path = Localization;
 			sourceTree = "<group>";
@@ -404,7 +491,6 @@
 				9986145D2BBBAC7500E0996D /* Common */,
 				593EB2112C01F9F400DD430F /* MainView.swift */,
 				593EB2142C01FA1200DD430F /* SplashView.swift */,
-				998614592BBB9EEC00E0996D /* WelcomePage.swift */,
 				598053EB2BA6FD19008056F3 /* Login.swift */,
 				9986145B2BBBAA6600E0996D /* Signup.swift */,
 				5953369F2B0503D800BB11D7 /* Home.swift */,
@@ -412,7 +498,7 @@
 				997291232C9C22BD0070DFAC /* Dashboard */,
 				5993CE6F2C939F2500855103 /* Book */,
 				5993CE722C939F3200855103 /* Friend */,
-				5993CE752C939F4700855103 /* Profile */,
+				99DAFBB72EA08EBD00943DA3 /* Settings */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -424,6 +510,9 @@
 				5953369D2B05018100BB11D7 /* Tab.swift */,
 				993EDAC92BEB2C9C002C18C7 /* PeerDevice.swift */,
 				993EDACE2BEB2CE2002C18C7 /* PermissionRequest.swift */,
+				99F0C5EC2E8534C1008711EC /* CloudBook.swift */,
+				991A522E2E9CB4CA001C7775 /* Ebook.swift */,
+				99F0C5ED2E8534C1008711EC /* UserBook.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -467,12 +556,20 @@
 			children = (
 				593EB1D52C01DEC000DD430F /* Reminder */,
 				593EB2032C01EFFF00DD430F /* LM.swift */,
+				991A513C2E96584B001C7775 /* BookImportManager.swift */,
+				991A522C2E9CAB01001C7775 /* BookCacheManager.swift */,
+				99F0C5F02E8534D2008711EC /* DashboardBooksManager.swift */,
+				991A51442E976C9C001C7775 /* ScriptManager.swift */,
 				998614432BB1770300E0996D /* NotificationManager.swift */,
+				99B807392DF6966F007A0E49 /* CloudKitManager.swift */,
+				99F0C5F22E8A6BAC008711EC /* CloudKitTestHelper.swift */,
+				99F0C5EA2E8534A9008711EC /* DataAPIManager.swift */,
 				598053E12BA6EDBB008056F3 /* DatabaseManager.swift */,
 				99E210292C0168F1006F27A7 /* Storage.swift */,
 				593EB1CB2C01DC1700DD430F /* ToastManager.swift */,
 				593EB1F32C01E6E500DD430F /* FontManager.swift */,
 				997D30622CB6672B00A3B692 /* AppSecurity.swift */,
+				99DA2D792D65B575007D178A /* KeychainManager.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -480,7 +577,10 @@
 		5993CE6F2C939F2500855103 /* Book */ = {
 			isa = PBXGroup;
 			children = (
-				5993CE682C939F0200855103 /* BookDetailPage.swift */,
+				99F0C5F42E8F7963008711EC /* AddBookView.swift */,
+				991A513E2E965899001C7775 /* BookImportView.swift */,
+				99B8F6FB2DF18AF0007A0E49 /* BookDetailView.swift */,
+				99B8F6FC2DF18AF0007A0E49 /* BookReaderView.swift */,
 			);
 			path = Book;
 			sourceTree = "<group>";
@@ -488,28 +588,25 @@
 		5993CE722C939F3200855103 /* Friend */ = {
 			isa = PBXGroup;
 			children = (
+				993EDAD12BEB48BA002C18C7 /* DeviceFinderViewModel.swift */,
 				993EDAD32BEB59FB002C18C7 /* FriendList.swift */,
-				993EDADC2BEC6D65002C18C7 /* FriendDetail.swift */,
+				994344572DEEED3B002FD942 /* AddFriend.swift */,
+				9943445B2DEEF2C9002FD942 /* FriendRow.swift */,
+				994344582DEEED3B002FD942 /* FriendSharedComponents.swift */,
 			);
 			path = Friend;
-			sourceTree = "<group>";
-		};
-		5993CE752C939F4700855103 /* Profile */ = {
-			isa = PBXGroup;
-			children = (
-				998614492BB3F9EE00E0996D /* Profile.swift */,
-			);
-			path = Profile;
 			sourceTree = "<group>";
 		};
 		59E75E8D2ADF53AA007A549C = {
 			isa = PBXGroup;
 			children = (
+				991A51422E976C2E001C7775 /* universal_book_scraper.py */,
 				59E75E982ADF53AA007A549C /* OursReader */,
 				59E75EA92ADF53AB007A549C /* OursReaderTests */,
 				59E75EB32ADF53AB007A549C /* OursReaderUITests */,
 				5980538B2BA6DA8D008056F3 /* SendMiss */,
 				598053D32BA6DBE9008056F3 /* SImplySendMiss */,
+				990DE4252D5C829C00C8776F /* readerWatchOS Watch App */,
 				598053862BA6DA8D008056F3 /* Frameworks */,
 				59E75E972ADF53AA007A549C /* Products */,
 			);
@@ -523,6 +620,7 @@
 				59E75EB02ADF53AB007A549C /* OursReaderUITests.xctest */,
 				598053852BA6DA8D008056F3 /* SendMissExtension.appex */,
 				598053D02BA6DBE9008056F3 /* SImplySendMissExtension.appex */,
+				990DE4242D5C829C00C8776F /* readerWatchOS Watch App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -530,8 +628,9 @@
 		59E75E982ADF53AA007A549C /* OursReader */ = {
 			isa = PBXGroup;
 			children = (
-				993EDACC2BEB2CBF002C18C7 /* README.md */,
+				99DA2D752D6586BE007D178A /* OursReaderDebug.entitlements */,
 				998614482BB17C9A00E0996D /* OursReader.entitlements */,
+				993EDACC2BEB2CBF002C18C7 /* README.md */,
 				998614122BA80EA300E0996D /* Info.plist */,
 				598053E92BA6F760008056F3 /* GoogleService-Info.plist */,
 				998614742BBD284D00E0996D /* Config */,
@@ -581,7 +680,6 @@
 			isa = PBXGroup;
 			children = (
 				998614162BA8110B00E0996D /* UserAuthModel.swift */,
-				993EDAD12BEB48BA002C18C7 /* DeviceFinderViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -589,6 +687,7 @@
 		997291232C9C22BD0070DFAC /* Dashboard */ = {
 			isa = PBXGroup;
 			children = (
+				99DAFB702E9F366400943DA3 /* UserNameInputView.swift */,
 				591BAAD22CBBF05D001FAE1C /* PushSetting */,
 				993EDAC62BE9F6EA002C18C7 /* Dashboard.swift */,
 				997291242C9C2D6E0070DFAC /* DashboardModel.swift */,
@@ -638,6 +737,9 @@
 		9986145D2BBBAC7500E0996D /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				99F0C5F82E939C41008711EC /* BaseSheetView.swift */,
+				998CD2132DEFD9A100F64329 /* EmptyStateView.swift */,
+				991A518C2E97AD25001C7775 /* DefaultBookCoverView.swift */,
 				591BAAC32CBB7B33001FAE1C /* BottomSheet */,
 				99EB5FA12C0D9C2A00F2AF29 /* Toast */,
 				593EB1F92C01EB6C00DD430F /* General */,
@@ -686,10 +788,19 @@
 			isa = PBXGroup;
 			children = (
 				598F58082B13A5ED003B4FCB /* View+Extensions.swift */,
+				991A52302E9CB4E0001C7775 /* Ebook+Codable.swift */,
 				998614812BBD35AC00E0996D /* Color+.swift */,
 				593EB1FE2C01EED600DD430F /* View+.swift */,
 			);
 			path = Extension;
+			sourceTree = "<group>";
+		};
+		99DAFBB72EA08EBD00943DA3 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				99DAFBB62EA08EBD00943DA3 /* SettingsView.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 		99EB5FA12C0D9C2A00F2AF29 /* Toast */ = {
@@ -745,6 +856,7 @@
 				59E75E932ADF53AA007A549C /* Frameworks */,
 				59E75E942ADF53AA007A549C /* Resources */,
 				5980539D2BA6DA8E008056F3 /* Embed Foundation Extensions */,
+				990DE4322D5C829E00C8776F /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
@@ -752,6 +864,7 @@
 				999651D42C0C5C3B00EC7C43 /* PBXTargetDependency */,
 				598053982BA6DA8E008056F3 /* PBXTargetDependency */,
 				598053DC2BA6DBEA008056F3 /* PBXTargetDependency */,
+				990DE4302D5C829E00C8776F /* PBXTargetDependency */,
 			);
 			name = OursReader;
 			packageProductDependencies = (
@@ -764,7 +877,6 @@
 				993EDABD2BDA4675002C18C7 /* SwiftEntryKit */,
 				993EDAC12BDBB71B002C18C7 /* FirebaseFirestore */,
 				993EDAC32BDBB71B002C18C7 /* FirebaseFirestoreSwift */,
-				999651D72C0C62C400EC7C43 /* RswiftLibrary */,
 				997D30652CB75BF200A3B692 /* FirebaseAppCheck */,
 				997D30702CBD04DA00A3B692 /* FirebaseAppCheck */,
 				997D30732CBD06B400A3B692 /* FirebaseAppCheck */,
@@ -810,6 +922,36 @@
 			productReference = 59E75EB02ADF53AB007A549C /* OursReaderUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		990DE4232D5C829C00C8776F /* readerWatchOS Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 990DE4352D5C829E00C8776F /* Build configuration list for PBXNativeTarget "readerWatchOS Watch App" */;
+			buildPhases = (
+				990DE4202D5C829C00C8776F /* Sources */,
+				990DE4212D5C829C00C8776F /* Frameworks */,
+				990DE4222D5C829C00C8776F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				990DE4252D5C829C00C8776F /* readerWatchOS Watch App */,
+			);
+			name = "readerWatchOS Watch App";
+			packageProductDependencies = (
+				99DA2D7C2D6C76CB007D178A /* FirebaseAnalytics */,
+				99DA2D7E2D6C76CB007D178A /* FirebaseAnalyticsSwift */,
+				99DA2D802D6C76CB007D178A /* FirebaseAppCheck */,
+				99DA2D892D6D5E9B007D178A /* FirebaseAuth */,
+				99BA2CFB2D9250D3003AD65C /* FirebaseDatabase */,
+				99BA2CFD2D9250D3003AD65C /* FirebaseDatabaseSwift */,
+				99BA2D032D9250D3003AD65C /* FirebaseFunctions */,
+				99BA2D562D925265003AD65C /* FirebaseFirestore */,
+			);
+			productName = "readerWatchOS Watch App";
+			productReference = 990DE4242D5C829C00C8776F /* readerWatchOS Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -820,7 +962,7 @@
 				KnownAssetTags = (
 					New,
 				);
-				LastSwiftUpdateCheck = 1500;
+				LastSwiftUpdateCheck = 1600;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					598053842BA6DA8D008056F3 = {
@@ -840,6 +982,9 @@
 						CreatedOnToolsVersion = 14.3;
 						TestTargetID = 59E75E952ADF53AA007A549C;
 					};
+					990DE4232D5C829C00C8776F = {
+						CreatedOnToolsVersion = 16.0;
+					};
 				};
 			};
 			buildConfigurationList = 59E75E912ADF53AA007A549C /* Build configuration list for PBXProject "OursReader" */;
@@ -848,8 +993,8 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
-				Base,
 				"zh-HK",
+				Base,
 			);
 			mainGroup = 59E75E8D2ADF53AA007A549C;
 			packageReferences = (
@@ -857,7 +1002,6 @@
 				998614132BA80F5D00E0996D /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				998614712BBD21EF00E0996D /* XCRemoteSwiftPackageReference "FloatingPromptTextField" */,
 				993EDABC2BDA4675002C18C7 /* XCRemoteSwiftPackageReference "SwiftEntryKit" */,
-				999651D62C0C62C400EC7C43 /* XCRemoteSwiftPackageReference "R" */,
 			);
 			productRefGroup = 59E75E972ADF53AA007A549C /* Products */;
 			projectDirPath = "";
@@ -868,6 +1012,7 @@
 				59E75EAF2ADF53AB007A549C /* OursReaderUITests */,
 				598053842BA6DA8D008056F3 /* SendMissExtension */,
 				598053CF2BA6DBE9008056F3 /* SImplySendMissExtension */,
+				990DE4232D5C829C00C8776F /* readerWatchOS Watch App */,
 			);
 		};
 /* End PBXProject section */
@@ -895,7 +1040,7 @@
 			files = (
 				59E75EA12ADF53AB007A549C /* Preview Assets.xcassets in Resources */,
 				593EB1E92C01DF1B00DD430F /* WorkSans-BoldItalic.ttf in Resources */,
-				593EB20C2C01F1CD00DD430F /* Localizable.strings in Resources */,
+				99EFE3472D5CA69100EA82EC /* Localizable.xcstrings in Resources */,
 				593EB1E82C01DF1B00DD430F /* WorkSans-MediumItalic.ttf in Resources */,
 				59E75E9E2ADF53AB007A549C /* Assets.xcassets in Resources */,
 				993EDACD2BEB2CC0002C18C7 /* README.md in Resources */,
@@ -903,6 +1048,7 @@
 				593EB1E62C01DF1B00DD430F /* WorkSans-Italic.ttf in Resources */,
 				593EB1E72C01DF1B00DD430F /* WorkSans-Medium.ttf in Resources */,
 				593EB1E52C01DF1B00DD430F /* WorkSans-Bold.ttf in Resources */,
+				991A51432E976C2E001C7775 /* universal_book_scraper.py in Resources */,
 				593EB1EA2C01DF1B00DD430F /* WorkSans-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -915,6 +1061,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		59E75EAE2ADF53AB007A549C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		990DE4222D5C829C00C8776F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -948,10 +1101,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				99F0C5F32E8A6BAC008711EC /* CloudKitTestHelper.swift in Sources */,
 				998614192BAAB3A500E0996D /* SideMenu.swift in Sources */,
 				998614762BBD287300E0996D /* ColorHelper.swift in Sources */,
+				99F0C5F52E8F7963008711EC /* AddBookView.swift in Sources */,
 				598053E82BA6F169008056F3 /* Error.swift in Sources */,
 				593EB1F72C01EAC300DD430F /* GeneralErrorReminder.swift in Sources */,
+				99B8073A2DF6966F007A0E49 /* CloudKitManager.swift in Sources */,
 				591BAACB2CBB7B63001FAE1C /* AddPushBottomsheet.swift in Sources */,
 				59E75EC42ADF5749007A549C /* Model.swift in Sources */,
 				998614612BBBBA7F00E0996D /* DividerWithText.swift in Sources */,
@@ -960,48 +1116,64 @@
 				591BAAD72CBBF0AC001FAE1C /* PushSettingListViewModel.swift in Sources */,
 				99EB5FA32C0D9C5600F2AF29 /* ToastView.swift in Sources */,
 				9986141D2BAD20C500E0996D /* SideMenuRowView.swift in Sources */,
+				991A513F2E965899001C7775 /* BookImportView.swift in Sources */,
 				998614172BA8110B00E0996D /* UserAuthModel.swift in Sources */,
 				593EB1DB2C01DED300DD430F /* ReminderManager.swift in Sources */,
+				991A518D2E97AD25001C7775 /* DefaultBookCoverView.swift in Sources */,
 				9986145C2BBBAA6600E0996D /* Signup.swift in Sources */,
 				593EB2152C01FA1200DD430F /* SplashView.swift in Sources */,
 				998614682BBD20D100E0996D /* EnvironmentValues.swift in Sources */,
 				59E75E9C2ADF53AA007A549C /* ContentView.swift in Sources */,
+				99F0C5F12E8534D2008711EC /* DashboardBooksManager.swift in Sources */,
+				99DAFB712E9F366B00943DA3 /* UserNameInputView.swift in Sources */,
 				998614692BBD20D100E0996D /* FloatingPromptTextField.swift in Sources */,
+				994344592DEEED3B002FD942 /* FriendSharedComponents.swift in Sources */,
+				9943445A2DEEED3B002FD942 /* AddFriend.swift in Sources */,
 				993EDACA2BEB2C9C002C18C7 /* PeerDevice.swift in Sources */,
+				998CD2142DEFD9A100F64329 /* EmptyStateView.swift in Sources */,
 				993EDAC72BE9F6EB002C18C7 /* Dashboard.swift in Sources */,
 				593EB1FB2C01EB8500DD430F /* GeneralReminder.swift in Sources */,
 				997291252C9C2D6E0070DFAC /* DashboardModel.swift in Sources */,
+				99DA2D7A2D65B575007D178A /* KeychainManager.swift in Sources */,
 				595336A02B0503D800BB11D7 /* Home.swift in Sources */,
 				593EB2122C01F9F400DD430F /* MainView.swift in Sources */,
+				99DAFBB82EA08EBD00943DA3 /* SettingsView.swift in Sources */,
+				99F0C5EB2E8534A9008711EC /* DataAPIManager.swift in Sources */,
+				991A513D2E96584B001C7775 /* BookImportManager.swift in Sources */,
+				99F0C5EE2E8534C1008711EC /* CloudBook.swift in Sources */,
+				99F0C5EF2E8534C1008711EC /* UserBook.swift in Sources */,
 				9986146A2BBD20D100E0996D /* HeightPreferenceKey.swift in Sources */,
 				59E75E9A2ADF53AA007A549C /* OursReaderApp.swift in Sources */,
 				993EDAD22BEB48BA002C18C7 /* DeviceFinderViewModel.swift in Sources */,
 				997D30632CB6672B00A3B692 /* AppSecurity.swift in Sources */,
 				593EB1FF2C01EED600DD430F /* View+.swift in Sources */,
+				991A51452E976C9C001C7775 /* ScriptManager.swift in Sources */,
 				998614502BB4253200E0996D /* Route.swift in Sources */,
-				993EDADD2BEC6D65002C18C7 /* FriendDetail.swift in Sources */,
 				993EDAD42BEB59FB002C18C7 /* FriendList.swift in Sources */,
 				593EB2042C01EFFF00DD430F /* LM.swift in Sources */,
 				593EB1FD2C01EE9F00DD430F /* GeneralBottomSheet.swift in Sources */,
 				593EB1D22C01DE3B00DD430F /* FontHelper.swift in Sources */,
 				9986141F2BAD330C00E0996D /* SideMenuOptionModel.swift in Sources */,
-				5993CE692C939F0200855103 /* BookDetailPage.swift in Sources */,
 				593EB1ED2C01E2A700DD430F /* Queue.swift in Sources */,
 				993EDACF2BEB2CE2002C18C7 /* PermissionRequest.swift in Sources */,
 				593EB1F42C01E6E500DD430F /* FontManager.swift in Sources */,
-				9986144A2BB3F9EE00E0996D /* Profile.swift in Sources */,
 				598F58092B13A5ED003B4FCB /* View+Extensions.swift in Sources */,
+				991A522F2E9CB4CA001C7775 /* Ebook.swift in Sources */,
 				598053EC2BA6FD19008056F3 /* Login.swift in Sources */,
 				593EB1F22C01E58700DD430F /* GeneralButton.swift in Sources */,
 				9986146B2BBD20D100E0996D /* ViewExtensions.swift in Sources */,
+				991A52312E9CB4E0001C7775 /* Ebook+Codable.swift in Sources */,
 				593EB1DA2C01DED300DD430F /* ErrorReminderManager.swift in Sources */,
 				593EB2012C01EF6600DD430F /* ErrorHelper.swift in Sources */,
 				599EC2F22BD4CEDA00F6DEB1 /* ORTextField.swift in Sources */,
-				9986145A2BBB9EEC00E0996D /* WelcomePage.swift in Sources */,
+				99B8F6FE2DF18AF0007A0E49 /* BookDetailView.swift in Sources */,
+				99B8F6FF2DF18AF0007A0E49 /* BookReaderView.swift in Sources */,
 				591BAADB2CBBF5A3001FAE1C /* EditPushSettingBottomsheet.swift in Sources */,
 				5953369E2B05018100BB11D7 /* Tab.swift in Sources */,
+				991A522D2E9CAB01001C7775 /* BookCacheManager.swift in Sources */,
 				593EB1D92C01DED300DD430F /* BaseReminder.swift in Sources */,
 				9986145F2BBBAC8500E0996D /* UnderlineTextField.swift in Sources */,
+				99F0C5F92E939C41008711EC /* BaseSheetView.swift in Sources */,
 				998614442BB1770300E0996D /* NotificationManager.swift in Sources */,
 				998614822BBD35AC00E0996D /* Color+.swift in Sources */,
 				9986141B2BAAB79600E0996D /* SideMenuHeaderView.swift in Sources */,
@@ -1011,6 +1183,7 @@
 				598053E22BA6EDBB008056F3 /* DatabaseManager.swift in Sources */,
 				998614582BB429C100E0996D /* LoginRoute.swift in Sources */,
 				99E2102A2C0168F1006F27A7 /* Storage.swift in Sources */,
+				9943445C2DEEF2C9002FD942 /* FriendRow.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1028,6 +1201,13 @@
 			files = (
 				59E75EB72ADF53AB007A549C /* OursReaderUITestsLaunchTests.swift in Sources */,
 				59E75EB52ADF53AB007A549C /* OursReaderUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		990DE4202D5C829C00C8776F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1054,23 +1234,16 @@
 			target = 59E75E952ADF53AA007A549C /* OursReader */;
 			targetProxy = 59E75EB12ADF53AB007A549C /* PBXContainerItemProxy */;
 		};
+		990DE4302D5C829E00C8776F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 990DE4232D5C829C00C8776F /* readerWatchOS Watch App */;
+			targetProxy = 990DE42F2D5C829E00C8776F /* PBXContainerItemProxy */;
+		};
 		999651D42C0C5C3B00EC7C43 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 999651D32C0C5C3B00EC7C43 /* RswiftGenerateInternalResources */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		593EB20E2C01F1CD00DD430F /* Localizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				593EB20D2C01F1CD00DD430F /* zh-HK */,
-				593EB20F2C01F1D300DD430F /* en */,
-			);
-			name = Localizable.strings;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		5980539B2BA6DA8E008056F3 /* Debug */ = {
@@ -1261,6 +1434,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -1314,6 +1488,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1325,9 +1500,9 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = OursReader/OursReader.entitlements;
+				CODE_SIGN_ENTITLEMENTS = OursReader/OursReaderDebug.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_ASSET_PATHS = "\"OursReader/Preview Content\"";
 				DEVELOPMENT_TEAM = UM4ZKH8HWF;
 				ENABLE_PREVIEWS = YES;
@@ -1361,7 +1536,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = OursReader/OursReader.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_ASSET_PATHS = "\"OursReader/Preview Content\"";
 				DEVELOPMENT_TEAM = UM4ZKH8HWF;
 				ENABLE_PREVIEWS = YES;
@@ -1465,6 +1640,77 @@
 			};
 			name = Release;
 		};
+		990DE4332D5C829E00C8776F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "readerWatchOS Watch App/readerWatchOS Watch AppDebug.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"readerWatchOS Watch App/Preview Content\"";
+				DEVELOPMENT_TEAM = UM4ZKH8HWF;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = readerWatchOS;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.cliffchan.manwareader;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cliffchan.manwareader.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.6;
+			};
+			name = Debug;
+		};
+		990DE4342D5C829E00C8776F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "readerWatchOS Watch App/readerWatchOS Watch App.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"readerWatchOS Watch App/Preview Content\"";
+				DEVELOPMENT_TEAM = UM4ZKH8HWF;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = readerWatchOS;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.cliffchan.manwareader;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cliffchan.manwareader.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.6;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1522,6 +1768,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		990DE4352D5C829E00C8776F /* Build configuration list for PBXNativeTarget "readerWatchOS Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				990DE4332D5C829E00C8776F /* Debug */,
+				990DE4342D5C829E00C8776F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -1555,14 +1810,6 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 0.4.0;
-			};
-		};
-		999651D62C0C62C400EC7C43 /* XCRemoteSwiftPackageReference "R" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/mac-cain13/R.swift";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 7.5.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -1631,10 +1878,38 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = "plugin:RswiftGenerateInternalResources";
 		};
-		999651D72C0C62C400EC7C43 /* RswiftLibrary */ = {
+		99BA2CFB2D9250D3003AD65C /* FirebaseDatabase */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 999651D62C0C62C400EC7C43 /* XCRemoteSwiftPackageReference "R" */;
-			productName = RswiftLibrary;
+			productName = FirebaseDatabase;
+		};
+		99BA2CFD2D9250D3003AD65C /* FirebaseDatabaseSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseDatabaseSwift;
+		};
+		99BA2D032D9250D3003AD65C /* FirebaseFunctions */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseFunctions;
+		};
+		99BA2D562D925265003AD65C /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseFirestore;
+		};
+		99DA2D7C2D6C76CB007D178A /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseAnalytics;
+		};
+		99DA2D7E2D6C76CB007D178A /* FirebaseAnalyticsSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseAnalyticsSwift;
+		};
+		99DA2D802D6C76CB007D178A /* FirebaseAppCheck */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseAppCheck;
+		};
+		99DA2D892D6D5E9B007D178A /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 59E06A1B2BA6C87B00FE18FD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

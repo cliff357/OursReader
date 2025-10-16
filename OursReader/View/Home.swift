@@ -23,31 +23,13 @@ struct Home: View {
                 TabView(selection: $selectedSideMenu) {
                     Dashboard()
                         .tag(Optional.some(SideMenuOptionModel.dashboard))
-                    Profile()
-                        .tag(Optional.some(SideMenuOptionModel.profile))
-                    Text("Widget")
-                        .tag(Optional.some(SideMenuOptionModel.widget))
                     FriendList()
                         .tag(Optional.some(SideMenuOptionModel.friendList))
-                    Text("Settings")
+                    SettingsView()
                         .tag(Optional.some(SideMenuOptionModel.settings))
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-//            .background(.gray.opacity(0.1))
-//            .onAppear() {
-//                Auth.auth().signInAnonymously { user, error in
-//                    if let error = error {
-//                        print(error.localizedDescription)
-//                    }
-//                }
-//                let ref = Database.database().reference(withPath: "name")
-//                ref.observe(.value) { snapshot in
-//                    if let output = snapshot.value {
-//                        //Todo: data exchange with push token
-//                    }
-//                }
-//            }
             
             SideMenu(isShowing: $showMenu, selectedTab: $selectedSideMenu)
         }
@@ -74,10 +56,10 @@ struct Home: View {
                 .font(.title3.bold())
         }
         .padding(15)
-        .background(Color.background)
-        .foregroundStyle(Color.black)
+        .background(ColorManager.shared.background)
+        .foregroundStyle(Color.black) // 確保所有文字都是黑色
+        .accentColor(.black) // 設置強調色為黑色
     }
-    
 }
 
 #Preview {

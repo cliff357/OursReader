@@ -9,35 +9,24 @@ import Foundation
 
 enum SideMenuOptionModel: Int, CaseIterable, Equatable {
     case dashboard
-    case profile
-    case widget
     case friendList
     case settings
-    
-    
+
     var title: String {
         switch self {
         case .dashboard:
-            return LM.Key.dashboard()
-        case .profile:
-            return LM.Key.profile()
-        case .widget:
-            return LM.Key.widget()
+            return String(localized:"dashboard")
         case .friendList:
-            return LM.Key.friendList()
+            return String(localized:"friendList")
         case .settings:
-            return LM.Key.settings()
+            return String(localized:"settings")
         }
     }
     
     var systemImageName: String {
         switch self {
         case .dashboard:
-            return "filemenu.and.cursorarrow"
-        case .profile:
-            return "person"
-        case .widget:
-            return "square.and.pencil"
+            return "house"
         case .friendList:
             return "person.2"
         case .settings:

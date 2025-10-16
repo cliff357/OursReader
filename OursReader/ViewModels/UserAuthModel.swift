@@ -13,6 +13,7 @@ import FirebaseAuth
 import CryptoKit
 import AuthenticationServices
 import FirebaseMessaging
+import WatchConnectivity
 
 enum AuthenticationState {
   case unauthenticated
@@ -54,9 +55,9 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
             token = t
         }
         
-        var loginType: UserType?
+        var loginType: LoginType?
         if let t = Storage.getInt(Storage.Key.userLoginType) {
-            loginType = UserType.init(rawValue: t)
+            loginType = LoginType.init(rawValue: t)
         }
         
         Auth.auth().addStateDidChangeListener { auth, user in
@@ -80,6 +81,19 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
                         }
                     }
                 }
+                
+                self.sendFirebaseTokenToWatch()
+                
+                CloudKitManager.shared.checkUserStatus { [weak self] result in
+                    switch result {
+                    case .success(_):
+                        // User is logged into CloudKit, link with Firebase
+                        self?.linkUserWithCloudKit()
+                    case .failure(let error):
+                        print("CloudKit status check failed: \(error.localizedDescription)")
+                    }
+                }
+                
             } else {
                 self.isLoggedIn = false
                 let router = HomeRouter.shared
@@ -103,14 +117,47 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
         }
     }
     
+    func sendFirebaseTokenToWatch() {
+        Auth.auth().currentUser?.getIDToken { token, error in
+            guard let token = token else {
+                print("Failed to get Firebase token")
+                return
+            }
+            
+            // 發送 token 到手錶應用
+            if WCSession.isSupported() {
+                let session = WCSession.default
+                if session.activationState == .activated && session.isPaired && session.isWatchAppInstalled {
+                    session.sendMessage(["authToken": token], replyHandler: nil, errorHandler: { error in
+                        print("Error sending token to watch: \(error.localizedDescription)")
+                    })
+                }
+            }
+        }
+    }
+
+    
     func signOut() {
         let firebaseAuth = Auth.auth()
         do {
             try firebaseAuth.signOut()
+            
+            // 🔧 使用 BookCacheManager 清除所有緩存
+            BookCacheManager.shared.clearAllCache()
+            
+            // 🔧 發送登出通知
+            NotificationCenter.default.post(name: .userDidLogout, object: nil)
+            
         } catch let signOutError as NSError {
             print("Error signing out: %@", signOutError)
         }
     }
+    
+    // 🔧 移除所有下載狀態相關方法（不再需要）
+    // private func clearDownloadedBooks() { ... } - 刪除
+    // func markBookAsDownloaded(bookID: String) { ... } - 刪除
+    // func isBookDownloaded(bookID: String) -> Bool { ... } - 刪除
+    // func removeBookDownloaded(bookID: String) { ... } - 刪除
     
     func getCurrentFirebaseUser() -> User? {
         if let user = Auth.auth().currentUser {
@@ -161,7 +208,7 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
                     if result {
                         print("user already exist")
                     } else {
-                        Storage.save(Storage.Key.userLoginType, UserType.google.rawValue)
+                        Storage.save(Storage.Key.userLoginType, LoginType.google.rawValue)
                         
                         DatabaseManager.shared.addUser(user:  UserObject(name: self.nickName,
                                                                          userID: user?.uid,
@@ -263,7 +310,8 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
                                                       rawNonce: nonce)
             
             // Sign in with Firebase.
-            Auth.auth().signIn(with: credential) { (authResult, error) in
+            Auth.auth().signIn(with: credential) { [weak self] (authResult, error) in
+                guard let self = self else { return }
                 if (error != nil) {
                     // Error. If error.code == .MissingOrInvalidNonce, make sure
                     // you're sending the SHA256-hashed nonce as a hex string with
@@ -283,7 +331,7 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
                     if result {
                         print("user already exist")
                     } else {
-                        Storage.save(Storage.Key.userLoginType, UserType.apple.rawValue)
+                        Storage.save(Storage.Key.userLoginType, LoginType.apple.rawValue)
                         
                         DatabaseManager.shared.addUser(user:  UserObject(name: self.nickName,
                                                                          userID: user?.uid,
@@ -326,7 +374,7 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
                     token = t
                 }
                 
-                Storage.save(Storage.Key.userLoginType, UserType.email.rawValue)
+                Storage.save(Storage.Key.userLoginType, LoginType.email.rawValue)
                 
                 DatabaseManager.shared.addUser(user:  UserObject(name: self.nickName,
                                                                  userID: user.uid,
@@ -355,6 +403,23 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
                 completion("Login success")
                 
                 
+            }
+        }
+    }
+    
+    //MARK: Link Firebase user with CloudKit
+    func linkUserWithCloudKit() {
+        guard let currentUser = getCurrentFirebaseUser() else {
+            print("No Firebase user logged in to link with CloudKit")
+            return
+        }
+        
+        CloudKitManager.shared.linkFirebaseUser(firebaseUserID: currentUser.uid) { result in
+            switch result {
+            case .success:
+                print("Successfully linked Firebase user to CloudKit")
+            case .failure(let error):
+                print("Failed to link Firebase user to CloudKit: \(error.localizedDescription)")
             }
         }
     }

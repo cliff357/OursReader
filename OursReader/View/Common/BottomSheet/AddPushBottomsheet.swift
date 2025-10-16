@@ -7,61 +7,87 @@
 
 import SwiftUI
 
+// MARK: - AddPush 內容實現
+struct AddPushContent: BaseSheetContent {
+    @Binding private var pushTitle: String
+    @Binding private var pushBody: String
+    let onSave: () -> Void
+    
+    init(
+        pushTitle: Binding<String>,
+        pushBody: Binding<String>,
+        onSave: @escaping () -> Void
+    ) {
+        self._pushTitle = pushTitle
+        self._pushBody = pushBody
+        self.onSave = onSave
+    }
+    
+    var title: String { String(localized: "push_add_new") }
+    var primaryButtonTitle: String { String(localized: "push_done") }
+    var isFormValid: Bool {
+        !pushTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+        !pushBody.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+    
+    var primaryButtonAction: () -> Void { onSave }
+    
+    var content: AnyView {
+        AnyView(
+            VStack(spacing: 20) {
+                SheetInputSection(
+                    title: "Notification Title",
+                    placeholder: "Enter notification title",
+                    text: $pushTitle,
+                    isRequired: true
+                )
+                
+                SheetInputSection(
+                    title: "Notification Message",
+                    placeholder: "Enter notification message",
+                    text: $pushBody,
+                    isRequired: true,
+                    isMultiline: true
+                )
+            }
+        )
+    }
+    
+    // 需要明確實現 View 協議的 body
+    var body: some View {
+        content
+    }
+}
+
+// MARK: - 自定義 Presentation Detent
 struct HalfPresentationDetent: CustomPresentationDetent {
     static func height(in context: Context) -> CGFloat? {
         return max(20, context.maxDetentValue * 0.7)
     }
 }
 
+// MARK: - AddPushBottomSheet 使用基類
 struct AddPushBottomSheet: View {
     @Binding var pushTitle: String
     @Binding var pushBody: String
-    var onSave: () -> Void
-
-    @Environment(\.dismiss) private var dismiss
-
+    let onSave: () -> Void
+    
     var body: some View {
-        NavigationStack {
-            Form {
-                Section(header: Text("通知")) {
-                    TextField("標題", text: $pushTitle)
-                        .submitLabel(pushBody.isEmpty ? .next : .done)
-                        .onSubmit {
-                            handleConfirm()
-                        }
-
-                    TextField("內容", text: $pushBody)
-                        .submitLabel(pushTitle.isEmpty ? .next : .done)
-                        .onSubmit {
-                            handleConfirm()
-                        }
-                }
-            }
-            .navigationTitle("新增通知")
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("搞掂") {
-                        handleConfirm()
-                    }
-                    .disabled(pushTitle.isEmpty || pushBody.isEmpty)
-                }
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("唔整住") {
-                        dismiss()
-                    }
-                }
-            }
-            .presentationDetents([.custom(HalfPresentationDetent.self)/*, .fraction(0.5)*/])
-            .padding(.bottom, 0)
-        }
+        BaseSheetView(
+            sheetContent: AddPushContent(
+                pushTitle: $pushTitle,
+                pushBody: $pushBody,
+                onSave: onSave
+            )
+        )
+        .presentationDetents([.custom(HalfPresentationDetent.self)])
     }
+}
 
-    private func handleConfirm() {
-        if !pushTitle.isEmpty && !pushBody.isEmpty {
-            onSave()
-            dismiss()
-        } else {
-            print("請填寫標題和內容")
-        }
-    }
+#Preview {
+    AddPushBottomSheet(
+        pushTitle: .constant(""),
+        pushBody: .constant(""),
+        onSave: { print("Save notification") }
+    )
 }
