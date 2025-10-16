@@ -11,7 +11,6 @@ struct SideMenu: View {
     @Binding var isShowing: Bool
     @Binding var selectedTab: SideMenuOptionModel?
     @State private var selectedOption: SideMenuOptionModel? = .dashboard
-    @State private var showSettings = false
     
     var version: String {
         // 從專案的 Info.plist 中取得版本號
@@ -22,7 +21,6 @@ struct SideMenu: View {
         return String(localized: "version_unavailable")
     }
 
-    
     var body: some View {
         ZStack {
             if isShowing {
@@ -30,7 +28,6 @@ struct SideMenu: View {
                     .opacity(0.3)
                     .ignoresSafeArea()
                     .onTapGesture { isShowing.toggle() }
-                
                 
                 HStack {
                     VStack(alignment: .leading, spacing: 10) {
@@ -42,11 +39,6 @@ struct SideMenu: View {
                                     selectedOption = option
                                     selectedTab = option
                                     
-                                    // 如果選擇的是設置選項，顯示設置頁面
-                                    if option == .settings {
-                                        showSettings = true
-                                    }
-                                    
                                     isShowing = false
                                 } label: {
                                     SideMenuRowView(option: option, selectedOption: $selectedOption)
@@ -57,7 +49,6 @@ struct SideMenu: View {
                         Button {
                             isShowing = false
                             
-                            // 🔧 修正：明確指定使用 NotificationCenter 的 post 方法
                             NotificationCenter.default.post(
                                 name: NSNotification.Name("userDidLogout"),
                                 object: nil
@@ -87,13 +78,9 @@ struct SideMenu: View {
                     Spacer()
                 }
                 .transition(.move(edge: .leading))
-                
             }
         }
         .animation(.easeIn,value: isShowing)
-        .sheet(isPresented: $showSettings) {
-            SettingsView()
-        }
     }
 }
 

@@ -34,32 +34,22 @@ final class LocalizationManager {
         }
     }
 
+    // 🔧 修改：強制默認語言為繁體中文
     private static var defaultLanguage: AppLanguage = .traditionalChinese
     
     static var currentLanguage: AppLanguage {
         get {
-            if let str = Storage.getString(Storage.Key.currentLanguage),
-               let lang = AppLanguage(rawValue: str) {
-                return lang
-            }
-
-            let preferredLanguages = NSLocale.preferredLanguages[0]
-
-            if preferredLanguages.hasPrefix(AppLanguage.english.rawValue) {
-                return .english
-            } else if preferredLanguages.hasPrefix(AppLanguage.simplifiedChinese.rawValue) {
-                return .traditionalChinese // 🔧 簡體轉為繁體
-            } else if preferredLanguages.hasPrefix(AppLanguage.traditionalChinese.rawValue) {
-                return .traditionalChinese
-            }
-
-            return defaultLanguage
+            // 🔧 修改：始終返回繁體中文
+            return .traditionalChinese
         }
 
         set {
-            if self.currentLanguage == newValue { return }
-            Storage.save(Storage.Key.currentLanguage, newValue.rawValue)
-            print("✅ Language changed to: \(newValue.rawValue)")
+            // 🔧 修改：忽略所有語言更改請求，始終保持繁體中文
+            if newValue != .traditionalChinese {
+                print("⚠️ Language change ignored, app is locked to Traditional Chinese")
+                return
+            }
+            Storage.save(Storage.Key.currentLanguage, AppLanguage.traditionalChinese.rawValue)
         }
     }
     

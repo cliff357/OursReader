@@ -20,14 +20,17 @@ struct Home: View {
             VStack(spacing: 0) {
                 NavBar()
                 
-                TabView(selection: $selectedSideMenu) {
-                    Dashboard()
-                        .tag(Optional.some(SideMenuOptionModel.dashboard))
-                    FriendList()
-                        .tag(Optional.some(SideMenuOptionModel.friendList))
-                    SettingsView()
-                        .tag(Optional.some(SideMenuOptionModel.settings))
+                // 🔧 修正：移除 TabView，使用 ZStack 切換頁面
+                ZStack {
+                    if selectedSideMenu == .dashboard {
+                        Dashboard()
+                    } else if selectedSideMenu == .friendList {
+                        FriendList()
+                    } else if selectedSideMenu == .settings {
+                        SettingsView()
+                    }
                 }
+                .animation(.easeInOut(duration: 0.2), value: selectedSideMenu)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             
@@ -57,8 +60,8 @@ struct Home: View {
         }
         .padding(15)
         .background(ColorManager.shared.background)
-        .foregroundStyle(Color.black) // 確保所有文字都是黑色
-        .accentColor(.black) // 設置強調色為黑色
+        .foregroundStyle(Color.black)
+        .accentColor(.black)
     }
 }
 

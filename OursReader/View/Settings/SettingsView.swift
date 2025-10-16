@@ -6,13 +6,12 @@ struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-        NavigationView {
-            ZStack {
-                ColorManager.shared.background
-                    .ignoresSafeArea()
-                
+        ZStack {
+            ColorManager.shared.background.ignoresSafeArea()
+            
+            VStack {
                 ScrollView {
-                    VStack(spacing: 20) {
+                    LazyVStack(spacing: 20) {
                         // 帳戶設置
                         SettingsSectionView(title: "account_settings") {
                             VStack(spacing: 12) {
@@ -76,18 +75,23 @@ struct SettingsView: View {
                             }
                         }
                         
-                        // 🔧 修改：語言設置 - 使用 LM 枚舉
+                        // 🔧 修改：語言設置 - 禁用並顯示為中文
                         SettingsSectionView(title: "language_settings") {
-                            SettingsPickerRow(
-                                icon: "globe",
-                                title: "app_language",
-                                selection: $viewModel.selectedLanguage,
-                                options: viewModel.availableLanguages,
-                                color: .blue
-                            )
-                            .onChange(of: viewModel.selectedLanguage) { oldValue, newValue in
-                                viewModel.changeLanguage(newValue)
+                            HStack {
+                                Image(systemName: "globe")
+                                    .foregroundColor(.gray)
+                                    .frame(width: 30)
+                                
+                                Text("app_language".localized)
+                                    .foregroundColor(.gray)
+                                
+                                Spacer()
+                                
+                                Text("繁體中文")
+                                    .foregroundColor(.gray)
                             }
+                            .padding()
+                            .background(Color.white)
                         }
                         
                         // 通知設置
@@ -197,8 +201,6 @@ struct SettingsView: View {
                                     }
                                     .disabled(viewModel.isLoadingStorage)
                                 }
-                                
-                                // 🔧 移除清除緩存按鈕
                             }
                         }
                         
@@ -211,8 +213,6 @@ struct SettingsView: View {
                                     value: viewModel.appVersion,
                                     color: .gray
                                 )
-                                
-                                // 🔧 移除隱私政策和服務條款
                             }
                         }
                         
@@ -232,29 +232,27 @@ struct SettingsView: View {
                         }
                         .padding(.top, 20)
                     }
-                    .padding()
+                    .padding(.horizontal)
+                    .padding(.top)
                 }
-            }
-            .navigationTitle("settings".localized)
-            .navigationBarTitleDisplayMode(.large)
-            .alert("confirm_logout".localized, isPresented: $viewModel.showLogoutAlert) {
-                Button("general_cancel".localized, role: .cancel) {}
-                Button("auth_logout_button".localized, role: .destructive) {
-                    NotificationCenter.default.post(
-                        name: NSNotification.Name("userDidLogout"),
-                        object: nil
-                    )
-                    UserAuthModel.shared.signOut()
-                    dismiss()
-                }
-            } message: {
-                Text("logout_confirmation_message".localized)
-            }
-            .onAppear {
-                viewModel.checkNotificationPermission()
             }
         }
-        // 🔧 修改：只在 SettingsView 內部重新渲染，不影響導航
+        .alert("confirm_logout".localized, isPresented: $viewModel.showLogoutAlert) {
+            Button("general_cancel".localized, role: .cancel) {}
+            Button("auth_logout_button".localized, role: .destructive) {
+                NotificationCenter.default.post(
+                    name: NSNotification.Name("userDidLogout"),
+                    object: nil
+                )
+                UserAuthModel.shared.signOut()
+                dismiss()
+            }
+        } message: {
+            Text("logout_confirmation_message".localized)
+        }
+        .onAppear {
+            viewModel.checkNotificationPermission()
+        }
         .id(viewModel.languageChangeID)
     }
 }
@@ -318,14 +316,14 @@ struct SettingsRowView: View {
                 // 🔧 修改：使用 LM.localized
                 Text(title.localized)
                     .foregroundColor(.black)
-                
+                    .foregroundColor(color)
                 Spacer()
                 
                 if let value = value {
                     Text(value)
                         .foregroundColor(.gray)
                 }
-                
+                Spacer()
                 if action != nil {
                     Image(systemName: "chevron.right")
                         .foregroundColor(.gray)
@@ -354,7 +352,7 @@ struct SettingsToggleRow: View {
             // 🔧 修改：使用 LM.localized
             Text(title.localized)
                 .foregroundColor(.black)
-            
+                .foregroundColor(color)
             Spacer()
             
             Toggle("", isOn: $isOn)
@@ -382,14 +380,14 @@ struct SettingsSliderRow: View {
                 // 🔧 修改：使用 LM.localized
                 Text(title.localized)
                     .foregroundColor(.black)
-                
+                    .foregroundColor(color)
                 Spacer()
                 
                 Text("\(Int(value))")
                     .foregroundColor(.gray)
                     .monospacedDigit()
             }
-            
+            Spacer()
             Slider(value: $value, in: range, step: 1)
                 .tint(color)
         }
@@ -414,7 +412,7 @@ struct SettingsPickerRow: View {
             // 🔧 修改：使用 LM.localized
             Text(title.localized)
                 .foregroundColor(.black)
-            
+                .foregroundColor(color)
             Spacer()
             
             Picker("", selection: $selection) {
@@ -445,7 +443,7 @@ struct SettingsNavigationRow: View {
                 // 🔧 修改：使用 LM.localized
                 Text(title.localized)
                     .foregroundColor(.black)
-                
+                    .foregroundColor(color)
                 Spacer()
                 
                 Image(systemName: "chevron.right")
@@ -469,17 +467,15 @@ class SettingsViewModel: ObservableObject {
     @Published var showLogoutAlert: Bool = false
     @Published var isLoadingStorage = false
     @Published var storageStats: StorageStatistics?
+    @Published var remainingStorage: String?
     
-    // 🔧 修改：只保留繁體中文和英文
-    @Published var selectedLanguage: String = ""
+    // 🔧 修改：固定語言為繁體中文
+    @Published var selectedLanguage: String = "繁體中文"
     @Published var languageChangeID = UUID()
     
     var availableLanguages: [String] {
-        return ["English", "繁體中文"]
+        return ["繁體中文"]
     }
-    
-    // 🔧 新增：剩餘空間
-    @Published var remainingStorage: String?
     
     let availableFonts = ["System", "Rounded", "Serif", "Monospaced"]
     
@@ -530,7 +526,7 @@ class SettingsViewModel: ObservableObject {
     
     private func loadSettings() {
         fontSize = UserDefaults.standard.double(forKey: "fontSize")
-        if fontSize == 0 { fontSize = 16 }
+        if (fontSize == 0) { fontSize = 16 }
         selectedFont = UserDefaults.standard.string(forKey: "selectedFont") ?? "System"
         notificationsEnabled = UserDefaults.standard.bool(forKey: "notificationsEnabled")
         readingReminders = UserDefaults.standard.bool(forKey: "readingReminders")
@@ -585,34 +581,15 @@ class SettingsViewModel: ObservableObject {
         }
     }
     
-    // 🔧 修改：載入當前語言（移除簡體中文）
+    // 🔧 修改：載入當前語言（始終為繁體中文）
     private func loadCurrentLanguage() {
-        switch LM.currentLanguage {
-        case .english:
-            selectedLanguage = "English"
-        case .traditionalChinese:
-            selectedLanguage = "繁體中文"
-        case .simplifiedChinese:
-            selectedLanguage = "繁體中文" // 簡體也顯示為繁體
-        }
+        selectedLanguage = "繁體中文"
     }
     
-    // 🔧 修改：即時更改語言（移除簡體中文）
+    // 🔧 修改：禁用語言更改
     func changeLanguage(_ language: String) {
-        let newLanguage: LM.AppLanguage
-        
-        switch language {
-        case "English":
-            newLanguage = .english
-        default: // "繁體中文"
-            newLanguage = .traditionalChinese
-        }
-        
-        // 設置新語言
-        LM.currentLanguage = newLanguage
-        
-        // 強制重新渲染
-        self.languageChangeID = UUID()
+        // 忽略所有語言更改請求
+        print("⚠️ Language selection is disabled")
     }
     
     // 🔧 修改：重新整理儲存使用量，包含計算剩餘空間
