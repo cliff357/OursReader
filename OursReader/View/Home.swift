@@ -23,15 +23,9 @@ struct Home: View {
                 TabView(selection: $selectedSideMenu) {
                     Dashboard()
                         .tag(Optional.some(SideMenuOptionModel.dashboard))
-                    Profile()
-                        .tag(Optional.some(SideMenuOptionModel.profile))
-                    Text("Widget")
-                        .tag(Optional.some(SideMenuOptionModel.widget))
                     FriendList()
                         .tag(Optional.some(SideMenuOptionModel.friendList))
-                    CloudBookListView() // 新增我的書籍頁面
-                        .tag(Optional.some(SideMenuOptionModel.myBooks))
-                    Text("Settings")
+                    SettingsView()
                         .tag(Optional.some(SideMenuOptionModel.settings))
                 }
             }

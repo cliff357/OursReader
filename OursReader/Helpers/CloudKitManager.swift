@@ -987,4 +987,110 @@ class CloudKitManager {
             completion(.failure(NSError(domain: "com.cliffchan.manwareader", code: 401, userInfo: [NSLocalizedDescriptionKey: "User not logged in"])))
         }
     }
+
+    // MARK: - 🔧 新增：儲存統計功能
+    
+    /// 獲取用戶的 CloudKit 儲存統計資料
+    func fetchStorageStatistics(
+        firebaseUserID: String,
+        completion: @escaping (Result<StorageStatistics, Error>) -> Void
+    ) {
+        let predicate = NSPredicate(format: "userID == %@", firebaseUserID)
+        let query = CKQuery(recordType: "Book", predicate: predicate)
+        
+        privateDatabase.fetch(withQuery: query) { result in
+            switch result {
+            case .success(let result):
+                var totalSize: Int64 = 0
+                var booksCount = 0
+                let dispatchGroup = DispatchGroup()
+                
+                for (_, recordResult) in result.matchResults {
+                    switch recordResult {
+                    case .success(let record):
+                        booksCount += 1
+                        
+                        // 檢查是否為分片書籍
+                        let isChunkedValue = record["isChunked"] as? Int64 ?? 1
+                        let isChunked = isChunkedValue == 1
+                        
+                        if isChunked {
+                            // 分片書籍：計算所有分片的大小
+                            dispatchGroup.enter()
+                            self.calculateChunkedBookSize(mainRecordID: record.recordID.recordName) { chunkSize in
+                                totalSize += chunkSize
+                                dispatchGroup.leave()
+                            }
+                        } else {
+                            // 非分片書籍：直接計算內容大小
+                            if let content = record["content"] as? [String] {
+                                let contentSize = content.joined().utf8.count
+                                totalSize += Int64(contentSize)
+                            }
+                        }
+                        
+                        // 計算封面圖片大小
+                        if let coverAsset = record["coverImage"] as? CKAsset,
+                           let fileURL = coverAsset.fileURL {
+                            do {
+                                let attributes = try FileManager.default.attributesOfItem(atPath: fileURL.path)
+                                if let fileSize = attributes[.size] as? Int64 {
+                                    totalSize += fileSize
+                                }
+                            } catch {
+                                print("無法獲取封面大小: \(error)")
+                            }
+                        }
+                        
+                    case .failure(let error):
+                        print("獲取記錄失敗: \(error)")
+                    }
+                }
+                
+                dispatchGroup.notify(queue: .main) {
+                    let averageSize = booksCount > 0 ? totalSize / Int64(booksCount) : 0
+                    let stats = StorageStatistics(
+                        booksCount: booksCount,
+                        totalSize: totalSize,
+                        averageSize: averageSize
+                    )
+                    completion(.success(stats))
+                }
+                
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    /// 計算分片書籍的總大小
+    private func calculateChunkedBookSize(mainRecordID: String, completion: @escaping (Int64) -> Void) {
+        let predicate = NSPredicate(format: "mainBookID == %@", mainRecordID)
+        let query = CKQuery(recordType: "BookChunk", predicate: predicate)
+        
+        privateDatabase.fetch(withQuery: query) { result in
+            switch result {
+            case .success(let result):
+                var totalChunkSize: Int64 = 0
+                
+                for (_, recordResult) in result.matchResults {
+                    switch recordResult {
+                    case .success(let chunkRecord):
+                        if let content = chunkRecord["content"] as? [String] {
+                            let chunkSize = content.joined().utf8.count
+                            totalChunkSize += Int64(chunkSize)
+                        }
+                    case .failure(let error):
+                        print("獲取分片失敗: \(error)")
+                    }
+                }
+                
+                completion(totalChunkSize)
+                
+            case .failure(let error):
+                print("查詢分片失敗: \(error)")
+                completion(0)
+            }
+        }
+    }
 }
