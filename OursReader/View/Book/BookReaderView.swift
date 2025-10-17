@@ -161,12 +161,39 @@ struct BookReaderView: View {
     // 🔧 簡化：移除 scrollToTop 參數和 ScrollViewReader
     private func pageView(for index: Int) -> some View {
         ScrollView {
-            Text(book.content[index])
-                .font(.system(size: fontSize))
-                .fontDesign(getFontDesign())
-                .foregroundColor(.black)
-                .padding()
-                .padding(.bottom, 20)
+            VStack(spacing: 20) {
+               Text(book.content[index])
+                   .font(.system(size: fontSize))
+                   .fontDesign(getFontDesign())
+                   .foregroundColor(.black)
+                   .padding()
+               
+               // 🔧 新增：下一頁按鈕
+               if index < book.content.count - 1 {
+                   Button(action: {
+                       turnPageWithAnimation(direction: .next)
+                   }) {
+                       HStack {
+                           Text(LocalizedStringKey("book_next_page"))
+                           Image(systemName: "chevron.right")
+                       }
+                       .font(.system(size: 16, weight: .medium))
+                       .foregroundColor(.white)
+                       .padding(.horizontal, 24)
+                       .padding(.vertical, 12)
+                       .background(Color.blue)
+                       .cornerRadius(25)
+                   }
+                   .buttonStyle(BorderlessButtonStyle())
+                   .padding(.bottom, 40)
+               } else {
+                   // 最後一頁顯示「完成」
+                   Text(LocalizedStringKey("book_finished"))
+                       .font(.system(size: 16, weight: .medium))
+                       .foregroundColor(.gray)
+                       .padding(.bottom, 40)
+               }
+           }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(ColorManager.shared.background)

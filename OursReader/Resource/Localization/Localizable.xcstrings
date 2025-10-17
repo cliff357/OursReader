@@ -236,6 +236,23 @@
         }
       }
     },
+    "book_finished" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finished Reading"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已完成閱讀"
+          }
+        }
+      }
+    },
     "book_by_author" : {
       "comment" : "Author name",
       "localizations" : {
@@ -1776,6 +1793,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "沒有圖片"
+          }
+        }
+      }
+    },
+    "book_next_page" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next Page"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下一頁"
           }
         }
       }
