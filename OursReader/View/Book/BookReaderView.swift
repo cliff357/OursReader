@@ -23,6 +23,12 @@ struct BookReaderView: View {
     @State private var fontSize: Double = 16
     @State private var fontFamily: String = "System"
     
+    // 🔧 修改：移除 @Namespace，改用更簡單的狀態追蹤
+    @State private var scrollToTop = false
+    
+    // 🔧 修改：用 UUID 來強制重置 ScrollView 位置
+    @State private var scrollViewID = UUID()
+    
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .top) {
@@ -40,6 +46,7 @@ struct BookReaderView: View {
                         if !book.content.isEmpty && currentPageIndex < book.content.count {
                             pageView(for: currentPageIndex)
                                 .offset(x: pageOffset)
+                                .id("page_\(currentPageIndex)_\(scrollViewID)")
                         }
                         
                         // Next page (during animation)
@@ -48,6 +55,7 @@ struct BookReaderView: View {
                                 .offset(x: animationDirection == .next ? 
                                        geometry.size.width + pageOffset : 
                                        -geometry.size.width + pageOffset)
+                                .id("page_\(nextIdx)_\(scrollViewID)")
                         }
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -150,13 +158,13 @@ struct BookReaderView: View {
         }
     }
     
-    // Page view for specific index
+    // 🔧 簡化：移除 scrollToTop 參數和 ScrollViewReader
     private func pageView(for index: Int) -> some View {
         ScrollView {
             Text(book.content[index])
                 .font(.system(size: fontSize))
                 .fontDesign(getFontDesign())
-                .foregroundColor(.black) // 改為黑色文字
+                .foregroundColor(.black)
                 .padding()
                 .padding(.bottom, 20)
         }
@@ -239,7 +247,7 @@ struct BookReaderView: View {
         .transition(.move(edge: .bottom).combined(with: .opacity))
     }
     
-    // Bookmarks sheet
+    // 🔧 修改：bookmarkSheet 中的跳轉也要重置滾動
     private func bookmarkSheet() -> some View {
         ZStack {
             Color.black.opacity(0.3)
@@ -271,8 +279,8 @@ struct BookReaderView: View {
                     List {
                         ForEach(book.bookmarkedPages, id: \.self) { page in
                             Button(action: {
-                                currentPageIndex = page
-                                updateProgressPercentage()
+                                // 🔧 修改：使用動畫跳轉
+                                turnPageWithAnimation(to: page)
                                 showBookmarks = false
                             }) {
                                 HStack {
@@ -329,7 +337,7 @@ struct BookReaderView: View {
         case previous
     }
     
-    // Turn page with animation
+    // 🔧 優化：在動畫開始前重置滾動位置
     private func turnPageWithAnimation(direction: PageTurnDirection) {
         guard !isButtonActionInProgress else { return }
         
@@ -339,24 +347,26 @@ struct BookReaderView: View {
         switch direction {
         case .next:
             if currentPageIndex < book.content.count - 1 {
-                // Set up next page animation
                 nextPageIndex = currentPageIndex + 1
                 
-                // Start the push animation
-                withAnimation(.easeInOut(duration: 0.3)) {
-                    pageOffset = -UIScreen.main.bounds.width
-                }
+                // 🔧 重置下一頁的滾動位置（在動畫開始前）
+                scrollViewID = UUID()
                 
-                // After animation completes, update the page
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                    currentPageIndex = nextPageIndex!
-                    updateProgressPercentage()
+                // 短暫延遲讓 ScrollView 重置完成
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                    withAnimation(.easeInOut(duration: 0.25)) {
+                        pageOffset = -UIScreen.main.bounds.width
+                    }
                     
-                    // Reset for next animation
-                    pageOffset = 0
-                    nextPageIndex = nil
-                    animationDirection = nil
-                    isButtonActionInProgress = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                        currentPageIndex = nextPageIndex!
+                        updateProgressPercentage()
+                        
+                        pageOffset = 0
+                        nextPageIndex = nil
+                        animationDirection = nil
+                        isButtonActionInProgress = false
+                    }
                 }
             } else {
                 isButtonActionInProgress = false
@@ -364,24 +374,26 @@ struct BookReaderView: View {
             
         case .previous:
             if currentPageIndex > 0 {
-                // Set up previous page animation
                 nextPageIndex = currentPageIndex - 1
                 
-                // Start the push animation
-                withAnimation(.easeInOut(duration: 0.3)) {
-                    pageOffset = UIScreen.main.bounds.width
-                }
+                // 🔧 重置下一頁的滾動位置（在動畫開始前）
+                scrollViewID = UUID()
                 
-                // After animation completes, update the page
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                    currentPageIndex = nextPageIndex!
-                    updateProgressPercentage()
+                // 短暫延遲讓 ScrollView 重置完成
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                    withAnimation(.easeInOut(duration: 0.25)) {
+                        pageOffset = UIScreen.main.bounds.width
+                    }
                     
-                    // Reset for next animation
-                    pageOffset = 0
-                    nextPageIndex = nil
-                    animationDirection = nil
-                    isButtonActionInProgress = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                        currentPageIndex = nextPageIndex!
+                        updateProgressPercentage()
+                        
+                        pageOffset = 0
+                        nextPageIndex = nil
+                        animationDirection = nil
+                        isButtonActionInProgress = false
+                    }
                 }
             } else {
                 isButtonActionInProgress = false
@@ -389,34 +401,36 @@ struct BookReaderView: View {
         }
     }
     
-    // Go to specific page with animation
+    // 🔧 優化：書籤跳轉也使用相同邏輯
     private func turnPageWithAnimation(to targetPage: Int) {
         guard !isButtonActionInProgress, 
               targetPage >= 0,
               targetPage < book.content.count, 
               targetPage != currentPageIndex else { return }
         
-        // Determine direction based on target page
         let direction: PageTurnDirection = targetPage > currentPageIndex ? .next : .previous
         animationDirection = direction
         nextPageIndex = targetPage
         isButtonActionInProgress = true
         
-        // Start the push animation
-        withAnimation(.easeInOut(duration: 0.3)) {
-            pageOffset = direction == .next ? -UIScreen.main.bounds.width : UIScreen.main.bounds.width
-        }
+        // 🔧 重置下一頁的滾動位置（在動畫開始前）
+        scrollViewID = UUID()
         
-        // After animation completes, update the page
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            currentPageIndex = targetPage
-            updateProgressPercentage()
+        // 短暫延遲讓 ScrollView 重置完成
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+            withAnimation(.easeInOut(duration: 0.25)) {
+                pageOffset = direction == .next ? -UIScreen.main.bounds.width : UIScreen.main.bounds.width
+            }
             
-            // Reset for next animation
-            pageOffset = 0
-            nextPageIndex = nil
-            animationDirection = nil
-            isButtonActionInProgress = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                currentPageIndex = targetPage
+                updateProgressPercentage()
+                
+                pageOffset = 0
+                nextPageIndex = nil
+                animationDirection = nil
+                isButtonActionInProgress = false
+            }
         }
     }
     
@@ -505,7 +519,7 @@ struct BookReaderView: View {
     
     private func loadFontSettings() {
         fontSize = UserDefaults.standard.double(forKey: "fontSize")
-        if fontSize == 0 { fontSize = 16 }
+        if (fontSize == 0) { fontSize = 16 }
         fontFamily = UserDefaults.standard.string(forKey: "selectedFont") ?? "System"
     }
     
