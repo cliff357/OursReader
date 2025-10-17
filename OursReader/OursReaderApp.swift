@@ -149,41 +149,13 @@ class OurReaderAppCheckProviderFactory: NSObject, AppCheckProviderFactory {
 
 @main
 struct OursReaderApp: App {
-    // Register app delegate for Firebase setup
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    
-    @StateObject var notificationManager = NotificationManager()
-    @StateObject var reminderManager = ReminderManager.shared
-//    @StateObject var toastManager = ToastManager.shared
-    
-//    @State var showSplashView: Bool = true
-//    @State private var timeRemaining = 2
-//    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @StateObject private var userAuthModel = UserAuthModel.shared
     
     var body: some Scene {
         WindowGroup {
-            ZStack {
-                MainView()
-                    .accentColor(.black) // 設置全局強調色為黑色
-//                if showSplashView {
-//                    SplashView()
-//                }
-                
-            }
-            .reminderBottomSheet(showReminder: $reminderManager.showReminder)
-            .task {
-                await notificationManager.request()
-                await notificationManager.getAuthStatus()
-            }
-//            .toastMessage(show: toastManager.isPresenting, title: toastManager.title, message: toastManager.message)
-//            .onReceive(timer) { _ in
-//                if timeRemaining > 0 {
-//                    timeRemaining -= 1
-//                } else {
-//                    showSplashView = false
-//                    timer.upstream.connect().cancel()
-//                }
-//            }
+            ContentView()
+                .environmentObject(userAuthModel)
         }
     }
 }

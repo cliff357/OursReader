@@ -417,41 +417,50 @@ struct CloudBookGridItem: View {
     }
 }
 
-// 🔧 修改：CloudBookGridItemWithCache，點擊未下載書籍時自動開始下載
+// 🔧 修改：CloudBookGridItemWithCache - 使用 sheet 彈出式導航
 struct CloudBookGridItemWithCache: View {
     let book: CloudBook
     let color: Color
     @ObservedObject var cacheManager: BookCacheManager
-    @State private var navigateToDetail = false
+    
+    @State private var showingBookDetail = false
     
     var body: some View {
-        // 🔧 修正：使用 NavigationLink + isActive 來控制導航
-        ZStack {
-            NavigationLink(
-                destination: destinationView,
-                isActive: $navigateToDetail
-            ) {
-                EmptyView()
+        Button(action: handleTap) {
+            bookCardView(showDownloadIcon: true)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(CardButtonStyle())
+        .sheet(isPresented: $showingBookDetail) {
+            if let localBook = cacheManager.getLocalBook(book.id) {
+                NavigationView {
+                    BookDetailView(book: localBook)
+                }
             }
-            .hidden()
-            
-            Button(action: {
-                handleBookTap()
-            }) {
-                bookCardView
-            }
-            .buttonStyle(PlainButtonStyle())
         }
         .onAppear {
             print("📖 Book: \(book.name)")
-            print("   ID: \(book.id)")
             print("   Downloaded: \(cacheManager.isBookDownloaded(book.id))")
-            print("   Downloading: \(cacheManager.isBookDownloading(book.id))")
-            print("   Content pages: \(book.content.count)")
+            if let localBook = cacheManager.getLocalBook(book.id) {
+                print("   ✅ Local book available with \(localBook.pages.count) pages")
+            }
         }
     }
     
-    private var bookCardView: some View {
+    private func handleTap() {
+        if cacheManager.isBookDownloaded(book.id) {
+            // 已下載：彈出 BookDetailView
+            print("📚 Opening book detail: \(book.name)")
+            showingBookDetail = true
+        } else if cacheManager.isBookDownloading(book.id) {
+            print("⏳ Already downloading...")
+        } else {
+            // 未下載：開始下載
+            handleDownload()
+        }
+    }
+    
+    private func bookCardView(showDownloadIcon: Bool) -> some View {
         RoundedRectangle(cornerRadius: 15)
             .fill(color)
             .frame(height: 150)
@@ -472,10 +481,9 @@ struct CloudBookGridItemWithCache: View {
                         
                         Spacer()
                         
-                        DownloadStatusIcon(
-                            book: book,
-                            cacheManager: cacheManager
-                        )
+                        if showDownloadIcon {
+                            downloadStatusView()
+                        }
                     }
                     
                     Text(String(format: NSLocalizedString("book_by_author", comment: "Author name"), book.author))
@@ -497,83 +505,55 @@ struct CloudBookGridItemWithCache: View {
             }
     }
     
-    // 🔧 修正：處理點擊書籍卡片的邏輯
-    private func handleBookTap() {
+    @ViewBuilder
+    private func downloadStatusView() -> some View {
         if cacheManager.isBookDownloaded(book.id) {
-            // 已下載：直接導航到詳情頁
-            print("📚 Opening downloaded book: \(book.name)")
-            navigateToDetail = true
+            Image(systemName: "checkmark.circle.fill")
+                .font(.system(size: 20))
+                .foregroundColor(ColorManager.shared.green1)
         } else if cacheManager.isBookDownloading(book.id) {
-            // 下載中：顯示提示
-            print("⏳ Book is downloading, please wait...")
+            ProgressView()
+                .progressViewStyle(CircularProgressViewStyle(tint: .blue))
+                .scaleEffect(0.8)
         } else {
-            // 未下載：開始下載
-            print("⬇️ Starting download for: \(book.name)")
-            startDownload()
+            Image(systemName: "icloud.and.arrow.down")
+                .font(.system(size: 20))
+                .foregroundColor(.blue)
         }
     }
     
-    // 🔧 修正：開始下載方法，下載完成後自動打開
-    private func startDownload() {
+    private func handleDownload() {
+        if cacheManager.isBookDownloading(book.id) {
+            print("⏳ Already downloading...")
+            return
+        }
+        
+        print("⬇️ Start download: \(book.name)")
         cacheManager.downloadBook(book) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success():
                     print("✅ Download completed: \(book.name)")
-                    print("   📍 Checking if book is now marked as downloaded...")
-                    print("   ✓ Downloaded: \(cacheManager.isBookDownloaded(book.id))")
-                    
-                    // 觸覺反饋
                     let feedback = UINotificationFeedbackGenerator()
                     feedback.notificationOccurred(.success)
                     
-                    // 🔧 關鍵修正：延遲一下確保狀態更新，然後自動打開書籍
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        if cacheManager.isBookDownloaded(book.id) {
-                            print("   ✅ Opening book after successful download")
-                            navigateToDetail = true
-                        } else {
-                            print("   ⚠️ Book not marked as downloaded after download completed")
-                        }
-                    }
-                    
                 case .failure(let error):
                     print("❌ Download failed: \(error.localizedDescription)")
-                    // 錯誤反饋
                     let feedback = UINotificationFeedbackGenerator()
                     feedback.notificationOccurred(.error)
                 }
             }
         }
     }
-    
-    @ViewBuilder
-    private var destinationView: some View {
-        if let localBook = cacheManager.getLocalBook(book.id) {
-            let _ = print("📚 [BookDetail] Loading from LOCAL cache: \(book.name)")
-            let _ = print("   Book ID: \(localBook.id)")
-            let _ = print("   Pages: \(localBook.totalPages)")
-            BookDetailView(book: localBook)
-                .accentColor(.black)
-        } else {
-            let _ = print("⚠️ [BookDetail] Book not found in cache")
-            let _ = print("   Looking for ID: \(book.id)")
-            let _ = print("   File exists: \(cacheManager.checkLocalFileExists(book.id))")
-            let _ = print("   Marked as downloaded: \(cacheManager.isBookDownloaded(book.id))")
-            
-            // 🔧 顯示錯誤視圖而不是空視圖
-            VStack {
-                Image(systemName: "exclamationmark.triangle")
-                    .font(.largeTitle)
-                    .foregroundColor(.orange)
-                Text("Book not found")
-                    .font(.headline)
-                Text("Please try downloading again")
-                    .font(.caption)
-                    .foregroundColor(.gray)
-            }
-            .padding()
-        }
+}
+
+// 🔧 新增：自定義按鈕樣式，防止點擊時變暗
+struct CardButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .opacity(1.0) // 強制保持完全不透明
+            .scaleEffect(configuration.isPressed ? 0.98 : 1.0) // 輕微縮放效果表示點擊
+            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
     }
 }
 

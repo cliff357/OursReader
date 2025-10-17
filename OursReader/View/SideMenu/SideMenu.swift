@@ -13,15 +13,14 @@ struct SideMenu: View {
     @State private var selectedOption: SideMenuOptionModel? = .dashboard
     
     var version: String {
-            // 從專案的 Info.plist 中取得版本號
-            if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
-               let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
-                return "v\(version) (\(build))" // 格式：v1.0.0 (1)
-            }
-            return String(localized: "version_unavailable")
+        // 從專案的 Info.plist 中取得版本號
+        if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
+           let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
+            return "v\(version) (\(build))" // 格式：v1.0.0 (1)
         }
+        return String(localized: "version_unavailable")
+    }
 
-    
     var body: some View {
         ZStack {
             if isShowing {
@@ -29,7 +28,6 @@ struct SideMenu: View {
                     .opacity(0.3)
                     .ignoresSafeArea()
                     .onTapGesture { isShowing.toggle() }
-                
                 
                 HStack {
                     VStack(alignment: .leading, spacing: 10) {
@@ -40,6 +38,7 @@ struct SideMenu: View {
                                 Button {
                                     selectedOption = option
                                     selectedTab = option
+                                    
                                     isShowing = false
                                 } label: {
                                     SideMenuRowView(option: option, selectedOption: $selectedOption)
@@ -50,8 +49,10 @@ struct SideMenu: View {
                         Button {
                             isShowing = false
                             
-                            // 🔧 新增：發送登出通知以清除書籍緩存
-                            NotificationCenter.default.post(name: .userDidLogout, object: nil)
+                            NotificationCenter.default.post(
+                                name: NSNotification.Name("userDidLogout"),
+                                object: nil
+                            )
                             
                             UserAuthModel.shared.signOut()
                         } label: {
@@ -77,7 +78,6 @@ struct SideMenu: View {
                     Spacer()
                 }
                 .transition(.move(edge: .leading))
-                
             }
         }
         .animation(.easeIn,value: isShowing)
