@@ -131,6 +131,7 @@
 		99DA2D8A2D6D5E9B007D178A /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 99DA2D892D6D5E9B007D178A /* FirebaseAuth */; };
 		99DAFB712E9F366B00943DA3 /* UserNameInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DAFB702E9F366400943DA3 /* UserNameInputView.swift */; };
 		99DAFBB82EA08EBD00943DA3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DAFBB62EA08EBD00943DA3 /* SettingsView.swift */; };
+		99DAFBFE2EA1EC4400943DA3 /* GoldFingerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DAFBFD2EA1EC4400943DA3 /* GoldFingerManager.swift */; };
 		99E2102A2C0168F1006F27A7 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E210292C0168F1006F27A7 /* Storage.swift */; };
 		99EB5FA32C0D9C5600F2AF29 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EB5FA22C0D9C5500F2AF29 /* ToastView.swift */; };
 		99EFE3472D5CA69100EA82EC /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 99EFE3462D5CA69100EA82EC /* Localizable.xcstrings */; };
@@ -321,6 +322,7 @@
 		99DA2D792D65B575007D178A /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
 		99DAFB702E9F366400943DA3 /* UserNameInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNameInputView.swift; sourceTree = "<group>"; };
 		99DAFBB62EA08EBD00943DA3 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		99DAFBFD2EA1EC4400943DA3 /* GoldFingerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoldFingerManager.swift; sourceTree = "<group>"; };
 		99E210292C0168F1006F27A7 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		99EB5FA22C0D9C5500F2AF29 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		99EFE3462D5CA69100EA82EC /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -559,6 +561,7 @@
 				991A513C2E96584B001C7775 /* BookImportManager.swift */,
 				991A522C2E9CAB01001C7775 /* BookCacheManager.swift */,
 				99F0C5F02E8534D2008711EC /* DashboardBooksManager.swift */,
+				99DAFBFD2EA1EC4400943DA3 /* GoldFingerManager.swift */,
 				991A51442E976C9C001C7775 /* ScriptManager.swift */,
 				998614432BB1770300E0996D /* NotificationManager.swift */,
 				99B807392DF6966F007A0E49 /* CloudKitManager.swift */,
@@ -1115,6 +1118,7 @@
 				998614522BB428F200E0996D /* HomeRouter.swift in Sources */,
 				591BAAD72CBBF0AC001FAE1C /* PushSettingListViewModel.swift in Sources */,
 				99EB5FA32C0D9C5600F2AF29 /* ToastView.swift in Sources */,
+				99DAFBFE2EA1EC4400943DA3 /* GoldFingerManager.swift in Sources */,
 				9986141D2BAD20C500E0996D /* SideMenuRowView.swift in Sources */,
 				991A513F2E965899001C7775 /* BookImportView.swift in Sources */,
 				998614172BA8110B00E0996D /* UserAuthModel.swift in Sources */,

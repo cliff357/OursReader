@@ -10,6 +10,7 @@ import SwiftUI
 struct Dashboard: View {
     @StateObject private var pushNotificationViewModel = PushSettingListViewModel()
     @StateObject private var bookCacheManager = BookCacheManager.shared
+    @StateObject private var goldFingerManager = GoldFingerManager.shared
     @State private var tabProgress: CGFloat = 0
     @State private var selectedTab: Tab? = .push
     @State private var selectedButtonListType: ButtonListType = .push_notification
@@ -21,10 +22,12 @@ struct Dashboard: View {
     @State private var isImportButtonPressed = false
     @State private var lockTabSelection = false
     
-    // 🔧 新增：用戶名稱輸入相關狀態
     @State private var showingUserNameInput = false
     @State private var userName = ""
     @State private var hasCheckedUserName = false
+    
+    @State private var showComingSoon = false
+    @State private var comingSoonMessage = ""
     
     var body: some View {
         ZStack {
@@ -63,9 +66,41 @@ struct Dashboard: View {
                     .scrollDisabled(lockTabSelection)
                 }
             }
+            
+            if showComingSoon {
+                Color.black.opacity(0.4)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        withAnimation {
+                            showComingSoon = false
+                        }
+                    }
+                
+                VStack(spacing: 20) {
+                    Image(systemName: "lock.fill")
+                        .font(.system(size: 60))
+                        .foregroundColor(.white)
+                    
+                    Text("Coming Soon")
+                        .font(.system(size: 28, weight: .bold))
+                        .foregroundColor(.white)
+                    
+                    Text(comingSoonMessage)
+                        .font(.system(size: 16))
+                        .foregroundColor(.white.opacity(0.8))
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 40)
+                }
+                .padding(40)
+                .background(
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(Color.gray.opacity(0.9))
+                )
+                .padding(40)
+                .transition(.scale.combined(with: .opacity))
+            }
         }
         .onAppear {
-            // 🔧 新增：首次進入時檢查用戶名稱
             if !hasCheckedUserName {
                 checkUserName()
                 hasCheckedUserName = true
@@ -96,7 +131,6 @@ struct Dashboard: View {
                 }
             }
         }
-        // 🔧 新增：用戶名稱輸入 sheet
         .fullScreenCover(isPresented: $showingUserNameInput) {
             UserNameInputView(userName: $userName) {
                 UserAuthModel.shared.nickName = userName
@@ -127,11 +161,9 @@ struct Dashboard: View {
         }
     }
     
-    // 🔧 新增：檢查用戶名稱
     private func checkUserName() {
         let currentName = Storage.getString(Storage.Key.nickName) ?? ""
         if currentName.isEmpty {
-            // 延遲一點顯示，讓 Dashboard 先完全載入
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 userName = ""
                 showingUserNameInput = true
@@ -139,7 +171,6 @@ struct Dashboard: View {
         }
     }
     
-    // 載入書籍數據 - 改為載入用戶書籍
     private func loadBooksData() {
         guard !isLoadingBooks else { return }
         guard let currentUser = UserAuthModel.shared.getCurrentFirebaseUser() else {
@@ -154,7 +185,7 @@ struct Dashboard: View {
                 self.isLoadingBooks = false
                 switch result {
                 case .success(let books):
-                    self.publicBooks = books // 重用變量名，但現在是用戶書籍
+                    self.publicBooks = books
                 case .failure(let error):
                     print("❌ Failed to load books: \(error.localizedDescription)")
                     self.setupFallbackData()
@@ -163,13 +194,11 @@ struct Dashboard: View {
         }
     }
     
-    // 更新 fallback 數據說明
     private func setupFallbackData() {
-        publicBooks = [] // 用戶沒有書籍時顯示空狀態
+        publicBooks = []
     }
 
     private func updateTabProgress(_ value: CGFloat, geometrySize: CGSize) {
-        // 🔧 新增：當鎖定時直接返回
         guard !lockTabSelection else { return }
         
         let progress = -value / (geometrySize.width * CGFloat(Tab.allCases.count - 1))
@@ -200,9 +229,18 @@ struct Dashboard: View {
                 .padding(.vertical, 10)
                 .contentShape(.capsule)
                 .onTapGesture {
-                    // 🔧 修正：當導入在進行中時，防止標籤切換
                     guard !lockTabSelection && !isImportButtonPressed else {
                         print("🔒 Tab switching locked during import")
+                        return
+                    }
+                    
+                    if tab == .widget && !goldFingerManager.isWidgetUnlocked {
+                        showComingSoonAlert(for: .widget)
+                        return
+                    }
+                    
+                    if tab == .ebook && !goldFingerManager.isEbookUnlocked {
+                        showComingSoonAlert(for: .ebook)
                         return
                     }
                     
@@ -210,6 +248,9 @@ struct Dashboard: View {
                         selectedTab = tab
                         updateSelectedButtonListType(for: tab)
                     }
+                }
+                .onLongPressGesture(minimumDuration: 5.0) {
+                    handleLongPress(for: tab)
                 }
             }
         }
@@ -229,9 +270,9 @@ struct Dashboard: View {
     @ViewBuilder
     func BooklistView(type: ButtonListType) -> some View {
         ScrollView(.vertical) {
-            LazyVGrid(columns: Array(repeating: GridItem(), count: 2), spacing: 10) { // 🔧 調整：增加垂直間距
+            LazyVGrid(columns: Array(repeating: GridItem(), count: 2), spacing: 10) {
                 switch type {
-                case .push_notification, .widget:
+                case .push_notification:
                     ForEach(widgetList, id: \.id) { widget in
                         RoundedRectangle(cornerRadius: 15)
                             .fill(type.color)
@@ -250,100 +291,119 @@ struct Dashboard: View {
                             }
                     }
 
-                case .ebook:
-                    if isLoadingBooks {
-                        // 顯示載入指示器
-                        ForEach(0..<4, id: \.self) { index in
+                case .widget:
+                    if goldFingerManager.isWidgetUnlocked {
+                        ForEach(widgetList, id: \.id) { widget in
                             RoundedRectangle(cornerRadius: 15)
-                                .fill(type.color.opacity(0.3))
-                                .frame(height: 150)
+                                .fill(type.color)
+                                .frame(height: 100)
                                 .overlay {
-                                    VStack {
-                                        ProgressView()
-                                            .progressViewStyle(CircularProgressViewStyle())
-                                        Text(LocalizedStringKey("general_loading"))
-                                            .font(.caption)
-                                            .foregroundColor(.white)
-                                            .padding(.top, 4)
+                                    VStack(alignment: .leading) {
+                                        Text(widget.name)
+                                            .font(.headline)
+                                            .foregroundColor(Color(hex: "FFFFFF"))
+                                        Text(widget.actionCode)
+                                            .font(.subheadline)
+                                            .foregroundColor(Color(hex: "FFD741"))
                                     }
+                                    .padding(15)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
                                 }
                         }
                     } else {
-                        if publicBooks.isEmpty {
-                            // 🔧 移除加書按鈕，只保留導入按鈕
-                            DashboardImportBookItem(color: type.color) {
-                                isImportButtonPressed = true
-                                lockTabSelection = true
-                                
-                                selectedTab = .ebook
-                                selectedButtonListType = .ebook
-                                
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                    showingImport = true
-                                }
+                        EmptyLockedView(type: .widget)
+                    }
+
+                case .ebook:
+                    if goldFingerManager.isEbookUnlocked {
+                        if isLoadingBooks {
+                            ForEach(0..<4, id: \.self) { index in
+                                RoundedRectangle(cornerRadius: 15)
+                                    .fill(type.color.opacity(0.3))
+                                    .frame(height: 150)
+                                    .overlay {
+                                        VStack {
+                                            ProgressView()
+                                                .progressViewStyle(CircularProgressViewStyle())
+                                            Text(LocalizedStringKey("general_loading"))
+                                                .font(.caption)
+                                                .foregroundColor(.white)
+                                                .padding(.top, 4)
+                                        }
+                                    }
                             }
-                            
-                            // 顯示空狀態
-                            RoundedRectangle(cornerRadius: 15)
-                                .fill(type.color.opacity(0.5))
-                                .frame(height: 150)
-                                .overlay {
-                                    VStack {
-                                        Image(systemName: "book.closed")
-                                            .font(.system(size: 30))
-                                            .foregroundColor(.white.opacity(0.7))
-                                        Text(String(localized: "dashboard_no_books_yet"))
-                                            .font(.caption)
-                                            .foregroundColor(.white.opacity(0.7))
-                                        Text(String(localized: "dashboard_tap_import_to_start"))
-                                            .font(.caption2)
-                                            .foregroundColor(.white.opacity(0.5))
-                                            .padding(.top, 2)
-                                            .multilineTextAlignment(.center)
-                                    }
-                                }
-                            
-                            RoundedRectangle(cornerRadius: 15)
-                                .fill(Color.gray.opacity(0.2))
-                                .frame(height: 150)
-                                .overlay {
-                                    VStack(spacing: 8) {
-                                        Image(systemName: "arrow.down.doc.fill")
-                                            .font(.system(size: 25))
-                                            .foregroundColor(.gray)
-                                        Text(String(localized: "book_import_title"))
-                                            .font(.caption)
-                                            .fontWeight(.medium)
-                                            .foregroundColor(.gray)
-                                        Text(String(localized: "book_import_python_description"))
-                                            .font(.caption2)
-                                            .foregroundColor(.gray.opacity(0.8))
-                                            .multilineTextAlignment(.center)
-                                    }
-                                }
                         } else {
-                            // 先顯示用戶書籍數據
-                            ForEach(publicBooks, id: \.id) { userBook in
-                                CloudBookGridItemWithCache(
-                                    book: userBook, 
-                                    color: type.color,
-                                    cacheManager: bookCacheManager
-                                )
-                            }
-                            
-                            DashboardImportBookItem(color: type.color) {
-                                isImportButtonPressed = true
-                                lockTabSelection = true
-                                
-                                selectedTab = .ebook
-                                selectedButtonListType = .ebook
-                                
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                    showingImport = true
+                            if publicBooks.isEmpty {
+                                DashboardImportBookItem(color: type.color) {
+                                    isImportButtonPressed = true
+                                    lockTabSelection = true
+                                    selectedTab = .ebook
+                                    selectedButtonListType = .ebook
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                        showingImport = true
+                                    }
                                 }
+                                
+                                RoundedRectangle(cornerRadius: 15)
+                                    .fill(type.color.opacity(0.5))
+                                    .frame(height: 150)
+                                    .overlay {
+                                        VStack {
+                                            Image(systemName: "book.closed")
+                                                .font(.system(size: 30))
+                                                .foregroundColor(.white.opacity(0.7))
+                                            Text(String(localized: "dashboard_no_books_yet"))
+                                                .font(.caption)
+                                                .foregroundColor(.white.opacity(0.7))
+                                            Text(String(localized: "dashboard_tap_import_to_start"))
+                                                .font(.caption2)
+                                                .foregroundColor(.white.opacity(0.5))
+                                                .padding(.top, 2)
+                                                .multilineTextAlignment(.center)
+                                        }
+                                    }
+                                
+                                RoundedRectangle(cornerRadius: 15)
+                                    .fill(Color.gray.opacity(0.2))
+                                    .frame(height: 150)
+                                    .overlay {
+                                        VStack(spacing: 8) {
+                                            Image(systemName: "arrow.down.doc.fill")
+                                                .font(.system(size: 25))
+                                                .foregroundColor(.gray)
+                                            Text(String(localized: "book_import_title"))
+                                                .font(.caption)
+                                                .fontWeight(.medium)
+                                                .foregroundColor(.gray)
+                                            Text(String(localized: "book_import_python_description"))
+                                                .font(.caption2)
+                                                .foregroundColor(.gray.opacity(0.8))
+                                                .multilineTextAlignment(.center)
+                                        }
+                                    }
+                            } else {
+                                ForEach(publicBooks, id: \.id) { userBook in
+                                    CloudBookGridItemWithCache(
+                                        book: userBook, 
+                                        color: type.color,
+                                        cacheManager: bookCacheManager
+                                    )
+                                }
+                                
+                                DashboardImportBookItem(color: type.color) {
+                                    isImportButtonPressed = true
+                                    lockTabSelection = true
+                                    selectedTab = .ebook
+                                    selectedButtonListType = .ebook
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                        showingImport = true
+                                    }
+                                }
+                                .gridCellColumns(2)
                             }
-                            .gridCellColumns(2)
                         }
+                    } else {
+                        EmptyLockedView(type: .ebook)
                     }
                 }
             }
@@ -363,9 +423,77 @@ struct Dashboard: View {
             selectedButtonListType = .ebook
         }
     }
+    
+    private func showComingSoonAlert(for tab: Tab) {
+        comingSoonMessage = tab == .widget ? 
+            "Widget 功能即將推出\n敬請期待！" : 
+            "電子書功能即將推出\n敬請期待！"
+        
+        withAnimation(.spring()) {
+            showComingSoon = true
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            withAnimation {
+                showComingSoon = false
+            }
+        }
+    }
+    
+    private func handleLongPress(for tab: Tab) {
+        switch tab {
+        case .ebook:
+            if !goldFingerManager.isEbookUnlocked {
+                goldFingerManager.unlockEbook()
+                
+                comingSoonMessage = "🎉 電子書功能已解鎖！"
+                withAnimation(.spring()) {
+                    showComingSoon = true
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    withAnimation {
+                        showComingSoon = false
+                    }
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        withAnimation(.snappy) {
+                            selectedTab = .ebook
+                            updateSelectedButtonListType(for: .ebook)
+                        }
+                    }
+                }
+            }
+            
+        case .widget:
+            if !goldFingerManager.isWidgetUnlocked {
+                goldFingerManager.unlockWidget()
+                
+                comingSoonMessage = "🎉 Widget 功能已解鎖！"
+                withAnimation(.spring()) {
+                    showComingSoon = true
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    withAnimation {
+                        showComingSoon = false
+                    }
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        withAnimation(.snappy) {
+                            selectedTab = .widget
+                            updateSelectedButtonListType(for: .widget)
+                        }
+                    }
+                }
+            }
+            
+        case .push:
+            break
+        }
+    }
 }
 
-// 新的 CloudBook 網格項目視圖
 struct CloudBookGridItem: View {
     let book: CloudBook
     let color: Color
@@ -376,12 +504,9 @@ struct CloudBookGridItem: View {
             .frame(height: 150)
             .overlay {
                 VStack(alignment: .leading, spacing: 8) {
-                    // 書籍封面圖片和標題區域 - 水平排列
                     HStack(alignment: .top, spacing: 8) {
-                        // 🔧 修改：使用新的預設封面視圖
                         DummyBookCoverView()
                         
-                        // 書籍標題 - 放在圖片右邊，可以顯示2行
                         VStack(alignment: .leading, spacing: 4) {
                             Text(book.name)
                                 .font(.headline)
@@ -395,14 +520,12 @@ struct CloudBookGridItem: View {
                         Spacer()
                     }
                     
-                    // 作者名 - 和簡介一樣的寬度和排版
                     Text(String(format: NSLocalizedString("book_by_author", comment: "Author name"), book.author))
                         .font(.caption)
                         .foregroundColor(ColorManager.shared.red1.opacity(0.8))
                         .lineLimit(1)
                         .multilineTextAlignment(.leading)
                     
-                    // 簡介放在下方
                     Text(book.introduction)
                         .font(.caption)
                         .foregroundColor(ColorManager.shared.red1.opacity(0.7))
@@ -417,7 +540,6 @@ struct CloudBookGridItem: View {
     }
 }
 
-// 🔧 修改：CloudBookGridItemWithCache - 使用 sheet 彈出式導航
 struct CloudBookGridItemWithCache: View {
     let book: CloudBook
     let color: Color
@@ -449,13 +571,11 @@ struct CloudBookGridItemWithCache: View {
     
     private func handleTap() {
         if cacheManager.isBookDownloaded(book.id) {
-            // 已下載：彈出 BookDetailView
             print("📚 Opening book detail: \(book.name)")
             showingBookDetail = true
         } else if cacheManager.isBookDownloading(book.id) {
             print("⏳ Already downloading...")
         } else {
-            // 未下載：開始下載
             handleDownload()
         }
     }
@@ -547,17 +667,15 @@ struct CloudBookGridItemWithCache: View {
     }
 }
 
-// 🔧 新增：自定義按鈕樣式，防止點擊時變暗
 struct CardButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .opacity(1.0) // 強制保持完全不透明
-            .scaleEffect(configuration.isPressed ? 0.98 : 1.0) // 輕微縮放效果表示點擊
+            .opacity(1.0)
+            .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
             .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
     }
 }
 
-// 🔧 修改：DownloadStatusIcon - 點擊時阻止事件冒泡
 struct DownloadStatusIcon: View {
     let book: CloudBook
     @ObservedObject var cacheManager: BookCacheManager
@@ -567,12 +685,10 @@ struct DownloadStatusIcon: View {
         Button(action: handleDownloadAction) {
             ZStack {
                 if cacheManager.isBookDownloaded(book.id) {
-                    // 已下載圖標
                     Image(systemName: "checkmark.circle.fill")
                         .font(.system(size: 20))
                         .foregroundColor(ColorManager.shared.green1)
                 } else if cacheManager.isBookDownloading(book.id) {
-                    // 下載中圖標
                     ZStack {
                         Circle()
                             .stroke(Color.gray.opacity(0.3), lineWidth: 2)
@@ -586,7 +702,6 @@ struct DownloadStatusIcon: View {
                             .animation(.easeInOut, value: downloadProgress)
                     }
                 } else {
-                    // 未下載圖標
                     Image(systemName: "icloud.and.arrow.down")
                         .font(.system(size: 20))
                         .foregroundColor(.blue)
@@ -602,7 +717,6 @@ struct DownloadStatusIcon: View {
     }
     
     private func handleDownloadAction() {
-        // 🔧 修改：只在未下載且未下載中時才處理
         if !cacheManager.isBookDownloaded(book.id) && !cacheManager.isBookDownloading(book.id) {
             startDownload()
         }
@@ -623,21 +737,18 @@ struct DownloadStatusIcon: View {
     }
 }
 
-// 🔧 修改：使用新的預設封面視圖
 struct DummyBookCoverView: View {
     var body: some View {
         DefaultBookCoverView(width: 40, height: 50)
     }
 }
 
-// 新增 Dashboard 的「導入書籍」按鈕視圖
 struct DashboardImportBookItem: View {
     let color: Color
     let onTap: () -> Void
     
     var body: some View {
         Button(action: {
-            // 🔧 添加觸覺反饋和防重複點擊
             let impactFeedback = UIImpactFeedbackGenerator(style: .light)
             impactFeedback.impactOccurred()
             
@@ -668,6 +779,31 @@ struct DashboardImportBookItem: View {
         }
         .buttonStyle(PlainButtonStyle())
         .disabled(false)
+    }
+}
+
+struct EmptyLockedView: View {
+    let type: ButtonListType
+    
+    var body: some View {
+        VStack {
+            ForEach(0..<3, id: \.self) { _ in
+                RoundedRectangle(cornerRadius: 15)
+                    .fill(Color.gray.opacity(0.2))
+                    .frame(height: 150)
+                    .overlay {
+                        VStack(spacing: 12) {
+                            Image(systemName: "lock.fill")
+                                .font(.system(size: 40))
+                                .foregroundColor(.gray.opacity(0.5))
+                            
+                            Text("Coming Soon")
+                                .font(.headline)
+                                .foregroundColor(.gray.opacity(0.7))
+                        }
+                    }
+            }
+        }
     }
 }
 
