@@ -143,7 +143,7 @@ class UserAuthModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
             try firebaseAuth.signOut()
             
             // 🔧 使用 BookCacheManager 清除所有緩存
-            BookCacheManager.shared.clearAllCache()
+//            BookCacheManager.shared.clearAllCache()
             
             // 🔧 發送登出通知
             NotificationCenter.default.post(name: .userDidLogout, object: nil)
