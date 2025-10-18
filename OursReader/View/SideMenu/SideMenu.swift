@@ -47,14 +47,16 @@ struct SideMenu: View {
                         }
                         Spacer()
                         Button {
+                            print("🔴 [Logout] Starting logout...")
                             isShowing = false
                             
-                            NotificationCenter.default.post(
-                                name: NSNotification.Name("userDidLogout"),
-                                object: nil
-                            )
+                            // 清除緩存
+                            BookCacheManager.shared.clearAllCache()
                             
+                            // 執行登出
                             UserAuthModel.shared.signOut()
+                            
+                            print("✅ [Logout] Complete")
                         } label: {
                             HStack {
                                 Text(String(localized:"auth_logout_button"))

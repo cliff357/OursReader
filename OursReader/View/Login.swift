@@ -14,17 +14,40 @@ struct Login: View {
     @EnvironmentObject var vm: UserAuthModel
     @State var email: String = ""
     @State var password: String = ""
+    @State private var isLoggingIn = false
     
     fileprivate func LoginByUsernameButton() -> some View {
         Button(action: {
+            guard !email.isEmpty && !password.isEmpty else { return }
+            
+            isLoggingIn = true
+            
             vm.loginUser(email: email, password: password) { msg in
-                
+                DispatchQueue.main.async {
+                    isLoggingIn = false
+                    
+                    // 🔧 檢查登入狀態
+                    if vm.isLoggedIn {
+                        print("✅ Login Success - Email")
+                    } else if let errorMsg = msg, !errorMsg.isEmpty {
+                        print("❌ Login failed: \(errorMsg)")
+                    }
+                }
             }
         }) {
-            Text(String(localized: "auth_login_button"))
-                .padding(20)
-                .font(FontHelper.shared.workSansMedium16)
+            HStack {
+                if isLoggingIn {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: ColorManager.shared.dark_brown2))
+                        .scaleEffect(0.8)
+                }
+                Text(String(localized: "auth_login_button"))
+                    .padding(20)
+                    .font(FontHelper.shared.workSansMedium16)
+            }
         }
+        .disabled(isLoggingIn)
+        .opacity(isLoggingIn ? 0.6 : 1.0)
         .background(ColorManager.shared.rice_white)
         .foregroundStyle(ColorManager.shared.dark_brown2)
         .clipShape(Capsule())
@@ -42,7 +65,11 @@ struct Login: View {
     
     fileprivate func LoginInByGoogleButton() -> some View {
         Button(action: {
+            isLoggingIn = true
             vm.signInByGoogle()
+            
+            // 🔧 輪詢檢查登入狀態
+            checkLoginStatus(loginType: "Google")
         }, label: {
             Image("Google")
                 .resizable()
@@ -50,11 +77,17 @@ struct Login: View {
                 .frame(width: 50, height: 50)
                 .padding(7.5)
         })
+        .disabled(isLoggingIn)
+        .opacity(isLoggingIn ? 0.6 : 1.0)
     }
     
     fileprivate func LoginInByAppleButton() -> some View {
         Button(action: {
+            isLoggingIn = true
             vm.startSignInWithAppleFlow()
+            
+            // 🔧 輪詢檢查登入狀態
+            checkLoginStatus(loginType: "Apple")
         }, label: {
             Image(systemName: "apple.logo")
                 .resizable()
@@ -64,6 +97,32 @@ struct Login: View {
                 .background(Circle().fill(Color.white))
                 .frame(width: 55, height: 55)
         })
+        .disabled(isLoggingIn)
+        .opacity(isLoggingIn ? 0.6 : 1.0)
+    }
+    
+    // 🔧 簡化的登入檢查
+    private func checkLoginStatus(loginType: String) {
+        var attempts = 0
+        let maxAttempts = 30
+        
+        Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { timer in
+            attempts += 1
+            
+            if vm.isLoggedIn {
+                timer.invalidate()
+                print("✅ Login Success - \(loginType)")
+                DispatchQueue.main.async {
+                    isLoggingIn = false
+                }
+            } else if attempts >= maxAttempts {
+                timer.invalidate()
+                print("⏱️ Login timeout - \(loginType)")
+                DispatchQueue.main.async {
+                    isLoggingIn = false
+                }
+            }
+        }
     }
     
     var body: some View {
@@ -112,4 +171,5 @@ struct Login: View {
 
 #Preview {
     Login()
+        .environmentObject(UserAuthModel.shared)
 }
