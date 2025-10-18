@@ -30,9 +30,8 @@ class GoldFingerManager: ObservableObject {
         UserDefaults.standard.set(true, forKey: ebookUnlockKey)
         print("🔓 [GoldFinger] Ebook unlocked!")
         
-        // 觸覺反饋
-        let generator = UINotificationFeedbackGenerator()
-        generator.notificationOccurred(.success)
+        // 🔧 加強觸覺反饋 - 使用多段強烈震動
+        triggerUnlockHaptics()
     }
     
     /// 解鎖 Widget 功能
@@ -41,9 +40,8 @@ class GoldFingerManager: ObservableObject {
         UserDefaults.standard.set(true, forKey: widgetUnlockKey)
         print("🔓 [GoldFinger] Widget unlocked!")
         
-        // 觸覺反饋
-        let generator = UINotificationFeedbackGenerator()
-        generator.notificationOccurred(.success)
+        // 🔧 加強觸覺反饋 - 使用多段強烈震動
+        triggerUnlockHaptics()
     }
     
     /// 鎖定 Ebook 功能（測試用）
@@ -78,5 +76,37 @@ class GoldFingerManager: ObservableObject {
         print("📱 [GoldFinger] Loaded status:")
         print("   Ebook: \(isEbookUnlocked ? "🔓 Unlocked" : "🔒 Locked")")
         print("   Widget: \(isWidgetUnlocked ? "🔓 Unlocked" : "🔒 Locked")")
+    }
+    
+    // MARK: - 🔧 新增：加強的解鎖震動效果
+    
+    private func triggerUnlockHaptics() {
+        // 第一段：重擊
+        let heavyGenerator = UIImpactFeedbackGenerator(style: .heavy)
+        heavyGenerator.prepare()
+        heavyGenerator.impactOccurred(intensity: 1.0)
+        
+        // 短暫延遲
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            // 第二段：成功通知
+            let notificationGenerator = UINotificationFeedbackGenerator()
+            notificationGenerator.prepare()
+            notificationGenerator.notificationOccurred(.success)
+        }
+        
+        // 再次延遲
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            // 第三段：中等強度震動
+            let mediumGenerator = UIImpactFeedbackGenerator(style: .medium)
+            mediumGenerator.prepare()
+            mediumGenerator.impactOccurred(intensity: 1.0)
+        }
+        
+        // 最後一段：輕微震動
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            let lightGenerator = UIImpactFeedbackGenerator(style: .light)
+            lightGenerator.prepare()
+            lightGenerator.impactOccurred(intensity: 1.0)
+        }
     }
 }

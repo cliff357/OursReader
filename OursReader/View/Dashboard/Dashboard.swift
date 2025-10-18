@@ -249,7 +249,7 @@ struct Dashboard: View {
                         updateSelectedButtonListType(for: tab)
                     }
                 }
-                .onLongPressGesture(minimumDuration: 5.0) {
+                .onLongPressGesture(minimumDuration: 3.0) {
                     handleLongPress(for: tab)
                 }
             }
@@ -266,7 +266,7 @@ struct Dashboard: View {
         .background(Color.gray.opacity(0.1), in: .capsule)
         .padding(.horizontal, 15)
     }
-    
+
     @ViewBuilder
     func BooklistView(type: ButtonListType) -> some View {
         ScrollView(.vertical) {
@@ -433,7 +433,7 @@ struct Dashboard: View {
             showComingSoon = true
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
             withAnimation {
                 showComingSoon = false
             }
