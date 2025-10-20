@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OurReader - Privacy Policy | 隱私政策</title>
+    <title>文華通知器 - Privacy Policy | 隱私政策</title>
     <style>
         * {
             margin: 0;
@@ -14,8 +14,8 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
             line-height: 1.8;
-            color: #333;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #2c3e50;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
@@ -24,110 +24,248 @@
             max-width: 1200px;
             margin: 0 auto;
             background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             overflow: hidden;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 40px;
+            padding: 60px 40px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 15s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1) rotate(0deg);
+            }
+            50% {
+                transform: scale(1.1) rotate(180deg);
+            }
         }
 
         header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            font-weight: 700;
+            font-size: 3em;
+            margin-bottom: 15px;
+            font-weight: 800;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         header p {
-            font-size: 1.1em;
-            opacity: 0.9;
+            font-size: 1.3em;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+            font-weight: 300;
         }
 
         .content {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 40px;
-            padding: 40px;
+            padding: 60px 40px;
         }
 
         .language-section {
-            padding: 20px;
+            padding: 30px;
+            background: linear-gradient(to bottom, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 16px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .language-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
         .language-section h2 {
             color: #667eea;
-            font-size: 1.8em;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 3px solid #667eea;
+            font-size: 2em;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 4px solid #667eea;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
         .language-section h3 {
             color: #764ba2;
-            font-size: 1.3em;
-            margin-top: 30px;
-            margin-bottom: 15px;
+            font-size: 1.4em;
+            margin-top: 35px;
+            margin-bottom: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .language-section h3::before {
+            content: '▸';
+            color: #764ba2;
+            font-weight: bold;
         }
 
         .language-section p {
-            margin-bottom: 15px;
+            margin-bottom: 18px;
             text-align: justify;
+            color: #555;
+            line-height: 1.9;
         }
 
         .language-section ul {
-            margin-left: 20px;
-            margin-bottom: 15px;
+            margin-left: 25px;
+            margin-bottom: 20px;
         }
 
         .language-section li {
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            color: #666;
+            position: relative;
+            padding-left: 10px;
+        }
+
+        .language-section li::before {
+            content: '●';
+            color: #667eea;
+            font-size: 0.8em;
+            position: absolute;
+            left: -15px;
         }
 
         .highlight {
-            background: #f0f4ff;
-            padding: 15px;
-            border-left: 4px solid #667eea;
-            margin: 20px 0;
-            border-radius: 5px;
+            background: linear-gradient(135deg, #e3f2fd 0%, #f0f4ff 100%);
+            padding: 20px 25px;
+            border-left: 5px solid #667eea;
+            margin: 25px 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+        }
+
+        .update-date {
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .update-date::before {
+            content: '🕐';
+            font-size: 1.2em;
         }
 
         footer {
-            background: #f8f9fa;
-            padding: 30px;
+            background: linear-gradient(to right, #f8f9fa 0%, #e9ecef 100%);
+            padding: 40px;
             text-align: center;
             color: #666;
             border-top: 1px solid #e0e0e0;
         }
 
-        .update-date {
+        footer p {
+            margin: 8px 0;
+            font-size: 0.95em;
+        }
+
+        footer p:first-child {
             font-weight: 600;
-            color: #667eea;
-            margin-bottom: 10px;
+            color: #333;
+        }
+
+        /* 滾動條樣式 */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
         }
 
         @media (max-width: 768px) {
             .content {
                 grid-template-columns: 1fr;
-                gap: 20px;
-                padding: 20px;
+                gap: 30px;
+                padding: 40px 20px;
+            }
+
+            header {
+                padding: 40px 20px;
             }
 
             header h1 {
-                font-size: 1.8em;
+                font-size: 2em;
+            }
+
+            header p {
+                font-size: 1em;
+            }
+
+            .language-section {
+                padding: 20px;
             }
 
             .language-section h2 {
-                font-size: 1.5em;
+                font-size: 1.6em;
+            }
+
+            .language-section h3 {
+                font-size: 1.2em;
             }
         }
 
-        /* 平滑滾動 */
         html {
             scroll-behavior: smooth;
+        }
+
+        /* 新增：強調重點區塊 */
+        strong {
+            color: #764ba2;
+            font-weight: 600;
+        }
+
+        /* 新增：區塊間距調整 */
+        .language-section > *:last-child {
+            margin-bottom: 0;
         }
     </style>
 </head>
@@ -148,38 +286,38 @@
                 </div>
 
                 <h3>1. Introduction</h3>
-                <p>Welcome to 文華通知器. We respect your privacy and are committed to protecting your personal data. This privacy policy explains how we collect, use, and protect your information when you use our app.</p>
+                <p>Welcome to 文華通知器 (ManWa Notifier). We respect your privacy and are committed to protecting your personal data. This privacy policy explains how we collect, use, and protect your information when you use our app.</p>
 
                 <h3>2. Information We Collect</h3>
                 <p>We collect the following types of information:</p>
                 <ul>
-                    <li><strong>Account Information:</strong> Email address, display name when you create an account</li>
-                    <li><strong>Book Content:</strong> Books you import and reading progress</li>
+                    <li><strong>Account Information:</strong> Email address and display name when you create an account</li>
+                    <li><strong>User Content:</strong> Content you create or upload to the app</li>
                     <li><strong>Usage Data:</strong> App usage statistics and preferences</li>
-                    <li><strong>Device Information:</strong> Device type, OS version for app optimization</li>
+                    <li><strong>Device Information:</strong> Device type and OS version for app optimization</li>
                 </ul>
 
                 <h3>3. How We Use Your Information</h3>
                 <p>We use your information to:</p>
                 <ul>
                     <li>Provide and maintain our service</li>
-                    <li>Sync your books across devices</li>
+                    <li>Sync your data across devices</li>
                     <li>Improve user experience</li>
-                    <li>Communicate important updates</li>
+                    <li>Send important notifications and updates</li>
                 </ul>
 
                 <h3>4. Data Storage</h3>
                 <p>Your data is stored securely using:</p>
                 <ul>
                     <li><strong>Firebase Authentication:</strong> For secure account management</li>
-                    <li><strong>CloudKit:</strong> For syncing books and reading progress</li>
-                    <li><strong>Local Storage:</strong> For offline access to downloaded books</li>
+                    <li><strong>CloudKit:</strong> For syncing data across your devices</li>
+                    <li><strong>Local Storage:</strong> For offline access to your content</li>
                 </ul>
 
                 <h3>5. Data Sharing</h3>
-                <p>We DO NOT sell, trade, or rent your personal information to third parties. We only share data with:</p>
+                <p>We <strong>DO NOT</strong> sell, trade, or rent your personal information to third parties. We only share data with:</p>
                 <ul>
-                    <li>Apple CloudKit (for data sync)</li>
+                    <li>Apple CloudKit (for data synchronization)</li>
                     <li>Firebase (for authentication)</li>
                 </ul>
 
@@ -188,7 +326,7 @@
                 <ul>
                     <li>Access your personal data</li>
                     <li>Delete your account and all associated data</li>
-                    <li>Export your book collection</li>
+                    <li>Export your data</li>
                     <li>Opt-out of notifications</li>
                 </ul>
 
@@ -200,7 +338,7 @@
 
                 <h3>9. Contact Us</h3>
                 <p>If you have questions about this privacy policy, please contact us at:</p>
-                <p><strong>Email:</strong> support@ourreader.app</p>
+                <p><strong>Email:</strong> support@manwanotifier.app</p>
             </div>
 
             <!-- 中文版本 -->
@@ -212,36 +350,36 @@
                 </div>
 
                 <h3>1. 簡介</h3>
-                <p>歡迎使用 文華通知器。我們尊重您的隱私，並致力於保護您的個人資料。本隱私政策說明我們如何收集、使用和保護您在使用本應用程式時的資訊。</p>
+                <p>歡迎使用文華通知器。我們尊重您的隱私，並致力於保護您的個人資料。本隱私政策說明我們如何收集、使用和保護您在使用本應用程式時的資訊。</p>
 
                 <h3>2. 我們收集的資訊</h3>
                 <p>我們收集以下類型的資訊：</p>
                 <ul>
-                    <li><strong>帳戶資訊：</strong>當您創建帳戶時的電郵地址、顯示名稱</li>
-                    <li><strong>書籍內容：</strong>您導入的書籍和閱讀進度</li>
+                    <li><strong>帳戶資訊：</strong>當您創建帳戶時的電郵地址和顯示名稱</li>
+                    <li><strong>用戶內容：</strong>您在應用程式中創建或上傳的內容</li>
                     <li><strong>使用數據：</strong>應用程式使用統計和偏好設置</li>
-                    <li><strong>設備資訊：</strong>設備類型、作業系統版本，用於優化應用程式</li>
+                    <li><strong>設備資訊：</strong>設備類型和作業系統版本，用於優化應用程式</li>
                 </ul>
 
                 <h3>3. 我們如何使用您的資訊</h3>
                 <p>我們使用您的資訊來：</p>
                 <ul>
                     <li>提供和維護我們的服務</li>
-                    <li>在設備之間同步您的書籍</li>
+                    <li>在設備之間同步您的數據</li>
                     <li>改善用戶體驗</li>
-                    <li>傳達重要更新</li>
+                    <li>發送重要通知和更新</li>
                 </ul>
 
                 <h3>4. 數據儲存</h3>
                 <p>您的數據使用以下方式安全儲存：</p>
                 <ul>
                     <li><strong>Firebase 身份驗證：</strong>用於安全的帳戶管理</li>
-                    <li><strong>CloudKit：</strong>用於同步書籍和閱讀進度</li>
-                    <li><strong>本地儲存：</strong>用於離線訪問已下載的書籍</li>
+                    <li><strong>CloudKit：</strong>用於在您的設備之間同步數據</li>
+                    <li><strong>本地儲存：</strong>用於離線訪問您的內容</li>
                 </ul>
 
                 <h3>5. 數據共享</h3>
-                <p>我們不會出售、交易或出租您的個人資訊給第三方。我們僅與以下服務共享數據：</p>
+                <p>我們<strong>不會</strong>出售、交易或出租您的個人資訊給第三方。我們僅與以下服務共享數據：</p>
                 <ul>
                     <li>Apple CloudKit（用於數據同步）</li>
                     <li>Firebase（用於身份驗證）</li>
@@ -252,7 +390,7 @@
                 <ul>
                     <li>訪問您的個人數據</li>
                     <li>刪除您的帳戶和所有相關數據</li>
-                    <li>導出您的書籍收藏</li>
+                    <li>導出您的數據</li>
                     <li>選擇退出通知</li>
                 </ul>
 
@@ -264,12 +402,12 @@
 
                 <h3>9. 聯絡我們</h3>
                 <p>如果您對本隱私政策有任何疑問，請通過以下方式聯絡我們：</p>
-                <p><strong>電郵：</strong>support@ourreader.app</p>
+                <p><strong>電郵：</strong>support@manwanotifier.app</p>
             </div>
         </div>
 
         <footer>
-            <p>&copy; 2025 文華通知器. All rights reserved.</p>
+            <p>&copy; 2025 文華通知器 (ManWa Notifier). All rights reserved.</p>
             <p>版權所有 © 2025 文華通知器. 保留所有權利。</p>
         </footer>
     </div>
