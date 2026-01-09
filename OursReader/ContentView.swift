@@ -28,7 +28,7 @@ struct ContentView: View {
                     Login()
                 }
             }
-        }
+        } 
         .onAppear {
             checkAuthStatus()
         }

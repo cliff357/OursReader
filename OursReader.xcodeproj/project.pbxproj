@@ -289,7 +289,7 @@
 		997291242C9C2D6E0070DFAC /* DashboardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardModel.swift; sourceTree = "<group>"; };
 		997D30622CB6672B00A3B692 /* AppSecurity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSecurity.swift; sourceTree = "<group>"; };
 		998614122BA80EA300E0996D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		998614162BA8110B00E0996D /* UserAuthModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAuthModel.swift; sourceTree = "<group>"; };
+		998614162BA8110B00E0996D /* UserAuthModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAuthModel.swift; sourceTree = "<group>"; wrapsLines = 0; };
 		998614182BAAB3A500E0996D /* SideMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenu.swift; sourceTree = "<group>"; };
 		9986141A2BAAB79600E0996D /* SideMenuHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuHeaderView.swift; sourceTree = "<group>"; };
 		9986141C2BAD20C500E0996D /* SideMenuRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuRowView.swift; sourceTree = "<group>"; };
