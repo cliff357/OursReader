@@ -6,41 +6,53 @@ Branch: `development`
 ## Current position
 
 - Current phase: **Phase 0 — Bootstrap and Baseline**
-- Current sub-phase: **0.1 GSD bootstrap + current-state inventory**
-- Status: **COMPLETE**
-- Next sub-phase: **0.2 Reproducible build baseline**
+- Current sub-phase: **0.2 Reproducible build baseline**
+- Status: **IN PROGRESS — audit complete, repository-controlled blockers remain**
+- Next sub-phase: **0.2a Fix repository-controlled build/release blockers**
 
 ## Baseline snapshot
 
-The repository already contains substantial implementation across reading, communication, Watch, widget, and release-support areas, but much of it has not been revalidated recently as one coherent product baseline.
+The repository contains substantial implementation, but it is not yet a reproducible clone-to-build/release baseline. The Phase 0.2 audit is recorded in `.planning/BUILD_BASELINE.md`.
 
-### Verified from repository scan
+### Current build-baseline summary
 
-| Area | Evidence seen | State |
-| --- | --- | --- |
-| Main SwiftUI app | Login, signup, main view, home, dashboard, friends, settings, book views | Implemented / needs verification |
-| Dashboard | Push / Widget / Ebook paged surfaces | Implemented |
-| Ebook UI | Add, import, detail, reader views | Implemented / needs verification |
-| Ebook state | Progress, bookmarks, font settings | Implemented / needs verification |
-| Storage | Book cache + CloudKit manager | Implemented / needs verification |
-| Friend flow | Add friend, list, Multipeer discovery view model | Implemented / needs verification |
-| Push flow | Notification manager + push setting UI + Firebase Functions dependency | Implemented / needs verification |
-| Firebase App Check | App Attest / DeviceCheck provider logic | Implemented / needs verification |
-| Apple Watch | Separate app with Connectivity, Firebase, services, models, views | Implemented / needs verification |
-| Widget | `SendMiss` widget + App Intent + Live Activity files | Experimental |
-| Secondary widget | `SImplySendMiss` target | Experimental |
-| Tests | XCTest target mostly default starter template | Missing meaningful coverage |
-| Release support | Fastlane + Xcode Cloud scripts | Needs verification |
-| Book conversion | PDF converter + web scraper | Supporting tooling |
+| Area | State |
+| --- | --- |
+| Shared main scheme | PASS |
+| Unit/UI test targets wired into scheme | PASS |
+| Pinned Swift Package dependencies | PASS |
+| Main iOS target = iOS 17 | PASS |
+| Watch target = watchOS 10.6 | PASS |
+| Main/Watch bundle IDs match Firebase configs | PASS |
+| Main capabilities declared | PASS |
+| CloudKit/App Group/Sign in with Apple provisioning | BLOCKED — account/device verification |
+| APNs/FCM delivery | BLOCKED — Firebase/APNs/device verification |
+| Multipeer | BLOCKED — two-device verification |
+| Watch end-to-end | BLOCKED — paired hardware verification |
+| Project-level deployment target consistency | FAIL |
+| Development-team portability | FAIL |
+| Debug/Release entitlement separation | FAIL |
+| Release APNs entitlement | FAIL |
+| App Check Debug/simulator path | FAIL |
+| Main ArchiveAction configuration | FAIL — Debug instead of Release |
+| Fastlane production configuration | FAIL — Debug App Store build + personal account |
+| Xcode Cloud setup completeness | FAIL |
+| Tracked Xcode user data | FAIL |
+| Firebase environment strategy | FAIL — implicit/current-project only |
+| Clean Xcode build | BLOCKED — requires Mac/Xcode execution |
 
-## Important observations
+## Important Phase 0.2 findings
 
-1. **Code maturity is uneven.** Some individual files are substantial, especially the ebook import / reader / CloudKit paths, but file size is not completion evidence.
-2. **Testing is the clearest baseline gap.** The unit-test target currently contains starter/template tests rather than meaningful assertions.
-3. **Hardware-dependent flows are unproven in this baseline.** APNs, App Attest, Multipeer, iCloud, and Apple Watch require device validation.
-4. **Backend completeness is uncertain from this repo alone.** The client references Firebase services / Functions, but backend resources and security configuration are not fully represented here.
-5. **Companion scope is unresolved.** Watch, Widget, Live Activity, and the second widget target exist, but v1 ownership must be decided deliberately.
-6. **Release automation exists but must be treated as unverified** until signing/account assumptions are audited.
+1. `Package.resolved` is committed and pins the dependency graph, including Firebase and Google Sign-In.
+2. The main shared scheme includes both unit and UI tests, but ArchiveAction currently uses **Debug**.
+3. Fastlane's `prod` lane also explicitly builds **Debug** while exporting for the App Store and hard-codes a personal TestFlight username.
+4. Signing uses automatic signing but the Apple Development Team ID is hard-coded across targets.
+5. Main Debug and Release entitlement files are effectively identical: APNs is `development` and App Attest is `production` in both.
+6. Runtime App Check always selects App Attest/DeviceCheck; the Debug provider is commented out. There is no reproducible simulator App Check path documented.
+7. The repository tracks both project and workspace `xcuserdata`, including multiple users. Current `.gitignore` does not prevent all of this metadata from being tracked.
+8. Main and Watch Firebase client plists are committed and tied to the `our-reader` Firebase project. No environment-selection strategy is documented.
+9. Main app target is iOS 17 and Watch is watchOS 10.6, but project-level configuration still contains iOS 16.4.
+10. Hardware/service-dependent behaviors remain intentionally BLOCKED rather than being treated as working without evidence.
 
 ## Phase history
 
@@ -57,50 +69,47 @@ Completed:
   - `.planning/STATE.md`
 - Classified major areas as implemented, needs verification, experimental, or missing.
 
-Decisions intentionally deferred:
+### 2026-09-16 — Phase 0.2 AUDIT COMPLETE / PHASE IN PROGRESS
 
-- Final v1 product promise.
-- Whether Watch / Widget / Live Activity are required for v1.
-- Whether `SImplySendMiss` should be merged, retained, or removed.
-- Exact minimum ebook import surface.
+Completed:
 
-## Next action — Phase 0.2
+- Audited shared schemes and test wiring.
+- Audited deployment targets and bundle identifiers.
+- Audited committed Swift Package pins.
+- Audited signing/team assumptions.
+- Audited main and Watch entitlements.
+- Audited Firebase plist/configuration assumptions.
+- Audited App Check setup.
+- Audited CloudKit/App Group/Push/Sign in with Apple requirements.
+- Audited tracked Xcode user metadata.
+- Audited Fastlane and Xcode Cloud support.
+- Created `.planning/BUILD_BASELINE.md` with PASS / FAIL / BLOCKED status.
 
-Create a **reproducible build baseline**.
+Not completed yet:
 
-The next pass should audit:
+- Repository-controlled configuration failures have not been fixed.
+- A clean Xcode build has not been executed.
+- Hardware/account dependent flows have not been revalidated.
 
-- Xcode targets and schemes
-- deployment targets
-- Swift Package dependencies
-- bundle identifiers
-- signing / team assumptions
-- entitlements and capabilities
-- Firebase plist / environment assumptions
-- CloudKit containers
-- App Groups
-- Push Notifications
-- Sign in with Apple
-- App Check
-- Watch pairing requirements
-- tracked user-specific Xcode data
-- Fastlane / Xcode Cloud assumptions
+## Next action — Phase 0.2a
 
-### Phase 0.2 output
+Fix repository-controlled baseline blockers before any product feature work:
 
-Produce a setup / verification checklist where every item is one of:
+1. Release archive must use Release configuration.
+2. Fastlane production lane must use Release and remove/parameterize personal account assumptions.
+3. Remove tracked `xcuserdata` and improve `.gitignore`.
+4. Normalize deployment-target policy.
+5. Separate/document Debug vs Release entitlement behavior.
+6. Establish a Debug/simulator Firebase App Check path.
+7. Make Apple team/signing assumptions explicit.
+8. Document Firebase environment strategy.
 
-- PASS
-- FAIL
-- BLOCKED — requires device / account / backend
-- NOT REQUIRED for current v1 scope
-
-Do not start feature implementation until this baseline has been recorded.
+After 0.2a, proceed to **0.2b Clean build verification** on a Mac/Xcode environment.
 
 ## `/gsd-next`
 
 Return:
 
-> **Phase 0.2 — Reproducible build baseline**
+> **Phase 0.2a — Fix repository-controlled build/release blockers**
 >
-> Audit the Xcode/Firebase/Apple configuration and create a clone-to-build checklist before changing product behavior.
+> Clean Xcode user metadata, correct Release/archive/Fastlane configuration, define Debug App Check and entitlement behavior, and make signing/Firebase assumptions explicit before running a clean build.
