@@ -29,24 +29,74 @@ Exit criteria:
 - Existing major feature families are inventoried.
 - Next phase can be chosen without relying on memory or README history alone.
 
-### 0.2 Reproducible build baseline — NEXT
+### 0.2 Reproducible build baseline — IN PROGRESS
 
 Goal: prove what a fresh developer checkout needs in order to build and run.
 
+Audit deliverable:
+
+- `.planning/BUILD_BASELINE.md`
+
+Audit completed:
+
+- Xcode targets, schemes, deployment targets, SPM dependencies, capabilities, bundle IDs, and signing assumptions reviewed.
+- Firebase, CloudKit, App Group, Push, Sign in with Apple, App Check, Watch, Fastlane, and Xcode Cloud assumptions recorded.
+- Simulator-only vs physical-device validation requirements classified.
+- Build/setup items classified as PASS / FAIL / BLOCKED / NOT REQUIRED.
+
+Repository-controlled blockers found:
+
+- Main ArchiveAction uses Debug instead of Release.
+- Fastlane `prod` builds Debug for App Store export and hard-codes a personal TestFlight account.
+- Project/workspace `xcuserdata` is tracked.
+- Debug/Release entitlement intent is not properly separated; Release currently carries development APNs entitlement.
+- App Check has no documented Debug/simulator provider path.
+- Apple development team is hard-coded in target settings.
+- Firebase environment/configuration strategy is implicit rather than parameterized/documented.
+- Project-level deployment target still contains 16.4 while supported product targets use iOS 17.
+
+#### 0.2a Fix repository-controlled build/release blockers — NEXT
+
 Tasks:
 
-- Audit Xcode targets, schemes, deployment targets, SPM dependencies, capabilities, bundle IDs, and signing assumptions.
-- Separate required local configuration from tracked project configuration.
-- Document Firebase, CloudKit, App Group, Push, Sign in with Apple, App Check, and Watch requirements.
-- Identify machine/user-specific Xcode files that should not be tracked.
-- Record simulator-only vs physical-device verification requirements.
-- Create a baseline checklist with pass / fail / blocked results.
+- Change the main archive configuration to Release.
+- Change Fastlane production build to Release and parameterize account assumptions.
+- Remove tracked Xcode user data and expand `.gitignore` for `xcuserdata`/user metadata.
+- Normalize deployment-target policy.
+- Define Debug vs Release entitlement behavior.
+- Establish and document a Firebase App Check debug/simulator path.
+- Make signing/team assumptions explicit rather than relying on one personal team silently.
+- Document Firebase environment strategy.
+
+#### 0.2b Clean build verification — PENDING
+
+Tasks:
+
+- Resolve packages from a clean checkout.
+- Compile the shared `OursReader` scheme on a clean Mac/Xcode environment.
+- Launch a supported simulator using the documented App Check development path.
+- Record any compile/runtime blockers.
+
+#### 0.2c Hardware/account verification — PENDING / BLOCKED
+
+Validate when hardware/account access is available:
+
+- APNs + FCM
+- App Attest
+- CloudKit
+- Sign in with Apple
+- App Group provisioning
+- Multipeer on two devices
+- iPhone ↔ Apple Watch
+- TestFlight / Xcode Cloud
 
 Exit criteria:
 
 - A developer can follow one documented setup path from clone to build.
 - Known blockers are explicit rather than implicit.
 - No required setup depends on undocumented personal machine state.
+- Release archive uses Release configuration.
+- Remaining hardware/account-only checks are explicitly marked BLOCKED rather than assumed.
 
 ## Phase 1 — Product Definition
 
@@ -160,4 +210,4 @@ Keep ideas here rather than interrupting an active phase:
 
 ## Current next action
 
-Run **Phase 0.2 — Reproducible build baseline**.
+Run **Phase 0.2a — Fix repository-controlled build/release blockers**.
