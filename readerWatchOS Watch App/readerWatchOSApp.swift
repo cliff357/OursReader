@@ -22,12 +22,13 @@ class AppDelegate: NSObject, ObservableObject {
             return
         }
         
-        FirebaseApp.configure(options: options)
+        #if DEBUG
+        AppCheck.setAppCheckProviderFactory(AppCheckDebugProviderFactory())
+        #else
+        AppCheck.setAppCheckProviderFactory(OurReaderAppCheckProviderFactory())
+        #endif
         
-        // 在 watchOS 上使用 Debug Provider
-        let providerFactory = OurReaderAppCheckProviderFactory()
-//        let providerFactory = AppCheckDebugProviderFactory()
-        AppCheck.setAppCheckProviderFactory(providerFactory)
+        FirebaseApp.configure(options: options)
     }
 }
 
