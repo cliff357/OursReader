@@ -22,21 +22,27 @@ platform :ios do
     buildNumber = increment_version_number
 
     UI.success("Update version number to #{buildNumber}")
-  end  
+  end
 
   desc "update build number"
   lane :update_build_number do
     buildNumber = increment_build_number
 
     UI.success("Update build number to #{buildNumber}")
-  end  
+  end
 
-  desc "build Production and upload to App Store"
+  desc "build Production and upload to TestFlight"
   lane :prod do
-    build_app(scheme: "OursReader",configuration: "Debug", export_method:"app-store",xcargs: "-allowProvisioningUpdates")
-    upload_to_testflight(username: "cliffchan1993@hotmail.com")
+    build_app(
+      scheme: "OursReader",
+      configuration: "Release",
+      export_method: "app-store",
+      xcargs: "-allowProvisioningUpdates"
+    )
+
+    # Authentication is supplied by the local/CI fastlane session or API key.
+    # Do not hard-code a personal Apple ID in the repository.
+    upload_to_testflight
   end
 
 end
-
-
