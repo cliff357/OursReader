@@ -19,11 +19,15 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         application.registerForRemoteNotifications()
         
-        FirebaseApp.configure()
+        #if DEBUG
+        // Debug builds use Firebase App Check's debug provider so simulator and
+        // fresh-development environments can be registered explicitly in Firebase.
+        AppCheck.setAppCheckProviderFactory(AppCheckDebugProviderFactory())
+        #else
+        AppCheck.setAppCheckProviderFactory(OurReaderAppCheckProviderFactory())
+        #endif
         
-        let providerFactory = OurReaderAppCheckProviderFactory()
-//        let providerFactory = AppCheckDebugProviderFactory()
-        AppCheck.setAppCheckProviderFactory(providerFactory)
+        FirebaseApp.configure()
         
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
