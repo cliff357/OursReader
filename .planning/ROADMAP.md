@@ -1,6 +1,6 @@
 # OursReader — GSD Roadmap
 
-Last updated: 2026-09-16
+Last updated: 2026-09-17
 
 ## Roadmap rules
 
@@ -23,72 +23,61 @@ Deliverables:
 - `.planning/ROADMAP.md`
 - Initial classification of implemented / needs verification / experimental / missing areas
 
-Exit criteria:
-
-- Project purpose and uncertainty are documented.
-- Existing major feature families are inventoried.
-- Next phase can be chosen without relying on memory or README history alone.
-
 ### 0.2 Reproducible build baseline — IN PROGRESS
 
 Goal: prove what a fresh developer checkout needs in order to build and run.
 
-Audit deliverable:
+Deliverables:
 
 - `.planning/BUILD_BASELINE.md`
+- `.planning/ENVIRONMENT_SETUP.md`
 
-Audit completed:
+#### 0.2a Fix repository-controlled build/release blockers — COMPLETE
 
-- Xcode targets, schemes, deployment targets, SPM dependencies, capabilities, bundle IDs, and signing assumptions reviewed.
-- Firebase, CloudKit, App Group, Push, Sign in with Apple, App Check, Watch, Fastlane, and Xcode Cloud assumptions recorded.
-- Simulator-only vs physical-device validation requirements classified.
-- Build/setup items classified as PASS / FAIL / BLOCKED / NOT REQUIRED.
+Completed:
 
-Repository-controlled blockers found:
+- Main ArchiveAction changed to Release.
+- Fastlane `prod` changed to Release.
+- Personal TestFlight username removed from Fastlane.
+- Debug/Release entitlement environment intent separated.
+- Debug iOS/Watch builds now use Firebase App Check debug provider.
+- App Check provider setup moved before Firebase initialization.
+- Tracked project/workspace `xcuserdata` removed.
+- `.gitignore` broadened for Xcode user state/build output.
+- Xcode Cloud post-clone preflight now validates repository-controlled prerequisites.
+- Apple team/signing assumptions documented.
+- Current Firebase single-project strategy documented.
 
-- Main ArchiveAction uses Debug instead of Release.
-- Fastlane `prod` builds Debug for App Store export and hard-codes a personal TestFlight account.
-- Project/workspace `xcuserdata` is tracked.
-- Debug/Release entitlement intent is not properly separated; Release currently carries development APNs entitlement.
-- App Check has no documented Debug/simulator provider path.
-- Apple development team is hard-coded in target settings.
-- Firebase environment/configuration strategy is implicit rather than parameterized/documented.
-- Project-level deployment target still contains 16.4 while supported product targets use iOS 17.
+Accepted constraints / deferred cleanup:
 
-#### 0.2a Fix repository-controlled build/release blockers — NEXT
+- The Apple Development Team ID remains committed as project ownership metadata; signed builds require team membership.
+- The project-level iOS 16.4 value remains because supported product targets explicitly override it with iOS 17; normalize later during project-file cleanup.
+- Multi-environment Firebase configuration is not required for this baseline; current one-project strategy is explicit.
 
-Tasks:
-
-- Change the main archive configuration to Release.
-- Change Fastlane production build to Release and parameterize account assumptions.
-- Remove tracked Xcode user data and expand `.gitignore` for `xcuserdata`/user metadata.
-- Normalize deployment-target policy.
-- Define Debug vs Release entitlement behavior.
-- Establish and document a Firebase App Check debug/simulator path.
-- Make signing/team assumptions explicit rather than relying on one personal team silently.
-- Document Firebase environment strategy.
-
-#### 0.2b Clean build verification — PENDING
+#### 0.2b Clean build verification — NEXT
 
 Tasks:
 
 - Resolve packages from a clean checkout.
 - Compile the shared `OursReader` scheme on a clean Mac/Xcode environment.
-- Launch a supported simulator using the documented App Check development path.
-- Record any compile/runtime blockers.
+- Run unit/UI test targets once.
+- Launch a supported simulator.
+- Register the generated Firebase App Check debug token.
+- Verify at least one Firebase-backed app path.
+- Record compile/runtime blockers.
 
 #### 0.2c Hardware/account verification — PENDING / BLOCKED
 
 Validate when hardware/account access is available:
 
 - APNs + FCM
-- App Attest
+- production App Attest
 - CloudKit
 - Sign in with Apple
 - App Group provisioning
 - Multipeer on two devices
 - iPhone ↔ Apple Watch
-- TestFlight / Xcode Cloud
+- TestFlight / Xcode Cloud signed run
 
 Exit criteria:
 
@@ -96,6 +85,7 @@ Exit criteria:
 - Known blockers are explicit rather than implicit.
 - No required setup depends on undocumented personal machine state.
 - Release archive uses Release configuration.
+- Debug/simulator Firebase has a verified App Check path.
 - Remaining hardware/account-only checks are explicitly marked BLOCKED rather than assumed.
 
 ## Phase 1 — Product Definition
@@ -210,4 +200,4 @@ Keep ideas here rather than interrupting an active phase:
 
 ## Current next action
 
-Run **Phase 0.2a — Fix repository-controlled build/release blockers**.
+Run **Phase 0.2b — Clean build verification**.
