@@ -1,0 +1,136 @@
+name: iOS Baseline
+
+on:
+  push:
+    branches:
+      - development
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  clean-build:
+    name: Clean build and simulator verification
+    runs-on: macos-15
+    timeout-minutes: 35
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show Xcode environment
+        run: |
+          xcodebuild -version
+          xcrun simctl list runtimes
+
+      - name: Resolve Swift packages
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -resolvePackageDependencies \
+            -project OursReader.xcodeproj \
+            -scheme OursReader \
+            2>&1 | sed -E 's/(FCM Token:).*/\1 [REDACTED]/; s/(Firebase App Check Debug Token:).*/\1 [REDACTED]/'
+
+      - name: Select available iPhone simulator
+        id: simulator
+        shell: bash
+        run: |
+          UDID=$(python3 - <<'PY'
+          import json
+          import subprocess
+
+          data = json.loads(subprocess.check_output(["xcrun", "simctl", "list", "devices", "available", "-j"]))
+          candidates = []
+          for runtime, devices in data.get("devices", {}).items():
+              if "iOS" not in runtime:
+                  continue
+              for device in devices:
+                  if device.get("isAvailable") and device.get("name", "").startswith("iPhone"):
+                      candidates.append((runtime, device["name"], device["udid"]))
+
+          if not candidates:
+              raise SystemExit("No available iPhone simulator found")
+
+          # Prefer the newest installed iOS runtime, then any available iPhone.
+          candidates.sort(reverse=True)
+          runtime, name, udid = candidates[0]
+          print(udid)
+          print(f"Selected {name} ({runtime})", file=__import__("sys").stderr)
+          PY
+          )
+          echo "udid=$UDID" >> "$GITHUB_OUTPUT"
+
+      - name: Boot simulator
+        run: |
+          xcrun simctl boot "${{ steps.simulator.outputs.udid }}" || true
+          xcrun simctl bootstatus "${{ steps.simulator.outputs.udid }}" -b
+
+      - name: Build OursReader
+        id: build
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project OursReader.xcodeproj \
+            -scheme OursReader \
+            -configuration Debug \
+            -destination "platform=iOS Simulator,id=${{ steps.simulator.outputs.udid }}" \
+            -derivedDataPath DerivedData \
+            CODE_SIGNING_ALLOWED=NO \
+            build \
+            2>&1 | sed -E 's/(FCM Token:).*/\1 [REDACTED]/; s/(Firebase App Check Debug Token:).*/\1 [REDACTED]/'
+
+      - name: Run unit and UI tests once
+        id: tests
+        if: steps.build.outcome == 'success'
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project OursReader.xcodeproj \
+            -scheme OursReader \
+            -configuration Debug \
+            -destination "platform=iOS Simulator,id=${{ steps.simulator.outputs.udid }}" \
+            -derivedDataPath DerivedData \
+            CODE_SIGNING_ALLOWED=NO \
+            test \
+            2>&1 | sed -E 's/(FCM Token:).*/\1 [REDACTED]/; s/(Firebase App Check Debug Token:).*/\1 [REDACTED]/'
+
+      - name: Launch built app in simulator
+        id: launch
+        if: steps.build.outcome == 'success'
+        continue-on-error: true
+        shell: bash
+        run: |
+          APP_PATH="DerivedData/Build/Products/Debug-iphonesimulator/OursReader.app"
+          test -d "$APP_PATH"
+          xcrun simctl install "${{ steps.simulator.outputs.udid }}" "$APP_PATH"
+          xcrun simctl launch "${{ steps.simulator.outputs.udid }}" com.cliffchan.manwareader
+          sleep 5
+
+      - name: Baseline summary
+        if: always()
+        shell: bash
+        run: |
+          echo "Build outcome:  ${{ steps.build.outcome }}"
+          echo "Tests outcome:  ${{ steps.tests.outcome }}"
+          echo "Launch outcome: ${{ steps.launch.outcome }}"
+
+          if [[ "${{ steps.build.outcome }}" != "success" ]]; then
+            echo "Clean build verification failed."
+            exit 1
+          fi
+
+          if [[ "${{ steps.tests.outcome }}" != "success" ]]; then
+            echo "Test verification failed."
+            exit 1
+          fi
+
+          if [[ "${{ steps.launch.outcome }}" != "success" ]]; then
+            echo "Simulator launch verification failed."
+            exit 1
+          fi
+
+          echo "Clean build, tests, and simulator launch all passed."
